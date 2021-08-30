@@ -1,17 +1,12 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+const Server = require('./domain/server');
 
-const app = express();
-app.use(bodyParser.json());
+(async () => {
+    const server = new Server();
 
-const HTTP_OK_STATUS = 200;
-const PORT = '3000';
-
-// não remova esse endpoint, e para o avaliador funcionar
-app.get('/', (_request, response) => {
-  response.status(HTTP_OK_STATUS).send();
-});
-
-app.listen(PORT, () => {
-  console.log('Online');
-});
+    try {
+        await server.init();
+        server.start();
+    } catch (err) {
+        console.error(err);
+    }
+})();
