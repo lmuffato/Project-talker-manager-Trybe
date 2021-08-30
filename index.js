@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const getTalkers = require('./middlewares/getTalkers');
 const getTalkerId = require('./middlewares/getTalkerId');
+const { generateToken, validatePassword, validateEmail } = require('./middlewares/login');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,3 +23,5 @@ app.listen(PORT, () => {
 app.get('/talker', getTalkers);
 
 app.get('/talker/:id', getTalkerId);
+
+app.post('/login', validateEmail, validatePassword, generateToken);
