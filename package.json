@@ -19,7 +19,8 @@
     "express": "4.17.1",
     "express-rescue": "1.1.30",
     "http-status-codes": "2.1.4",
-    "randomstring": "1.2.1"
+    "randomstring": "1.2.1",
+    "moment": "2.29.1"
   },
   "devDependencies": {
     "eslint": "6.8.0",

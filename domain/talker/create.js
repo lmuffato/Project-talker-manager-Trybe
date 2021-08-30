@@ -5,19 +5,23 @@ const { CustomError } = require('../errors/client');
 
 module.exports = async function (req, res, next) {
     try {
+        const absolutePath = path.resolve('./talker.json');
+        data = await fs.promises.readFile(absolutePath)
 
+        const talkers = JSON.parse(data);
 
-        // const absolutePath = path.resolve('./talker.json');
+        const newTalker = {
+            id: talkers.length + 1,
+            ...req.body,
+        };
 
-        // readStream = fs.readFile(absolutePath, (err, data) => {
-        //     if (err) {
-        //         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send();
-        //     } else {
-        //         const talkers = JSON.parse(data);
-        //         res.status(StatusCodes.OK).json(talkers);
-        //     }
-        // })
+        const updated = [...talkers, newTalker]
+        await fs.promises.writeFile(
+            absolutePath,
+            JSON.stringify(updated),
+        );
 
+        return res.status(StatusCodes.CREATED).json(newTalker);
     } catch (err) {
         next(err);
     }

@@ -3,6 +3,7 @@ module.exports = class TalkerClient {
         this.ListHandler = require('./list');
         this.GetHandler = require('./get');
         this.CreateHandler = require('./create');
+        this.ValidateTalkerMiddleware = require('./validate');
     }
 
     list = async (...args) => {

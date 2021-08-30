@@ -22,6 +22,13 @@ const talkerRouter = (server) => {
         server.talkerClient.list,
     );
 
+    router.post(
+        '/',
+        server.authClient.authenticate,
+        server.talkerClient.validate,
+        server.talkerClient.create,
+    );
+
     router.get(
         '/:id',
         server.talkerClient.get,
