@@ -18,6 +18,34 @@ app.listen(PORT, () => {
 
 const fs = require('fs').promises;
 
+// 7 - Crie o endpoint GET /talker/search?q=searchTerm
+
+const findToken = (req, res, next) => {
+  const { authorization } = req.headers;
+
+  if (!authorization) {
+    return res.status(401).json({ message: 'Token não encontrado' });
+  }
+  next();
+};
+
+const checkToken = (req, res, next) => {
+  const { authorization } = req.headers;
+
+  if (authorization.length !== 16) {
+    return res.status(401).json({ message: 'Token inválido' });
+  }
+  next();
+};
+
+app.get('/talker/search', findToken, checkToken, async (req, res) => {
+  const { q } = req.query;
+  const content = await fs.readFile('./talker.json', 'utf8');
+  const talker = JSON.parse(content);
+  const filteredTalker = talker.filter((t) => t.name.includes(q));
+  res.status(200).json(filteredTalker);
+});
+
 // 1 - Crie o endpoint GET /talker
 
 app.get('/talker', async (_req, res) => {
@@ -32,17 +60,9 @@ app.get('/talker', async (_req, res) => {
 
 // 2 - Crie o endpoint GET /talker/:id
 
-app.get('/talker/:id', async (req, res) => {
-    const { id } = req.params;
-    const content = await fs.readFile('./talker.json');
-    const talker = JSON.parse(content);
-    const talkerId = talker.findIndex((t) => t.id === +id);
-    if (talkerId === -1) {
-      res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-    } else {
-      res.status(200).json(talker[talkerId]);
-    }
-});
+const talkerIdRouter = require('./talkerIdRouter');
+
+app.use('/talker/', talkerIdRouter);
 
 // 3 - Crie o endpoint POST /login
 
@@ -67,5 +87,3 @@ app.use('/talker/', editRouter);
 const deleteRouter = require('./deleteRouter');
 
 app.use('/talker/', deleteRouter);
-
-// 7 - Crie o endpoint GET /talker/search?q=searchTerm
