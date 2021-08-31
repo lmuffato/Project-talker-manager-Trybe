@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const getAllTalkers = require('./desafio1');
+const getTalkerById = require('./desafio2');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +17,9 @@ app.get('/', (_request, response) => {
 
 // Desafio 1
 app.get('/talker', getAllTalkers);
+
+// Desafio 2
+app.get('/talker/:id', getTalkerById);
 
 app.listen(PORT, () => {
   console.log('Online');
