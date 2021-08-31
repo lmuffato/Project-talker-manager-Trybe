@@ -26,11 +26,9 @@ const validatePassword = (req, res, next) => {
   next();
 };
 
-const tokenGen = (_req, res) => {
+router.post('/', validateEmail, validatePassword, (_req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
   return res.status(200).json({ token });
-};
-
-router.post('/', validateEmail, validatePassword, tokenGen);
+});
 
 module.exports = router;
