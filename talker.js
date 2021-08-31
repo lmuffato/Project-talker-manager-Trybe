@@ -49,7 +49,7 @@ const authAge = (req, res, next) => {
 const authTalk = (req, res, next) => {
   const { talk } = req.body;
 
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (talk === undefined || talk.watchedAt === undefined || talk.rate === undefined) {
     return res.status(400).json({ message: 'O campo "talk" é obrigatório e "watchedAt"'
       + ' e "rate" não podem ser vazios' });
   }
@@ -121,6 +121,24 @@ router.post('/', authToken, authName, authAge, authTalk, authWatchedAt, authRate
   writeFileSync('./talker.json', JSON.stringify(talkers));
 
   return res.status(201).json(talkerRegistered);
+});
+
+router.put('/:id', authToken, authName, authAge, authTalk, authWatchedAt, authRate, (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+
+  const talkers = readTalkerFile();
+
+  const updatedTalkers = talkers.map((talker) => {
+    if (talker.id === Number(id)) return ({ id: Number(id), name, age, talk });
+    return talker;
+  });
+
+  writeFileSync('./talker.json', JSON.stringify(updatedTalkers));
+
+  const editedTalker = updatedTalkers.find((talker) => talker.id === Number(id));
+
+  return res.status(200).json(editedTalker);
 });
 
 module.exports = router;
