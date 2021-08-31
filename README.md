@@ -579,11 +579,7 @@ Você pode também instalar o plugin do `ESLint` no `VSCode`, bastar ir em exten
     }
     ```
 
-- O endpoint deve deletar uma pessoa palestrante com base no id da rota. Devendo retornar o `status 200`, com o seguinte corpo:
-
-  ```json
-  { "message": "Pessoa palestrante deletada com sucesso" }
-  ```
+- O endpoint deve deletar uma pessoa palestrante com base no id da rota. Devendo retornar o `status 204`, com nenhum conteúdo.
 
 
 ### 7 - Crie o endpoint GET `/talker/search?q=searchTerm`
