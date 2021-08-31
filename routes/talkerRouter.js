@@ -35,8 +35,8 @@ const verifyTalkerAge = (req, res, next) => {
 };
 
 /**
- * Referência: Uso do Object.prototype.hasOwnProperty.call para evitar erro do Lint
- * consultado no StackOverflow
+ * Referência: Uso do OObject.keys(talk).includes() para evitar erro do Lint
+ * inspirado por consulta ao StackOverflow
  * Link: https://stackoverflow.com/questions/39282873/how-do-i-access-the-object-prototype-method-in-the-following-logic
  */
 const verifyTalkerTalk = (req, res, next) => {
@@ -44,8 +44,8 @@ const verifyTalkerTalk = (req, res, next) => {
 
   if (
     typeof talk === 'object'
-    && Object.prototype.hasOwnProperty.call(talk, 'rate')
-    && Object.prototype.hasOwnProperty.call(talk, 'watchedAt')
+    && Object.keys(talk).includes('rate')
+    && Object.keys(talk).includes('watchedAt')
   ) {
     return next();
   }
