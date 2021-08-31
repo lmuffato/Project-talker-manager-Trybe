@@ -46,61 +46,17 @@ app.get('/talker/:id', async (req, res) => {
 
 // 3 - Crie o endpoint POST /login
 
-const verifyEmailExists = (req, res, next) => {
-  const { email } = req.body;
-  
-  if (!email) {
-    return res.status(400).json({ message: 'O campo "email" é obrigatório' });
-  } 
-    next();
-};
+const loginRouter = require('./loginRouter');
 
-const verifyEmailPattern = (req, res, next) => {
-  const { email } = req.body;
-  const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
-  
-  if (emailPattern.test(email) === false) {
-    return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
-  }
-    next();
-};
-
-const verifyPasswordExists = (req, res, next) => {
-  const { password } = req.body;
-  
-  if (!password) {
-    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
-  }
-    next();
-};
-
-const verifyPasswordLenght = (req, res, next) => {
-  const { password } = req.body;
-  
-  if (password.length < 6) {
-    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
-  } 
-    next();
-};
-
-const generateToken = () => {
-  const length = 16;
-  const a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
-  const b = [];  
-  for (let i = 0; i < length; i += 1) {
-      const j = (Math.random() * (a.length - 1)).toFixed(0);
-      b[i] = a[j];
-  }
-  return b.join('');
-};
-
-app.post('/login', 
-verifyEmailExists, verifyEmailPattern, 
-verifyPasswordExists, verifyPasswordLenght, (_req, res) => {
-  res.status(200).json({ token: generateToken() });
-});
+app.use('/login', loginRouter);
 
 // 4 - Crie o endpoint POST /talker
+
+const talkerRouter = require('./talkerRouter');
+
+app.use('/talker', talkerRouter);
+
+// 5 - Crie o endpoint PUT /talker/:id
 
 const findToken = (req, res, next) => {
   const { authorization } = req.headers;
@@ -166,17 +122,6 @@ const findTalk = (req, res, next) => {
   next();
 };
 
-const checkTalk = (req, res, next) => {
-  const { talk } = req.body;
-  const { watchedAt, rate } = talk;
-  
-  if (!watchedAt || !rate) {
-    return res.status(400).json({ message: 
-      'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
-  }
-  next();
-};
-
 const checkRate = (req, res, next) => {
   const { talk } = req.body;
   const { rate } = talk;
@@ -187,6 +132,17 @@ const checkRate = (req, res, next) => {
   } if (rate < 1) {
     return res.status(400).json({ message: 
       'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+  next();
+};
+
+const checkTalk = (req, res, next) => {
+  const { talk } = req.body;
+  const { watchedAt, rate } = talk;
+  
+  if (!watchedAt || !rate) {
+    return res.status(400).json({ message: 
+      'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
   next();
 };
@@ -203,25 +159,21 @@ const checkWhachedAt = (req, res, next) => {
   next();
 };
 
-app.post('/talker', 
-findToken, checkToken, 
-findName, checkName, 
-findAge, checkAge, 
-findTalk, checkTalk,
-checkRate, checkWhachedAt, async (req, res) => {
-const { name, age, talk: { watchedAt, rate } } = req.body;
-const content = await fs.readFile('./talker.json');
-const talker = JSON.parse(content);
-const newTalker = {
-  name,
-  age,
-  id: (talker.length + 1),
-  talk: {
-    rate,
-    watchedAt,
-  },
-};
-  talker.push(newTalker);
-  await fs.writeFile('./talker.json', JSON.stringify(talker));
-  res.status(201).json(newTalker);
+app.put('/talker/:id', findToken, checkToken, findName, checkName,
+findAge, checkAge, findTalk, checkRate, checkTalk, checkWhachedAt,
+ async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk: { watchedAt, rate } } = req.body;
+  // const content = await fs.readFile('./talker.json');
+  // const talker = JSON.parse(content);
+  const editedTalker = {
+    name,
+    age,
+    id,
+    talk: {
+      rate,
+      watchedAt,
+    },
+  };
+  res.status(201).json(editedTalker);
 });
