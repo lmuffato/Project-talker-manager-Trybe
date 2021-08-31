@@ -10,6 +10,13 @@ const readFile = () => (
     })
 );
 
+// Função cedida pelo Luan Ramalho
+async function writeFile(newFile) {
+  const setFile = await fs.writeFile('./talker.json', JSON.stringify(newFile));
+  return setFile;
+  } 
+
 module.exports = {
   readFile,
+  writeFile,
 };

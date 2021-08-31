@@ -1,5 +1,16 @@
+const crypto = require('crypto');
 const express = require('express');
 const bodyParser = require('body-parser');
+const { readFile, writeFile } = require('../services/readFile');
+const {
+  validateEmail,
+  validatePassword,
+  validateToken,
+  validateName,
+  validateAge,
+  validateWatchedAtAndRate,
+  validateTalk,
+} = require('../validations/validations');
 
 const app = express();
 
@@ -7,15 +18,9 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 
-const crypto = require('crypto');
-
 function generateToken() {
 return crypto.randomBytes(8).toString('hex');
-} 
-
-const { readFile } = require('../services/readFile');
-
-const { validateEmail, validatePassword } = require('../validations/validations');
+}
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -44,6 +49,19 @@ app.post('/login', validateEmail, validatePassword, (_req, res) => {
   const token = generateToken();
   return res.status(HTTP_OK_STATUS).json({ token });
 });
+
+app.post('/talker', 
+validateTalk, validateName, validateToken, validateWatchedAtAndRate, validateAge,
+async (req, res) => {
+const { name, age, talk } = req.body;
+const data = await readFile();
+const id = 5;
+const newObj = ({ name, age, id, talk });
+data.push(newObj);
+writeFile(data);
+
+return res.status(201).json(newObj);
+}); 
 
 module.exports = {
   app,
