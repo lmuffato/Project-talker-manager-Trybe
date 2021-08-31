@@ -57,7 +57,7 @@ router.post(
 
     await fs.writeFile('./talker.json', prettifyString, 'utf-8');
 
-    response.status(201).json(request.body);
+    return response.status(201).json(newTalker);
   },
 );
 
