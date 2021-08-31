@@ -3,15 +3,24 @@ const { Router } = require('express');
 const fs = require('fs').promises;
 
 const router = Router();
-
 async function getTalkerList(_req, res) {
   const talkers = await fs.readFile('./talker.json', 'utf8')
     .then((response) => JSON.parse(response))
     .catch((err) => console.log(err.message));
-  console.log(talkers[0]);
   return res.status(200).json(talkers);
 }
 
+async function getFilteredTalker(req, res) {
+  const { id } = req.params;
+  const talkers = await fs.readFile('./talker.json', 'utf8')
+    .then((response) => JSON.parse(response))
+    .catch((err) => console.log(err.message));
+  const filteredTalker = talkers.find((talker) => talker.id === +id);
+  return res.status(200).json(filteredTalker);
+}
+
 router.get('/', getTalkerList);
+
+router.get('/:id', getFilteredTalker);
 
 module.exports = router;
