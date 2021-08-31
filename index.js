@@ -12,6 +12,6 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.listen(PORT, () => {
+app.listen(3001, () => {
   console.log('Online');
 });
