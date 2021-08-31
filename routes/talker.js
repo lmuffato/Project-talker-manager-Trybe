@@ -37,14 +37,14 @@ router.get('/:id', async (req, res) => {
   res.status(200).json(talker);
 });
 
-router.post('/talker', AuthMiddleware, async (req, res) => {
+router.post('/', AuthMiddleware, async (req, res) => {
   const { name, age, talk } = req.body;
   try {
     const talkersList = await readTalkersList('./talker.json');
-    const newTalker = { name, age, talk, id: `${talkersList.length + 1}` };
+    const newTalker = { name, age, talk, id: (talkersList.length + 1) };
     const newTalkersList = [...talkersList, newTalker];
-    await writeFile('./talker.json', JSON.stringify(newTalkersList), 'utf-8');
-    return res.status(200).json(newTalker);
+    await writeFile('talker.json', JSON.stringify(newTalkersList), 'utf-8');
+    return res.status(201).json(newTalker);
   } catch (e) {
     res.status(400).json({ message: e.message });
   }
