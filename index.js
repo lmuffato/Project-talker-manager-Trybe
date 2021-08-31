@@ -1,11 +1,18 @@
+const crypto = require('crypto');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const { validateEmail, validatePassword } = require('./validate/index');
 
 const read = async () => {
 const data = await fs.readFile('./talker.json', 'utf8').catch(() => []);
 return JSON.parse(data);
 };  
+
+function generateToken() {
+return crypto.randomBytes(8).toString('hex');
+} 
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,6 +31,11 @@ app.get('/talker', async (_req, res) => {
 return res.status(HTTP_OK_STATUS).json(data);
 });
 
+app.post('/login', validateEmail, validatePassword, (_req, res) => {
+  const newToken = generateToken();
+  res.status(HTTP_OK_STATUS).json({ token: newToken });
+  });
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const data = await read();
@@ -33,7 +45,7 @@ app.get('/talker/:id', async (req, res) => {
  return res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); 
 }
 
-  res.status(200).json(data[talkerId]);
+  res.status(HTTP_OK_STATUS).json(data[talkerId]);
 });
 
 app.listen(PORT, async () => {
