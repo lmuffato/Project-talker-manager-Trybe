@@ -4,6 +4,8 @@ module.exports = class TalkerClient {
         this.GetHandler = require('./get');
         this.CreateHandler = require('./create');
         this.UpdateHandler = require('./update');
+        this.DeleteHandler = require('./delete');
+        this.SearchHandler = require('./search');
         this.ValidateTalkerMiddleware = require('./validate');
     }
 
@@ -21,6 +23,14 @@ module.exports = class TalkerClient {
     
     update = async (...args) => {
         this.UpdateHandler.call(this, ...args);
+    }
+
+    delete = async (...args) => {
+        this.DeleteHandler.call(this, ...args);
+    }
+
+    search = async (...args) => {
+        this.SearchHandler.call(this, ...args);
     }
 
     validate = async (...args) => {

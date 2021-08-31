@@ -18,6 +18,13 @@ const talkerRouter = (server) => {
     const router = express.Router({ mergeParams: true });
 
     router.get(
+        '/search',
+        server.authClient.authenticate,
+        server.talkerClient.search,
+        server.talkerClient.list,
+    );
+
+    router.get(
         '/',
         server.talkerClient.list,
     );
@@ -41,6 +48,12 @@ const talkerRouter = (server) => {
         server.talkerClient.update,
     );
     
+    router.delete(
+        '/:id',
+        server.authClient.authenticate,
+        server.talkerClient.delete,
+    );
+
     return router;
 };
 
