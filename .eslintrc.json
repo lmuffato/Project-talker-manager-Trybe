@@ -4,6 +4,11 @@
   },
   "extends": "trybe-backend",
   "rules": {
-    "sonarjs/no-duplicate-string": ["error", 5]
+    "sonarjs/no-duplicate-string": ["error", 5],
+    "max-lines-per-function": ["warn", 80],
+    "no-use-before-define": ["off", { "functions": true, "classes": true, "variables": true }],
+    "complexity": ["off", 2],
+    "no-param-reassign": ["off", { "props": true }],
+    "func-names": ["off", "as-needed"]
   }
 }

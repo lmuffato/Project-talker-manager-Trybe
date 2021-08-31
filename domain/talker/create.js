@@ -1,12 +1,11 @@
 const fs = require('fs');
-const path = require("path");
+const path = require('path');
 const { StatusCodes } = require('http-status-codes');
-const { CustomError } = require('../errors/client');
 
 module.exports = async function (req, res, next) {
     try {
         const absolutePath = path.resolve('./talker.json');
-        data = await fs.promises.readFile(absolutePath)
+        const data = await fs.promises.readFile(absolutePath);
 
         const talkers = JSON.parse(data);
 
@@ -15,7 +14,7 @@ module.exports = async function (req, res, next) {
             ...req.body,
         };
 
-        const updated = [...talkers, newTalker]
+        const updated = [...talkers, newTalker];
         await fs.promises.writeFile(
             absolutePath,
             JSON.stringify(updated),

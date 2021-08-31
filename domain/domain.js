@@ -8,4 +8,4 @@ module.exports = async (server) => {
     server.talkerClient = new TalkerClient();
     server.loginClient = new LoginClient();
     server.configClient = new ConfigClient();
-};      
+};

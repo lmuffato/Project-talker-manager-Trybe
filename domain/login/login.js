@@ -5,12 +5,10 @@ module.exports = async function (_, res, next) {
     try {
         const token = genToken();
 
-        return res.status(StatusCodes.OK).json({ token: token });
+        return res.status(StatusCodes.OK).json({ token });
     } catch (err) {
         next(err);
     }
 };
 
-const genToken = () => {
-    return randstr.generate(16)
-};
+const genToken = () => randstr.generate(16);

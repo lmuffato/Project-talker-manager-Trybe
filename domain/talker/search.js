@@ -1,19 +1,19 @@
 const fs = require('fs/promises');
-const path = require("path");
+const path = require('path');
 const { StatusCodes } = require('http-status-codes');
 
 module.exports = async function (req, res, next) {
     try {
-        const { q } = req.query
+        const { q } = req.query;
         if (!q) {
-            return next()
+            return next();
         }
 
         const absolutePath = path.resolve('./talker.json');       
-        data = await fs.readFile(absolutePath)
+        const data = await fs.readFile(absolutePath);
         
         const talkers = JSON.parse(data);
-        filtered = talkers.filter(talker => talker.name.includes(q))
+        const filtered = talkers.filter((talker) => talker.name.includes(q));
 
         return res.status(StatusCodes.OK).json(filtered);
     } catch (err) {

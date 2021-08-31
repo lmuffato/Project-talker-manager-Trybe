@@ -1,22 +1,23 @@
 const fs = require('fs/promises');
-const path = require("path");
+const path = require('path');
 const { StatusCodes } = require('http-status-codes');
 
 module.exports = async function (req, res, next) {
     try {
-        const { id } = req.params
-
+        const id = parseInt(req.params.id, 10);
+        
         const absolutePath = path.resolve('./talker.json');       
-        data = await fs.readFile(absolutePath)
+        const data = await fs.readFile(absolutePath);
         
         const talkers = JSON.parse(data);
-        for (obj of talkers) {
-            if (obj.id == id) {
-                return res.status(StatusCodes.OK).json(obj);
-            }
+        const found = talkers.find((talker) => talker.id === id);
+        if (!found) {
+            return res.status(StatusCodes.NOT_FOUND).json({
+                message: 'Pessoa palestrante não encontrada',
+            });
         }
 
-        return res.status(StatusCodes.NOT_FOUND).json({ message: 'Pessoa palestrante não encontrada' });
+        return res.status(StatusCodes.OK).json(found);
     } catch (err) {
         next(err);
     }
