@@ -82,6 +82,17 @@ router.get('/', async (_req, res) => {
   res.status(200).json(talkers);
 });
 
+router.get('/search', verifyToken, async (req, res) => {
+  const { q } = req.query;
+
+  const talkers = await readTalkers();
+  if (!q) return res.status(200).json(talkers);
+
+  const filteredTalkers = talkers.filter((t) => t.name.includes(q));
+
+  res.status(200).json(filteredTalkers);
+});
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
 
