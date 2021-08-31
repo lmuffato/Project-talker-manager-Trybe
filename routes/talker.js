@@ -4,19 +4,22 @@ const status = require('../status');
 
 const router = express.Router();
 
-const TALKERS = readFile('talker.json');
+router.route('/')
+.get((_req, res) => {
+  const hasTalkers = talkers || talkers.length > 0;
+  const talkers = readFile('talker.json');
 
-router.get('/', (_req, res) => {
-  const hasTalkers = TALKERS || TALKERS.length > 0;
+    if (!hasTalkers) return res.status(status.ok).json([]);
 
-  if (!hasTalkers) return res.status(status.ok).json([]);
+    res.status(status.ok).json(talkers);
+  })
+  .post((req, res) => {
 
-  res.status(status.ok).json(TALKERS);
-});
+  });
 
 router.get('/:id', (req, res) => {
   const { id } = req.params;
-  const foundTalker = TALKERS.find((t) => t.id === parseInt(id, 10));
+  const foundTalker = talkers.find((t) => t.id === parseInt(id, 10));
 
   if (!foundTalker) {
     return res
