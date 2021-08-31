@@ -34,14 +34,29 @@ const verifyTalkerAge = (req, res, next) => {
   next();
 };
 
+/**
+ * Referência: Uso do Object.prototype.hasOwnProperty.call para evitar erro do Lint
+ * consultado no StackOverflow
+ * Link: https://stackoverflow.com/questions/39282873/how-do-i-access-the-object-prototype-method-in-the-following-logic
+ */
 const verifyTalkerTalk = (req, res, next) => {
   const { talk } = req.body;
 
-  if (!talk || !talk.watchedAt || !talk.rate) {
-    return res.status(400).json({
-      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
-    });
+  if (
+    typeof talk === 'object'
+    && Object.prototype.hasOwnProperty.call(talk, 'rate')
+    && Object.prototype.hasOwnProperty.call(talk, 'watchedAt')
+  ) {
+    return next();
   }
+
+  return res.status(400).json({
+    message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+  });
+};
+
+const verifyTalkerDate = (req, res, next) => {
+  const { talk } = req.body;
 
   if (!isDateValid(talk.watchedAt)) {
     return res.status(400).json({
@@ -53,7 +68,6 @@ const verifyTalkerTalk = (req, res, next) => {
 
 const verifyTalkerRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
-  console.log('----------- RATE ----------', rate);
   if (rate < 1 || rate > 5) {
     return res.status(400).json({
       message: 'O campo "rate" deve ser um inteiro de 1 à 5',
@@ -79,13 +93,17 @@ router.get('/:id', async (req, res) => {
   res.status(200).json(talker);
 });
 
-router.post(
-  '/',
+router.use(
   verifyToken,
   verifyTalkerName,
   verifyTalkerAge,
   verifyTalkerTalk,
+  verifyTalkerDate,
   verifyTalkerRate,
+);
+
+router.post(
+  '/',
   async (req, res) => {
     const { name, age, talk } = req.body;
     const talkers = await readTalkers();
@@ -99,5 +117,22 @@ router.post(
     res.status(201).json(newTalker);
   },
 );
+
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkers = await readTalkers();
+  const talkerIndex = talkers.findIndex((t) => t.id === +id);
+
+  talkers[talkerIndex] = {
+    ...talkers[talkerIndex],
+    name,
+    age,
+    talk,
+  };
+
+  await writeTalker(talkers);
+  res.status(200).json(talkers[talkerIndex]);
+});
 
 module.exports = router;
