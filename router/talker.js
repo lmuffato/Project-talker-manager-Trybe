@@ -10,6 +10,7 @@ const {
 } = require('../middlewares/validateTalker');
 const addTalker = require('../middlewares/addTalker');
 const updateTalker = require('../middlewares/updateTalker');
+const deleteTalker = require('../middlewares/deleteTalker');
 
 const router = Router();// { mergeParams: true }
 
@@ -38,5 +39,7 @@ router.get('/:id', async (req, res) => {
 });
 
 router.put('/:id', validateToken, allValidates, updateTalker);
+
+router.delete('/:id', validateToken, deleteTalker);
 
 module.exports = router;
