@@ -18,13 +18,27 @@ const validateName = (name, res) => {
     return false;
 };
 
+const validateAge = (age, res) => {
+    if (!age || age === '') {
+        return res.status(400).json({ message: 'O campo "age" é obrigatório' });
+    }
+    if (Number(age) < 18) {
+        return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
+    }
+    if (typeof (age) !== 'number') {
+        return res.status(400).json({ message: 'Idade deve ser um número' });
+    }
+    return false;
+};
+
 const createTalker = (req, res) => {
     const { authorization } = req.headers;
     const talker = req.body;
-    const { name } = req.body;
+    const { name, age, watchedAt, rate } = req.body;
 
     if (validateToken(authorization, res)) return;
     if (validateName(name, res)) return;
+    if (validateAge(age, res)) return;
 
     res.status(201).json(talker);
 };
