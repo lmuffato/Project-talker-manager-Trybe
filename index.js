@@ -12,7 +12,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-const talkerRouter = require('./talker');
+const talkerRouter = require('./talker/index');
 
 app.use('/talker', talkerRouter);
 
