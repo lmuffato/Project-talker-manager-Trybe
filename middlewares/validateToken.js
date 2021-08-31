@@ -1,4 +1,4 @@
-const validateToken = (req, res) => {
+const validateToken = (req, res, next) => {
   const { token } = req.headers;
   const regexAlphanumeric = /^[a-zA-Z0-9-_!@#$%^&*]{16,16}$/;
 
@@ -6,14 +6,11 @@ const validateToken = (req, res) => {
     return res.status(401).json({ message: 'Token não encontrado' });
   }
 
-  console.log(token);
-  console.log(regexAlphanumeric.test(token));
-
   if (!regexAlphanumeric.test(token)) {
     return res.status(401).json({ message: 'Token inválido' });
   }
 
-  return res.status(200).send('Ola mundo!');
+  next();
 };
 
 module.exports = validateToken;

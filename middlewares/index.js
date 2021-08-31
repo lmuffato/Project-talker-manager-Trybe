@@ -4,6 +4,8 @@ const validateEmail = require('./validateEmail');
 const validatePassword = require('./validatePassword');
 const generateToken = require('./generateToken');
 const validateToken = require('./validateToken');
+const validateName = require('./validadeName');
+const validateAge = require('./validateAge');
 
 module.exports = {
   getTalkers,
@@ -12,4 +14,6 @@ module.exports = {
   validatePassword,
   generateToken,
   validateToken,
+  validateName,
+  validateAge,
 };
