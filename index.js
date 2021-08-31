@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs').promisses;
+const fs = require('fs').promises;
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,15 +16,15 @@ app.get('/', (_request, response) => {
 app.get('/talker', (_request, response) => {
   fs.readFile('./talker.json', 'utf8')
   .then((content) => response.status(HTTP_OK_STATUS).send(JSON.parse(content)))
-  .catch((err) => response.status(401)
-  .json({ message: `Erro ao buscar arquivo ${err.message}` }));
+  .catch(() => response.status(401).json([]));
 });
 
 app.get('/talker/:id', (_request, response) => {
  const { id } = _request.params;
  fs.readFile('./talker.json', 'utf8').then((talkers) => {
- const res = talkers.find((talkerId) => talkerId.id === parseInt(id, 10));
-if (!res) return response.status(404).json({ message: 'Pessoa palestrante nao encontrada' });
+ const talkerjson = JSON.parse(talkers);
+ const res = talkerjson.find((talkerId) => talkerId.id === parseInt(id, 10));
+if (!res) return response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 return response.status(HTTP_OK_STATUS).json(res);
 });
 });
