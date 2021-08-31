@@ -13,4 +13,4 @@ const generateToken = () => {
   return token.substr(0, tokenLength);
 };
 
-module.exports = generateToken();
+module.exports = generateToken;

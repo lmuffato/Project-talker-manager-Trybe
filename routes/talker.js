@@ -1,19 +1,17 @@
 const express = require('express');
 const readFile = require('../utils/readFile');
+const status = require('../status');
 
 const router = express.Router();
-
-const HTTP_OK_STATUS = 200;
-const HTTP_NOT_FOUND_STATUS = 404;
 
 const TALKERS = readFile('talker.json');
 
 router.get('/', (_req, res) => {
   const hasTalkers = TALKERS || TALKERS.length > 0;
 
-  if (!hasTalkers) return res.status(HTTP_OK_STATUS).json([]);
+  if (!hasTalkers) return res.status(status.ok).json([]);
 
-  res.status(HTTP_OK_STATUS).json(TALKERS);
+  res.status(status.ok).json(TALKERS);
 });
 
 router.get('/:id', (req, res) => {
@@ -22,11 +20,11 @@ router.get('/:id', (req, res) => {
 
   if (!foundTalker) {
     return res
-    .status(HTTP_NOT_FOUND_STATUS)
+    .status(status.notFound)
     .json({ message: 'Pessoa palestrante não encontrada' }); 
   }
 
-  res.status(HTTP_OK_STATUS).json(foundTalker);
+  res.status(status.ok).json(foundTalker);
 });
 
 module.exports = router;
