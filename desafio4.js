@@ -1,3 +1,7 @@
+// Validation Functions
+
+const regexValidation = '^(((0[1-9]|[12]\d|3[01])\/(0[13578]|1[02])\/((19|[2-9]\d)\d{2}))|((0[1-9]|[12]\d|30)\/(0[13456789]|1[012])\/((19|[2-9]\d)\d{2}))|((0[1-9]|1\d|2[0-8])\/02\/((19|[2-9]\d)\d{2}))|(29\/02\/((1[6-9]|[2-9]\d)(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00))))$';
+
 const validateToken = (authorization, res) => {
     if (!authorization || authorization === '') {
         return res.status(401).json({ message: 'Token não encontrado' });
@@ -31,14 +35,28 @@ const validateAge = (age, res) => {
     return false;
 };
 
+/* Procurar regex para data
+
+const validateTalkDate = (watchedAt, res) => {
+    if () {
+        return res.status(400).json({ 
+            message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+    }
+    return false;
+};
+*/
+
+// Main Function
+
 const createTalker = (req, res) => {
     const { authorization } = req.headers;
     const talker = req.body;
     const { name, age, watchedAt, rate } = req.body;
-
+    
     if (validateToken(authorization, res)) return;
     if (validateName(name, res)) return;
     if (validateAge(age, res)) return;
+    if (validateTalkDate(watchedAt, res)) return;
 
     res.status(201).json(talker);
 };
