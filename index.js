@@ -98,3 +98,11 @@ app.put(
     res.status(200).json(editedSpeaker);
   },
 );
+
+app.delete('/talker/:id', isValidToken, async (req, res) => {
+  const { id } = req.params;
+  const talker = await readTalker();
+  const newObj = talker.filter((obj) => obj.id !== parseInt(id, 10));
+  await fs.writeFile('talker.json', JSON.stringify(newObj));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
