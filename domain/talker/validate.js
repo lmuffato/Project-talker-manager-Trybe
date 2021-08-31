@@ -1,9 +1,10 @@
 const { StatusCodes } = require('http-status-codes');
 const moment = require('moment');
 
-const MIN_AGE = 18;
-const MAX_RATE = 5;
-const MIN_RATE = 1;
+const 
+    MIN_AGE = 18,
+    MAX_RATE = 5,
+    MIN_RATE = 1;
 
 module.exports = async function validate(req, res, next) {
     try {

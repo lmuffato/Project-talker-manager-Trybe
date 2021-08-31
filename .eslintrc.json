@@ -9,6 +9,8 @@
     "no-use-before-define": ["off", { "functions": true, "classes": true, "variables": true }],
     "complexity": ["off", 2],
     "no-param-reassign": ["off", { "props": true }],
-    "func-names": ["off", "as-needed"]
+    "func-names": ["off", "as-needed"],
+    "sonarjs/cognitive-complexity": ["off"],
+    "one-var": ["off"]
   }
 }
