@@ -38,6 +38,26 @@ app.get('/talker', async (_req, res) => {
   }
 });
 
+// Requisito 5
+app.put('.talker/:id', validadeToken, validadeName, validadeAge, validadeTalk, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkers = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
+  const modificTalk = talkers.map((item) => {
+    if (item.id === Number(id)) {
+      return {
+        name,
+        age,
+        id: item.id,
+        talk,
+      };
+    }
+    return item;
+  });
+  fs.writeFile(ROTA_TALKER, JSON.stringify(modificTalk));
+  res.status(200).end();
+});
+
 // Requisito 7
 app.get('/talker/search', validadeToken, async (req, res) => {
   const { q } = req.query;
@@ -86,8 +106,6 @@ app.post('/talker', validadeToken, validadeName, validadeAge, validadeTalk, asyn
 
   res.status(201).json({ id, name, age, talk });
 });
-
-// Requisito 5
 
 // Requisito 6
 app.delete('/talker/:id', validadeToken, async (req, res) => {
