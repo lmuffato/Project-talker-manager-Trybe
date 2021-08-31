@@ -12,6 +12,10 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+const requisitoUm = require('./requisito1');
+
+app.use('/talker', requisitoUm);
+
 app.listen(PORT, () => {
   console.log('Online');
 });
