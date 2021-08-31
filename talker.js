@@ -88,6 +88,18 @@ router.get('/', (_req, res) => {
   }
 });
 
+router.get('/search', authToken, (req, res) => {
+  const { q } = req.query;
+
+  console.log(q);
+
+  const talkers = readTalkerFile();
+
+  const filteredTalkers = talkers.filter((talker) => talker.name.includes(q));
+
+  return res.status(200).json(filteredTalkers);
+});
+
 router.get('/:id', (req, res) => {
   const { id } = req.params;
 
