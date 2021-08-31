@@ -13,6 +13,7 @@ const writeTalker = require('./writeTalker');
 const updateTalker = require('./updatetalker');
 const test = require('./testMiddleware');
 const deleteTalker = require('./deleteTalker');
+const searchTalker = require('./searchTalker');
 
 module.exports = {
     talker,
@@ -30,4 +31,5 @@ module.exports = {
     updateTalker,
     test,
     deleteTalker,
+    searchTalker,
 };

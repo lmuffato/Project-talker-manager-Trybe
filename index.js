@@ -14,9 +14,9 @@ const {
   validateDate,
   validateRate,
   writeTalker,
-  updateTalker,
-  test,
+  updateTalker, 
   deleteTalker,
+  searchTalker,
 } = require('./midllewares/index');
 
 const app = express();
@@ -32,6 +32,8 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', talker);
 
+app.get('/talker/search', validateToken, searchTalker);
+
 app.post('/talker',
   validateToken,
   validateTalkerName,
@@ -44,7 +46,6 @@ app.post('/talker',
 app.get('/talker/:id', talkerId);
 
 app.put('/talker/:id',
-test,
 validateToken,
 validateTalkerName,
 validateTalkerAge,

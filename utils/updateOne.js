@@ -8,8 +8,7 @@ const updateOne = async (talker, id) => {
     const updatedTalker = { ...talker, id: idToNumber };
     filterArr.push(updatedTalker);
     try {
-        await fs.writeFile('./talker.json', JSON.stringify(filterArr));
-        console.log(updatedTalker);
+        await fs.writeFile('./talker.json', JSON.stringify(filterArr));        
         return updatedTalker;
     } catch (e) {
         return false;
