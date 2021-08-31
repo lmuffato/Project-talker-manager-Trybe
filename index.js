@@ -3,11 +3,15 @@ const bodyParser = require('body-parser');
 const getAllTalkers = require('./middleware/req1');
 const getTalkerById = require('./middleware/req2');
 const login = require('./middleware/req3');
+const createTalker = require('./middleware/req4');
 
 const validateEmail = require('./validations/validateEmail');
 const validatePassword = require('./validations/validatePassword');
+const validateToken = require('./validations/validateToken');
+const validateNameAge = require('./validations/validateNameAge');
+const validateTalk = require('./validations/validateTalks');
 
-
+const { validateTalks, validateRates, validateWachedAt } = validateTalk;
 
 const app = express();
 app.use(bodyParser.json());
@@ -23,11 +27,18 @@ app.get('/', (_request, response) => {
 // requisito 1
 app.get('/talker', getAllTalkers);
 
+// requisito 4
+app.post(
+  '/talker', validateToken, validateNameAge,
+  validateTalks, validateRates, validateWachedAt, createTalker,
+  );
+
 // requisito 2
 app.get('/talker/:id', getTalkerById);
 
 // requisito 3
-app.post('/login', validateEmail, validatePassword, login)
+app.post('/login', validateEmail, validatePassword, login);
+
 // Erros
 
 // app.use((err, _req, res, _next) => {
