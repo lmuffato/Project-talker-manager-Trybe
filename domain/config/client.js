@@ -11,5 +11,5 @@ module.exports = class ConfigClient {
         return this.config[key];    
     }
 
-    appConfig = () =>  this.get('app')
+    appConfig = () => this.get('app')
 };

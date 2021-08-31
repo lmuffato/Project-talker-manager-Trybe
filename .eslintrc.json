@@ -1,6 +1,7 @@
 {
   "env": {
-    "es2020": true
+    "es2020": true,
+    "node": true
   },
   "extends": "trybe-backend",
   "rules": {
@@ -11,6 +12,16 @@
     "no-param-reassign": ["off", { "props": true }],
     "func-names": ["off", "as-needed"],
     "sonarjs/cognitive-complexity": ["off"],
-    "one-var": ["off"]
-  }
+    "one-var": ["off"],
+    "global-require": "off"
+  },
+  "parserOptions": {
+    "es6": true,
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "parser": "babel-eslint"
 }

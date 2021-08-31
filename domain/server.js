@@ -25,7 +25,7 @@ module.exports = class Server {
 
         this.app.use(
             this.configClient.appConfig().baseUrl,
-            initroutes(this)
+            initroutes(this),
         );
         
         this.posRoutesMiddlewares();
@@ -50,5 +50,3 @@ module.exports = class Server {
 };
 
 const defaultClient = () => {};
-
-const defaultHandler = () => { throw new Error('unimplemented handler'); };

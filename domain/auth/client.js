@@ -2,8 +2,6 @@ const { StatusCodes } = require('http-status-codes');
 const errors = require('../errors/client');
 
 module.exports = class AuthClient {
-    constructor() { }
-
     authenticate = async (req, res, next) => {
         try {
             const token = req.headers.authorization;
@@ -26,7 +24,8 @@ module.exports = class AuthClient {
                 new errors.CustomError(
                     err.message,
                     StatusCodes.UNAUTHORIZED,
-            ));
+                ),
+            );
         }
     }
 };
