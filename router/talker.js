@@ -11,6 +11,7 @@ const {
 const addTalker = require('../middlewares/addTalker');
 const updateTalker = require('../middlewares/updateTalker');
 const deleteTalker = require('../middlewares/deleteTalker');
+const searchTalker = require('../middlewares/searchTalker');
 
 const router = Router();// { mergeParams: true }
 
@@ -23,6 +24,8 @@ const allValidates = [
   validateTalkDate,
   validateTalkRate,
 ];
+
+router.get('/search', validateToken, searchTalker);
 
 router.get('/', async (_req, res) => {
   const arrTalkers = await readFile();
