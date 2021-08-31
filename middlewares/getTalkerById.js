@@ -1,10 +1,12 @@
-const readFile = require('./readFile');
+const fs = require('fs');
 
-const getTalkerById = async (req, res) => {
-  const talkerList = await readFile();
-  const talker = talkerList.find(({ id }) => id === parseInt(req.params.id, 10));
+const getTalkerById = (req, res) => {
+  const talkers = JSON.parse(fs.readFileSync('talker.json'));
+  const id = Number(req.params.id);
+  const talker = talkers.find((tal) => tal.id === id);
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-  return res.status(200).json(talker);
+
+  res.status(200).json(talker);
 };
 
 module.exports = getTalkerById;
