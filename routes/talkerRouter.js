@@ -35,7 +35,7 @@ const verifyTalkerAge = (req, res, next) => {
 };
 
 /**
- * Referência: Uso do OObject.keys(talk).includes() para evitar erro do Lint
+ * Referência: Uso do Object.keys(talk).includes() para evitar erro do Lint
  * inspirado por consulta ao StackOverflow
  * Link: https://stackoverflow.com/questions/39282873/how-do-i-access-the-object-prototype-method-in-the-following-logic
  */
@@ -93,8 +93,19 @@ router.get('/:id', async (req, res) => {
   res.status(200).json(talker);
 });
 
+router.use(verifyToken);
+
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readTalkers();
+  const filteredTalkers = talkers.filter((t) => t.id !== +id);
+
+  await await writeTalker(filteredTalkers);
+
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
 router.use(
-  verifyToken,
   verifyTalkerName,
   verifyTalkerAge,
   verifyTalkerTalk,
