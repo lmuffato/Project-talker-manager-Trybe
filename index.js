@@ -6,7 +6,6 @@ const app = express();
 app.use(bodyParser.json());
 
 app.get('/talker', async (_req, res) => {
-
   const talkers = await fs.readFile('./talker.json', 'utf8');
 
   return res.status(200).json(JSON.parse(talkers));
@@ -17,11 +16,13 @@ app.get('/talker/:id', async (req, res) => {
 
   const talkers = await fs.readFile('./talker.json', 'utf8');
   const talker = JSON.parse(talkers)
-    .filter(talker => talker.id === Number(id));
+    .filter((tal) => tal.id === Number(id));
 
-  if (talker.length < 1) return res.status(404).json({
-    message: "Pessoa palestrante não encontrada"
-  });
+  if (talker.length < 1) {
+    return res.status(404).json({
+     message: 'Pessoa palestrante não encontrada',
+   });
+  }
 
   res.status(200).json(talker[0]);
 });
