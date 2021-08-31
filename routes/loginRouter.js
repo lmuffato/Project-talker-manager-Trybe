@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const validateEmail = require('../middleware/validateEmail');
 const validatePassword = require('../middleware/validatePasword');
 
-const tokens = [];
+const tokens = ['68cceff8d081335d'];
 
 function generateToken(num) {
   return crypto.randomBytes(num).toString('hex');

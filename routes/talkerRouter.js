@@ -1,6 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 
+const path = './talker.json';
+
 const prettier = require('prettier');
 
 const router = express.Router();
@@ -15,7 +17,7 @@ const {
 } = require('../middleware/validateTalk');
 
 router.get('/', async (request, response) => {
-  const talkers = JSON.parse(await fs.promises.readFile('./talker.json', { encoding: 'utf-8' }));
+  const talkers = JSON.parse(await fs.promises.readFile(path, { encoding: 'utf-8' }));
 
   if (!talkers.length) {
     return response.status(200).json([]);
@@ -26,7 +28,7 @@ router.get('/', async (request, response) => {
 
 router.get('/:id', async (request, response) => {
   const { id } = request.params;
-  const talkers = JSON.parse(await fs.promises.readFile('./talker.json', { encoding: 'utf-8' }));
+  const talkers = JSON.parse(await fs.promises.readFile(path, { encoding: 'utf-8' }));
 
   const talkerById = await talkers.find((talker) => talker.id === Number(id));
 
@@ -37,28 +39,47 @@ router.get('/:id', async (request, response) => {
   return response.status(200).json(talkerById);
 });
 
-router.post(
-  '/',
+const validations = [
   validateToken,
   validateName,
   validateAge,
   validateTalk,
   validateWatchedAt,
   validateRate,
-  async (request, response) => {
-    const talkers = JSON.parse(await fs.promises.readFile('./talker.json', { encoding: 'utf-8' }));
+];
 
-    const newTalker = { id: talkers.length + 1, ...request.body };
+router.post('/', validations, async (request, response) => {
+  const talkers = JSON.parse(await fs.promises.readFile(path, { encoding: 'utf-8' }));
 
-    talkers.push(newTalker);
+  const newTalker = { id: talkers.length + 1, ...request.body };
 
-    const stringifyTalkers = JSON.stringify(talkers);
-    const prettifyString = prettier.format(stringifyTalkers, { parser: 'json' });
+  talkers.push(newTalker);
 
-    await fs.promises.writeFile('./talker.json', prettifyString, 'utf-8');
+  const stringifyTalkers = JSON.stringify(talkers);
+  const prettifyString = prettier.format(stringifyTalkers, { parser: 'json' });
 
-    return response.status(201).json(newTalker);
-  },
-);
+  await fs.promises.writeFile('./talker.json', prettifyString, 'utf-8');
+
+  return response.status(201).json(newTalker);
+});
+
+router.put('/:id', validations, validateRate, async (request, response) => {
+  const { id } = request.params;
+  const { name, age } = request.body;
+  const { watchedAt, rate } = request.body.talk;
+  const talkers = JSON.parse(await fs.promises.readFile(path, { encoding: 'utf-8' }));
+
+  const getTalkerIndex = talkers.findIndex((t) => t.id === Number(id));
+  const editedTalker = { id: Number(id), name, age, talk: { watchedAt, rate } };
+
+  talkers[getTalkerIndex] = editedTalker;
+  console.log(talkers);
+
+  const stringifyTalkers = JSON.stringify(talkers);
+  const prettifyString = prettier.format(stringifyTalkers, { parser: 'json' });
+
+  await fs.promises.writeFile('./talker.json', prettifyString, 'utf-8');
+  return response.status(200).json(talkers[getTalkerIndex]);
+});
 
 module.exports = router;
