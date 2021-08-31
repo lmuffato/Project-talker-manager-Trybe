@@ -16,6 +16,10 @@ const requisitos = require('./rota');
 
 app.use('/talker', requisitos);
 
+const requisitoTres = require('./requisito3_rota');
+
+app.use('/login', requisitoTres);
+
 app.listen(PORT, () => {
   console.log('Online');
 });

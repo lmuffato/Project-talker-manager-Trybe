@@ -23,7 +23,10 @@ const requisito2 = async (req, res) => {
   return res.status(200).json(resposta);
 };
 
+const requisito3 = async (_req, res) => res.status(200).json({ token: '7mqaVRXJSp886CGr' });
+
 module.exports = {
   requisito1,
   requisito2,
+  requisito3,
 };
