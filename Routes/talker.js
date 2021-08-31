@@ -59,6 +59,21 @@ router.post('/', authMiddlewares, async (req, res) => {
   }  
 });
 
+router.put('/:id', authMiddlewares, async (req, res) => {
+  const { name, age, talk } = req.body;
+  const { id } = req.params;
+
+  try {
+    const talkers = await getFileData(TALKER_JSON);
+    const newTalker = { name, age, talk, id: parseInt(id, 10) };
+    const filteredTalkers = talkers.filter((person) => person.id !== parseInt(id, 10));
+    await writeFile(TALKER_JSON, JSON.stringify([...filteredTalkers, newTalker]));
+    res.status(200).json(newTalker);
+  } catch (error) {
+    res.status(500).end();
+  }  
+});
+
 router.delete('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
   try {
