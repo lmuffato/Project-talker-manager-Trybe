@@ -11,6 +11,10 @@ const {
   getTalkerFile,
 } = require('../fsFunctions');
 
+const {
+  validateToken,
+} = require('../middlewares/talkerMiddlewares');
+
 router.get('/', rescue(async (_req, res) => {
   const talkerFile = await fs.readFile('talker.json', 'utf-8');
   const talkerContent = talkerFile ? JSON.parse(talkerFile) : [];
@@ -28,5 +32,9 @@ router.get('/:id', rescue(async (req, res) => {
     ? res.status(HTTP_NOTFOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' })
     : res.status(HTTP_OK_STATUS).json(talkerById);
 }));
+
+const talkerMiddlewares = [validateToken];
+
+router.post('/', talkerMiddlewares);
 
 module.exports = router;
