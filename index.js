@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 
 const app = express();
+
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
@@ -44,3 +45,7 @@ app.get('/talker/:id', async (req, res) => {
 
 // utilizei esse artigo para corrigir o erro de lint no parseInt da linha 35:
 // https://eslint.org/docs/rules/radix
+
+const loginRouter = require('./loginRouter');
+
+app.use('/login', loginRouter);
