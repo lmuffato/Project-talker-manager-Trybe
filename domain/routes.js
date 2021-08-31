@@ -32,7 +32,7 @@ const talkerRouter = (server) => {
     router.post(
         '/',
         server.authClient.authenticate,
-        server.talkerClient.validate,
+        ...server.talkerClient.validators,
         server.talkerClient.create,
     );
 
@@ -44,7 +44,7 @@ const talkerRouter = (server) => {
     router.put(
         '/:id',
         server.authClient.authenticate,
-        server.talkerClient.validate,
+        ...server.talkerClient.validators,
         server.talkerClient.update,
     );
     

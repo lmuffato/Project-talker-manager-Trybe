@@ -1,3 +1,5 @@
+const validators = require('./validate');
+
 module.exports = class TalkerClient {
     constructor() {
         this.ListHandler = require('./list');
@@ -6,7 +8,12 @@ module.exports = class TalkerClient {
         this.UpdateHandler = require('./update');
         this.DeleteHandler = require('./delete');
         this.SearchHandler = require('./search');
-        this.ValidateTalkerMiddleware = require('./validate');
+        
+        this.validators = [
+            validators.validateName,
+            validators.validateAge,
+            validators.validateTalker,
+        ];
     }
 
     list = async (...args) => {
@@ -31,9 +38,5 @@ module.exports = class TalkerClient {
 
     search = async (...args) => {
         this.SearchHandler.call(this, ...args);
-    }
-
-    validate = async (...args) => {
-        this.ValidateTalkerMiddleware.call(this, ...args);
     }
 };
