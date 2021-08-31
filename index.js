@@ -36,3 +36,20 @@ app.get('/talker/:id', async (req, res) => {
   }
   res.status(HTTP_OK_STATUS).send(foundTalker);
 });
+
+
+function emailValidation() {
+
+};
+
+function passwordValidation() {
+
+};
+
+function tokenGenerator() {
+
+};
+
+app.post('/login', (req, res) => {
+
+});
