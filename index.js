@@ -3,12 +3,23 @@ const crypto = require('crypto');
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
-const { validateEmail, validatePassword } = require('./validate/index');
+const {
+  validateEmail,
+  validatePassword,
+  validateName,
+  validateToken,
+  validateWatchedAtAndRate,
+  validateAge,
+  validateTalk } = require('./validate/index');
 
 const read = async () => {
 const data = await fs.readFile('./talker.json', 'utf8').catch(() => []);
 return JSON.parse(data);
-};  
+};
+async function write(newFile) {
+  const setFile = await fs.writeFile('./talker.json', JSON.stringify(newFile));
+  return setFile;
+  } 
 
 function generateToken() {
 return crypto.randomBytes(8).toString('hex');
@@ -46,6 +57,19 @@ app.get('/talker/:id', async (req, res) => {
 }
 
   res.status(HTTP_OK_STATUS).json(data[talkerId]);
+});
+
+app.post('/talker', 
+validateTalk, validateName, validateToken, validateWatchedAtAndRate, validateAge,
+   async (req, res) => {
+  const { name, age, talk } = req.body;
+  const data = await read();
+  const id = 5;
+  const newObj = ({ name, age, id, talk });
+  data.push(newObj);
+  write(data);
+
+  return res.status(201).json(newObj);
 });
 
 app.listen(PORT, async () => {
