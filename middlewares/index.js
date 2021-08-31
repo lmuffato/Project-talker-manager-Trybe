@@ -7,7 +7,15 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 
+const crypto = require('crypto');
+
+function generateToken() {
+return crypto.randomBytes(8).toString('hex');
+} 
+
 const { readFile } = require('../services/readFile');
+
+const { validateEmail, validatePassword } = require('../validations/validations');
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -30,6 +38,11 @@ app.get('/talker/:id', async (req, res) => {
 }
 
   res.status(HTTP_OK_STATUS).json(talkers[talkerId]);
+});
+
+app.post('/login', validateEmail, validatePassword, (_req, res) => {
+  const token = generateToken();
+  return res.status(HTTP_OK_STATUS).json({ token });
 });
 
 module.exports = {
