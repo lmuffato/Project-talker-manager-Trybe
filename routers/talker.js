@@ -13,6 +13,7 @@ const {
 
 const {
   validateToken,
+  validateName,
 } = require('../middlewares/talkerMiddlewares');
 
 router.get('/', rescue(async (_req, res) => {
@@ -33,7 +34,7 @@ router.get('/:id', rescue(async (req, res) => {
     : res.status(HTTP_OK_STATUS).json(talkerById);
 }));
 
-const talkerMiddlewares = [validateToken];
+const talkerMiddlewares = [validateToken, validateName];
 
 router.post('/', talkerMiddlewares);
 
