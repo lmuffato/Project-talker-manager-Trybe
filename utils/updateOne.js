@@ -1,4 +1,4 @@
-const fs = require('fs/promises');
+const fs = require('fs').promises;
 const readData = require('./readData');
 
 const updateOne = async (talker, id) => {
