@@ -1,9 +1,7 @@
 const express = require('express');
 const crypto = require('crypto');
 
-const router = express.Router({
-  mergeParams: true,
-});
+const router = express.Router();
 
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
