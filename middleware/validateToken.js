@@ -1,16 +1,16 @@
 const { tokens } = require('../routes/loginRouter');
 
 const validateToken = (request, response, next) => {
-  const { token } = request.headers;
+  const { authorization } = request.headers;
 
-  if (!token || token === '') {
-    return response.status(401).json({ message: 'Token inválido' });
+  if (!authorization) {
+    return response.status(401).json({ message: 'Token não encontrado' });
   }
 
-  const findToken = tokens.find((t) => t === token);
+  const findToken = tokens.find((t) => t === authorization);
 
   if (!findToken) {
-    return response.status(401).json({ message: 'Token não encontrado' });
+    return response.status(401).json({ message: 'Token inválido' });
   }
 
   next();

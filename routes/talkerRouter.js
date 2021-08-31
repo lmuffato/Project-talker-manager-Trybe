@@ -39,12 +39,12 @@ router.get('/:id', async (request, response) => {
 
 router.post(
   '/',
+  validateToken,
   validateName,
   validateAge,
   validateTalk,
   validateWatchedAt,
   validateRate,
-  validateToken,
   async (request, response) => {
     const talkers = JSON.parse(await fs.promises.readFile('./talker.json', { encoding: 'utf-8' }));
 
