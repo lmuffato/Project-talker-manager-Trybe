@@ -31,7 +31,6 @@ router.get('/:id', async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  const { token } = req.headers;
   const { name, age, talk } = req.body;
 
   try {
