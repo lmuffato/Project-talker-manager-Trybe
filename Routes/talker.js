@@ -22,6 +22,18 @@ router.get('/', async (_req, res) => {
   }  
 });
 
+router.get('/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  try {
+    const talkers = await getFileData(TALKER_JSON);
+    if (!q) return res.status(200).json(talkers);
+    const filteredTalkers = talkers.filter((talker) => talker.name.includes(q));
+    res.status(200).json(filteredTalkers);
+  } catch (error) {
+    res.status(500).end();
+  }
+});
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   try {
