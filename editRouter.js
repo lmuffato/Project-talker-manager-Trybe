@@ -104,7 +104,7 @@ const checkWhachedAt = (req, res, next) => {
   next();
 };
 
-router.put('/', findToken, checkToken, findName, checkName,
+router.put('/:id', findToken, checkToken, findName, checkName,
 findAge, checkAge, findTalk, checkRate, checkTalk, checkWhachedAt,
  async (req, res) => {
   const { id } = req.params;

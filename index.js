@@ -60,33 +60,12 @@ app.use('/talker', talkerRouter);
 
 const editRouter = require('./editRouter');
 
-app.use('/talker/:id', editRouter);
+app.use('/talker/', editRouter);
 
 // 6 - Crie o endpoint DELETE /talker/:id
 
-const findToken = (req, res, next) => {
-  const { authorization } = req.headers;
+const deleteRouter = require('./deleteRouter');
 
-  if (!authorization) {
-    return res.status(401).json({ message: 'Token não encontrado' });
-  }
-  next();
-};
+app.use('/talker/', deleteRouter);
 
-const checkToken = (req, res, next) => {
-  const { authorization } = req.headers;
-
-  if (authorization.length !== 16) {
-    return res.status(401).json({ message: 'Token inválido' });
-  }
-  next();
-};
-
-app.delete('/talker/:id', findToken, checkToken, async (req, res) => {
-  const { id } = req.params;
-  const content = await fs.readFile('./talker.json');
-  const talker = JSON.parse(content);
-  const otherTalker = talker.filter((t) => t.id !== +id);
-  await fs.writeFile('./talker.json', JSON.stringify(otherTalker));
-  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
-});
+// 7 - Crie o endpoint GET /talker/search?q=searchTerm
