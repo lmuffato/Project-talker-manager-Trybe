@@ -58,6 +58,12 @@ app.use('/talker', talkerRouter);
 
 // 5 - Crie o endpoint PUT /talker/:id
 
+const editRouter = require('./editRouter');
+
+app.use('/talker/:id', editRouter);
+
+// 6 - Crie o endpoint DELETE /talker/:id
+
 const findToken = (req, res, next) => {
   const { authorization } = req.headers;
 
@@ -76,134 +82,11 @@ const checkToken = (req, res, next) => {
   next();
 };
 
-const findName = (req, res, next) => {
-  const { name } = req.body;
-
-  if (!name) {
-    return res.status(400).json({ message: 'O campo "name" é obrigatório' });
-  }
-  next();
-};
-
-const checkName = (req, res, next) => {
-  const { name } = req.body;
-
-  if (name.length < 3) {
-    return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
-  }
-  next();
-};
-
-const findAge = (req, res, next) => {
-  const { age } = req.body;
-
-  if (!age) {
-    return res.status(400).json({ message: 'O campo "age" é obrigatório' });
-  }
-  next();
-};
-
-const checkAge = (req, res, next) => {
-  const { age } = req.body;
-
-  if (age < 18) {
-    return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
-  }
-  next();
-};
-
-const findTalk = (req, res, next) => {
-  const { talk } = req.body;
-  
-  if (!talk) {
-    return res.status(400).json({ message: 
-      'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
-  }
-  next();
-};
-
-const checkRate = (req, res, next) => {
-  const { talk } = req.body;
-  const { rate } = talk;
-
-  if (rate > 5) {
-    return res.status(400).json({ message: 
-      'O campo "rate" deve ser um inteiro de 1 à 5' });
-  } if (rate < 1) {
-    return res.status(400).json({ message: 
-      'O campo "rate" deve ser um inteiro de 1 à 5' });
-  }
-  next();
-};
-
-const checkTalk = (req, res, next) => {
-  const { talk } = req.body;
-  const { watchedAt, rate } = talk;
-  
-  if (!watchedAt || !rate) {
-    return res.status(400).json({ message: 
-      'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
-  }
-  next();
-};
-
-const checkWhachedAt = (req, res, next) => {
-  const { talk } = req.body;
-  const { watchedAt } = talk;
-  const datePattern = /^(0?[1-9]|[12][0-9]|3[01])[/](0?[1-9]|1[012])[/]\d{4}$/;
-
-  if (datePattern.test(watchedAt) === false) {
-    return res.status(400).json({ message: 
-      'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
-  } 
-  next();
-};
-
-app.put('/talker/:id', findToken, checkToken, findName, checkName,
-findAge, checkAge, findTalk, checkRate, checkTalk, checkWhachedAt,
- async (req, res) => {
+app.delete('/talker/:id', findToken, checkToken, async (req, res) => {
   const { id } = req.params;
-  const { name, age, talk: { watchedAt, rate } } = req.body;
   const content = await fs.readFile('./talker.json');
   const talker = JSON.parse(content);
   const otherTalker = talker.filter((t) => t.id !== +id);
-  const editedTalker = {
-    id: +id,
-    name,
-    age,
-    talk: {
-      watchedAt,
-      rate,
-    },
-  };
-  otherTalker.push(editedTalker);
   await fs.writeFile('./talker.json', JSON.stringify(otherTalker));
-  res.status(200).json(editedTalker);
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
-
-// 6 - Crie o endpoint DELETE /talker/:id
-
-// const findToken = (req, res, next) => {
-//   const { authorization } = req.headers;
-
-//   if (!authorization) {
-//     return res.status(401).json({ message: 'Token não encontrado' });
-//   }
-//   next();
-// };
-
-// const checkToken = (req, res, next) => {
-//   const { authorization } = req.headers;
-
-//   if (authorization.length !== 16) {
-//     return res.status(401).json({ message: 'Token inválido' });
-//   }
-//   next();
-// };
-
-// app.delete('/talker/:id', findToken, checkToken, async (req, _res) => {
-//   const { id } = req.params;
-//   const content = await fs.readFile('./talker.json');
-//   const talker = JSON.parse(content);
-//   const otherTalker = talker.findIndex((t) => t.id !== +id);
-// });
