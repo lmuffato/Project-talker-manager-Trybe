@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const getAllTalkers = require('./desafio1');
 
 const app = express();
 app.use(bodyParser.json());
@@ -11,6 +12,9 @@ const PORT = '3000';
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
+
+// Desafio 1
+app.get('/talker', getAllTalkers);
 
 app.listen(PORT, () => {
   console.log('Online');
