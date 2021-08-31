@@ -85,14 +85,27 @@ function ageValidation(req, res, next) {
   if (!age) {
     return res.status(400).json({ message: 'O campo "age" é obrigatório' });
   }
-  if (parseInt(age) < 18) {
-    return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade'})
+  if (parseInt(age, 0) < 18) {
+    return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
   }
   next();
 }
 
+function talkValidation(req, res) {
+  const { talk: { watchedAt, rate } } = req.body;
+  const { talk } = req.body;
+  const dataRegex = /\n# $&:\n\t/;
+  if (dataRegex.test(watchedAt) === false) {
+    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  } if (rate < 1 || rate > 5) {
+    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  } if (!talk || !watchedAt || !rate) {
+    return res.status(400).json({ 
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios', 
+    }); 
+  }
+}
 
-
-app.post('/talker', nameValidation, (req, res) => {
-  const { name, age, talk: {watchedAt, rate} } = req.body;
+app.post('/talker', nameValidation, ageValidation, talkValidation, (req, res) => {
+  const { name, age, talk: { watchedAt, rate } } = req.body;
 });
