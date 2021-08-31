@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 function validateEmail(email, res) {
   if (!email || email === '') {
     return res.status(400).json({
@@ -27,14 +29,18 @@ function validatePassword(password, res) {
   }
 }
 
+const generateToken = () => crypto.randomBytes(8).toString('hex');
+// Dica do Vinicius Rodrigues :)
+
 const login = (req, res) => {
   const { email, password } = req.body;
+  const token = generateToken();
 
   if (validateEmail(email, res)) return;
   if (validatePassword(password, res)) return;
 
   res.status(200).json({
-    token: '7mqaVRXJSp886CGr',
+    token,
   });
 };
 
