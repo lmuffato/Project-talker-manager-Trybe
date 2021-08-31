@@ -1,4 +1,5 @@
 const express = require('express');
+const token = require('./token');
 
 const router = express.Router();
 
@@ -7,10 +8,9 @@ const validateEmail = (req, res, next) => {
   if (!email || email === '') {
     return res.status(400).json({ message: 'O campo "email" é obrigatório' });
   }
-  if (
-    !(email.includes('@') && email.includes('.com'))
-  ) return res.status(400).json({ massage: 'O "email" deve ter o formato "email@email.com"' });
-
+  if (!(email.includes('@') && email.includes('.com'))) {
+    return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
+  }
   next();
 };
 
@@ -29,8 +29,8 @@ const validatePassword = (req, res, next) => {
   next();
 };
 
-router.post('/', (req, res, _next) => {
-  const { email, password } = req.body;
+router.post('/', validateEmail, validatePassword, (req, res, _next) => {
+  res.status(200).json({ token: token() });
 });
 
 module.exports = router;
