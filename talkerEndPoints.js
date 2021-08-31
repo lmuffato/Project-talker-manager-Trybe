@@ -16,6 +16,9 @@ async function getFilteredTalker(req, res) {
     .then((response) => JSON.parse(response))
     .catch((err) => console.log(err.message));
   const filteredTalker = talkers.find((talker) => talker.id === +id);
+  if (filteredTalker === null) { 
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
   return res.status(200).json(filteredTalker);
 }
 
