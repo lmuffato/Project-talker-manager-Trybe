@@ -30,3 +30,5 @@ app.get('/talker/:id', getTalkerId);
 app.post('/login', validateEmail, validatePassword, generateToken);
 
 app.post('/talker', talkerValidations, createTalker);
+
+app.put('/talker/:id', talkerValidations, updateTalker);
