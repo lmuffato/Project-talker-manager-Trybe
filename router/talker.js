@@ -9,6 +9,7 @@ const {
   validateTalk,
 } = require('../middlewares/validateTalker');
 const addTalker = require('../middlewares/addTalker');
+const updateTalker = require('../middlewares/updateTalker');
 
 const router = Router();// { mergeParams: true }
 
@@ -35,5 +36,7 @@ router.get('/:id', async (req, res) => {
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   return res.status(HTTP_OK_STATUS).json(talker);
 });
+
+router.put('/:id', validateToken, allValidates, updateTalker);
 
 module.exports = router;
