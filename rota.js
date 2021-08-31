@@ -1,14 +1,14 @@
 const { Router } = require('express');
+
 const {
-  lerDados,
+  requisito1,
+  requisito2,
 } = require('./crud');
 
 const router = Router();
 
-router.get('/', async (_req, res) => {
-  const data = await lerDados();
+router.get('/', requisito1);
 
-  res.status(200).json(data);
-});
+router.get('/:id', requisito2);
 
 module.exports = router;
