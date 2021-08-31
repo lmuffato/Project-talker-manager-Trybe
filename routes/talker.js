@@ -69,7 +69,45 @@ function validateAge(req, res, next) {
   next();
 }
 
-const AuthMiddleware = [validateToken, validateName, validateAge];
+function validateTalk(req, res, next) {
+  const { talk } = req.body;
+  const { watchedAt, rate } = talk;
+  if (!talk || !watchedAt || !rate) {
+    return res.status(400).json({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
+  }
+  next();
+}
+
+function validateWatchedAt(req, res, next) {
+  const { talk: { watchedAt } } = req.body;
+  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+
+  if (!dateRegex.test(watchedAt)) {
+    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+
+  next();
+}
+
+function validateRate(req, res, next) {
+  const { talk: { rate } } = req.body;
+
+  if (rate < 1 || rate > 5) {
+    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+  next();
+}
+
+const AuthMiddleware = [
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatchedAt,
+  validateRate,
+];
 
 router.post('/talker', AuthMiddleware, (_req, _res) => {
 
