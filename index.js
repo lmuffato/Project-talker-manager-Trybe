@@ -15,3 +15,11 @@ app.get('/', (_request, response) => {
 app.listen(PORT, () => {
   console.log('Online');
 });
+
+const talkerEndPoints = require('./talkerEndPoints');
+
+app.use('/talker', talkerEndPoints);
+
+// const loginEndPoints = require('./loginEndPoints');
+
+// app.use('/login', loginEndPoints);
