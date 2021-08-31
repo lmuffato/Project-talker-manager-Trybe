@@ -7,6 +7,13 @@ const {
   validateEmail,
   validatePassword,
   generateToken,
+  validateTalkerName,
+  validateToken,
+  validateTalkerAge,
+  validateTalk,
+  validateDate,
+  validateRate,
+  writeTalker,
 } = require('./midllewares/index');
 
 const app = express();
@@ -25,6 +32,15 @@ app.get('/talker', talker);
 app.get('/talker/:id', talkerId);
 
 app.post('/login', validateEmail, validatePassword, generateToken);
+
+app.post('/talker',
+  validateToken,
+  validateTalkerName,
+  validateTalkerAge,
+  validateTalk,
+  validateDate,
+  validateRate,
+  writeTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
