@@ -30,18 +30,40 @@ app.get('/talker', async (_req, res) => {
 app.get('/talker/:id', async (req, res) => {
   const talkers = await readTalkers();
   const { id } = req.params;
-  const myTalker = talkers.find((t) => t.id === parseInt(id));
-  if (!myTalker) return res.status(404).json({ "message": "Pessoa palestrante não encontrada" });
+  const myTalker = talkers.find((t) => t.id === parseInt(id, 10));
+  if (!myTalker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   res.status(HTTP_OK_STATUS).json(myTalker);
 });
 
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
+const validateEmail = (req, res, next) => {
+  const { email } = req.body;
   const reg = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email || email === '') return res.status(400).json({ "message": "O campo \"email\" é obrigatório" });
-  if (!reg.test(email)) return res.status(400).json({ "message": "O \"email\" deve ter o formato \"email@email.com\"" });
-  if (!password || password === '') return res.status(400).json({ "message": "O campo \"password\" é obrigatório" });
-  if (password.length < 6) res.status(400).json({"message": "O \"password\" deve ter pelo menos 6 caracteres"});
+  if (!email || email === '') { 
+    return res
+    .status(400)
+    .json({ message: 'O campo "email" é obrigatório' });
+  }
+  if (!reg.test(email)) { 
+    return res.status(400)
+    .json({ message: 'O "email" deve ter o formato "email@email.com"' });
+  }
+  
+  next();
+};
 
-  res.status(HTTP_OK_STATUS).json({ "token": "7mqaVRXJSp886CGr" });
+const validatePassword = (req, res, next) => {
+  const { password } = req.body;
+  if (!password || password === '') {
+    return res.status(400)
+    .json({ message: 'O campo "password" é obrigatório' });
+  }
+  if (password.length < 6) {
+    return res.status(400)
+    .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+  }
+  next();
+};
+
+app.post('/login', validateEmail, validatePassword, (req, res) => {
+  res.status(HTTP_OK_STATUS).json({ token: '7mqaVRXJSp886CGr' });
 });
