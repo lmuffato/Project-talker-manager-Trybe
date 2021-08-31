@@ -19,3 +19,20 @@ function validaEmail(req, res) {
     return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' }); 
   }
 }
+
+function validaPassword(req, res) {
+  const { password } = req.body;
+  if (password === undefined) {
+     return res.status(400).json({ message: 'O campo "password" é obrigatório' });
+  }
+
+  if (password >= 6) {
+    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' }); 
+  }
+}
+
+module.exports = {
+  geraToken,
+  validaEmail,
+  validaPassword,
+};
