@@ -13,7 +13,6 @@ app.get(('/', (_request, response) => {
   response.status(StatusCodes.OK).send();
 }));
 
-// Requisito 1
 app.use('/talker', talkerRouter);
 
 app.listen(PORT, () => {

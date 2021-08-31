@@ -7,5 +7,6 @@ const router = Router();
 
 router.get('/', getter);
 router.get('/:id', getById);
+// router.post('/',function);
 
 module.exports = router;

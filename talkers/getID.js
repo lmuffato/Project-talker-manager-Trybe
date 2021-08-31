@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { readFiles } = require('../fs-utils');
+const { readFiles } = require('../utility');
 
 module.exports = async (req, res) => {
     const person = await readFiles();
