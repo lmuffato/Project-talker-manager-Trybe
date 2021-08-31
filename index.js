@@ -16,6 +16,7 @@ const {
   writeTalker,
   updateTalker,
   test,
+  deleteTalker,
 } = require('./midllewares/index');
 
 const app = express();
@@ -51,6 +52,8 @@ validateTalk,
 validateDate,
 validateRate,
 updateTalker);
+
+app.delete('/talker/:id', validateToken, deleteTalker);
 
 app.post('/login', validateEmail, validatePassword, generateToken);
 

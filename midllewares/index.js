@@ -12,6 +12,7 @@ const validateToken = require('./validateToken');
 const writeTalker = require('./writeTalker');
 const updateTalker = require('./updatetalker');
 const test = require('./testMiddleware');
+const deleteTalker = require('./deleteTalker');
 
 module.exports = {
     talker,
@@ -28,4 +29,5 @@ module.exports = {
     writeTalker,
     updateTalker,
     test,
+    deleteTalker,
 };
