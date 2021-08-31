@@ -2,11 +2,21 @@
 
 const rescue = require('express-rescue');
 const { data } = require('../models');
-const schema = require('../schema');
+const { status } = require('../schema');
 
 const getAll = rescue(async (_req, res) => {
-  const getAllTalker = await data();
-  res.status(schema.ok).json(getAllTalker);
+  const getTalkers = await data();
+  res.status(status.ok).json(getTalkers);
 });
 
-module.exports = { getAll };
+const getById = async (req, res) => {
+  const getParams = req.params.id;
+  const dataTalker = await data();
+  const findTalker = dataTalker.find(({ id }) => id === +getParams);
+  res.status(status.ok).json(findTalker);
+};
+
+module.exports = {
+  getAll,
+  getById,
+};

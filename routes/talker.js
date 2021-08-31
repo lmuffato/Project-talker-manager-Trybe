@@ -4,6 +4,7 @@ const middlewares = require('../middlewares');
 
 const route = express.Router();
 
-route.get('/talker', middlewares.checkAllTalkers, controller.getAll);
+route.get('/talker', middlewares.checkAll, controller.getAll);
+route.get('/talker/:id', middlewares.getById, controller.getById);
 
 module.exports = route;
