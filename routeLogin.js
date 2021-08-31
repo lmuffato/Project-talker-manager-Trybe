@@ -28,17 +28,11 @@ const validatePassword = (req, res, next) => {
   next();
 };
 
-const users = [];
-
-router.get('/', (_req, res) => {
-  res.status(200).json(users);
-});
-
-router.post('/', validateEmail, validatePassword, (req, res) => {
-  const { email, password } = req.body;
+const tokenGen = (_req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
-  res.push({ email, password, token });
-  res.status(200);
-});
+  return res.status(200).json({ token });
+};
+
+router.post('/', validateEmail, validatePassword, tokenGen);
 
 module.exports = router;
