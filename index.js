@@ -78,3 +78,23 @@ app.post(
       res.status(201).json(obj);
   },
 );
+
+app.put(
+  '/talker/:id',
+  isValidToken,
+  isValidName,
+  isValidAge,
+  isValidTalk,
+  isValidDate,
+  isValidRate,
+  async (req, res) => {
+    const { id } = req.params;
+    const talker = await readTalker();
+    const speaker = talker.find((obj) => obj.id === parseInt(id, 0));
+    const filteredSpeakers = talker.filter((obj) => obj.id !== id);
+    const editedSpeaker = { ...speaker, ...req.body };
+    filteredSpeakers.push(editedSpeaker);
+    await fs.writeFile('talker.json', JSON.stringify(filteredSpeakers));
+    res.status(200).json(editedSpeaker);
+  },
+);
