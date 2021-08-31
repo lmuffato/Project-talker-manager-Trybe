@@ -2,13 +2,23 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const crypto = require('crypto');
+const {
+  validateEmailMiddleware,
+  validatePasswordMiddleware,
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkKeys,
+  validateTalkEmptyValues,
+} = require('./validations');
 
 const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
+const HTTP_CREATED = 201;
 const NOT_FOUND = 404;
-const BAD_REQUEST = 400;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -34,6 +44,25 @@ app.get('/talker', async (_req, res) => {
   }
 });
 
+app.post(
+  '/talker',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkEmptyValues,
+  validateTalkKeys,
+  async (req, res) => {
+    const { name, age, talk } = req.body;
+    const talker = await readTalker();
+    const add = { id: talker.length + 1, name, age, talk };
+    talker.push(add);
+    console.log(add);
+    res.status(HTTP_CREATED).json(add);
+    console.log(talker);
+},
+);
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
     const talker = await readTalker();
@@ -45,36 +74,8 @@ app.get('/talker/:id', async (req, res) => {
     res.status(HTTP_OK_STATUS).json(talkerById);
 });
 
-const validateEmailMiddleware = (req, res, next) => {
-  const { email } = req.body;
-  // https://stackoverflow.com/questions/201323/how-to-validate-an-email-address-using-a-regular-expression onde peguei regex
-  // https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript onde aprendi a usar o .test
-  if (email === '' || email === undefined) { 
-    return res.status(BAD_REQUEST)
-    .json({ message: 'O campo "email" é obrigatório' });
-  }
-  if (!/^\S+@\S+\.\S+$/.test(email)) {
-    return res.status(BAD_REQUEST)
-    .json({ message: 'O "email" deve ter o formato "email@email.com"' });
-  }
-  next();
-};
-
-const validatePasswordMiddleware = (req, res, next) => {
-  const { password } = req.body;
-  if (password === '' || password === undefined) {
-    return res.status(BAD_REQUEST).json({ message: 'O campo "password" é obrigatório' });
-  }
-  if (password.length < 6) {
-    return res.status(BAD_REQUEST)
-      .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
-  }
-  next();
-};
-
 app.post('/login', validateEmailMiddleware, validatePasswordMiddleware, (req, res) => {
   // https://stackoverflow.com/questions/8855687/secure-random-token-in-node-js
   const token = crypto.randomBytes(8).toString('hex');
-  console.log(token);
   res.status(HTTP_OK_STATUS).json({ token });
 });
