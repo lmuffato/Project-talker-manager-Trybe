@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const fs = require('fs').promises;
+// const fs = require('fs').promises;
 const talkerRoute = require('./routes/talkerRoute');
 const talkerPostRoute = require('./routes/talkerPostRoute');
 

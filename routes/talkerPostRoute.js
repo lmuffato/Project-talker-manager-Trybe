@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const filePath = ('talker.json');
 
-const saveTalkers = (talkers) => fs.writeFileSync(filePath, JSON.stringify(talkers, null, '\t'));
+// const saveTalkers = (talkers) => fs.writeFileSync(filePath, JSON.stringify(talkers, null, '\t'));
 
 const noToken = {
     message: 'Token não encontrado',
@@ -75,18 +75,18 @@ const passwordValidation = (res, password) => {
 
 // função vista no projeto do Kevin Fraga - Turma 9
 // https://github.com/tryber/sd-09-project-talker-manager/pull/99
-const randomHexGenerator = (res, length) => {
-    const MaxLength = 8;
-    const min = 16 ** (Math.min(16, MaxLength) - 1);
-    const max = 16 ** (Math.min(16, MaxLength)) - 1;
-    const number = Math.floor(Math.random() * (max - min + 1)) + min;
-    let token = number.toString(16);
+// const randomHexGenerator = (res, length) => {
+//     const MaxLength = 8;
+//     const min = 16 ** (Math.min(16, MaxLength) - 1);
+//     const max = 16 ** (Math.min(16, MaxLength)) - 1;
+//     const number = Math.floor(Math.random() * (max - min + 1)) + min;
+//     let token = number.toString(16);
     
-    while (token.length < length) {
-      token += randomHexGenerator(length - MaxLength);
-    }
-    return res.status(200).json({ token });
-  };
+//     while (token.length < length) {
+//       token += randomHexGenerator(length - MaxLength);
+//     }
+//     return res.status(200).json({ token });
+//   };
 
 const logIn = async (req, res) => {
     // const { authorization } = req.headers;
@@ -128,6 +128,11 @@ const minorAge = {
     message: 'A pessoa palestrante deve ser maior de idade',
   };
 
+const checkAge = (age, res) => {
+  if (!age) return res.status(400).send(validAge);
+  if (age < 18) return res.status(400).send(minorAge);
+};
+
 const addTalker = (req, res) => {
     const { authorization } = req.headers;
     const { name, age } = req.body;
@@ -135,8 +140,7 @@ const addTalker = (req, res) => {
     if (authorization.length !== 16) return res.status(401).send(invalidToken);
     if (!name) return res.status(400).send(noName);
     if (name.length < 3) return res.status(400).send(shortName);
-    if (!age)return res.status(400).send(validAge);
-    if (age < 18)return res.status(400).send(minorAge);
+    checkAge(age, res);
 };
 
 const talkerPostRoute = (app) => {
