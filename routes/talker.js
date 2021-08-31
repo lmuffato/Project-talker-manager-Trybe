@@ -49,4 +49,18 @@ router.post('/', AuthMiddleware, async (req, res) => {
     res.status(400).json({ message: e.message });
   }
 });
+
+const [validateToken] = AuthMiddleware;
+
+router.delete('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const talkersList = await readTalkersList('talker.json');
+    const newTalkersList = talkersList.filter((talker) => talker.id !== parseInt(id, 10));
+    await writeFile('talker.json', JSON.stringify(newTalkersList), 'utf-8');
+    return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
+});
 module.exports = router;
