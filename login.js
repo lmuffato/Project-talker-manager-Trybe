@@ -8,20 +8,20 @@ function emailIsValid(email) {
 
 function validateEmail(email) {
   if (email === undefined || email === '') {
-    return 'O campo \"email\" é obrigatório';
+    return 'O campo "email" é obrigatório';
   }
   if (emailIsValid(email) === false) {
-    return 'O \"email\" deve ter o formato \"email@email.com\"';
+    return 'O "email" deve ter o formato "email@email.com"';
   }
   return 'ok';
 }
 
 function validatePassword(password) {
   if (password === undefined || password === '') {
-    return 'O campo \"password\" é obrigatório';
+    return 'O campo "password" é obrigatório';
   }
   if (password.length < 6) {
-    return 'O \"password\" deve ter pelo menos 6 caracteres';
+    return 'O "password" deve ter pelo menos 6 caracteres';
   }
   return 'ok';
 }
