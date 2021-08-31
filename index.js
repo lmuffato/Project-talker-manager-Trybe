@@ -37,19 +37,33 @@ app.get('/talker/:id', async (req, res) => {
   res.status(HTTP_OK_STATUS).send(foundTalker);
 });
 
+function emailValidation(req, res, next) {
+  const { email } = req.body;
+  const regexValidation = /^\w+@\w+\.com$/; // Regex feito com base no projeto TrybeWallet. src=https://github.com/tryber/sd-010-a-project-trybewallet/pull/21/files 
+  if (!email) {
+    return res.status(400).json({ message: 'O campo "email" é obrigatório' });
+  }
+  if (regexValidation.test(email) === false) {
+    return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
+  }
+  next();
+}
 
-function emailValidation() {
+function passwordValidation(req, res, next) {
+  const { password } = req.body;
+  if (!password) {
+    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+  }
+  next();
+}
 
-};
+function tokenGenerator(_req, _res) {
 
-function passwordValidation() {
+}
 
-};
-
-function tokenGenerator() {
-
-};
-
-app.post('/login', (req, res) => {
-
+app.post('/login', emailValidation, passwordValidation, tokenGenerator, (req, res) => {
+ res.status(200).send('Email ok');
 });
