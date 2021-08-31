@@ -9,6 +9,7 @@ const {
   validateEmail,
   validatePassword,
   generateToken,
+  validateToken,
 } = middlewares;
 
 const app = express();
@@ -26,6 +27,7 @@ app.get('/talker', getTalkers);
 app.get('/talker/:id', findTalkerById);
 
 app.post('/login', validateEmail, validatePassword, generateToken);
+app.post('/talker', validateToken);
 
 app.listen(PORT, () => {
   console.log('Online');
