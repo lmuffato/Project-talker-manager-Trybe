@@ -2,7 +2,7 @@
 
 const rescue = require('express-rescue');
 const crypto = require('crypto');
-const { data } = require('../models');
+const { data, addTalker } = require('../models');
 const { status } = require('../schema');
 
 const getAll = rescue(async (_req, res) => {
@@ -22,8 +22,18 @@ const loginUser = (_req, res) => {
   res.status(status.ok).json({ token });
 };
 
+const createTalker = async (req, res) => {
+  const { name, age, talk } = req.body;
+  const dataTalker = await data();
+  const add = { id: dataTalker.length + 1, name, age, talk };
+  const dataUsers = [...dataTalker, add];
+  addTalker(dataUsers);
+  res.status(status.created).json(add);
+};
+
 module.exports = {
   getAll,
   getById,
   loginUser,
+  createTalker,
 };
