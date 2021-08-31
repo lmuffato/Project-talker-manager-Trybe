@@ -1,10 +1,10 @@
 function validateToken(req, res, next) {
   const { authorization } = req.headers;
   if (!authorization || authorization === ' ') {
-    return res.status(401).json({ message: 'token não encontrado' });
+    return res.status(401).json({ message: 'Token não encontrado' });
   }
   if (authorization.length !== 16) {
-    return res.status(401).json({ message: 'token inválido' });
+    return res.status(401).json({ message: 'Token inválido' });
   }
   next();
 }
@@ -33,8 +33,7 @@ function validateAge(req, res, next) {
 
 function validateTalk(req, res, next) {
   const { talk } = req.body;
-  const { watchedAt, rate } = talk;
-  if (!talk || !watchedAt || !rate) {
+  if (!talk || !talk.watchedAt || !talk.rate) {
     return res.status(400).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
