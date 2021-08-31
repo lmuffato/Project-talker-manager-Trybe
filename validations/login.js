@@ -2,35 +2,38 @@
 const status = require('../status');
 
 const validateEmail = (email) => {
-  const emailRegEx = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
   const isEmpty = email === undefined || !email.length;
-  const isValid = emailRegEx.test(String(email).toLowerCase());
-
+  
   if (isEmpty) return { status: status.bad, message: 'O campo "email" é obrigatório' };
+  
+  const emailRegEx = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+  const isValid = emailRegEx.test(String(email).toLowerCase());
+  
   if (!isValid) { 
     return { status: status.bad, message: 'O "email" deve ter o formato "email@email.com"' }; 
   }
 };
 
 const validatePassword = (password) => {
-  const minLength = 6;
   const isEmpty = password === undefined || !password.length;
-  const isValid = password.length >= minLength;
-
+  
   if (isEmpty) return { status: status.bad, message: 'O campo "password" é obrigatório' };
+  
+  const minLength = 6;
+  const isValid = password.length >= minLength;
 
   if (!isValid) { 
     return { status: status.bad, message: 'O "password" deve ter pelo menos 6 caracteres' }; 
   }
 };
 
-const validateLogin = (email, password) => {
-  const checkEmail = validateEmail(email);
-  const checkPassword = validatePassword(password);
+const validateLogin = (user) => {
+  const isEmailWrong = validateEmail(user.email);
+  const isPasswordWrong = validatePassword(user.password);
 
-  if (!checkEmail && !checkPassword) return true;
+  if (!isEmailWrong && !isPasswordWrong) return { status: status.ok };
   
-  return checkEmail || checkPassword;
+  return isEmailWrong || isPasswordWrong;
 };
 
 module.exports = validateLogin;
