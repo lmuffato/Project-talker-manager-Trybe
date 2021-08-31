@@ -3,7 +3,9 @@ const bodyParser = require('body-parser');
 
 const getAllTalkers = require('./middlewares/getAllTalkers');
 const getTalkersId = require('./middlewares/getTalkersId');
-const { validateEmail, validatePassword, validateName, validateAge, validateTalk, validateRate, validateToken, validateWatchedAt } = require('./middlewares/validations');
+const { validateEmail, validatePassword, validateName } = require('./middlewares/validations');
+const { validateAge, validateTalk, validateRate } = require('./middlewares/validations');
+const { validateToken, validateWatchedAt } = require('./middlewares/validations');
 const generateToken = require('./utils/generateToken');
 const talkerCreation = require('./middlewares/talker');
 
