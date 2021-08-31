@@ -2,15 +2,16 @@ const { readFile, writeFileTalker } = require('../fs-util');
 
 async function updateTalker(req, res) {
   const { name, age, talk } = req.body;
+  const { id } = req.params;
   const arrTalkers = await readFile();
-  let talkerToEdit = arrTalkers.find((t) => name === t.name);
-  talkerToEdit = {
+  const talkerToEdit = {
+    id: Number(id),
     name,
     age,
     talk,
   };
-  const talkerToEditIndex = arrTalkers.findIndex((tlkr) => tlkr.name === name);
-  arrTalkers.splice(talkerToEditIndex, 1, talkerToEdit);
+  arrTalkers.filter((talker) => Number(talker.id) !== Number(id));
+  arrTalkers.push(talkerToEdit);
 
   await writeFileTalker(arrTalkers);
   return res.status(200).json(talkerToEdit);
