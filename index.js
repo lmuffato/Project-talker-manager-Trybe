@@ -15,3 +15,15 @@ app.get('/', (_request, response) => {
 app.listen(PORT, () => {
   console.log('Online');
 });
+
+const fs = require('fs').promises;
+
+const talkers = 'talker.json';
+
+app.get('/talker', (_req, res) => {
+  res.status(200).json(
+    fs.readFile(talkers, 'utf-8')
+    .then((data) => data)
+    .catch((err) => console.log(`Não foi possível ler o arquivo ${talkers}, /n Erro: ${err}`)),
+  );
+});
