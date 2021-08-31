@@ -21,6 +21,17 @@ app.get('/talker', async (_req, res) => {
   res.status(HTTP_OK_STATUS).json(talkers);
 });
 
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readFile();
+  const talkerId = talkers.findIndex(({ id: i }) => i === +id);
+  if (talkerId === -1) {
+  return res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); 
+}
+
+  res.status(HTTP_OK_STATUS).json(talkers[talkerId]);
+});
+
 module.exports = {
   app,
 };
