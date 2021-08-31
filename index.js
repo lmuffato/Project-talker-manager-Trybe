@@ -19,6 +19,20 @@ app.get('/talker', (_req, res) => {
     .catch((err) => res.status(404).json({ message: err.message }));
 });
 
+app.get('/talker/:id', (req, res) => {
+  fs.readFile('./talker.json')
+    .then((result) => JSON.parse(result))
+    .then((result) => result.filter((entry) => entry.id === +req.params.id))
+    .then((result) => {
+      if (result.length > 0) {
+        res.status(200).send(result[0]);
+      } else {
+        throw new Error('Pessoa palestrante não encontrada');
+      }
+    })
+    .catch((err) => res.status(404).json({ message: err.message }));
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Backend rodando na porta ${PORT}`);
 });
