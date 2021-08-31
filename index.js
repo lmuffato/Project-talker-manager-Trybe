@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const getTalkers = require('./getTalkers');
+const getTalkersID = require('./getTalkersID');
 
 const app = express();
 app.use(bodyParser.json());
@@ -14,8 +15,10 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', getTalkers);
-
 app.listen(PORT, () => {
   console.log('Online');
 });
+
+app.get('/talker', getTalkers);
+
+app.get('/talker/:id', getTalkersID);
