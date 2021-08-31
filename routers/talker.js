@@ -14,6 +14,7 @@ const {
 const {
   validateToken,
   validateName,
+  validateAge,
 } = require('../middlewares/talkerMiddlewares');
 
 router.get('/', rescue(async (_req, res) => {
@@ -34,7 +35,7 @@ router.get('/:id', rescue(async (req, res) => {
     : res.status(HTTP_OK_STATUS).json(talkerById);
 }));
 
-const talkerMiddlewares = [validateToken, validateName];
+const talkerMiddlewares = [validateToken, validateName, validateAge];
 
 router.post('/', talkerMiddlewares);
 
