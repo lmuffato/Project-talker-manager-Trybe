@@ -141,4 +141,16 @@ router.put('/:id', authToken, authName, authAge, authTalk, authWatchedAt, authRa
   return res.status(200).json(editedTalker);
 });
 
+router.delete('/:id', authToken, (req, res) => {
+  const { id } = req.params;
+
+  const talkers = readTalkerFile();
+
+  const updatedTalkersList = talkers.filter((talker) => talker.id !== Number(id));
+
+  writeFileSync('./talker.json', JSON.stringify(updatedTalkersList));
+
+  return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
 module.exports = router;
