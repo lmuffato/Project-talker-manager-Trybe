@@ -35,7 +35,21 @@ const validatePassword = (request, response, next) => {
   next();
 };
 
+const getToken = (request, _response, next) => {
+  const TOKEN_ALEATORY_KEY = 10;
+  let token = '';
+  for (let i = 0; i < TOKEN_ALEATORY_KEY; i += 1) {
+    // Source: https://pt.stackoverflow.com/questions/107322/como-gerar-um-token-na-barra-de-link-com-javascript
+    // max radix number 36 --> [0-9][A-Z]
+    token += (Math.floor(Math.random() * 256)).toString(36);
+  }
+  const getLengthEqual16 = token.substr(0, 16);
+  request.tok = getLengthEqual16;
+  next();
+};
+
 module.exports = {
   validateEmail,
   validatePassword,
+  getToken,
 };
