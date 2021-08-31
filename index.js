@@ -38,6 +38,24 @@ app.get('/talker', async (_req, res) => {
   }
 });
 
+// Requisito 7
+app.get('/talker/search', validadeToken, async (req, res) => {
+  const { q } = req.query;
+  
+  const talkers = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
+
+  if (!q || q === '') return res.status(200).json(talkers);
+
+  const filterQuery = talkers
+    .filter(({ id, name, age, talk: { watchedAt, rate } }) => name.includes(q)
+      || watchedAt.includes(q)
+      || rate === Number(q)
+      || age === Number(q)
+      || id === Number(q));
+
+  res.status(200).json(filterQuery);
+});
+
 // Requisito 2
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
@@ -82,5 +100,3 @@ app.delete('/talker/:id', validadeToken, async (req, res) => {
 
   res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
-
-// Requisito 7
