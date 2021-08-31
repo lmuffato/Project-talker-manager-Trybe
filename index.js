@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 const ERROR_404 = 'Pessoa palestrante não encontrada';
+const ROTA_TALKER = './talker.json';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -30,7 +31,7 @@ app.listen(PORT, () => {
 // Requisito 1
 app.get('/talker', async (_req, res) => {
   try {
-    const request = await fs.readFile('./talker.json', 'utf-8').then((r) => JSON.parse(r));
+    const request = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
     res.status(200).json(request);
   } catch (_err) {
     res.status(200).json([]);
@@ -40,7 +41,7 @@ app.get('/talker', async (_req, res) => {
 // Requisito 2
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  const request = await fs.readFile('./talker.json', 'utf-8').then((r) => JSON.parse(r));
+  const request = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
   const findTalker = request.find((e) => e.id === Number(id));
 
   if (!findTalker) return res.status(404).json({ message: ERROR_404 });
@@ -59,11 +60,27 @@ app.post('/login', validadeEmail, validadePassword, (_req, res) => {
 app.post('/talker', validadeToken, validadeName, validadeAge, validadeTalk, async (req, res) => {
   const { id, name, age, talk } = req.body;
 
-  const talkers = await fs.readFile('./talker.json', 'utf-8').then((r) => JSON.parse(r));
+  const talkers = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
   console.log(talkers);
 
   talkers.push({ id, name, age, talk });
-  fs.writeFile('./talker.json', JSON.stringify(talkers));
+  fs.writeFile(ROTA_TALKER, JSON.stringify(talkers));
 
   res.status(201).json({ id, name, age, talk });
 });
+
+// Requisito 5
+
+// Requisito 6
+app.delete('/talker/:id', validadeToken, async (req, res) => {
+  const { id } = req.params;
+
+  const talkers = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
+  const filterId = talkers.filter((talk) => talk.id !== Number(id));
+
+  fs.writeFile(ROTA_TALKER, JSON.stringify(filterId));
+
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
+// Requisito 7
