@@ -12,9 +12,13 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-const talkerRouter = require('./talker/index');
+const talkerRouter = require('./routes/talker');
 
 app.use('/talker', talkerRouter);
+
+const loginRouter = require('./routes/login');
+
+app.use('/login', loginRouter);
 
 app.listen(PORT, () => {
   console.log('Online');
