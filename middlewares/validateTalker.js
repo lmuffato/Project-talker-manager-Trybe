@@ -41,7 +41,7 @@ const validateTalkDate = (req, res, next) => {
 
 const validateTalkRate = (req, res, next) => {
   const { rate } = req.body.talk;
-  if (!rate) {
+  if (rate === undefined) { // ou !rate && rate !== 0 descobrimos atraves de uma call com Italo Noura a exclamação em uma variável do tipo number ela muda o tipo da variavel para boleano
     return res
   .status(FAIL_STATUS)
   .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
