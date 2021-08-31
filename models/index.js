@@ -1,0 +1,1 @@
+// Dentro dessa pasta irão ficar os arquivos que irão se comunicar com o 'talker.json'
