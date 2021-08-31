@@ -2,8 +2,7 @@ const { StatusCodes } = require('http-status-codes');
 const { readFiles } = require('../fs-utils');
 
 module.exports = async (_req, res) => {
-  const xablau = await readFiles();
-  console.log(xablau);
+  const file = await readFiles();
   
-  return res.status(StatusCodes.OK).send(xablau);
+  return res.status(StatusCodes.OK).send(file);
 };
