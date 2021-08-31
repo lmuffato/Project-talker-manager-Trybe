@@ -118,11 +118,9 @@ const isValidRate = (req, res, next) => {
 module.exports = {
   isValidEmail,
   isValidPassword,
-
   isValidToken,
   isValidName,
   isValidAge,
-
   isValidTalk,
   isValidDate,
   isValidRate,

@@ -15,16 +15,6 @@ router.get('/', async (_req, res) => {
   res.status(200).json(talker);
 });
 
-router.get('/search', isValidToken, async (req, res) => {
-  const { q } = req.query;
-  const talker = await readTalker();
-  if (!q || q === '') {
-    return res.status(200).json(talker);
-  }
-  const filteredTalkers = talker.filter((obj) => obj.name.includes(q));
-  res.status(200).json(filteredTalkers);
-});
-
 router.post(
   '/',
   isValidToken,
@@ -49,6 +39,16 @@ router.post(
     res.status(201).json(obj);
   },
 );
+
+router.get('/search', isValidToken, async (req, res) => {
+  const { q } = req.query;
+  const talker = await readTalker();
+  if (!q || q === '') {
+    return res.status(200).json(talker);
+  }
+  const filteredTalkers = talker.filter((obj) => obj.name.includes(q));
+  res.status(200).json(filteredTalkers);
+});
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;

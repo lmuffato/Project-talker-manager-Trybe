@@ -1,3 +1,5 @@
+const fs = require('fs').promises;
+
 function generateToken(n) {
   const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let token = '';
@@ -8,4 +10,13 @@ function generateToken(n) {
   return token;
 }
 
-module.exports = generateToken;
+const readTalker = async () => {
+  const talker = await fs.readFile('./talker.json', 'utf-8');
+  const result = await JSON.parse(talker);
+  return result;
+};
+
+module.exports = { 
+  generateToken,
+  readTalker,
+};
