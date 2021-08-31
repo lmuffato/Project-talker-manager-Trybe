@@ -33,6 +33,13 @@ const talkerRouter = (server) => {
         '/:id',
         server.talkerClient.get,
     );
+
+    router.put(
+        '/:id',
+        server.authClient.authenticate,
+        server.talkerClient.validate,
+        server.talkerClient.update,
+    );
     
     return router;
 };

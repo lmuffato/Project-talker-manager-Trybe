@@ -34,7 +34,7 @@ module.exports = async function validate(req, res, next) {
         }
 
         const { talk } = talker
-        if (!talk || !talk.watchedAt || !talk.rate) {
+        if (!talk || !talk.watchedAt || talk.rate === null || talk.rate === undefined) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             });
