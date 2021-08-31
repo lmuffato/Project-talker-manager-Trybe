@@ -22,3 +22,13 @@ app.get('/talker', async (_req, res) => {
   const result = await JSON.parse(talker);
   res.status(200).json(result);
 });
+
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const talker = await fs.readFile('./talker.json', 'utf-8');
+  const result = await JSON.parse(talker);
+  const speaker = result.find((obj) => obj.id === parseInt(id, 0));
+  if (!speaker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  
+  res.status(200).json(speaker);
+});
