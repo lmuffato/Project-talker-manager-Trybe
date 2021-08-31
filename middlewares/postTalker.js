@@ -2,7 +2,12 @@ const { readFile, writeFile } = require('fs').promises;
 
 const createTalker = async (req, res) => {
   const { name, age, talk } = req.body;
-  const talkers = JSON.parse(await readFile('talker.json', 'utf-8'));
+  let talkers;
+  try {
+    talkers = JSON.parse(await readFile('talker.json', 'utf-8'));
+  } catch (error) {
+    console.error(error);
+  }
   const newTalker = {
     name,
     age,
