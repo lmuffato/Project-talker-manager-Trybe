@@ -20,7 +20,7 @@ talkerController.get(ROUTE_TALKER_GET_BY_ID, async (request, response) => {
   const talker = await getTalker(id, SRC_TALKER_DATA);
   const messageError = { message: 'Pessoa palestrante não encontrada' };
 
-  if (!talker) response.status(HTTP_NOT_FOUND_STATUS).json(messageError);
+  if (!talker) return response.status(HTTP_NOT_FOUND_STATUS).json(messageError);
 
   response.status(HTTP_OK_STATUS).json(talker);
 });
