@@ -41,3 +41,6 @@ app.get('/talker/:id', async (req, res) => {
 
   res.status(HTTP_OK_STATUS).json(chosedTalker);
 });
+
+// utilizei esse artigo para corrigir o erro de lint no parseInt da linha 35:
+// https://eslint.org/docs/rules/radix
