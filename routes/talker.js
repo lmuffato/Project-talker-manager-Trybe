@@ -2,6 +2,8 @@ const express = require('express');
 const { readFile, writeFile } = require('fs').promises;
 const AuthMiddleware = require('./authMiddleware');
 
+const [validateToken] = AuthMiddleware;
+
 const router = express.Router();
 
 const readTalkersList = async (fileName) => {
@@ -21,6 +23,21 @@ router.get('/', async (_req, res) => {
   } catch (e) {
     res.status(400).json({ message: e.message });
   }
+});
+
+router.get('/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  let talkersList = [];
+  try {
+    talkersList = await readTalkersList('talker.json');
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
+
+  if (!q || q === '') return res.status(200).json(talkersList);
+  
+  const filteredTalkers = talkersList.filter((t) => t.name.includes(q));
+  return res.status(200).json(filteredTalkers);
 });
 
 router.get('/:id', async (req, res) => {
@@ -50,8 +67,6 @@ router.post('/', AuthMiddleware, async (req, res) => {
   }
 });
 
-const [validateToken] = AuthMiddleware;
-
 router.delete('/:id', validateToken, async (req, res) => {
   const { id } = req.params;
   try {
@@ -63,4 +78,5 @@ router.delete('/:id', validateToken, async (req, res) => {
     res.status(400).json({ message: e.message });
   }
 });
+
 module.exports = router;
