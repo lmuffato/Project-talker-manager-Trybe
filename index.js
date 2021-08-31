@@ -7,6 +7,7 @@ const { generateToken, validatePassword, validateEmail } = require('./middleware
 const talkerValidations = require('./middlewares/validateTalker');
 const createTalker = require('./middlewares/postTalker');
 const updateTalker = require('./middlewares/putTalker');
+const deleteTalker = require('./middlewares/deleteTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -32,3 +33,5 @@ app.post('/login', validateEmail, validatePassword, generateToken);
 app.post('/talker', talkerValidations, createTalker);
 
 app.put('/talker/:id', talkerValidations, updateTalker);
+
+app.delete('/talker/:id', talkerValidations[0], deleteTalker);
