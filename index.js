@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const UIDGenerator = require('uid-generator');
 
 const app = express();
 app.use(bodyParser.json());
@@ -60,10 +61,10 @@ function passwordValidation(req, res, next) {
   next();
 }
 
-function tokenGenerator(_req, _res) {
-
+function tokenGenerator(_req, res) {
+  const newToken = new UIDGenerator(UIDGenerator.BASE16); // Src = https://www.npmjs.com/package/uid-generator
+  return res.status(200).json({ token: newToken.baseEncoding });
 }
 
-app.post('/login', emailValidation, passwordValidation, tokenGenerator, (req, res) => {
- res.status(200).send('Email ok');
+app.post('/login', emailValidation, passwordValidation, tokenGenerator, (_req, _res) => {
 });
