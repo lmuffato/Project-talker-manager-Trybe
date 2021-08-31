@@ -1,5 +1,6 @@
 const express = require('express');
 const { readFile, writeFile } = require('fs').promises;
+const authMiddlewares = require('./middlewares');
 
 const router = express.Router();
 
@@ -30,13 +31,13 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/', authMiddlewares, async (req, res) => {
   const { name, age, talk } = req.body;
 
   try {
     const talkers = await getFileData('talker.json');
     const newTalker = { name, age, talk, id: (talkers.length + 1) };
-    await writeFile('', JSON.stringify([...talkers, newTalker]));
+    await writeFile('talker.json', JSON.stringify([...talkers, newTalker]));
     res.status(201).json(newTalker);
   } catch (error) {
     res.status(500).end();
