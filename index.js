@@ -1,3 +1,4 @@
+const fs = require('fs').promises;
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -12,6 +13,12 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.get('/talker', (_req, res) => {
+  fs.readFile('./talker.json')
+    .then((result) => res.status(200).json(JSON.parse(result)))
+    .catch((err) => res.status(404).json({ message: err.message }));
+});
+
 app.listen(PORT, () => {
-  console.log('Online');
+  console.log(`🚀 Backend rodando na porta ${PORT}`);
 });
