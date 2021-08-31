@@ -21,4 +21,18 @@ router.get('/', async (_req, res) => {
     res.status(400).json({ message: e.message });
   }
 });
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  let talkersList = [];
+  try {
+    talkersList = await readTalkersList('./talker.json');
+  } catch (e) {
+    res.status(400).json({ message: e.message });
+  }
+
+  const talker = talkersList.find((person) => person.id === parseInt(id, 10));
+  if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  res.status(200).json(talker);
+});
 module.exports = router;
