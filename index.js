@@ -13,8 +13,11 @@ app.get('/', (_request, response) => {
 });
 
 const talkerRouter = require('./talkerRouter');
+const loginRouter = require('./loginRouter');
 
 app.use('/talker', talkerRouter);
+
+app.use('/login', loginRouter);
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend rodando na porta ${PORT}`);
