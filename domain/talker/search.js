@@ -1,6 +1,5 @@
-const fs = require('fs');
-const path = require('path');
 const { StatusCodes } = require('http-status-codes');
+const file = require('../../internal/file');
 
 module.exports = async function (req, res, next) {
     try {
@@ -9,10 +8,7 @@ module.exports = async function (req, res, next) {
             return next();
         }
 
-        const absolutePath = path.resolve('./talker.json');       
-        const data = await fs.promises.readFile(absolutePath);
-        
-        const talkers = JSON.parse(data);
+        const talkers = await file.read();
         const filtered = talkers.filter((talker) => talker.name.includes(q));
 
         return res.status(StatusCodes.OK).json(filtered);

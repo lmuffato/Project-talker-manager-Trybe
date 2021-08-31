@@ -1,13 +1,9 @@
-const fs = require('fs');
-const path = require('path');
 const { StatusCodes } = require('http-status-codes');
+const file = require('../../internal/file');
 
 module.exports = async function (req, res, next) {
     try {
-        const absolutePath = path.resolve('./talker.json');
-        const data = await fs.promises.readFile(absolutePath);
-
-        const talkers = JSON.parse(data);
+        const talkers = await file.read();
 
         const newTalker = {
             id: talkers.length + 1,
@@ -15,10 +11,7 @@ module.exports = async function (req, res, next) {
         };
 
         const updated = [...talkers, newTalker];
-        await fs.promises.writeFile(
-            absolutePath,
-            JSON.stringify(updated),
-        );
+        await file.overwrite(updated);
 
         return res.status(StatusCodes.CREATED).json(newTalker);
     } catch (err) {
