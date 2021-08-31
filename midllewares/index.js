@@ -10,6 +10,8 @@ const validateTalk = require('./validateTalk');
 const validateTalkerAge = require('./validateTalkerAge');
 const validateToken = require('./validateToken');
 const writeTalker = require('./writeTalker');
+const updateTalker = require('./updatetalker');
+const test = require('./testMiddleware');
 
 module.exports = {
     talker,
@@ -24,4 +26,6 @@ module.exports = {
     validateTalk,
     validateToken,
     writeTalker,
+    updateTalker,
+    test,
 };

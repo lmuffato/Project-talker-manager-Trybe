@@ -14,6 +14,8 @@ const {
   validateDate,
   validateRate,
   writeTalker,
+  updateTalker,
+  test,
 } = require('./midllewares/index');
 
 const app = express();
@@ -29,10 +31,6 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', talker);
 
-app.get('/talker/:id', talkerId);
-
-app.post('/login', validateEmail, validatePassword, generateToken);
-
 app.post('/talker',
   validateToken,
   validateTalkerName,
@@ -41,6 +39,20 @@ app.post('/talker',
   validateDate,
   validateRate,
   writeTalker);
+
+app.get('/talker/:id', talkerId);
+
+app.put('/talker/:id',
+test,
+validateToken,
+validateTalkerName,
+validateTalkerAge,
+validateTalk,
+validateDate,
+validateRate,
+updateTalker);
+
+app.post('/login', validateEmail, validatePassword, generateToken);
 
 app.listen(PORT, () => {
   console.log('Online');
