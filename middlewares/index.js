@@ -18,24 +18,24 @@ const getById = rescue(async (req, res, next) => {
   next();
 });
 
-const checkLogin = (req, res, next) => {
+const checkLogin = rescue((req, res, next) => {
   const { email, password } = req.body;
   const regexEmail = /^[\w.]+@[a-z]+\.\w{2,3}$/g.test(email);
   const minPasswordLength = 6;
   if (!email) {
-    res.status(status.notFound).json({ message: message.emailNotFound });
+    res.status(status.badRequest).json({ message: message.emailNotFound });
   }
   if (!regexEmail) {
-    res.status(status.notFound).json({ message: message.incorrectEmail });
+    res.status(status.badRequest).json({ message: message.incorrectEmail });
   }
   if (!password) {
-    res.status(status.notFound).json({ message: message.passwordNotFound });
+    res.status(status.badRequest).json({ message: message.passwordNotFound });
   }
   if (password.length < minPasswordLength) {
-    res.status(status.notFound).json({ message: message.shortPassword });
+    res.status(status.badRequest).json({ message: message.shortPassword });
   }
   next();
-};
+});
 
 module.exports = {
   checkAll,

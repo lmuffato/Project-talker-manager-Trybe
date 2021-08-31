@@ -2,15 +2,19 @@
 
 const status = {
   ok: 200,
+  badRequest: 400,
   notFound: 404,
 };
 
 const message = {
   notFound: 'Pessoa palestrante não encontrada',
-  emailNotFound: 'O campo email é obrigatório',
-  incorrectEmail: 'O email deve ter o formato "email@email.com"',
+  emailNotFound: 'O campo "email" é obrigatório',
+  incorrectEmail: 'O "email" deve ter o formato "email@email.com"',
   passwordNotFound: 'O campo "password" é obrigatório',
   shortPassword: 'O "password" deve ter pelo menos 6 caracteres',
+  tokenNotFound: 'Token não encontrado',
+  invalidToken: 'Token inválido',
+
 };
 
 module.exports = { status, message };
