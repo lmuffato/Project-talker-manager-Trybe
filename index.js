@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 
+const loginRouter = require('./loginRouter');
+
 const arrayPeople = './talker.json';
 
 const app = express();
@@ -37,6 +39,8 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 // ----------------------------------------
+
+app.use('/login', loginRouter);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
