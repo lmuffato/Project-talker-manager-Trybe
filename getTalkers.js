@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const validToken = require('./validation');
 
 function readingFile() {
   const theFile = 'talker.json';
@@ -20,21 +21,24 @@ const getTalkerById = async (req, res) => {
 res.status(200).json(talkerById);
 };
 
-/* const addTalker = async (req, res) => {
-const { name, age, talk } = req.body;
+/* // só pra né
 
+const addTalker = async (req, res) => {
+const { name, age, talk } = req.body;
+await validToken();
+// leitura dos palestrantes
 const oldTalkers = await readingFile();
+// cria variavel do novo palestrante
 const newTalker = {
   name, age, talk, id: oldTalkers.lenght + 1,
 };
-
-oldTalkers.push(newTalker);
-await fs.writeFile('talker.json', JSON.stringfy(oldTalkers));
+// cria variavel que adiciona aos antigos palestrantes, o novo
+const attTalkers = oldTalkers.push(newTalker);
+// escreve no arquivo o novo dado de palestrantes
+await fs.writeFile('talker.json', JSON.stringfy(attTalkers));
   res.status(200).json(newTalker);
-
-  // adicionar na exportação o addTalker
 }; */
 
-module.exports = { getAllTalkers, getTalkerById };
+module.exports = { getAllTalkers, getTalkerById, addTalker };
 
 // referência parseInt : https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
