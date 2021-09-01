@@ -12,6 +12,7 @@ const {
   validateDateFormat,
   validateRate,
 } = require('./middlewares/validators');
+const { fileReader, fileWriter } = require('./utils/talkersFileOperations');
 
 const talkerValidators = [
   validateAge,
@@ -32,16 +33,11 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', async (req, res) => {
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
-  const parsedTalkers = JSON.parse(talkers);
-  return res.status(HTTP_OK_STATUS).json(parsedTalkers || []);
-});
+app.get('/talker', async (req, res) => res.status(HTTP_OK_STATUS).json(fileReader() || []));
 
 app.get('/talker/search', async (req, res) => {
   const { name } = req.query;
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
-  const parsedTalkers = JSON.parse(talkers);
+  const parsedTalkers = fileReader();
   const queriedTalker = parsedTalkers.filter((t) => t.name.includes(name));
 
   return res.status(200).json(queriedTalker);
@@ -49,8 +45,7 @@ app.get('/talker/search', async (req, res) => {
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
-  const parsedTalkers = JSON.parse(talkers);
+  const parsedTalkers = fileReader();
 
   const talker = parsedTalkers.find((t) => t.id === +id);
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -60,8 +55,7 @@ app.get('/talker/:id', async (req, res) => {
 app.post('/talker', validateToken, talkerValidators, async (req, res) => {
   const { name, age, talk } = req.body;
   
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
-  const parsedTalkers = JSON.parse(talkers);
+  const parsedTalkers = fileReader();
 
   const talker = {
     id: parsedTalkers.length + 1,
@@ -72,7 +66,8 @@ app.post('/talker', validateToken, talkerValidators, async (req, res) => {
 
   const newTalkers = [...parsedTalkers, talker];
   
-  await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
+  await fileWriter(newTalkers);
+
   return res.status(201).json(talker);
 });
 
@@ -84,8 +79,7 @@ app.post('/login', validateEmail, validatePassword, (req, res) => {
 app.put('/talker/:id', validateToken, talkerValidators, async (req, res) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
-  const parsedTalkers = JSON.parse(talkers);
+  const parsedTalkers = fileReader();
   const filteredTalkersObj = parsedTalkers.filter((t) => t.id !== +id);
   
   const editedTalker = {
@@ -102,8 +96,7 @@ app.put('/talker/:id', validateToken, talkerValidators, async (req, res) => {
 app.delete('/talker/:id', validateToken, async (req, res) => {
   const { id } = req.params;
 
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
-  const parsedTalkers = JSON.parse(talkers);
+  const parsedTalkers = fileReader();
   const filteredTalkersObj = parsedTalkers.filter((t) => t.id !== +id);
 
   await fs.writeFile('./talker.json', JSON.stringify(filteredTalkersObj));
