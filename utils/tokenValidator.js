@@ -7,3 +7,5 @@ function tokenValidator(tk) {
   }
   return 0;
 }
+
+module.exports = tokenValidator;
