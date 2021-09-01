@@ -14,6 +14,10 @@ router.get('/', async (_req, res) => {
   res.status(HTTP_OK).json(talkers);
 });
 
+router.post('/', (req, res) => {
+  
+});
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   const talkers = await readContentFile(PATH);
