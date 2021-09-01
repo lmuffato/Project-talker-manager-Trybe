@@ -134,9 +134,18 @@ const updateTalker = async (request, _response, next) => {
   };
   const updatedFile = talkers.filter((talker) => talker.id !== id);
   updatedFile.push(updatedTalker);
-  console.log(updatedFile);
   request.updatedTalker = updatedTalker;
   await fs.writeFile('./talker.json', JSON.stringify(updatedFile));
+  next();
+};
+
+const deleteTalker = async (request, _response, next) => {
+  const { id } = request.params;
+  const talkers = await JSON.parse(await fs.readFile('./talker.json', { encoding: 'utf-8' }));
+  await fs
+    .writeFile('./talker.json', JSON
+      .stringify(talkers
+        .filter((talker) => talker.id !== +id)));
   next();
 };
 
@@ -149,4 +158,5 @@ module.exports = {
   validateTalkInfos,
   createTalker,
   updateTalker,
+  deleteTalker,
 };

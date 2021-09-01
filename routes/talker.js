@@ -15,6 +15,7 @@ const {
   validateTalkInfos,
   createTalker,
   updateTalker,
+  deleteTalker,
 } = require('../middlewares/createNewTalker');
 
 const HTTP_OK_STATUS = 200;
@@ -77,6 +78,13 @@ router.put('/:id',
   updateTalker, (request, response) => {
     const { updatedTalker } = request;
     return response.status(200).json(updatedTalker);
+  });
+
+router.delete('/:id',
+  validateToken,
+  deleteTalker,
+  (_request, response) => {
+    response.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
   });
 
 module.exports = router;
