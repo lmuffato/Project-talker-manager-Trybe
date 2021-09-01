@@ -6,6 +6,7 @@ const getTalkersID = require('./middlewares/getTalkersID');
 const { emailValidation, passwordValidation, tokenGenerator } = require('./middlewares/login');
 const talkerValidations = require('./middlewares/talkerValidation');
 const createTalker = require('./middlewares/createTalker');
+const talkerUpdate = require('./middlewares/putTalkers');
 
 const app = express();
 app.use(bodyParser.json());
@@ -27,3 +28,5 @@ app.get('/talker/:id', getTalkersID);
 
 app.post('/login', emailValidation, passwordValidation, tokenGenerator);
 app.post('/talker', talkerValidations, createTalker);
+
+app.put('/talker/:id', talkerValidations, talkerUpdate);

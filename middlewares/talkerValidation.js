@@ -35,7 +35,7 @@ const talkValidate = (req, res, next) => {
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
-
+  
   next();
 };
 
