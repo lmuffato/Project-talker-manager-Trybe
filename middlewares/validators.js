@@ -87,10 +87,10 @@ function isTalkObjectEmpty(talk) {
 
 function validateDateFormat(req, res, next) {
   // https://qastack.com.br/programming/15491894/regex-to-validate-date-format-dd-mm-yyyy
-  const { date } = req.body.talk;
+  const { watchedAt } = req.body.talk;
   const dateRegex = /^(0?[1-9]|[12][0-9]|3[01])[/-](0?[1-9]|1[012])[/-]\d{4}$/;
 
-  if (!dateRegex.test(date)) {
+  if (!dateRegex.test(watchedAt)) {
     return res
        .status(400)
        .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' }); 
@@ -134,7 +134,6 @@ module.exports = {
   validateName,
   validateAge,
   validateTalk,
-  isTokenValid,
   validateDateFormat,
   validateRate,
   validateToken
