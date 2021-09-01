@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs').promises;
 const routerLogin = require('./routerLogin');
+const fileTalker = require('./fileTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,12 +13,6 @@ const PORT = '3000';
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
-
-const fileTalker = async () => {
-  const file = await fs.readFile('talker.json');
-  const arrayOfObejct = JSON.parse(file);
-  return arrayOfObejct;
-};
 
 // Requirement 01
 app.get('/talker', async (_req, res) => {
