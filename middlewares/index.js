@@ -6,7 +6,9 @@ const { databaseTalker } = require('../models');
 
 const checkAll = rescue(async (_req, res, next) => {
   const data = await databaseTalker();
-  if (!data) return res.status(status.ok).json([]);
+  if (!data) {
+    return res.status(status.ok).json([]);
+  }
   next();
 });
 
@@ -14,7 +16,9 @@ const getById = rescue(async (req, res, next) => {
   const idParams = req.params.id;
   const data = await databaseTalker();
   const findTalker = data.find(({ id }) => id === +idParams);
-  if (!findTalker) return res.status(status.notFound).json({ message: message.notFound });
+  if (!findTalker) {
+    return res.status(status.notFound).json({ message: message.notFound });
+  }
   next();
 });
 
