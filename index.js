@@ -129,6 +129,7 @@ function validateToken(_req, res, authorization) {
   if (authorization.length !== 16) {
     return res.status(HTTP_ERROR401_STATUS).json(messageTokenFormat);
   }
+  return true;
 }
 
 function validateName(_req, res, name) {
@@ -137,6 +138,7 @@ function validateName(_req, res, name) {
   if (name.length < minNameLength) {
     return res.status(HTTP_ERROR400_STATUS).json(messageNameFormat);
   }
+  return true;
 }
 
 function validateAge(_req, res, age) {
@@ -145,21 +147,23 @@ function validateAge(_req, res, age) {
   if (age < minAgeAllowed) {
     return res.status(HTTP_ERROR400_STATUS).json(messageAgeInvalid);
   }
+  return true;
 }
 
 function validateTalkExists(_req, res, talk) {
   if (!talk || !talk.watchedAt || !talk.rate) {
     return res.status(HTTP_ERROR400_STATUS).json(messageWatchAndRateRequired);
   }
+  return true;
 }
 function validateTalk(req, res, talk) {
   validateTalkExists(req, res, talk);
   if (talk.watchedAt.split('/').length !== 3) {
     return res.status(HTTP_ERROR400_STATUS).json(messageWatchFormat);
-  }
-  if (talk.rate > 5 || talk.rate < 1) {
+  } if (talk.rate > 5 || talk.rate < 1) {
     return res.status(HTTP_ERROR400_STATUS).json(messageRateFormat);
   }
+    return true;
 }
 
 function validateTalker(req, res, next) {
@@ -176,11 +180,15 @@ function validateTalker(req, res, next) {
 
 async function createTalker(req, res) {
   const { name, age, talk } = req.body;
+  try {
   const dataTalkers = await readFile();
   const newTalker = { name, age, id: dataTalkers.length + 1, talk };
   dataTalkers.push(newTalker);
   await fs.writeFile('talker.json', JSON.stringify(dataTalkers));
   return res.status(HTTP_OK201_STATUS).json(newTalker);
+  } catch (error) {
+    return error;
+  }
 }
 
 // Requisito 3
