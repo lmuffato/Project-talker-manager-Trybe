@@ -5,9 +5,9 @@ const { writeFileSync, readFileSync } = require('fs');
 
 const router = express.Router();
 
-const getTalkers = () => {
-  fs.readFile('./talker.json', 'utf-8').then((result) => JSON.parse(result));
-};
+function getTalkers() {
+ return fs.readFile('./talker.json', 'utf-8').then((result) => JSON.parse(result));
+}
 
 const readFileFn = () => {
   const talkers = readFileSync('./talker.json');
