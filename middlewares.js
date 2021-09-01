@@ -7,10 +7,10 @@ const validateToken = (req, res, next) => {
 
 const validateName = (req, res, next) => {
   const { name } = req.body;
-  if (!name || name === '') {
+  if (!name || name.length === '') {
     return res.status(400).json({ message: 'O campo "name" é obrigatório' });
   }
-  if (name.length <= 3) {
+  if (name.length < 3) {
     return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
   }
   next();
@@ -18,7 +18,7 @@ const validateName = (req, res, next) => {
 
 const validateAge = (req, res, next) => {
   const { age } = req.body;
-  if (!age || age === '') {
+  if (!age || age.length === '') {
     res.status(400).json({ message: 'O campo "age" é obrigatório' });
   }
   if (parseInt(age, 10) < 18) {
@@ -48,7 +48,7 @@ const validateDate = (req, res, next) => {
 
 const validateRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
-  if (parseInt(rate, 10) >= 1 && parseInt(rate, 10) < 6) {
+  if (rate >= 1 || rate < 6) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   next();

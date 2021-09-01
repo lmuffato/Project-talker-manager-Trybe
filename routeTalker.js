@@ -24,7 +24,7 @@ router.post('/', ultility, async (req, res) => {
     talk,
   };
   talker.push(newTalker);
-  await fs.writeFile('talker.json', JSON.stringify(newTalker));
+  await fs.writeFile('talker.json', JSON.stringify(talker));
   res.status(201).json(newTalker);
 });
 
