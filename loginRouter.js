@@ -1,5 +1,4 @@
 const { Router } = require('express');
-const UIDGenerator = require('uid-generator');
 
 const router = Router();
 
@@ -28,15 +27,19 @@ function passwordValidation(req, res, next) {
   next();
 }
 
-function tokenGenerator(_req, res) {
-  const newToken = new UIDGenerator(UIDGenerator.BASE16); // Src = https://www.npmjs.com/package/uid-generator
-  // console.log(newToken);
-  console.log('Gerou token');
-  return res.status(200).json({ token: newToken.baseEncoding });
+function tokenGenerator() {
+  const length = 16;
+  const a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+  const b = [];  
+  for (let i = 0; i < length; i += 1) {
+      const j = (Math.random() * (a.length - 1)).toFixed(0);
+      b[i] = a[j];
+  }
+  return b.join('');
 }
 
-router.post('/', emailValidation, passwordValidation, tokenGenerator, (_req, res) => {
-  res.end();
+router.post('/', emailValidation, passwordValidation, (_req, res) => {
+  res.status(200).json({ token: tokenGenerator() });
 });
 
 module.exports = router;

@@ -27,14 +27,9 @@ router.get('/:id', async (req, res) => {
 
 function tokenValidation(res, req, next) {
   const { authorization } = req.headers;
-  
-  if (!authorization) {
-    return res.status(401).json({ message: 'Token não encontrado' });
-  }
-  if (authorization.length !== 16) {
-    return res.status(401).json({ message: 'Token inválido' });
-  }
-  next();  
+  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
+  if (authorization.length !== 16) return res.status(401).json({ message: 'Token inválido' });
+  next();
 }
 
 function nameValidation(req, res, next) {
@@ -79,7 +74,7 @@ function rateValidation(req, res, next) {
 
 function watchedValidation(res, req, next) {
   const { talk: { watchedAt } } = req.body;
-  const regex = /\n# $&:\n\t/;
+  const regex = /^(0?[1-9]|[12][0-9]|3[01])[/](0?[1-9]|1[012])[/]\d{4}$/;
   if (!regex.test(watchedAt) === false) {
     return res.status(400).json({ 
       message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
@@ -88,7 +83,7 @@ function watchedValidation(res, req, next) {
   next();
 }
 
-router.post('/talker', tokenValidation, nameValidation, 
+router.post('/', tokenValidation, nameValidation, 
   ageValidation, talkValidation, rateValidation, watchedValidation, async (req, res) => {
   const { name, age, talk } = req.body;
   const talkersList = await readFile();
@@ -100,7 +95,7 @@ router.post('/talker', tokenValidation, nameValidation,
   };
   talkersList.push(createNewTalker);
   await fs.writeFile(talkers, JSON.stringify(talkersList));
-  return res.status(HTTP_OK_STATUS).json(createNewTalker);
+  res.status(HTTP_OK_STATUS).json(createNewTalker);
 });
 
 module.exports = router;
