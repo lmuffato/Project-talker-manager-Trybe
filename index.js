@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const getAllTalkers = require('./middlewares/getAllTalkers');
 const getTalkerByID = require('./middlewares/getTalkerByID');
 
-
 const app = express();
 app.use(bodyParser.json());
 
