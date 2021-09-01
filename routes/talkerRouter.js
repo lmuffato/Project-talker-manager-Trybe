@@ -16,14 +16,22 @@ const {
   validateTalk,
 } = require('../middleware/validateTalk');
 
-router.get('/', async (request, response) => {
+router.get('/search', validateToken, async (request, response) => {
+  const { q } = request.query;
+
   const talkers = JSON.parse(await fs.promises.readFile(path, { encoding: 'utf-8' }));
 
-  if (!talkers.length) {
+  if (!q || q === '') {
+    return response.status(200).json(talkers);
+  }
+
+  const filter = talkers.filter((t) => t.name.includes(q));
+
+  if (filter.length === 0) {
     return response.status(200).json([]);
   }
 
-  return response.status(200).json(talkers);
+  return response.status(200).json(filter);
 });
 
 router.get('/:id', async (request, response) => {
@@ -37,6 +45,16 @@ router.get('/:id', async (request, response) => {
   }
 
   return response.status(200).json(talkerById);
+});
+
+router.get('/', async (request, response) => {
+  const talkers = JSON.parse(await fs.promises.readFile(path, { encoding: 'utf-8' }));
+
+  if (!talkers.length) {
+    return response.status(200).json([]);
+  }
+
+  return response.status(200).json(talkers);
 });
 
 const validations = [
@@ -91,7 +109,9 @@ router.delete('/:id', validateToken, async (request, response) => {
   const prettifyString = prettier.format(stringifyTalkers, { parser: 'json' });
 
   await fs.promises.writeFile('./talker.json', prettifyString, 'utf-8');
-  return response.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  return response
+    .status(200)
+    .json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 module.exports = router;
