@@ -1,7 +1,6 @@
 const randonCode = require('../services/randonCode');
 
 function validaEmail(req, res, next) {
-
   /* regex de validação de email adquirido do site abaixo:
   https://stackoverflow.com/questions/61830906/regular-expression-s-s-in-javascript-not-working */
   const emailRegex = /\S+@\S+\.\S+/;
