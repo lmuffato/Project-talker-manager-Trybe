@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const { showTalkers } = require('./showTalkers');
+const showTalkers = require('./showTalkers');
 
 /* router.get('/talker/search', );
 
