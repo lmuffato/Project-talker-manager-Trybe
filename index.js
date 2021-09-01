@@ -33,6 +33,12 @@ app.get('/talker/:id', async (request, response) => {
   response.status(200).json(talkerId);
 });
 
+// Requisito 3
+
+// app.post('/login', (request, response) => {
+//
+// });
+
 app.listen(PORT, () => {
   console.log('Online');
 });
