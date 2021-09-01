@@ -60,7 +60,7 @@ app.get('/talker/:id', async (req, res) => {
 
 // at3
 app.post('/login', (req, res) => { 
-  const { email, senha } = req.body; 
+  //const { email, senha } = req.body; 
 
 const token = { token: '7mqaVRXJSp886CGr' };
 res.status(200).json(token); 
