@@ -16,10 +16,10 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-const talkerEndPoints = require('./talkerEndPoints');
+const talkerEndPoints = require('./routers/talkerEndPoints');
 
 app.use('/talker', talkerEndPoints);
 
-// const loginEndPoints = require('./loginEndPoints');
+const loginEndPoints = require('./routers/loginEndPoints');
 
-// app.use('/login', loginEndPoints);
+app.use('/login', loginEndPoints);
