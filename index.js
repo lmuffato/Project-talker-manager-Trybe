@@ -4,14 +4,15 @@ const getAllTalkers = require('./middleware/req1');
 const getTalkerById = require('./middleware/req2');
 const login = require('./middleware/req3');
 const createTalker = require('./middleware/req4');
+const editTalker = require('./middleware/req5');
+const deleteTalker = require('./middleware/req6');
+// const searchTalker = require('./middleware/req7');
 
+const validations = require('./validations/validations');
+
+const [validateToken] = validations;
 const validateEmail = require('./validations/validateEmail');
 const validatePassword = require('./validations/validatePassword');
-const validateToken = require('./validations/validateToken');
-const validateNameAge = require('./validations/validateNameAge');
-const validateTalk = require('./validations/validateTalks');
-
-const { validateTalks, validateRates, validateWachedAt } = validateTalk;
 
 const app = express();
 app.use(bodyParser.json());
@@ -28,13 +29,19 @@ app.get('/', (_request, response) => {
 app.get('/talker', getAllTalkers);
 
 // requisito 4
-app.post(
-  '/talker', validateToken, validateNameAge,
-  validateTalks, validateRates, validateWachedAt, createTalker,
-  );
+app.post('/talker', validations, createTalker);
 
 // requisito 2
 app.get('/talker/:id', getTalkerById);
+
+// requisito 5
+app.put('/talker/:id', validations, editTalker);
+
+// requisito 6
+app.delete('/talker/:id', validateToken, deleteTalker);
+
+// requisito 7
+// app.get('/talker/search', validateToken, searchTalker);
 
 // requisito 3
 app.post('/login', validateEmail, validatePassword, login);

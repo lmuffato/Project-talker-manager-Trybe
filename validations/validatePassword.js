@@ -10,7 +10,6 @@ const validatePassword = (request, response, next) => {
     return response.status(400)
     .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
-  console.log(password.length);
   next();
 };
 
