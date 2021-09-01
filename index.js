@@ -32,6 +32,17 @@ app.get('/talker/:id', async (request, response) => {
   response.status(200).json(pessoasPalestrantes);
 });
 
+const SECRET = 'xablau';
+
+app.post('/login', (request, response) => {
+  if (request.body.email === 'email@email.com'
+   && request.body.password === '123456') {
+    const token = response.sign({ userId: 1 }, SECRET, { expiresIn: 300 });
+    response.json({ auth: true, token });
+   }
+   response.status(401).end();
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
