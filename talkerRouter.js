@@ -56,7 +56,7 @@ function ageValidation(req, res, next) {
 
 function talkValidation(req, res, next) {
   const { talk } = req.body;
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (!talk || !talk.watchedAt) {
     return res.status(400).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
@@ -66,8 +66,13 @@ function talkValidation(req, res, next) {
 
 function rateValidation(req, res, next) {
   const { talk: { rate } } = req.body; 
-  if (rate < 1 || rate > 5) {
+  if (rate < Number(1) || rate > Number(5) || rate === 0) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+  if (rate === '' || rate === undefined) {
+    return res.status(400).json({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
   }
   next();
 }
@@ -103,6 +108,9 @@ router.put('/:id', tokenValidation, nameValidation, ageValidation, talkValidatio
   const { id } = req.params;
   const { name, age, talk } = req.body;
   const talkersList = await readFile();
+  if (talk.rate < Number(1) || talk.rate === '') {
+    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
   const talkerById = talkersList.filter((talker) => talker.id !== Number(id));
   const updatetalker = { 
     name,
