@@ -78,7 +78,7 @@ router.put('/:id', talkerMiddlewares, rescue(async (req, res) => {
     talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
   }
   talkers[talkerIndex] = { ...talkers[talkerIndex], name, age, talk };
-  
+  await setUpdate(talkers);
   res.status(HTTP_OK_STATUS)
   .json({
     id: parseFloat(id),
@@ -86,7 +86,23 @@ router.put('/:id', talkerMiddlewares, rescue(async (req, res) => {
     age,
     talk,
   });
+}));
+
+router.delete('/:id', validateToken, rescue(async (req, res) => {
+  const { id } = req.params;
+  const talkers = await getTalkerFile();
+  let talkerIndex;
+
+  if (talkers.length > 0) {
+    talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  }
+
+  talkers.splice(talkerIndex, 1);
+
   setUpdate(talkers);
+
+  res.status(HTTP_OK_STATUS)
+    .json({ message: 'Pessoa palestrante deletada com sucesso' });
 }));
 
 module.exports = router;
