@@ -5,4 +5,4 @@ function getTalkers() {
   return talkers.then((res) => JSON.parse(res));
 }
 
-module.exports = { getTalkers };
+module.exports = getTalkers;
