@@ -4,13 +4,14 @@ const fs = require('fs').promises;
 const { writeFileSync, readFileSync } = require('fs');
 
 const router = express.Router();
+const talkFile = './talker.json';
 
 function getTalkers() {
- return fs.readFile('./talker.json', 'utf-8').then((result) => JSON.parse(result));
+ return fs.readFile(talkFile, 'utf-8').then((result) => JSON.parse(result));
 }
 
 const readFileFn = () => {
-  const talkers = readFileSync('./talker.json');
+  const talkers = readFileSync(talkFile);
   const result = JSON.parse(talkers);
   return result;
 };
@@ -120,7 +121,7 @@ router
 
   talkerPeople.push(newTalker);
 
-  writeFileSync('./talker.json', JSON.stringify(talkerPeople));
+  writeFileSync(talkFile, JSON.stringify(talkerPeople));
 
   return res.status(201).json(newTalker);
 });
@@ -133,8 +134,19 @@ router.put('/:id', getAuth, getTalkerName, getAge, getTalkField, getDate, getRat
 
   talkers[talkerPeople] = { ...talkers[talkerPeople], name, age, talk };
 
-  writeFileSync('./talker.json', JSON.stringify(talkers));
+  writeFileSync(talkFile, JSON.stringify(talkers));
   res.status(200).json(talkers[talkerPeople]);
+});
+
+router.delete('/:id', getAuth, (req, res) => {
+  const { id } = req.params;
+  const talkers = readFileFn();
+  const talkerPeople = talkers.findIndex((result) => result.id === Number(id));
+
+  talkers.splice(talkerPeople, 1);
+
+  writeFileSync(talkFile, JSON.stringify(talkers));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 module.exports = router;
