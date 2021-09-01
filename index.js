@@ -13,7 +13,7 @@ const crypto = require('crypto');
 const { validateEmail, validatePassword } = require('./validations/validationsPassAndEmail');
 
 function generateToken() {
-  return crypto.randomBytes(16).toString('hex');
+  return crypto.randomBytes(8).toString('hex');
   // 1 Byte usa 2 caracteres no hexadecimal, por isso é normal vermos 32 bytes sendo representados como 64 bytes.
 }
 
