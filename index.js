@@ -31,7 +31,14 @@ app.get('/talker', getTalkers);
 app.get('/talker/:id', findTalkerById);
 
 app.post('/login', validateEmail, validatePassword, generateToken);
-app.post('/talker', validateToken, validateName, validateAge, validateTalk, addTalker);
+app.post(
+  '/talker',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  addTalker,
+);
 
 app.listen(PORT, () => {
   console.log('Online');
