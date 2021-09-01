@@ -1,5 +1,6 @@
 const {
   lerDados,
+  escreverDados,
 } = require('./lerOsDados');
 
 const requisito1 = async (_req, res) => {
@@ -25,8 +26,27 @@ const requisito2 = async (req, res) => {
 
 const requisito3 = async (_req, res) => res.status(200).json({ token: '7mqaVRXJSp886CGr' });
 
+const requisito4 = async (req, res) => {
+    const { name, age, talk: { watchedAt, rate } } = req.body;
+    const data = await lerDados();
+    
+   if (data[data.length - 1]) {
+     const { id: oldId } = data[data.length - 1];
+     
+     const id = parseInt(oldId, 10) + 1;
+
+     data.push({ id, name, age, talk: { watchedAt, rate } });
+
+     await escreverDados(data);
+   }
+
+    const newData = await lerDados();
+    res.status(201).json(newData[newData.length - 1]);
+};
+
 module.exports = {
   requisito1,
   requisito2,
   requisito3,
+  requisito4,
 };

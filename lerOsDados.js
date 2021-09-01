@@ -10,6 +10,10 @@ const lerDados = async () => {
   }
 };
 
+const escreverDados = async (novosDados) => 
+fs.writeFile('./talker.json', JSON.stringify(novosDados));
+
 module.exports = {
   lerDados,
+  escreverDados,
 };
