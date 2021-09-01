@@ -4,23 +4,6 @@ const {
   talkValidator,
 } = require('../utils/createTalkerValidator');
 
-/* function createTalker(request, response, next) {
-  nameCheck = nameValidator();
-  ageCheck = ageValidator();
-  talkCheck = talkValidator();
-
-  if (nameCheck === 0) {
-    return next();
-  }
-  
-  if (ageCheck === 0) {
-    return next();
-  }
-  if (talkCheck === 0) {
-    return next();
-  }
-} */
-
 function nameCheck (request, response, next) {
   const { name } = request.body;
   const validated = nameValidator(name);
@@ -41,7 +24,7 @@ function ageCheck (request, response, next) {
 
 function talkCheck (request, response, next) {
   const { talk } = request.body;
-  const validated = nameValidator(talk);
+  const validated = talkValidator(talk);
   if ( validated === 0) {
     return next();
   }
