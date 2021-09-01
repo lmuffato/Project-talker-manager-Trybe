@@ -1,6 +1,6 @@
 const { returnArrayIncludesTerm } = require('../utils/talkerFilters');
 
-function searchTerm(request, response) {
+async function searchTerm(request, response) {
   try {
     const { q } = request.query;
     if (q) {
