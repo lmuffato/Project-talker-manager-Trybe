@@ -91,7 +91,7 @@ app.put('/talker/:id', validateToken, talkerValidators, async (req, res) => {
   return res.status(200).json(editedTalker);
 });
 
-app.delete('/talker/:id', validateToken, (req, res) => {
+app.delete('/talker/:id', validateToken, async (req, res) => {
   const { id } = req.params;
 
   const talkers = await fs.readFile('./talker.json', 'utf-8');
