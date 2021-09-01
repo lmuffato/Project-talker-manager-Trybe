@@ -14,6 +14,7 @@ const {
   nameCheck,
   ageCheck,
   talkCheck,
+  registerTalker,
 } = require('./middlewares/createTalker');
 
 const validateToken = require('./middlewares/validateToken');
@@ -32,7 +33,7 @@ app.get('/', (_request, response) => {
 app.get('/talker', getAllTalkers);
 app.get('/talker/:id', getTalkerByID);
 app.post('/login', emailValidation, passwordValidation, tokenDispatch);
-app.post('/talker', validateToken, nameCheck, ageCheck, talkCheck);
+app.post('/talker', validateToken, nameCheck, ageCheck, talkCheck, registerTalker);
 // ---------------------
 
 app.listen(PORT, () => {
