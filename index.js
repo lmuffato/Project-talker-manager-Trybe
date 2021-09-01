@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const routerLogin = require('./routerLogin');
 
 const app = express();
 app.use(bodyParser.json());
@@ -38,6 +39,9 @@ app.get('/talker/:id', async (req, res) => {
    if (!findById) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
    res.status(200).json(findById); 
 });
+
+// Requirement 03
+app.use('/login', routerLogin);
 
 app.listen(PORT, () => {
   console.log('Online');
