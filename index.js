@@ -38,10 +38,14 @@ app.get('/talker', async (_req, res) => {
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
+  try {
   const dataTalkers = await readFile();
 
-  const dataTalkerFiltered = dataTalkers.find((talker) => talker.id === id);
+  const dataTalkerFiltered = dataTalkers.find((talker) => talker.id === +id);
 
-  if (dataTalkerFiltered.length > 0) return res.status(HTTP_OK_STATUS).json(dataTalkerFiltered);
-  return res.status(HTTP_NOTFOUND_STATUS).json(messageNotFound);
+  if (dataTalkerFiltered) return res.status(HTTP_OK_STATUS).json(dataTalkerFiltered);
+  throw Error();
+  } catch (error) {
+    return res.status(HTTP_NOTFOUND_STATUS).json(messageNotFound);
+  }
 });
