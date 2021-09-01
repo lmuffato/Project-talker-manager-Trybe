@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const fs = require('fs').promises;
-const { nextTick } = require('process');
 
 const readFile = async () => {
   const file = await fs.readFile('./talker.json', 'utf-8');
