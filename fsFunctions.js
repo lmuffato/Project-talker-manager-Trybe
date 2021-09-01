@@ -5,4 +5,4 @@ async function getAllTalkers() {
   return JSON.parse(talkers);
 }
 
-module.exports = { getAllTalkers };
+module.exports = { getAllTalkers /* createUserLogin */ };

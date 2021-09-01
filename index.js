@@ -2,7 +2,8 @@ const express = require('express');
 const rescue = require('express-rescue');
 const bodyParser = require('body-parser');
 
-const { getAllTalkers } = require('./fsFunctions');
+const { getAllTalkers /* createUserLogin */ } = require('./fsFunctions');
+const { createToken, validateEmail, validatePassword } = require('./middlewares');
 
 const app = express();
 app.use(bodyParser.json());
@@ -37,6 +38,11 @@ app.get(
     res.status(HTTP_OK_STATUS).json(talker);
   }),
 );
+
+app.post('/login', createToken, validateEmail, validatePassword, (req, res) => {
+  const { token } = req;
+  res.status(HTTP_OK_STATUS).json({ token });
+});
 
 app.listen(PORT, () => {
   console.log('Online');
