@@ -1,8 +1,10 @@
 const validateToken = (req, res, next) => {
-  const { token } = req.headers;
+  const { authorization } = req.headers;
 
-  if (!token) return res.status(401).json({ message: 'Token não encontrado' });
-  if (token !== '7mqaVRXJSp886CGr') return res.status(401).json({ message: 'Token inválido' });
+  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
+  if (authorization !== '7mqaVRXJSp886CGr') {
+    return res.status(401).json({ message: 'Token inválido' });
+  }
 
   next();
 };
@@ -31,21 +33,24 @@ const validateAge = (req, res, next) => {
 
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
-  const { watchedAt, rate } = talk;
 
-  if (!talk || !watchedAt || !rate) {
+  if (!talk) {
     return res.status(400)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
+ 
   next();
 };
 
 const validateDate = (req, res, next) => {
   const { talk } = req.body;
-  const { watchedAt } = talk;
 
-  const dateRegex = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[012])\/\d{4}$/; // https://stackoverflow.com/questions/5465375/javascript-date-regex-dd-mm-yyyy
-  if (!watchedAt.match(dateRegex)) {
+  if (!talk.watchedAt || talk.watchedAt === '') {
+    return res.status(400)
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+  const dateRegex = /^[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}$/g; // https://stackoverflow.com/questions/5465375/javascript-date-regex-dd-mm-yyyy
+  if (!dateRegex.test(talk.watchedAt)) {
     return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
   next();
@@ -55,6 +60,10 @@ const validateRate = (req, res, next) => {
   const { talk } = req.body;
   const { rate } = talk;
 
+  if (!rate || rate === '') {
+    return res.status(400)
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
   if (rate < 1 || rate > 5) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }

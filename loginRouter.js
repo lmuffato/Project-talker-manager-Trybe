@@ -26,7 +26,7 @@ const validatePassword = (req, res, next) => {
   next();
 };
 
-router.post('/', validateEmail, validatePassword, (req, res) => {
+router.post('/', validateEmail, validatePassword, (_req, res) => {
   res.status(200).json({ token: '7mqaVRXJSp886CGr' });
 });
 
