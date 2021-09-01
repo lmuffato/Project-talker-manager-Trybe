@@ -8,4 +8,7 @@ router.get('/', getTalkerList);
 
 router.get('/:id', getFilteredTalker);
 
+
+// router.post('/', validateToken, validateTalkerName, validateTalkerAge, validateTalker, createTalker);
+
 module.exports = router;

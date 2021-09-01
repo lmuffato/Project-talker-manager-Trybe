@@ -2,9 +2,9 @@ const { Router } = require('express');
 
 const router = Router();
 
-const { validateEmail, validatePassword } = require('../middlewares/validations');
+const { validateEmail, validatePassword } = require('../middlewares/AcessValidations');
 
-const createToken = require('../middlewares/createToken');
+const { createToken } = require('../middlewares/tokenHandlers');
 
 router.post('/', validateEmail, validatePassword, createToken);
 
