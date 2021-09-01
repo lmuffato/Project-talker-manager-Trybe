@@ -1,4 +1,5 @@
 const moment = require('moment');
+const { checkToken } = require('./funtions');
 
 const ERROR_EMAIL_VAZIO = 'O campo "email" é obrigatório';
 const ERROR_EMAIL_INVALID = 'O "email" deve ter o formato "email@email.com"';
@@ -12,10 +13,11 @@ const ERROR_TOKEN_VAZIO = 'Token não encontrado';
 const ERROR_TOKEN_INVALID = 'Token inválido';
 const ERROR_RATE_INVALID = 'O campo "rate" deve ser um inteiro de 1 à 5';
 const ERROR_DATE_INVALID = 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"';
+const ERROR_TALK_UNDEFINED = `O campo "talk" é obrigatório e "watchedAt"
+  e "rate" não podem ser vazios`;
 
 const validadePassword = (req, res, next) => {
   const { password } = req.body;
-
   if (!password || password === '') return res.status(400).json({ message: ERROR_PASSWORD_VAZIO });
   if (password.length < 5) return res.status(400).json({ message: ERROR_PASSWORD_INVALID });
 
@@ -33,10 +35,13 @@ const validadeEmail = (req, res, next) => {
 };
 
 const validadeToken = (req, res, next) => {
-  const { token } = req.headers;
+  const { authorization: token } = req.headers;
 
   if (!token || token === '') return res.status(401).json({ message: ERROR_TOKEN_VAZIO });
-  if (token.length !== 16) return res.status(401).json({ message: ERROR_TOKEN_INVALID });
+
+  const checked = checkToken(token);
+
+  if (!checked) return res.status(401).json({ message: ERROR_TOKEN_INVALID });
 
   next();
 };
@@ -45,7 +50,7 @@ const validadeName = (req, res, next) => {
   const { name } = req.body;
 
   if (!name || name === '') return res.status(400).json({ message: ERROR_NAME_VAZIO });
-  if (name.length < 2) return res.status(400).json({ message: ERROR_NAME_INVALID });
+  if (name.length < 3) return res.status(400).json({ message: ERROR_NAME_INVALID });
 
   next();
 };
@@ -54,17 +59,24 @@ const validadeAge = (req, res, next) => {
   const { age } = req.body;
 
   if (!age || age === '') return res.status(400).json({ message: ERROR_AGE_VAZIO });
-  if (age < 17) return res.status(400).json({ message: ERROR_AGE_INVALID });
+  if (age < 18) return res.status(400).json({ message: ERROR_AGE_INVALID });
 
+  next();
+};
+
+const validadeRate = (req, res, next) => {
+  const { talk } = req.body;
+  if (talk.rate < 1 || talk.rate > 5) return res.status(400).json({ message: ERROR_RATE_INVALID });
   next();
 };
 
 const validadeTalk = (req, res, next) => {
   const { talk } = req.body;
   const validDate = moment(talk.watchedAt, 'DD/MM/YYYY').isValid();
-
+  if (talk === undefined) {
+    return res.status(400).json({ message: ERROR_TALK_UNDEFINED });
+  }
   if (!validDate) return res.status(400).json({ message: ERROR_DATE_INVALID });
-  if (talk.rate < 1 || talk.rate > 5) return res.status(400).json({ message: ERROR_RATE_INVALID });
   next();
 };
 
@@ -75,4 +87,5 @@ module.exports = {
   validadeName,
   validadeToken,
   validadeTalk,
+  validadeRate,
 };

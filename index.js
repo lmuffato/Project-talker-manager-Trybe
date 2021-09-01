@@ -9,6 +9,7 @@ const {
   validadeName,
   validadeAge,
   validadeTalk,
+  validadeRate,
 } = require('./utils/middlewares');
 
 const app = express();
@@ -54,7 +55,7 @@ app.put('.talker/:id', validadeToken, validadeName, validadeAge, validadeTalk, a
     }
     return item;
   });
-  fs.writeFile(ROTA_TALKER, JSON.stringify(modificTalk));
+  await fs.writeFile(ROTA_TALKER, JSON.stringify(modificTalk));
   res.status(200).end();
 });
 
@@ -95,16 +96,22 @@ app.post('/login', validadeEmail, validadePassword, (_req, res) => {
 });
 
 // Requisito 4
-app.post('/talker', validadeToken, validadeName, validadeAge, validadeTalk, async (req, res) => {
-  const { id, name, age, talk } = req.body;
+app.post('/talker',
+validadeToken,
+validadeName,
+validadeAge,
+validadeTalk,
+validadeRate,
+async (req, res) => {
+  const { name, age, talk } = req.body;
 
   const talkers = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
-  console.log(talkers);
+  const talker = { id: talkers.length + 1, name, age, talk };
 
-  talkers.push({ id, name, age, talk });
-  fs.writeFile(ROTA_TALKER, JSON.stringify(talkers));
+  talkers.push(talker);
+  await fs.writeFile(ROTA_TALKER, JSON.stringify(talkers));
 
-  res.status(201).json({ id, name, age, talk });
+  res.status(201).json(talker);
 });
 
 // Requisito 6
@@ -114,7 +121,7 @@ app.delete('/talker/:id', validadeToken, async (req, res) => {
   const talkers = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
   const filterId = talkers.filter((talk) => talk.id !== Number(id));
 
-  fs.writeFile(ROTA_TALKER, JSON.stringify(filterId));
+  await fs.writeFile(ROTA_TALKER, JSON.stringify(filterId));
 
   res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
