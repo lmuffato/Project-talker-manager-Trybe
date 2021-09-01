@@ -8,6 +8,7 @@ const {
   createTalker,
   talkerFormValidations,
   updateTalker,
+  deleteTalker,
 } = require('../middlewares');
 
 router.get('/', getTalkers, async (req, res) => {
@@ -38,6 +39,12 @@ router.put('/:id', [
   ...talkerFormValidations,
   getTalkers,
   updateTalker,
+]);
+
+router.delete('/:id', [
+  validateToken,
+  getTalkers,
+  deleteTalker,
 ]);
 
 module.exports = router;

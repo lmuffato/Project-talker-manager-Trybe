@@ -1,4 +1,4 @@
-const fs = require('fs').promises;
+const { persistFile } = require('../utils/persistFile');
 
 const TALKER_NOT_FOUND = { message: 'não existe palestrante com este ID cadastrado' };
 
@@ -6,9 +6,9 @@ function checkIfIdExists(talkers, id) {
   return talkers.some((talker) => Number(talker.id) === id);
 }
 
-function persistUpdatedTalker(file) {
-  return fs.writeFile('./talker.json', JSON.stringify(file), 'utf-8');
-}
+// function persistUpdatedTalker(file) {
+//   return fs.writeFile('./talker.json', JSON.stringify(file), 'utf-8');
+// }
 
 const updateTalker = async (req, res) => {
   const { name, age, talk } = req.body;
@@ -25,7 +25,7 @@ const updateTalker = async (req, res) => {
 
   const arrayWithoutOldTalker = talkers.filter((talker) => talker.id !== parsedId);
   arrayWithoutOldTalker.push(updatedTalker);
-  await persistUpdatedTalker(arrayWithoutOldTalker);
+  await persistFile(arrayWithoutOldTalker);
 
   res.status(200).json(updatedTalker);
 };
