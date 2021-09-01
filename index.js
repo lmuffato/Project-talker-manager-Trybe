@@ -30,16 +30,16 @@ app.listen(PORT, () => {
 });
 
 // Requisito 1
-app.get('/talkers', async (_req, res) => {
+app.get('/talker', async (_req, res) => {
   const dataTalkers = await readFile();
   if (dataTalkers.length > 0) return res.status(HTTP_OK_STATUS).json(dataTalkers);
   return res.status(HTTP_OK_STATUS).json([]);
 });
 
-app.get('/talkers/:id', async (req, res) => {
+app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const dataTalkers = await readFile();
-  
+
   const dataTalkerFiltered = dataTalkers.find((talker) => talker.id === id);
 
   if (dataTalkerFiltered.length > 0) return res.status(HTTP_OK_STATUS).json(dataTalkerFiltered);
