@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs').promises;
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
-const data = require('./talker.json');
 const {
   validateEmail,
   validatePassword,
@@ -11,7 +10,7 @@ const {
   validateTalk,
   validateToken,
   validateDateFormat,
-  validateRate
+  validateRate,
 } = require('./middlewares/validators');
 
 const talkerValidators = [
@@ -19,7 +18,7 @@ const talkerValidators = [
   validateName,
   validateTalk,
   validateDateFormat,
-  validateRate
+  validateRate,
 ];
 
 const app = express();
@@ -108,7 +107,7 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   const filteredTalkersObj = parsedTalkers.filter((t) => t.id !== +id);
 
   await fs.writeFile('./talker.json', JSON.stringify(filteredTalkersObj));
-  return res.status(200).json({message: "Pessoa palestrante deletada com sucesso"});
+  return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 app.listen(PORT, () => {
