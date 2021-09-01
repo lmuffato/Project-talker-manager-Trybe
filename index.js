@@ -16,6 +16,7 @@ const {
   addTalker,
   editTalker,
   deleteTalker,
+  searchTerm,
 } = middlewares;
 
 const app = express();
@@ -29,6 +30,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.get('/talker/search', validateToken, searchTerm);
 app.get('/talker', getTalkers);
 app.get('/talker/:id', findTalkerById);
 
