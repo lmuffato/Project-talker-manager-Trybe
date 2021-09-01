@@ -7,7 +7,11 @@ app.use(bodyParser.json());
 const getTalkers = require('./middlewares/getTalkers');
 const getTalkerById = require('./middlewares/getTalkerById');
 const { checkEmail, checkPassword, generateToken } = require('./middlewares/postLogin');
-const addTalker = require('./middlewares/postTalker');
+const {
+  checkToken, checkName, checkAge,
+  checkWatched, checkRate, checkTalk,
+  addTalker,
+} = require('./middlewares/postTalker');
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
@@ -21,7 +25,7 @@ app.get('/talker', getTalkers);
 app.get('/talker/:id', getTalkerById);
 
 app.post('/login', checkEmail, checkPassword, generateToken);
-app.post('/talker', addTalker);
+app.post('/talker', checkToken, checkName, checkAge, checkTalk, checkWatched, checkRate, addTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
