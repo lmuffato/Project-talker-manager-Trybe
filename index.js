@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const talkerRouter = require('./middlewares/talkerRouter/talkerRouter');
-const loginRouter = require('./middlewares/loginRouter.js');
+const { showTalkers } = require('./middlewares');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,8 +14,18 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.use('/talker', talkerRouter);
-app.use('/login', loginRouter);
+/* router.get('/talker/search', );
+
+router.get('/talker/:id', );
+
+router.put('/talker/:id',  );
+
+router.delete('/talker/:id', ); */
+
+app.get('/talker', showTalkers);
+
+// router.post('/talker',  );
+// .post('/login');
 
 app.listen(PORT, () => {
   console.log('Online');
