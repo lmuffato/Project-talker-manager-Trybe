@@ -1,3 +1,7 @@
+const { readJsonReturnArray } = require('../utils/read');
+const { writeAnObjectIntoAJSONFile } = require('../utils/write');
+const { returnArrayDifferentID } = require('../utils/talkerFilters');
+
 async function deleteTalker(request, response) {
   const { id } = request.params;
   const talkerDBPath = './talker.json';
