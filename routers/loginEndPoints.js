@@ -21,6 +21,9 @@ async function createToken(req, res) {
 }
 
 function validateEmail(req, res, next) {
+  if (req.body === undefined) {
+    return res.status(400).json({ message: 'O campo "email" é obrigatório' });
+  }
   const { email } = req.body;
   if (email === undefined) {
     return res.status(400).json({ message: 'O campo "email" é obrigatório' });
@@ -33,6 +36,9 @@ function validateEmail(req, res, next) {
 }
 
 function validatePassword(req, res, next) {
+  if (req.body === undefined) {
+    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
+  }
   const { password } = res.body;
   if (password === undefined) {
     return res.status(400).json({ message: 'O campo "password" é obrigatório' });
@@ -43,6 +49,6 @@ function validatePassword(req, res, next) {
   next();
 }
 
-router.post('/', validatePassword, validateEmail, createToken);
+router.post('/', validateEmail, validatePassword, createToken);
 
 module.exports = router;
