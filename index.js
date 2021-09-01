@@ -9,6 +9,7 @@ const { validateToken, validateWatchedAt } = require('./middlewares/validations'
 const generateToken = require('./utils/generateToken');
 const talkerCreation = require('./middlewares/talker');
 const editTalkers = require('./middlewares/putTalkers');
+const delTalkers = require('./middlewares/delTalkers');
 
 const app = express();
 app.use(bodyParser.json());
@@ -37,6 +38,8 @@ const validate = [validateToken,
 app.post('/talker', validate, talkerCreation);
 
 app.put('/talker/:id', validate, editTalkers);
+
+app.delete('/talker/:id', validateToken, delTalkers);
 
 app.listen(PORT, () => {
   console.log('Online');
