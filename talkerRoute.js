@@ -141,18 +141,19 @@ route.get('/:id', async (req, res) => {
   return res.status(200).json(person);
 });
 
-route.post('/', async (req, res) => {
-  const { name, age, talk } = req.body;
-  const token = req.headers.authorization;
-  const error = validateAll(name, age, talk, token);
-  if (error === false) {
-    const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
-    talkers.push({ id: (talkers.length + 1), name, age, talk });
-    await fs.writeFile(talkersFile, JSON.stringify(talkers));
-    return res.status(201).json({ id: 5, name, age, talk });
-  }
-  return treatError(error, res);
-});
+// route.post('/', async (req, res) => {
+//   const { name, age, talk } = req.body;
+//   const token = req.headers.authorization;
+//   const error = validateAll(name, age, talk, token);
+//   if (error === false) {
+//     const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
+//     const id = talkers.length + 1;
+//     talkers.push({ id, name, age, talk });
+//     await fs.writeFile(talkersFile, JSON.stringify(talkers));
+//     return res.status(201).json({ id, name, age, talk });
+//   }
+//   return treatError(error, res);
+// });
 
 route.put('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
