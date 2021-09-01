@@ -10,6 +10,7 @@ const validToken = (req, res, next) => {
   }
   next();
 };
+
 const validName = (req, res, next) => {
   const { name } = req.body;
   if (!name) {
@@ -34,12 +35,37 @@ const validAge = (req, res, next) => {
 };
 
 const validTalk = (req, res, next) => {
-  const { talk: watchedAt } = req.body;
-  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
-  if (!dateRegex.test(watchedAt)) {
-    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  const { talk } = req.body;
+  const { watchedAt, rate } = talk; 
+  if (!talk || !watchedAt || !rate) {
+    return res.status(400).json({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
   next();
 };
 
-  module.exports = { validToken, validName, validAge, validTalk };
+const validTalkKeys = (req, res, next) => {
+  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
+  const { talk: watchedAt, rate } = req.body;
+  if (!dateRegex.test(watchedAt)) {
+    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+  if (rate < 1 || rate > 5) {
+    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+  next();
+};
+
+const allTalkerValidations = [
+  validToken,
+   validName,
+  validAge,
+  validTalk,
+  validTalkKeys,
+];
+
+  module.exports = { allTalkerValidations };
+
+/* Referência de regex de IagoFerreira:
+https://github.com/tryber/sd-010-a-project-talker-manager/pull/4/files ;
+*/

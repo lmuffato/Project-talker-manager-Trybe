@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const validToken = require('./validation');
+// const validToken = require('./validation');
 
 function readingFile() {
   const theFile = 'talker.json';
@@ -21,11 +21,10 @@ const getTalkerById = async (req, res) => {
 res.status(200).json(talkerById);
 };
 
-/* // só pra né
+// só pra né
 
 const addTalker = async (req, res) => {
 const { name, age, talk } = req.body;
-await validToken();
 // leitura dos palestrantes
 const oldTalkers = await readingFile();
 // cria variavel do novo palestrante
@@ -36,8 +35,8 @@ const newTalker = {
 const attTalkers = oldTalkers.push(newTalker);
 // escreve no arquivo o novo dado de palestrantes
 await fs.writeFile('talker.json', JSON.stringfy(attTalkers));
-  res.status(200).json(newTalker);
-}; */
+  res.status(20).json(newTalker);
+};
 
 module.exports = { getAllTalkers, getTalkerById, addTalker };
 
