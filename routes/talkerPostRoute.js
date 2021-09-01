@@ -2,7 +2,7 @@ const fs = require('fs');
 
 const filePath = ('talker.json');
 
-// const saveTalkers = (talkers) => fs.writeFileSync(filePath, JSON.stringify(talkers, null, '\t'));
+const saveTalkers = (talkers) => fs.writeFileSync(filePath, JSON.stringify(talkers, null, '\t'));
 
 const noToken = {
     message: 'Token não encontrado',
@@ -38,15 +38,9 @@ const getTalker = (req, res) => {
 const noneEmail = {
     message: 'O campo "email" é obrigatório',
 };
-const noneEmailValidation = (res, email) => {
-    if (email === undefined) return res.status(400).send(noneEmail);
-};
 
 const nonePassword = {
     message: 'O campo "password" é obrigatório',
-};
-const nonePasswordValidation = (res, password) => {
-    if (password === undefined) return res.status(400).send(nonePassword);
 };
 
 const invalidEmail = {
@@ -57,59 +51,47 @@ const invalidPassword = {
     message: 'O "password" deve ter pelo menos 6 caracteres',
   };
 
-const EmailValidation = (res, email) => {
-    const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-    const validEmail = regex.test(String(email).toLowerCase());
-    if (!validEmail) return res.status(400).send(invalidEmail);
+const EmailValidation = (req, res, next) => {
+  const { email } = req.body;
+  if (email === undefined) return res.status(400).send(noneEmail);
+  const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+  const validEmail = regex.test(String(email).toLowerCase());
+  if (!validEmail) return res.status(400).send(invalidEmail);
+  next();
 };
 
-const passwordValidation = (res, password) => {
-    const minPassLength = 6;
-    const validPassword = (password.length > minPassLength);
-    if (!validPassword) return res.status(400).send(invalidPassword);
+const passwordValidation = (req, res, next) => {
+  const { password } = req.body;
+  if (password === undefined) return res.status(400).send(nonePassword);
+  const minPassLength = 6;
+  const validPassword = (password.length > minPassLength);
+  if (!validPassword) return res.status(400).send(invalidPassword);
+  next();
 };
 
 // const validToken = (res, authorization) => {
 //     if (authorization.length !== 16) return res.status(400)
 // };
 
-// função vista no projeto do Kevin Fraga - Turma 9
-// https://github.com/tryber/sd-09-project-talker-manager/pull/99
-// const randomHexGenerator = (res, length) => {
-//     const MaxLength = 8;
-//     const min = 16 ** (Math.min(16, MaxLength) - 1);
-//     const max = 16 ** (Math.min(16, MaxLength)) - 1;
-//     const number = Math.floor(Math.random() * (max - min + 1)) + min;
-//     let token = number.toString(16);
-    
-//     while (token.length < length) {
-//       token += randomHexGenerator(length - MaxLength);
-//     }
-//     return res.status(200).json({ token });
-//   };
+// Dica do token vista no repositório do Iago Ferreira
+const crypto = require('crypto');
 
-const logIn = async (req, res) => {
-    // const { authorization } = req.headers;
-    const { email, password } = req.body;
-    // randomHexGenerator(res, 16);
-    // validToken(res, authorization);
-    noneEmailValidation(res, email);
-    EmailValidation(res, email);
-    nonePasswordValidation(res, password);
-    passwordValidation(res, password);
+const generateToken = (_req, res) => {
+  const token = crypto.randomBytes(8).toString('hex');
+  return res.status(200).json({ token });
 };
 
-// const setTalkers = (_req, res) => {
-
-// };
-
 const deleteTalker = (req, res) => {
-    const talker = getTalker();
+    // const { id } = req.params;
+    const datas = fs.readFileSync(filePath);
+    const answer = JSON.parse(datas);
+    const defAnswer = answer.find(({ id }) => id !== parseInt(req.params.id, 10));
+    saveTalkers(defAnswer);
     const { authorization } = req.headers;
     if (!authorization) return res.status(401).send(noToken);
     if (authorization.length !== 16) return res.status(401).send(invalidToken);
     const message = { message: 'Pessoa palestrante deletada com sucesso' };
-    if (talker) return res.status(200).send(message);
+    return res.status(200).send(message);
 };
 
 const noName = {
@@ -147,17 +129,13 @@ const talkerPostRoute = (app) => {
     app.route('/talker')
     .post((req, res) => {
         addTalker(req, res);
-        // const talkers = setTalkers();
-        // res.status(200).send(talkers);
     });
     app.route('/talker/:id')
     .delete((req, res) => {
       deleteTalker(req, res);
     });
     app.route('/login')
-    .post((req, res) => {
-        logIn(req, res);
-    });
+    .post(EmailValidation, passwordValidation, generateToken);
 };
 
 module.exports = talkerPostRoute;
