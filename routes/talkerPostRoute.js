@@ -83,15 +83,12 @@ const generateToken = (_req, res) => {
   return res.status(200).json({ token });
 };
 
-const deleteTalker = (req, res) => {
-    // const { id } = req.params;
-    const datas = fs.readFileSync(filePath);
+const deleteTalker = async (req, res) => {
+    const { id } = req.params;
+    const datas = await fs.readFileSync(filePath);
     const answer = JSON.parse(datas);
-    const defAnswer = answer.find(({ id }) => id !== parseInt(req.params.id, 10));
-    saveTalkers(defAnswer);
-    const { authorization } = req.headers;
-    if (!authorization) return res.status(401).json(noToken);
-    if (authorization.length !== 16) return res.status(401).json(invalidToken);
+    const defAnswer = answer.filter((talker) => talker.id !== parseInt(id, 10));
+    await writeFile(filePath, JSON.stringify(defAnswer));
     const message = { message: 'Pessoa palestrante deletada com sucesso' };
     return res.status(200).send(message);
 };
@@ -184,9 +181,7 @@ const talkerPostRoute = (app) => {
     app.route('/talker/:id')
     .put(tokenValidation, validatingName, validatingAge, validatingTalk,
       validatingDate, validatingRate, editingTalker)
-    .delete((req, res) => {
-      deleteTalker(req, res);
-    });
+    .delete(tokenValidation, deleteTalker);
     app.route('/login')
     .post(EmailValidation, passwordValidation, generateToken);
 };
