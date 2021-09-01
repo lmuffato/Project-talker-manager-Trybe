@@ -5,6 +5,7 @@ const getAllTalkers = require('./middlewares/getAllTalkers');
 const getTalkerByID = require('./middlewares/getTalkerByID');
 const editTalkers = require('./middlewares/editTalkers');
 const deleteTalker = require('./middlewares/deleteTalker');
+const searchTerm = require('./middlewares/searchTerm');
 
 const {
   emailValidation,
@@ -34,6 +35,7 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', getAllTalkers);
 app.get('/talker/:id', getTalkerByID);
+app.get('/talker/search', validateToken, searchTerm);
 app.post('/login', emailValidation, passwordValidation, tokenDispatch);
 app.post('/talker', validateToken, nameCheck, ageCheck, talkCheck, registerTalker);
 app.put('/talker/:id', validateToken, nameCheck, ageCheck, talkCheck, editTalkers);
