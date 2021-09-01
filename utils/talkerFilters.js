@@ -7,9 +7,7 @@ function returnArrayDifferentID(talkersArray, tid) {
 }
 
 function returnArrayIncludesTerm(talkersArray, term, key) {
-  return talkersArray.filter((talker) => {
-    return talker[key].includes(term);
-  });
+  return talkersArray.filter((talker) => talker[key].includes(term));
 }
 
 module.exports = {
