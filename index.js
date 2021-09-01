@@ -35,6 +35,10 @@ const readTalker = async () => {
   return JSON.parse(talker);
 };
 
+const writeTalker = async (data) => {
+  await fs.writeFile('talker.json', JSON.stringify(data));
+};
+
 app.get('/talker', async (_req, res) => {
   try {
     const talker = await readTalker();
@@ -57,9 +61,8 @@ app.post(
     const talker = await readTalker();
     const add = { id: talker.length + 1, name, age, talk };
     talker.push(add);
-    console.log(add);
-    res.status(HTTP_CREATED).json(add);
-    console.log(talker);
+    writeTalker(talker);
+    return res.status(HTTP_CREATED).json(add);
 },
 );
 
