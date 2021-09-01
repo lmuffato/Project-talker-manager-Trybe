@@ -75,6 +75,26 @@ function validateAll(name, age, talk, token) {
   return false;
 }
 
+function updateTalker(list, { id, name, age, talk }) {
+  const newArr = list;
+  let arrIndex;
+  list.forEach((object, index) => {
+    if (object.id === id) {
+      arrIndex = index;
+    }
+  });
+  newArr[arrIndex] = { id, name, age, talk };
+  return newArr;
+}
+
+function treatError(error, res) {
+  error.forEach((element) => {
+    if (element !== false) {
+      return res.status(parseInt(element.error, 10)).json({ message: element.message });
+    }
+  });
+}
+
 route.get('/', async (_req, res) => {
   const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
 
@@ -100,11 +120,21 @@ route.post('/', async (req, res) => {
     await fs.writeFile(talkersFile, JSON.stringify(talkers));
     return res.status(201).json({ id: 5, name, age, talk });
   }
-  error.forEach((element) => {
-    if (element !== false) {
-      return res.status(parseInt(element.error, 10)).json({ message: element.message });
-    }
-  });
+  return treatError(error, res);
+});
+
+route.put('/:id', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const { name, age, talk } = req.body;
+  const token = req.headers.authorization;
+  const error = validateAll(name, age, talk, token);
+  if (error === false) {
+    const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
+    const updatedList = updateTalker(talkers, { id, name, age, talk });
+    await fs.writeFile(talkersFile, JSON.stringify(updatedList));
+    return res.status(200).json({ id, name, age, talk });
+  }
+  return treatError(error, res);
 });
 
 module.exports = route;
