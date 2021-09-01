@@ -39,7 +39,7 @@ app.get('/talker', async (req, res) => {
 
 app.get('/talker/search', async (req, res) => {
   const { name } = req.query;
-  const parsedTalkers = fileReader();
+  const parsedTalkers = await fileReader();
   const queriedTalker = parsedTalkers.filter((t) => t.name.includes(name));
 
   return res.status(200).json(queriedTalker);
@@ -47,7 +47,7 @@ app.get('/talker/search', async (req, res) => {
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  const parsedTalkers = fileReader();
+  const parsedTalkers = await fileReader();
 
   const talker = parsedTalkers.find((t) => t.id === +id);
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -81,7 +81,7 @@ app.post('/login', validateEmail, validatePassword, (req, res) => {
 app.put('/talker/:id', validateToken, talkerValidators, async (req, res) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;
-  const parsedTalkers = fileReader();
+  const parsedTalkers = await fileReader();
   const filteredTalkersObj = parsedTalkers.filter((t) => t.id !== +id);
   
   const editedTalker = {
@@ -98,7 +98,7 @@ app.put('/talker/:id', validateToken, talkerValidators, async (req, res) => {
 app.delete('/talker/:id', validateToken, async (req, res) => {
   const { id } = req.params;
 
-  const parsedTalkers = fileReader();
+  const parsedTalkers = await fileReader();
   const filteredTalkersObj = parsedTalkers.filter((t) => t.id !== +id);
 
   await fileWriter(filteredTalkersObj);
