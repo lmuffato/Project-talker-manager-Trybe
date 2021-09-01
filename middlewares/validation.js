@@ -39,4 +39,16 @@ module.exports = {
 
     next();
   },
+
+  validateAge(req, res, next) {
+    const { age } = req.body;
+    try {
+      if (!age) throw new Error('O campo "age" é obrigatório');
+      if (age < 18) throw new Error('A pessoa palestrante deve ser maior de idade');
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+
+    next();
+  },
 };
