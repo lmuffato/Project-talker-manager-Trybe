@@ -2,8 +2,6 @@ const fs = require('fs');
 
 const filePath = ('talker.json');
 
-const saveTalkers = (talkers) => fs.writeFileSync(filePath, JSON.stringify(talkers, null, '\t'));
-
 const { readFile, writeFile } = require('fs').promises;
 
 const noToken = {
@@ -70,8 +68,8 @@ const passwordValidation = (req, res, next) => {
 
 const tokenValidation = (req, res, next) => {
   const { authorization } = req.headers;
-  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
-  if (authorization.length !== 16) return res.status(401).json({ message: 'Token inválido' });
+  if (!authorization) return res.status(401).send(noToken);
+  if (authorization.length !== 16) return res.status(401).send(invalidToken);
   next();
 };
 
