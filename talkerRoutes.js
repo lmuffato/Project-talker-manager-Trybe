@@ -29,6 +29,19 @@ router.get('/', rescue(async (_req, res) => {
   res.status(200).json(talker);
 }));
 
+router.get('/search', validateToken, rescue(async (req, res) => {
+  const { q } = req.query;
+  
+  const talkers = await getFile();
+  if (!q || q === '') return res.status(200).json(talkers);
+
+  const filteredTalkers = talkers.filter((talker) => talker.name.includes(q));
+  if (!filteredTalkers) return res.status(200).json([]);
+
+  res.status(200).json(filteredTalkers);
+
+}));
+
 router.get('/:id', rescue(async (req, res) => {
   const { id } = req.params;
   const talkers = await getFile();
