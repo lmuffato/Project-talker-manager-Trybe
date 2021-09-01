@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 
 const loginRouter = require('./loginRouter');
+const validateToken = require('./middlewares/validateToken');
+
+const talkerValidation = require('./middlewares/checkPostTalkers');
 
 const arrayPeople = './talker.json';
 
@@ -40,7 +43,33 @@ app.get('/talker/:id', async (req, res) => {
 
 // ----------------------------------------
 
+// Requisito 3 - Crie o endpoint POST /login
+
 app.use('/login', loginRouter);
+
+// ----------------------------------------
+
+// Requisito 4 - Crie o endpoint POST /talker
+
+app.post('/talker', validateToken, talkerValidation, async (req, res) => {
+  const { name, age, talk } = req.body;
+  const arrayToSend = await getTalkers();
+
+  const aceptedPerson = {
+    id: (arrayToSend.length) + 1,
+    name,
+    age,
+    talk,
+  };
+  
+  arrayToSend.push(aceptedPerson);
+
+  await fs.writeFile('./talker.json', JSON.stringify(arrayToSend));
+
+  res.status(201).json(aceptedPerson);
+});
+
+// ----------------------------------------
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
