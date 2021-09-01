@@ -22,11 +22,32 @@ const readTalkers = async () => {
   return JSON.parse(file);
 };
 
+const tokenValidation = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ message: 'Token não encontrado' });
+  }
+  if (token.length !== 16) {
+    return res.status(401).json({ message: 'Token inválido' });
+  }
+  next();
+};
+
 // Requisito 1:
 
 app.get('/talker', async (_req, res) => {
   const talkers = await readTalkers();
   res.status(HTTP_OK_STATUS).json(talkers);
+});
+
+// Requisito 7:
+
+app.get('/talker/search', tokenValidation, async (req, res) => {
+  const { name } = req.query;
+  const talkers = await readTalkers();
+  if (!name) return res.status(200).json(talkers);
+  const queryTalkers = talkers.filter((t) => t.name.includes(name));
+  res.status(200).json(queryTalkers);
 });
 
 // Requisito 2:
@@ -75,17 +96,6 @@ app.post('/login', validateEmail, validatePassword, (req, res) => {
 });
 
 // Requisito 4:
-
-const tokenValidation = (req, res, next) => {
-  const token = req.headers.authorization;
-  if (!token) {
-    return res.status(401).json({ message: 'Token não encontrado' });
-  }
-  if (token.length !== 16) {
-    return res.status(401).json({ message: 'Token inválido' });
-  }
-  next();
-};
 
 const nameValidation = (req, res, next) => {
   const { name } = req.body;
