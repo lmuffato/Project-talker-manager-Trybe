@@ -6,6 +6,7 @@ const {
   requisito4,
   requisito5,
   requisito6,
+  requisito7,
 } = require('./crud');
 
 const {
@@ -20,6 +21,12 @@ const {
 const router = Router();
 
 router.get('/', requisito1);
+
+router.get(
+  '/search',
+  validateToken,
+  requisito7,
+);
 
 router.get('/:id', requisito2);
 

@@ -70,6 +70,24 @@ const requisito6 = async (req, res) => {
   });
 };
 
+const requisito7 = async (req, res) => {
+  const { name } = req.query;
+
+  const data = await lerDados();
+
+  if (!name || name === '') {
+    return res.status(200).json(data);
+  }
+
+  const filteredSearch = data.filter((d) => d.name === name);
+  
+  if (!filteredSearch) {
+    return res.status(200).json([]);
+  }
+
+  res.status(200).json(filteredSearch);
+};
+
 module.exports = {
   requisito1,
   requisito2,
@@ -77,4 +95,5 @@ module.exports = {
   requisito4,
   requisito5,
   requisito6,
+  requisito7,
 };
