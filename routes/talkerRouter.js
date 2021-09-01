@@ -73,13 +73,25 @@ router.put('/:id', validations, validateRate, async (request, response) => {
   const editedTalker = { id: Number(id), name, age, talk: { watchedAt, rate } };
 
   talkers[getTalkerIndex] = editedTalker;
-  console.log(talkers);
 
   const stringifyTalkers = JSON.stringify(talkers);
   const prettifyString = prettier.format(stringifyTalkers, { parser: 'json' });
 
   await fs.promises.writeFile('./talker.json', prettifyString, 'utf-8');
   return response.status(200).json(talkers[getTalkerIndex]);
+});
+
+router.delete('/:id', validateToken, async (request, response) => {
+  const { id } = request.params;
+  let talkers = JSON.parse(await fs.promises.readFile(path, { encoding: 'utf-8' }));
+
+  talkers = talkers.filter((t) => t.id !== Number(id));
+
+  const stringifyTalkers = JSON.stringify(talkers);
+  const prettifyString = prettier.format(stringifyTalkers, { parser: 'json' });
+
+  await fs.promises.writeFile('./talker.json', prettifyString, 'utf-8');
+  return response.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 module.exports = router;
