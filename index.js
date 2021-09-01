@@ -10,6 +10,12 @@ const {
   tokenDispatch,
 } = require('./middlewares/checkLogin');
 
+const {
+  nameCheck,
+  ageCheck,
+  talkCheck,
+} = require('./middlewares/createTalker');
+
 const validateToken = require('./middlewares/validateToken');
 
 const app = express();
@@ -26,7 +32,7 @@ app.get('/', (_request, response) => {
 app.get('/talker', getAllTalkers);
 app.get('/talker/:id', getTalkerByID);
 app.post('/login', emailValidation, passwordValidation, tokenDispatch);
-app.post('/talker', validateToken);
+app.post('/talker', validateToken, nameCheck, ageCheck, talkCheck);
 // ---------------------
 
 app.listen(PORT, () => {
