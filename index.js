@@ -2,13 +2,22 @@ const express = require('express');
 const rescue = require('express-rescue');
 const bodyParser = require('body-parser');
 
-const { getAllTalkers /* createUserLogin */ } = require('./fsFunctions');
-const { createToken, validateEmail, validatePassword } = require('./middlewares');
+const { getAllTalkers, writeTalker } = require('./fsFunctions');
+const { createToken, validateEmail, validatePassword } = require('./middlewares/middlewaresLogin');
+const {
+  verifiToken,
+  validateName,
+  validateAge,
+  validateTalkDate,
+  validateRate,
+  validateTalk,
+} = require('./middlewares/middlewaresTalkers');
 
 const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
+const HTTP_CREATED_STATUS = 201;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -43,6 +52,28 @@ app.post('/login', createToken, validateEmail, validatePassword, (req, res) => {
   const { token } = req;
   res.status(HTTP_OK_STATUS).json({ token });
 });
+
+app.post(
+  '/talker',
+  verifiToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateRate,
+  rescue(async (req, res) => {
+    const { name, age, talk } = req.body;
+    const fileTalkers = await getAllTalkers();
+
+    const id = parseInt(fileTalkers[fileTalkers.length - 1].id + 1, 10);
+
+    fileTalkers.push({ name, age, id, talk });
+
+    writeTalker(fileTalkers);
+    
+    res.status(HTTP_CREATED_STATUS).json({ name, age, id, talk });
+  }),
+);
 
 app.listen(PORT, () => {
   console.log('Online');

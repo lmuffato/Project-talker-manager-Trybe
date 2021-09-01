@@ -5,4 +5,9 @@ async function getAllTalkers() {
   return JSON.parse(talkers);
 }
 
-module.exports = { getAllTalkers /* createUserLogin */ };
+async function writeTalker(newFile) {
+  const newTalke = await fs.writeFile('./talker.json', JSON.stringify(newFile));
+  return newTalke;
+}
+
+module.exports = { getAllTalkers, writeTalker };
