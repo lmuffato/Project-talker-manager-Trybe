@@ -10,7 +10,7 @@ async function editTalkers(request, response) {
     const newTalkersList = returnArrayDifferentID(talkerDB);
     const talkerToAdd = { name, age, talk, id: Number(id) };
     newTalkersList.push(talkerToAdd);
-    await writeAnObjectIntoAJSONFile(talkerDB);
+    await writeAnObjectIntoAJSONFile([talkerToAdd]);
     return response.status(200).json(talkerToAdd);
 }
 
