@@ -1,3 +1,7 @@
 function returnTalkerByID(talkersArray, tid) {
-  talkersArray.find(({ id }) => id === tid);
+  return talkersArray.find(({ id }) => id === tid);
+}
+
+function returnArrayDifferentID(talkersArray, tid) {
+  return talkersArray.filter(({ id }) => id !== tid);
 }
