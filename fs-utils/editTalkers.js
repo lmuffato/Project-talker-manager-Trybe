@@ -4,4 +4,4 @@ function editTalkers(newTalker) {
   return fs.writeFile('./talker.json', JSON.stringify(newTalker));
 }
 
-module.exports = { editTalkers };
+module.exports = editTalkers;
