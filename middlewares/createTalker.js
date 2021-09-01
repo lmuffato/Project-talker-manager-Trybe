@@ -1,17 +1,17 @@
-const fs = require('fs');
+// const fs = require('fs');
 
-async function writeNewTalker(req, _res) {
-  const { name, age, talk } = req.body;
-  const talkersList = await fs.readFile('../talker.json');
-  const newTalker = {
-    id: talkersList.length + 1,
-    name,
-    age,
-    talk,
-  };
-  talkersList.push(newTalker);
-  fs.writeFileSync('../talker.json', JSON.stringify(talkersList));
-}
+// async function writeNewTalker(req, _res) {
+//   const { name, age, talk } = req.body;
+//   const talkersList = await fs.readFile('../talker.json');
+//   const newTalker = {
+//     id: talkersList.length + 1,
+//     name,
+//     age,
+//     talk,
+//   };
+//   talkersList.push(newTalker);
+//   fs.writeFileSync('../talker.json', JSON.stringify(talkersList));
+// }
 
 function checkAuth(req, res, next) {
   const { authorization } = req.headers;
@@ -60,7 +60,7 @@ function checkTalkRate(req, res) {
   if (talk.rate < 1 || talk.rate > 5) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
-  writeNewTalker(req, res);
+  // writeNewTalker(req, res);
   return res.status(201).json({ ok: true });
 }
 
