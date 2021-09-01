@@ -40,3 +40,9 @@ function talkValidator(talk) {
 
   return 0;
 }
+
+module.exports = {
+  nameValidator,
+  ageValidator,
+  talkValidator,
+};
