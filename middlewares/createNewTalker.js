@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 
 const HTTP_BAD_REQUEST_STATUS = 400;
 const HTTP_UNAUTHORIZED_STATUS = 401;
@@ -55,7 +55,14 @@ const validateAge = (request, response, next) => {
 
 const existsTalkKeys = (request, response, next) => {
   const { talk } = request.body;
-  if (!talk || (!talk.watchedAt || !talk.rate)) {
+  if (!talk) {
+    return response
+      .status(HTTP_BAD_REQUEST_STATUS)
+      .json({
+        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+      });
+  }
+  if (talk.rate !== 0 && (!talk.rate || !talk.watchedAt)) {
     return response
       .status(HTTP_BAD_REQUEST_STATUS)
       .json({
@@ -98,10 +105,9 @@ const validateTalkInfos = (request, response, next) => {
   next();
 };
 
-const createTalker = (request, _response, next) => {
+const createTalker = async (request, _response, next) => {
   const { name, age, talk } = request.body;
-  const talkers = JSON.parse(fs.readFileSync('./talker.json', { encoding: 'utf-8' }));
-  console.log(talkers);
+  const talkers = await JSON.parse(await fs.readFile('./talker.json', { encoding: 'utf-8' }));
   const id = talkers.reduce((maxId, talker) => (
     (talker.id > maxId) ? talker.id : maxId),
     talkers[0].id) + 1;
@@ -112,7 +118,25 @@ const createTalker = (request, _response, next) => {
     talk,
   }];
   request.userId = id;
-  fs.writeFileSync('./talker.json', JSON.stringify(newTalker));
+  await fs.writeFile('./talker.json', JSON.stringify(newTalker));
+  next();
+};
+
+const updateTalker = async (request, _response, next) => {
+  const { id } = request.params;
+  const { name, age, talk } = request.body;
+  const talkers = await JSON.parse(await fs.readFile('./talker.json', { encoding: 'utf-8' }));
+  const updatedTalker = {
+    id: Number(id),
+    name,
+    age,
+    talk,
+  };
+  const updatedFile = talkers.filter((talker) => talker.id !== id);
+  updatedFile.push(updatedTalker);
+  console.log(updatedFile);
+  request.updatedTalker = updatedTalker;
+  await fs.writeFile('./talker.json', JSON.stringify(updatedFile));
   next();
 };
 
@@ -124,4 +148,5 @@ module.exports = {
   existsTalkInfos,
   validateTalkInfos,
   createTalker,
+  updateTalker,
 };

@@ -14,6 +14,7 @@ const {
   existsTalkInfos,
   validateTalkInfos,
   createTalker,
+  updateTalker,
 } = require('../middlewares/createNewTalker');
 
 const HTTP_OK_STATUS = 200;
@@ -65,5 +66,17 @@ router.post(
       });
   },
 );
+
+router.put('/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  existsTalkKeys,
+  existsTalkInfos,
+  validateTalkInfos,
+  updateTalker, (request, response) => {
+    const { updatedTalker } = request;
+    return response.status(200).json(updatedTalker);
+  });
 
 module.exports = router;

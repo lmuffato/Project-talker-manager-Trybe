@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const fs = require('fs');
 const routerTalker = require('./routes/talker');
 const { validateEmail, validatePassword, getToken } = require('./middlewares/authMiddleware');
 
@@ -26,5 +25,5 @@ app.use('*', (_request, response) => response
   .status(HTTP_NOT_FOUND_STATUS).json({ message: '404 not found' }));
 
 app.listen(PORT, () => {
-  console.log('Online');
+  console.log('ONLINE');
 });
