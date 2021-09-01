@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 
 const TALKER_NOT_FOUND = { message: 'não existe palestrante com este ID cadastrado' };
 
-function checkIfidExists(talkers, id) {
+function checkIfIdExists(talkers, id) {
   return talkers.some((talker) => Number(talker.id) === id);
 }
 
@@ -17,11 +17,11 @@ const updateTalker = async (req, res) => {
   const { talkers } = req;
   const parsedId = Number(id);
 
-  if (!checkIfidExists(talkers, parsedId)) {
+  if (!checkIfIdExists(talkers, parsedId)) {
     return res.status(400).send(TALKER_NOT_FOUND);
   }
 
-  const updatedTalker = { parsedId, name, age, talk };
+  const updatedTalker = { id: parsedId, name, age, talk };
 
   const arrayWithoutOldTalker = talkers.filter((talker) => talker.id !== parsedId);
   arrayWithoutOldTalker.push(updatedTalker);
