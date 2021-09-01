@@ -90,7 +90,7 @@ async (req, res) => {
     return res.status(404);
   }
   talker[talkerIndex] = { id: +id, name, age, talk };
-  writeTalker(talker);
+  await writeTalker(talker);
   return res.status(200).json(talker[talkerIndex]);
 });
 
