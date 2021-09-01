@@ -96,6 +96,16 @@ router.get('/', async (_req, res) => {
   }
 });
 
+router.get('/search', getAuth, (req, res) => {
+  const { q } = req.query;
+  const talkers = readFileFn();
+  const findTalker = talkers.filter((result) => result.name.includes(q));
+
+  if (!q || q === '') return res.status(200).json(talkers);
+
+  res.status(200).json(findTalker);
+});
+
 router.get('/:id', rescue(async (req, res) => {
   const talkerPeople = await getTalkers();
 
