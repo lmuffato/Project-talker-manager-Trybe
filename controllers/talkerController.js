@@ -5,12 +5,8 @@ const router = express.Router();
 const {
   getTalkers,
   validateToken,
-  validateName,
-  validateAge,
-  validateDate,
-  validateRate,
-  validateTalk,
   addTalker,
+  talkerFormValidations,
 } = require('../middlewares');
 
 router.get('/', getTalkers, async (req, res) => {
@@ -31,11 +27,7 @@ router.get('/:id', getTalkers, async (req, res) => {
 
 router.post('/', [
   validateToken,
-  validateName,
-  validateAge,
-  validateTalk,
-  validateDate,
-  validateRate,
+  ...talkerFormValidations,
   getTalkers,
   addTalker,
 ]);
