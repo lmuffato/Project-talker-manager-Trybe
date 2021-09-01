@@ -74,6 +74,11 @@ function validateAge(req, res, next) {
   next();
 }
 
+function isTalkObjectEmpty(talk) {
+  const { watchedAt, rate } = talk;
+  return [watchedAt, rate].includes(undefined);
+}
+
 function validateTalk(req, res, next) {
   const { talk } = req.body;
 
@@ -90,11 +95,6 @@ function validateTalk(req, res, next) {
 }
 
   next();
-}
-
-function isTalkObjectEmpty(talk) {
-  const { watchedAt, rate } = talk;
-  return [watchedAt, rate].includes(undefined);
 }
 
 function validateDateFormat(req, res, next) {
