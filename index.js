@@ -1,17 +1,12 @@
-const express = require('express');
+const app = require('express')();
 const bodyParser = require('body-parser');
+const routes = require('./routes');
+const { PORT } = require('./util/constants');
 
-const app = express();
+// https://scotch.io/tutorials/keeping-api-routing-clean-using-express-routers
 app.use(bodyParser.json());
-
-const HTTP_OK_STATUS = 200;
-const PORT = '3000';
-
-// não remova esse endpoint, e para o avaliador funcionar
-app.get('/', (_request, response) => {
-  response.status(HTTP_OK_STATUS).send();
-});
+app.use(routes);
 
 app.listen(PORT, () => {
-  console.log('Online');
+  console.log(`Online on http://localhost:${PORT}/`);
 });
