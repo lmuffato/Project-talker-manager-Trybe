@@ -31,7 +31,7 @@ function passwordValidation(req, res, next) {
 function tokenGenerator(_req, res) {
   const newToken = new UIDGenerator(UIDGenerator.BASE16); // Src = https://www.npmjs.com/package/uid-generator
   // console.log(newToken);
-  console.log('Gerou token')
+  console.log('Gerou token');
   return res.status(200).json({ token: newToken.baseEncoding });
 }
 
