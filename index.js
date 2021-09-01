@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const getAllTalkers = require('./middlewares/getAllTalkers');
 const getTalkerByID = require('./middlewares/getTalkerByID');
 const editTalkers = require('./middlewares/editTalkers');
+const deleteTalker = require('./middlewares/deleteTalker');
 
 const {
   emailValidation,
@@ -36,7 +37,7 @@ app.get('/talker/:id', getTalkerByID);
 app.post('/login', emailValidation, passwordValidation, tokenDispatch);
 app.post('/talker', validateToken, nameCheck, ageCheck, talkCheck, registerTalker);
 app.put('/talker/:id', validateToken, nameCheck, ageCheck, talkCheck, editTalkers);
-app.delete('/talker/:id', validateToken);
+app.delete('/talker/:id', validateToken, deleteTalker);
 // ---------------------
 
 app.listen(PORT, () => {
