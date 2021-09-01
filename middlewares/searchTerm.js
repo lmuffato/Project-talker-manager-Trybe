@@ -1,4 +1,5 @@
 const { returnArrayIncludesTerm } = require('../utils/talkerFilters');
+const { readJsonReturnArray } = require('../utils/read');
 
 async function searchTerm(request, response) {
   try {
