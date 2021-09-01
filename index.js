@@ -89,7 +89,7 @@ app.put('/talker/:id', validateToken, talkerValidators, async (req, res) => {
     talk,
   };
   const newTalkers = [...filteredTalkersObj, editedTalker];
-  await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
+  await fileWriter(newTalkers);
   return res.status(200).json(editedTalker);
 });
 
@@ -99,7 +99,7 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   const parsedTalkers = fileReader();
   const filteredTalkersObj = parsedTalkers.filter((t) => t.id !== +id);
 
-  await fs.writeFile('./talker.json', JSON.stringify(filteredTalkersObj));
+  await fileWriter(filteredTalkersObj);
   return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
