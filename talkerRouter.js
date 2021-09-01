@@ -98,24 +98,27 @@ router.post('/', tokenValidation, nameValidation,
   res.status(201).json(createNewTalker);
 });
 
-router.put('/:id', tokenValidation, nameValidation, ageValidation, talkValidation,
-  rateValidation, watchedValidation, async (req, res) => {
-  const { id } = req.params;
-  const { name, age, talk } = req.body;
-  const talkersList = await readFile();
-  const talkerById = talkersList.find((talker) => talker.id === id);
+// router.put('/:id', tokenValidation, nameValidation, ageValidation, talkValidation,
+//   rateValidation, watchedValidation, async (req, res) => {
+//   const { id } = req.params;
+//   const { name, age, talk } = req.body;
+//   const talkersList = await readFile();
+//   const edit = {
+//     name,
+//     age, 
+//     talk,
+//     id: Number(id),
+//   };
+//   const talkerById = talkersList.find((talker) => talker.id === Number(id));
 
-  const edit = {
-    name,
-    age, 
-    talk,
-    id: Number(id),
-  };
-
-  talkerById.push(edit);
-  await fs.writeFile(talkers, JSON.stringify(talkerById));
+//   talkerById.push(edit);
+//   await fs.writeFile(talkers, JSON.stringify(talkerById));
   
-  return res.status(200).json(edit);
+//   return res.status(HTTP_OK_STATUS).json(edit);
+// });
+
+router.delete('/:id', tokenValidation, async (req, res) => {
+  
 });
 
 module.exports = router;
