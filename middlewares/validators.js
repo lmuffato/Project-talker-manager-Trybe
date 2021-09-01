@@ -39,18 +39,6 @@ function validatePassword(req, res, next) {
 function validateName(req, res, next) {
   const { name } = req.body;
   const nameMinLength = 3;
-
-  if (!name || name === '') {
- return res
-    .status(400)
-    .json({ message: 'O campo "name" é obrigatório' }); 
-}
-  
-  if (name.length < nameMinLength) {
- return res
-    .status(400)
-    .json({ message: 'O "name" deve ter pelo menos 3 caracteres' }); 
-}
   
   next();
 }
@@ -88,43 +76,56 @@ function validateTalk(req, res, next) {
     .status(400)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' }); 
 }
-  
-  const { watchedAt, rate } = talk;
-
-  if (!verifyDateFormat(watchedAt)) {
- return res
-    .status(400)
-    .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' }); 
-}
-  
-  if (!verifyRate(rate)) {
- return res
-    .status(400)
-    .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' }); 
-}
 
   next();
 }
 
 function isTalkObjectEmpty(talk) {
   const { watchedAt, rate } = talk;
-  return [watchedAt, rate].includes('');
+  return [watchedAt, rate].includes(undefined);
 }
 
-function verifyDateFormat(date) {
+function validateDateFormat(req, res, next) {
   // https://qastack.com.br/programming/15491894/regex-to-validate-date-format-dd-mm-yyyy
+  const { date } = req.body.talk;
   const dateRegex = /^(0?[1-9]|[12][0-9]|3[01])[/-](0?[1-9]|1[012])[/-]\d{4}$/;
-  return dateRegex.test(date);
+
+  if (!dateRegex.test(date)) {
+    return res
+       .status(400)
+       .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' }); 
+  }
+  
+  next();
 }
 
-function verifyRate(rate) {
+function validateRate(req, res, next) {
+  const { rate } = req.body.talk;
   const isRateRangeOk = rate >= 1 && rate <= 5;
-  return Number.isInteger(rate) && isRateRangeOk;
+  const isRateOk = Number.isInteger(rate) && isRateRangeOk;
+  if (!isRateOk) {
+    return res
+       .status(400)
+       .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' }); 
+  }
+  next();
 }
 
-function isTokenValid(token) {
+function validateToken(req, res, next) {
+  const { authorization: token } = req.headers;
   const tokenLength = 16;
-  return token.length !== tokenLength;
+  
+  if (!token) {
+    return res
+       .status(401)
+       .json({ message: 'Token não encontrado' });
+  }
+  
+  if(token.length !== tokenLength) return res
+  .status(401)
+  .json({ message: 'Token inválido' });
+
+  next();
 }
 
 module.exports = {
@@ -134,4 +135,7 @@ module.exports = {
   validateAge,
   validateTalk,
   isTokenValid,
+  validateDateFormat,
+  validateRate,
+  validateToken
 };
