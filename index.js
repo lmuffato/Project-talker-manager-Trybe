@@ -9,9 +9,9 @@ app.use(bodyParser.json());
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
-app.get(('/', (_request, response) => {
-  response.status(StatusCodes.OK).send();
-}));
+app.get('/', (_request, response) => {
+  response.status(200).send();
+});
 
 app.use('/talker', talkerRouter);
 
