@@ -1,4 +1,4 @@
-// Aqui irão ficar contidas as verificações exigidas nos requisitos
+// Aqui irão ficar contidas as verificações
 
 const rescue = require('express-rescue');
 const { status, message } = require('../schema');
@@ -72,7 +72,6 @@ const checkAge = rescue((req, res, next) => {
 
 const checkRate = rescue((req, res, next) => {
   const { talk: { rate } } = req.body;
-
   if (rate < 1 || rate > 5) {
     res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
@@ -99,8 +98,8 @@ const checkDate = rescue((req, res, next) => {
 
 const checkTalk = rescue((req, res, next) => {
   const { talk } = req.body;
-   if (!talk) {
-    res.status(status.badRequest).json({ message: message.invalidTalk });
+  if (!talk) {
+  res.status(status.badRequest).json({ message: message.invalidTalk });
   }
   next();
 });

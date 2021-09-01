@@ -1,19 +1,19 @@
-// Aqui ocorre a união dos verbos http + middlewares + camada de services
+// Aqui ocorre o processamento da rota + comunicação com a camada de models
 
 const rescue = require('express-rescue');
 const crypto = require('crypto');
-const { data, addEditTalker } = require('../models');
+const { databaseTalker, addEditTalker } = require('../models');
 const { status, message } = require('../schema');
 
 const getAll = rescue(async (_req, res) => {
-  const getTalkers = await data();
+  const getTalkers = await databaseTalker();
   return res.status(status.ok).json(getTalkers);
 });
 
 const getById = rescue(async (req, res) => {
   const userId = req.params.id;
-  const dataTalker = await data();
-  const findTalker = dataTalker.find(({ id }) => id === +userId);
+  const data = await databaseTalker();
+  const findTalker = data.find(({ id }) => id === +userId);
   return res.status(status.ok).json(findTalker);
 });
 
@@ -24,10 +24,9 @@ const loginUser = rescue((_req, res) => {
 
 const createTalker = rescue(async (req, res) => {
   const { name, age, talk } = req.body;
-  const dataTalker = await data();
-  console.log(dataTalker);
-  const add = { id: dataTalker.length + 1, name, age, talk };
-  const dataUsers = [...dataTalker, add];
+  const data = await databaseTalker();
+  const add = { id: data.length + 1, name, age, talk };
+  const dataUsers = [...data, add];
   addEditTalker(dataUsers);
   return res.status(status.created).json(add);
 });
@@ -35,29 +34,25 @@ const createTalker = rescue(async (req, res) => {
 const editUser = rescue(async (req, res) => {
   const userId = req.params.id;
   const { name, age, talk } = req.body;
-  const dataTalker = await data();
-  console.log(dataTalker);
+  const data = await databaseTalker();
   const dataForUpdate = { id: +userId, name, age, talk };
-  console.log(dataForUpdate);
-  const newDataTalker = dataTalker.map(({ id }) => (id === +userId ? dataForUpdate : id));
-  console.log(newDataTalker);
+  const newDataTalker = data.map(({ id }) => (id === +userId ? dataForUpdate : id));
   addEditTalker(newDataTalker);
-  console.log(addEditTalker);
   return res.status(status.ok).json(dataForUpdate);
 });
 
 const deleteUser = rescue(async (req, res) => {
   const userId = req.params.id;
-  const dataTalker = await data();
-  const erase = dataTalker.find(({ id }) => id !== +userId);
+  const data = await databaseTalker();
+  const erase = data.find(({ id }) => id !== +userId);
   addEditTalker(erase);
   return res.status(status.ok).json({ message: message.deleteUser });
 });
 
 const searchTalk = rescue(async (req, res) => {
   const queryParam = req.query.q;
-  const dataTalker = await data();
-  const search = dataTalker.filter((talker) => 
+  const data = await databaseTalker();
+  const search = data.filter((talker) => 
       talker.name.toLowerCase().includes(queryParam.toLowerCase()));
   return res.status(status.ok).json(search);
 });

@@ -1,4 +1,4 @@
-// Para não ficar escrevendo toda hora o status e mensagens de resposta, irei deixar as mensagens prontas e ir chamando dentro da camada controllers ou no middleware
+// Para não ficar escrevendo toda hora o status e mensagens de resposta, irei deixar as mensagens prontas aqui e ir chamando dentro da camada controllers ou no middleware
 
 const status = {
   ok: 200,
