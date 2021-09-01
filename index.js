@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs').promises;
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const data = require('./talker.json');
@@ -22,7 +23,11 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', (req, res) => res.status(HTTP_OK_STATUS).json(data || []));
+app.get('/talker', async (req, res) => {
+  const talkers = await fs.readFile('./talker.json', 'utf-8');
+  const parsedTalkers = JSON.parse(talkers);
+  return res.status(HTTP_OK_STATUS).json(parsedTalkers || []);
+});
 
 app.get('/talker/:id', (req, res) => {
   const { id } = req.params;
