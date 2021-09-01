@@ -2,8 +2,8 @@ const { returnArrayIncludesTerm } = require('../utils/talkerFilters');
 const { readJsonReturnArray } = require('../utils/read');
 
 async function searchTerm(request, response) {
+  const { q } = request.query;
   try {
-    const { q } = request.query;
     if (q) {
       const talkerDBPath = './talker.json';
       const talkerDB = await readJsonReturnArray(talkerDBPath);
