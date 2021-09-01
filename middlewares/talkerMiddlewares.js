@@ -54,14 +54,21 @@ const isCorrectDate = (date) => {
   return isValid;
 };
 
+const validateTalkToEdit = (talk, next) => {
+  if (!talk || talk === ' ') return;
+
+  if (talk.watchedAt === ' '
+    || talk.rate === 0) next();
+};
+
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
-  // const { watchedAt, rate } = talk;
 
   if (!talk
       || talk === ' '
       || !talk.watchedAt
       || !talk.rate) {
+    validateTalkToEdit(talk, next);
     res.status(HTTP_NOTOK_STATUS)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
@@ -72,7 +79,7 @@ const validateTalkDate = (req, res, next) => {
   const { talk } = req.body;
   const { watchedAt } = talk;
 
-  if (!isCorrectDate(watchedAt)) {
+  if (!watchedAt || !isCorrectDate(watchedAt)) {
     res.status(HTTP_NOTOK_STATUS)
       .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
@@ -83,10 +90,9 @@ const validateTalkDate = (req, res, next) => {
 const validateTalkRate = (req, res, next) => {
   const { talk } = req.body;
   const { rate } = talk;
-
   const convertedRate = parseFloat(rate);
 
-  if (convertedRate <= 0 || convertedRate > 5) {
+  if (!rate || convertedRate <= 0 || convertedRate > 5) {
     res.status(HTTP_NOTOK_STATUS)
       .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }

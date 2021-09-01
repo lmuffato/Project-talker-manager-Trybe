@@ -12,7 +12,12 @@ const setNewTalker = async (newTalker) => {
   fs.writeFile('./talker.json', JSON.stringify([newTalker]));
 };
 
+const setUpdate = (newTalker) => {
+  fs.writeFile('./talker.json', JSON.stringify(newTalker));
+};
+
 module.exports = {
   getTalkerFile,
   setNewTalker,
+  setUpdate,
 };

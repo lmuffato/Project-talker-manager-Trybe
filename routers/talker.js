@@ -11,6 +11,7 @@ const HTTP_NOTFOUND_STATUS = 404;
 const {
   getTalkerFile,
   setNewTalker,
+  setUpdate,
 } = require('../fsFunctions');
 
 const {
@@ -25,8 +26,6 @@ const {
 router.get('/', rescue(async (_req, res) => {
   const talkerFile = await fs.readFile('talker.json', 'utf-8');
   const talkerContent = talkerFile ? JSON.parse(talkerFile) : [];
-
-  console.log(talkerContent);
 
   return res.status(HTTP_OK_STATUS).json(talkerContent);
 }));
@@ -53,20 +52,41 @@ router.post('/', talkerMiddlewares, rescue(async (req, res) => {
   const { name, age, talk } = req.body;
 
   const talkers = await getTalkerFile();
-
+  
   const lastTalker = talkers.length + 1;
-
+  
   const newTalker = {
     id: lastTalker,
     name,
     age,
     talk,
   };
-
+  
   setNewTalker(newTalker);
-
+  
   res.status(HTTP_CREATED_STATUS)
-    .json(newTalker);
+  .json(newTalker);
+}));
+
+router.put('/:id', talkerMiddlewares, rescue(async (req, res) => {
+  const { id } = req.params;
+
+  const talkers = await getTalkerFile();
+  const { name, age, talk } = req.body;
+  let talkerIndex;
+  if (talkers.length > 0) {
+    talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  }
+  talkers[talkerIndex] = { ...talkers[talkerIndex], name, age, talk };
+  setUpdate(talkers);
+    
+  res.status(HTTP_OK_STATUS)
+    .json({
+      id: parseFloat(id),
+      name,
+      age,
+      talk,
+    });
 }));
 
 module.exports = router;

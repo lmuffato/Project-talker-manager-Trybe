@@ -13,7 +13,7 @@ const validateEmail = (req, res, next) => {
     return res.status(HTTP_NOTOK_STATUS)
       .json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
-  console.log('deu bom');
+
   next();
 };
 
