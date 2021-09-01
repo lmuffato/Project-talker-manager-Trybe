@@ -8,13 +8,12 @@ const ERROR_PASSWORD_INVALID = 'O "password" deve ter pelo menos 6 caracteres';
 const ERROR_AGE_VAZIO = 'O campo "age" é obrigatório';
 const ERROR_AGE_INVALID = 'A pessoa palestrante deve ser maior de idade';
 const ERROR_NAME_VAZIO = 'O campo "name" é obrigatório';
-const ERROR_NAME_INVALID = 'O "name" deve ter pelo menos 3 caracteres"';
+const ERROR_NAME_INVALID = 'O "name" deve ter pelo menos 3 caracteres';
 const ERROR_TOKEN_VAZIO = 'Token não encontrado';
 const ERROR_TOKEN_INVALID = 'Token inválido';
 const ERROR_RATE_INVALID = 'O campo "rate" deve ser um inteiro de 1 à 5';
 const ERROR_DATE_INVALID = 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"';
-const ERROR_TALK_UNDEFINED = `O campo "talk" é obrigatório e "watchedAt"
-  e "rate" não podem ser vazios`;
+const ERROR_UNDEFINED = 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios';
 
 const validadePassword = (req, res, next) => {
   const { password } = req.body;
@@ -70,13 +69,19 @@ const validadeRate = (req, res, next) => {
   next();
 };
 
-const validadeTalk = (req, res, next) => {
+const validadeDate = (req, res, next) => {
   const { talk } = req.body;
   const validDate = moment(talk.watchedAt, 'DD/MM/YYYY').isValid();
-  if (talk === undefined) {
-    return res.status(400).json({ message: ERROR_TALK_UNDEFINED });
-  }
   if (!validDate) return res.status(400).json({ message: ERROR_DATE_INVALID });
+  next();
+};
+
+const validadeTalk = (req, res, next) => {
+  const { talk } = req.body;
+  if (!talk) return res.status(400).json({ message: ERROR_UNDEFINED });
+  if ([talk.watchedAt, talk.rate].includes(undefined)) {
+    return res.status(400).json({ message: ERROR_UNDEFINED });
+  }
   next();
 };
 
@@ -88,4 +93,5 @@ module.exports = {
   validadeToken,
   validadeTalk,
   validadeRate,
+  validadeDate,
 };

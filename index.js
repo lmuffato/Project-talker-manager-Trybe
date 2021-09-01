@@ -10,6 +10,7 @@ const {
   validadeAge,
   validadeTalk,
   validadeRate,
+  validadeDate,
 } = require('./utils/middlewares');
 
 const app = express();
@@ -40,23 +41,27 @@ app.get('/talker', async (_req, res) => {
 });
 
 // Requisito 5
-app.put('.talker/:id', validadeToken, validadeName, validadeAge, validadeTalk, async (req, res) => {
+app.put('/talker/:id',
+validadeToken,
+validadeName,
+validadeAge,
+validadeTalk,
+validadeDate,
+validadeRate,
+async (req, res) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;
   const talkers = await fs.readFile(ROTA_TALKER, 'utf-8').then((r) => JSON.parse(r));
+  const searchId = talkers.find((item) => item.id === Number(id));
+  const newTalk = { id: searchId.id, name, age, talk };
   const modificTalk = talkers.map((item) => {
     if (item.id === Number(id)) {
-      return {
-        name,
-        age,
-        id: item.id,
-        talk,
-      };
+      return newTalk;
     }
     return item;
   });
   await fs.writeFile(ROTA_TALKER, JSON.stringify(modificTalk));
-  res.status(200).end();
+  res.status(200).json(newTalk);
 });
 
 // Requisito 7
@@ -101,6 +106,7 @@ validadeToken,
 validadeName,
 validadeAge,
 validadeTalk,
+validadeDate,
 validadeRate,
 async (req, res) => {
   const { name, age, talk } = req.body;
