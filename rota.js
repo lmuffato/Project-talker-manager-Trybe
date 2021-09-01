@@ -4,6 +4,7 @@ const {
   requisito1,
   requisito2,
   requisito4,
+  requisito5,
 } = require('./crud');
 
 const {
@@ -30,6 +31,17 @@ router.post(
   validateWatched,
   validateRate,
   requisito4,
+);
+
+router.put(
+  '/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateWatched,
+  validateRate,
+  requisito5,
 );
 
 module.exports = router;

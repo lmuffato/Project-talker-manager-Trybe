@@ -44,9 +44,22 @@ const requisito4 = async (req, res) => {
     res.status(201).json(newData[newData.length - 1]);
 };
 
+const requisito5 = async (req, res) => {
+  const { name, age, talk } = req.body;
+  const { id } = req.params;
+  const data = await lerDados();
+  const newObj = { id: +id, name, age, talk };
+  
+  const dataFind = data.filter((d) => d.id !== +id);
+  dataFind.push(newObj);
+  await escreverDados(dataFind);
+  res.status(200).json(newObj);
+};
+
 module.exports = {
   requisito1,
   requisito2,
   requisito3,
   requisito4,
+  requisito5,
 };
