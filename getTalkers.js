@@ -1,9 +1,9 @@
 const { readFile } = require('fs').promises;
 
-// const fileTalkers = './talker.json';
+const fileTalkers = './talker.json';
 const HTTP_OK_STATUS = 200;
 
-const readFileTalker = () => readFile('./talker.json', 'utf-8').then((data) => JSON.parse(data));
+const readFileTalker = () => readFile(fileTalkers, 'utf-8').then((data) => JSON.parse(data));
 
   // console.log(readFileTalker()); // promise
 
