@@ -13,8 +13,10 @@ const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
+const HTTP_OK201_STATUS = 201;
 const HTTP_NOTFOUND_STATUS = 404;
-const HTTP_ERROR_STATUS = 400;
+const HTTP_ERROR400_STATUS = 400;
+const HTTP_ERROR401_STATUS = 401;
 const PORT = '3000';
 
 const messageNotFound = {
@@ -31,6 +33,33 @@ const messagePassRequired = {
 };
 const messagePassFormat = {
   message: 'O "password" deve ter pelo menos 6 caracteres',
+};
+const messageTokenNotFound = {
+  message: 'Token não encontrado',
+};
+const messageTokenFormat = {
+  message: 'Token inválido',
+};
+const messageNameRequired = {
+  message: 'O campo "name" é obrigatório',
+};
+const messageNameFormat = {
+  message: 'O "name" deve ter pelo menos 3 caracteres',
+};
+const messageAgeRequired = {
+  message: 'O campo "age" é obrigatório',
+};
+const messageAgeInvalid = {
+  message: 'A pessoa palestrante deve ser maior de idade',
+};
+const messageWatchFormat = {
+  message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
+};
+const messageRateFormat = {
+  message: 'O campo "rate" deve ser um inteiro de 1 à 5',
+};
+const messageWatchAndRateRequired = {
+  message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
 };
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -66,17 +95,17 @@ app.get('/talker/:id', async (req, res) => {
 
 function validateEmail(req, res, next) {
   const { email } = req.body;
-  if (!email) return res.status(HTTP_ERROR_STATUS).json(messageEmailRequired);
+  if (!email) return res.status(HTTP_ERROR400_STATUS).json(messageEmailRequired);
   if (!/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/.test(email)) {
-    return res.status(HTTP_ERROR_STATUS).json(messageEmailFormat);
+    return res.status(HTTP_ERROR400_STATUS).json(messageEmailFormat);
   }
   next();
 }
 
 function validatePass(req, res, next) {
   const { password } = req.body;
-  if (!password) return res.status(HTTP_ERROR_STATUS).json(messagePassRequired);
-  if (password.length < 6) return res.status(HTTP_ERROR_STATUS).json(messagePassFormat);
+  if (!password) return res.status(HTTP_ERROR400_STATUS).json(messagePassRequired);
+  if (password.length < 6) return res.status(HTTP_ERROR400_STATUS).json(messagePassFormat);
   next();
 }
 
@@ -84,7 +113,7 @@ function generateToken() {
   return Math.random().toString(16).substr(8) + Math.random().toString(16).substr(6);
 }
 
-function generateAuth(req, res) {
+function generateAuth(_req, res) {
   const auth = generateToken();
   if (auth.length === 16) {
     const token = { token: auth };
@@ -95,5 +124,67 @@ function generateAuth(req, res) {
     return res.status(HTTP_OK_STATUS).json(token);
 }
 
+function validateToken(_req, res, authorization) {
+  if (!authorization) return res.status(HTTP_ERROR401_STATUS).json(messageTokenNotFound);
+  if (authorization.length !== 16) {
+    return res.status(HTTP_ERROR401_STATUS).json(messageTokenFormat);
+  }
+}
+
+function validateName(_req, res, name) {
+  const minNameLength = 3;
+  if (!name) return res.status(HTTP_ERROR400_STATUS).json(messageNameRequired);
+  if (name.length < minNameLength) {
+    return res.status(HTTP_ERROR400_STATUS).json(messageNameFormat);
+  }
+}
+
+function validateAge(_req, res, age) {
+  const minAgeAllowed = 18;
+  if (!age) return res.status(HTTP_ERROR400_STATUS).json(messageAgeRequired);
+  if (age < minAgeAllowed) {
+    return res.status(HTTP_ERROR400_STATUS).json(messageAgeInvalid);
+  }
+}
+
+function validateTalkExists(_req, res, talk) {
+  if (!talk || !talk.watchedAt || !talk.rate) {
+    return res.status(HTTP_ERROR400_STATUS).json(messageWatchAndRateRequired);
+  }
+}
+function validateTalk(req, res, talk) {
+  validateTalkExists(req, res, talk);
+  if (talk.watchedAt.split('/').length !== 3) {
+    return res.status(HTTP_ERROR400_STATUS).json(messageWatchFormat);
+  }
+  if (talk.rate > 5 || talk.rate < 1) {
+    return res.status(HTTP_ERROR400_STATUS).json(messageRateFormat);
+  }
+}
+
+function validateTalker(req, res, next) {
+  const { name, age, talk } = req.body;
+  const { authorization } = req.headers;
+  
+  validateToken(req, res, authorization);
+  validateName(req, res, name);
+  validateAge(req, res, age);
+  validateTalk(req, res, talk);
+
+  next();
+}
+
+async function createTalker(req, res) {
+  const { name, age, talk } = req.body;
+  const dataTalkers = await readFile();
+  const newTalker = { name, age, id: dataTalkers.length + 1, talk };
+  dataTalkers.push(newTalker);
+  await fs.writeFile('talker.json', JSON.stringify(dataTalkers));
+  return res.status(HTTP_OK201_STATUS).json(newTalker);
+}
+
 // Requisito 3
 app.post('/login', validateEmail, validatePass, generateAuth);
+
+// Requisito 4
+app.post('/talker', validateTalker, createTalker);
