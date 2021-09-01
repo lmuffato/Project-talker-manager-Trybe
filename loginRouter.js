@@ -1,9 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser');
 const crypto = require('crypto');
 
-const app = express();
-app.use(bodyParser.json());
+// const app = express();
+// app.use(bodyParser.json());
 
 const router = express.Router();
 
@@ -19,7 +19,16 @@ const checkEmail = (req, res, next) => {
   next();
 };
 
-router.post('/login', (req, res) => {
+const checkPassword = (req, res, next) => {
+  const { password } = req.params;
+
+  if (!password) return res.status(400).json({ message: 'O campo "password" é obrigatório' });
+  if (password.length < 6) return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+
+  next();
+};
+
+router.post('/login', checkEmail, (req, res) => {
   const {};
 });
 
