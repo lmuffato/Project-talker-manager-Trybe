@@ -77,11 +77,10 @@ const checkAge = rescue((req, res, next) => {
 const checkRate = rescue((req, res, next) => {
   const { talk: { rate } } = req.body;
   if (rate < 1 || rate > 5) {
-    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+    return res.status(status.badRequest).json({ message: message.invalidRate });
   }
   if (!rate) {
-    return res.status(400)
-    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+    return res.status(status.badRequest).json({ message: message.invalidTalk });
   }
     next();
 });
@@ -90,7 +89,6 @@ const checkDate = rescue((req, res, next) => {
   const { talk: { watchedAt } } = req.body;
   const formatData = /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/
   .test(watchedAt);
-
   if (!watchedAt) {
     return res.status(status.badRequest).json({ message: message.invalidTalk });
   }
