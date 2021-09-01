@@ -156,8 +156,29 @@ app.post('/talker', [
   nameValidation,
   ageValidation,
   talkValidation,
-  talkValidation,
   watchedAtValidation,
   rateValidation,
   postTalker,
+]);
+
+// Requisito 5:
+
+const putTalker = async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkers = await readTalkers();
+  const talkerIndex = talkers.findIndex((t) => t.id === parseInt(id, 10));
+  talkers[talkerIndex] = { ...talkers[talkerIndex], name, age, talk };
+  await fs.writeFile('talker.json', JSON.stringify(talkers));
+  res.status(200).json(talkers[talkerIndex]);
+};
+
+app.put('/talker/:id', [
+  tokenValidation,
+  nameValidation,
+  ageValidation,
+  talkValidation,
+  watchedAtValidation,
+  rateValidation,
+  putTalker,
 ]);
