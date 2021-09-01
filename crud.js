@@ -56,10 +56,25 @@ const requisito5 = async (req, res) => {
   res.status(200).json(newObj);
 };
 
+const requisito6 = async (req, res) => {
+  const { id } = req.params;
+
+  const data = await lerDados();
+
+  const deleteData = data.filter((d) => d.id !== +id);
+
+  await escreverDados(deleteData);
+
+  res.status(200).json({
+    message: 'Pessoa palestrante deletada com sucesso',
+  });
+};
+
 module.exports = {
   requisito1,
   requisito2,
   requisito3,
   requisito4,
   requisito5,
+  requisito6,
 };

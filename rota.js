@@ -5,6 +5,7 @@ const {
   requisito2,
   requisito4,
   requisito5,
+  requisito6,
 } = require('./crud');
 
 const {
@@ -42,6 +43,12 @@ router.put(
   validateWatched,
   validateRate,
   requisito5,
+);
+
+router.delete(
+  '/:id',
+  validateToken,
+  requisito6,
 );
 
 module.exports = router;
