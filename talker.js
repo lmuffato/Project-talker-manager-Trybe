@@ -99,6 +99,13 @@ function deleteTalker(list, id) {
   return newArr;
 }
 
+function filterTalker(list, name) {
+  if (name === undefined || name === '') {
+    return list;
+  }
+  return list.filter((object) => object.name.includes(name));
+}
+
 function treatError(error, res) {
   error.forEach((element) => {
     if (element !== false) {
@@ -106,6 +113,18 @@ function treatError(error, res) {
     }
   });
 }
+
+route.get('/search', async (req, res) => {
+  const { q } = req.query;
+  const token = req.headers.authorization;
+  const error = validateToken(token);
+  if (error === false) {
+    const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
+    const filteredList = filterTalker(talkers, q);
+    return res.status(200).json(filteredList);
+  }
+  return res.status(parseInt(error.error, 10)).json({ message: error.message });
+});
 
 route.get('/', async (_req, res) => {
   const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
