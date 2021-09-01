@@ -30,7 +30,7 @@ function hasFields(talk) {
     };
   }
 
-  if (!talk.watchedAt || (!talk.rate && talk.rate !== 0)) {
+  if (!talk.watchedAt || (!talk.rate && talk.rate !== 0)) { // talk.rate !== 0 was inserted to prevent js confusing types. 0 number and 0 boolean.
     return {
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     };
