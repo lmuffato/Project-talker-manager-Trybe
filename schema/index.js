@@ -15,7 +15,7 @@ const message = {
   invalidData: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
   incorrectEmail: 'O "email" deve ter o formato "email@email.com"',
   invalidName: 'O campo "name" é obrigatório',
-  invalidRate: 'O campo "rate" deve ser um inteiro de 1 à 5"',
+  invalidRate: 'O campo "rate" deve ser um inteiro de 1 à 5',
   invalidTalk: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
   invalidToken: 'Token inválido',
   notFound: 'Pessoa palestrante não encontrada',
