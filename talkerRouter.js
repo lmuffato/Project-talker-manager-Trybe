@@ -61,6 +61,11 @@ function talkValidation(req, res, next) {
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
+  if (talk.rate === '' || talk.rate === undefined) {
+    return res.status(400).json({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
+  }
   next();
 }
 
@@ -69,11 +74,7 @@ function rateValidation(req, res, next) {
   if (rate < Number(1) || rate > Number(5) || rate === 0) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
-  if (rate === '' || rate === undefined) {
-    return res.status(400).json({
-      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
-    });
-  }
+ 
   next();
 }
 
