@@ -39,8 +39,9 @@ app.get('/talker', (req, res) => {
 });
 
 app.post('/login', validateEmail, validatePassword, (req, res) => {
-  const cryptoToken = generateToken();
-  return res.status(HTTP_OK_STATUS).json({ cryptoToken });
+  const token = generateToken();
+  console.log(token);
+  return res.status(HTTP_OK_STATUS).json({ token });
 });
 
 // https://stackoverflow.com/questions/17604866/difference-between-readfile-and-readfilesync
