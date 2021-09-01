@@ -1,4 +1,4 @@
-function deleteTalker(request, response) {
+async function deleteTalker(request, response) {
   const { id } = request.params;
   const talkerDBPath = './talker.json';
   const talkerDB = await readJsonReturnArray(talkerDBPath);
