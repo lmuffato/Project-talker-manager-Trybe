@@ -18,6 +18,16 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+// Requirement 07
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const file = await fileTalker();
+  if (!q || q === '') return res.status(200).json(file);
+  const filtered = file.filter((elem) => elem.name.includes(q));
+  if (filtered.length === 0) return res.status(200).json([]);
+   res.status(200).json(filtered);
+});
+
 // Requirement 01
 app.get('/talker', async (_req, res) => {
   try {
