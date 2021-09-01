@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --runInBand",
     "restore": "cp tests/seed.json talker.json",
-    "dev": "node index.js",
+    "start": "node index.js",
     "lint": "eslint --no-inline-config --no-error-on-unmatched-pattern -c .eslintrc.json ."
   },
   "keywords": [],
@@ -16,7 +16,8 @@
     "body-parser": "1.19.0",
     "crypto-js": "4.0.0",
     "express": "4.17.1",
-    "express-rescue": "1.1.30"
+    "express-rescue": "1.1.30",
+    "httpie": "^1.1.2"
   },
   "devDependencies": {
     "eslint": "6.8.0",
