@@ -98,4 +98,24 @@ router.post('/', tokenValidation, nameValidation,
   res.status(201).json(createNewTalker);
 });
 
+router.put('/:id', tokenValidation, nameValidation, ageValidation, talkValidation,
+  rateValidation, watchedValidation, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkersList = await readFile();
+  const talkerById = talkersList.find((talker) => talker.id === id);
+
+  const edit = {
+    name,
+    age, 
+    talk,
+    id: Number(id),
+  };
+
+  talkerById.push(edit);
+  await fs.writeFile(talkers, JSON.stringify(talkerById));
+  
+  return res.status(200).json(edit);
+});
+
 module.exports = router;
