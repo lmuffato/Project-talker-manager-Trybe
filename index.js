@@ -34,8 +34,8 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', getAllTalkers);
-app.get('/talker/:id', getTalkerByID);
 app.get('/talker/search', validateToken, searchTerm);
+app.get('/talker/:id', getTalkerByID);
 app.post('/login', emailValidation, passwordValidation, tokenDispatch);
 app.post('/talker', validateToken, nameCheck, ageCheck, talkCheck, registerTalker);
 app.put('/talker/:id', validateToken, nameCheck, ageCheck, talkCheck, editTalkers);
