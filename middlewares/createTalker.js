@@ -2,7 +2,7 @@ const {
   nameValidator,
   ageValidator,
   talkValidator,
-} = require('../utils/createTalkerValidator');
+} = require('../utils/talkerFormValidator');
 
 const { readJsonReturnArray } = require('../utils/read');
 const { writeAnObjectIntoAJSONFile } = require('../utils/write');
