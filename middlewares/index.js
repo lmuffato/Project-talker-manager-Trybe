@@ -2,18 +2,18 @@
 
 const rescue = require('express-rescue');
 const { status, message } = require('../schema');
-const { data } = require('../models');
+const { databaseTalker } = require('../models');
 
 const checkAll = rescue(async (_req, res, next) => {
-  const databaseTalker = await data();
-  if (!databaseTalker) res.status(status.ok).json([]);
+  const data = await databaseTalker();
+  if (!data) return res.status(status.ok).json([]);
   next();
 });
 
 const getById = rescue(async (req, res, next) => {
   const idParams = req.params.id;
-  const databaseTalker = await data();
-  const findTalker = databaseTalker.find(({ id }) => id === +idParams);
+  const data = await databaseTalker();
+  const findTalker = data.find(({ id }) => id === +idParams);
   if (!findTalker) res.status(status.notFound).json({ message: message.notFound });
   next();
 });
