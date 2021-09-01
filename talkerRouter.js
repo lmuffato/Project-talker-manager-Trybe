@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
   res.status(HTTP_OK_STATUS).send(foundTalker);
 });
 
-function tokenValidation(res, req, next) {
+function tokenValidation(req, res, next) {
   const { authorization } = req.headers;
   if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
   if (authorization.length !== 16) return res.status(401).json({ message: 'Token inválido' });
@@ -72,10 +72,10 @@ function rateValidation(req, res, next) {
   next();
 }
 
-function watchedValidation(res, req, next) {
+function watchedValidation(req, res, next) {
   const { talk: { watchedAt } } = req.body;
-  const regex = /^(0?[1-9]|[12][0-9]|3[01])[/](0?[1-9]|1[012])[/]\d{4}$/;
-  if (!regex.test(watchedAt) === false) {
+  const regex = /^\d{2}\/\d{2}\/\d{4}$/;
+  if (regex.test(watchedAt) === false) {
     return res.status(400).json({ 
       message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
     });
@@ -95,7 +95,7 @@ router.post('/', tokenValidation, nameValidation,
   };
   talkersList.push(createNewTalker);
   await fs.writeFile(talkers, JSON.stringify(talkersList));
-  res.status(HTTP_OK_STATUS).json(createNewTalker);
+  res.status(201).json(createNewTalker);
 });
 
 module.exports = router;
