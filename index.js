@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const talkerRoutes = require('./routes/TalkerRoutes');
+const loginRoutes = require('./routes/LoginRoutes');
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,3 +20,4 @@ app.listen(PORT, () => {
 });
 
 app.use('/talker', talkerRoutes);
+app.use('/login', loginRoutes);
