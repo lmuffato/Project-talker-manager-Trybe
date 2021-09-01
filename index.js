@@ -26,11 +26,8 @@ return crypto.randomBytes(8).toString('hex');
 }
 function maxId(arr) {
   const maxID = arr.reduce(
-     (accumulator, currentValue) => {
-       console.log(accumulator);
-       console.log(currentValue);
-       return accumulator.id > currentValue.id ? accumulator.id : currentValue.id;
-     },
+     (accumulator, currentValue) => (accumulator.id 
+      > currentValue.id ? accumulator.id : currentValue.id),
  );
  return maxID;
 }
@@ -97,7 +94,19 @@ async (req, res) => {
   data[talkerIndex].talk = talk;
   write(data);
 
-  res.status(200).json(data[talkerIndex]);
+  res.status(HTTP_OK_STATUS.json(data[talkerIndex]));
+});
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const data = await read();
+  const talkerIndex = data.findIndex((talker) => talker.id === +id);
+  if (talkerIndex === -1) return res.status(404).json({ message: 'Talker not found!' });
+  data.splice(talkerIndex, 1);
+  write(data);
+
+  res.status(HTTP_OK_STATUS)
+  .json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 app.listen(PORT, async () => {
