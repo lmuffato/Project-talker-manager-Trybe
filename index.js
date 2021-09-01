@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const crypto = require('crypto');
 
 const app = express();
 app.use(bodyParser.json());
@@ -92,7 +93,9 @@ const validatePassword = (req, res, next) => {
 };
 
 app.post('/login', validateEmail, validatePassword, (req, res) => {
-  res.status(HTTP_OK_STATUS).json({ token: '7mqaVRXJSp886CGr' });
+  // https://www.codegrepper.com/code-examples/javascript/js+random+generate+token
+  const token = crypto.randomBytes(8).toString('hex');
+  res.status(HTTP_OK_STATUS).json({ token });
 });
 
 // Requisito 4:
