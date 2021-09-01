@@ -19,9 +19,9 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talkers', async (_req, res) => {
+app.get('/talker', async (_req, res) => {
   const data = await readFile();
-  return res.status(200).json(data);
+  return res.status(HTTP_OK_STATUS).json(data);
 });
 
 app.listen(PORT, () => {
