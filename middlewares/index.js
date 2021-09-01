@@ -1,7 +1,11 @@
-const crypto = require('crypto');
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readFile, writeFile } = require('../services/readFile');
+const {
+  readFile,
+  writeFile,
+  generateId,
+  generateToken,
+} = require('../services/utils');
 const {
   validateEmail,
   validatePassword,
@@ -17,10 +21,6 @@ const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
-
-function generateToken() {
-return crypto.randomBytes(8).toString('hex');
-}
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -51,16 +51,40 @@ app.post('/login', validateEmail, validatePassword, (_req, res) => {
 });
 
 app.post('/talker', 
-validateTalk, validateName, validateToken, validateWatchedAtAndRate, validateAge,
+validateToken,
+validateTalk,
+validateWatchedAtAndRate,
+validateName,
+validateAge,
 async (req, res) => {
 const { name, age, talk } = req.body;
-const data = await readFile();
-const id = 5;
+const talkers = await readFile();
+const id = generateId(talkers);
 const newObj = ({ name, age, id, talk });
-data.push(newObj);
-writeFile(data);
+talkers.push(newObj);
+writeFile(talkers);
 
 return res.status(201).json(newObj);
+});
+
+app.put('/talker/:id', 
+validateToken,
+validateTalk,
+validateWatchedAtAndRate,
+validateName,
+validateAge,
+async (req, res) => {
+const { id } = req.params;
+const { name, age, talk } = req.body;
+const talkers = await readFile();
+const talkerIndex = talkers.findIndex((talker) => talker.id === Number(id));
+if (talkerIndex === -1) return res.status(404).json({ message: 'ID não encontrado' });
+talkers[talkerIndex].name = name;
+talkers[talkerIndex].age = age;
+talkers[talkerIndex].talk = talk;
+writeFile(talkers);
+
+return res.status(200).json(talkers[talkerIndex]);
 }); 
 
 module.exports = {
