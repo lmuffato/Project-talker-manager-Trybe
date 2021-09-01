@@ -1,27 +1,42 @@
 const { StatusCodes } = require('http-status-codes');
 const val = require('../../internal/validate');
 
-module.exports = async function validate(req, res, next) {
+module.exports = {
+    validateEmail,
+    validatePassword,
+};
+
+async function validateEmail(req, res, next) {
     try {
-        const { email, password } = req.body;
+        const { email } = req.body;
     
         if (!email) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: 'O campo "email" é obrigatório',
             });
         }
-    
-        if (!password) {
-            return res.status(StatusCodes.BAD_REQUEST).json({
-                message: 'O campo "password" é obrigatório',
-            });
-        }
-        
+            
         if (!val.isValidEmail(email)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: 'O "email" deve ter o formato "email@email.com"',
             });
         }
+    
+        next();
+    } catch (err) {
+        next(err);
+    }
+}
+
+async function validatePassword(req, res, next) {
+    try {
+        const { password } = req.body;
+        
+        if (!password) {
+            return res.status(StatusCodes.BAD_REQUEST).json({
+                message: 'O campo "password" é obrigatório',
+            });
+        }    
     
         if (!val.isValidPassword(password)) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -33,4 +48,4 @@ module.exports = async function validate(req, res, next) {
     } catch (err) {
         next(err);
     }
-};
+}

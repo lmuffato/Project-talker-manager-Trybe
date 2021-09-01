@@ -62,7 +62,7 @@ const loginRouter = (server) => {
 
     router.post(
         '/',
-        server.loginClient.validate,
+        ...server.loginClient.validators,
         server.loginClient.login,
     );
 
