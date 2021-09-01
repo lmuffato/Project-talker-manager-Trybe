@@ -5,8 +5,9 @@ const router = express.Router();
 const {
   getTalkers,
   validateToken,
-  addTalker,
+  createTalker,
   talkerFormValidations,
+  updateTalker,
 } = require('../middlewares');
 
 router.get('/', getTalkers, async (req, res) => {
@@ -29,7 +30,14 @@ router.post('/', [
   validateToken,
   ...talkerFormValidations,
   getTalkers,
-  addTalker,
+  createTalker,
+]);
+
+router.put('/:id', [
+  validateToken,
+  ...talkerFormValidations,
+  getTalkers,
+  updateTalker,
 ]);
 
 module.exports = router;

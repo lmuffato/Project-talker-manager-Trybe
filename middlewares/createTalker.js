@@ -5,7 +5,7 @@ function generateValidId(talkers) {
   return Math.max(...arrayOfIds) + 1;
 }
 
-const addTalker = async (req, res) => {
+const createTalker = async (req, res) => {
   const {
     name,
     age,
@@ -21,4 +21,4 @@ const addTalker = async (req, res) => {
   res.status(201).json(talker);
 };
 
-module.exports = { addTalker };
+module.exports = { createTalker };

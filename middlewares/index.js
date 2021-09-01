@@ -4,7 +4,8 @@ const { validateEmail } = require('./validateEmail');
 const { validatePassword } = require('./validatePassword');
 const { validateToken } = require('./validateToken');
 const { talkerFormValidations } = require('./talker_form_validations');
-const { addTalker } = require('./addTalker');
+const { createTalker } = require('./createTalker');
+const { updateTalker } = require('./updateTalker');
 
 module.exports = {
   getTalkers,
@@ -13,5 +14,6 @@ module.exports = {
   validatePassword,
   validateToken,
   talkerFormValidations,
-  addTalker,
+  createTalker,
+  updateTalker,
 };
