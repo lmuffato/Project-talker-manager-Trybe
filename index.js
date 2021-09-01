@@ -37,7 +37,7 @@ app.get('/talker', async (req, res) => {
   return res.status(HTTP_OK_STATUS).json(parsedTalker || [])
 });
 
-app.get('/talker/search', async (req, res) => {
+app.get('/talker/search', validateToken, async (req, res) => {
   const { name } = req.query;
   const parsedTalkers = await fileReader();
   const queriedTalker = parsedTalkers.filter((t) => t.name.includes(name));
