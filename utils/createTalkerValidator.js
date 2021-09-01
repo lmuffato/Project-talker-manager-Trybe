@@ -23,19 +23,33 @@ function ageValidator(age) {
   return 0;
 }
 
-function talkValidator(talk) {
-  const { watchedAt, rate } = talk;
-  if (!watchedAt || !rate) {
+function hasFields(talk) {
+  if (!talk) {
     return {
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     };
   }
 
-  if (!ddmmyyValidator(watchedAt)) {
+  if (!talk.watchedAt || !talk.rate) {
+    return {
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    };
+  }
+
+  return 0;
+}
+
+function talkValidator(talk) {
+  const hasAllFields = hasFields(talk);
+  if (hasAllFields !== 0) {
+    return hasAllFields;
+  }
+
+  if (!ddmmyyValidator(talk.watchedAt)) {
     return { message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' };
   }
-  
-  const rateCheck = rateValidator(rate);
+
+  const rateCheck = rateValidator(talk.rate);
   if (rateCheck !== 0) {
     return rateCheck;
   }
