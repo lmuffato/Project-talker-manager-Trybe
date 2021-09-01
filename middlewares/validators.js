@@ -49,7 +49,7 @@ function validateName(req, res, next) {
   if (name.length < nameMinLength) {
     return res
     .status(400)
-    .json({ message: 'O "name" ter pelo menos 3 caracteres' });
+    .json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
   }
 
   next();
