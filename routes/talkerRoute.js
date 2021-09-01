@@ -1,5 +1,5 @@
 const express = require('express');
-const getTalkers = require('../util/getTalkers');
+const getTalkers = require('../services/getTalkers');
 
 const router = express.Router();
 
