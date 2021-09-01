@@ -11,7 +11,7 @@ const postTalkerMock = {
 
 const url = 'http://localhost:3000';
 
-describe.skip('4 - Crie o endpoint POST /talker', () => {
+describe('4 - Crie o endpoint POST /talker', () => {
   beforeEach(() => {
     const talkerSeed = fs.readFileSync(
       path.join(__dirname, 'seed.json'),

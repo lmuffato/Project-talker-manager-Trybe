@@ -6,9 +6,19 @@ const fs = require('fs');
 
 const router = express.Router();
 
-const HTTP_OK_STATUS = 200;
-const NOT_FOUND_STATUS = 404;
+const {
+  validateToken,
+  validateName,
+  validateAge,
+  existsTalkKeys,
+  existsTalkInfos,
+  validateTalkInfos,
+  createTalker,
+} = require('../middlewares/createNewTalker');
 
+const HTTP_OK_STATUS = 200;
+const HTTP_CREATED_STATUS = 201;
+const NOT_FOUND_STATUS = 404;
 // getTalkerById
 router.get(
   '/:id',
@@ -33,9 +43,27 @@ router.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).json(jsonData);
 });
 
-router.post('/talker', (request, _response) => {
-  const { authorization } = request.headers;
-  console.log(authorization);
-});
+router.post(
+  '/',
+  validateToken,
+  validateName,
+  validateAge,
+  existsTalkKeys,
+  existsTalkInfos,
+  validateTalkInfos,
+  createTalker,
+  (request, response) => {
+    const { name, age, talk } = request.body;
+    const { userId: id } = request;
+    return response
+      .status(HTTP_CREATED_STATUS)
+      .json({
+        id,
+        name,
+        age,
+        talk,
+      });
+  },
+);
 
 module.exports = router;

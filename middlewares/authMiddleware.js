@@ -44,7 +44,7 @@ const getToken = (request, _response, next) => {
     token += (Math.floor(Math.random() * 256)).toString(36);
   }
   const getLengthEqual16 = token.substr(0, 16);
-  request.tok = getLengthEqual16;
+  request.token = getLengthEqual16;
   next();
 };
 
