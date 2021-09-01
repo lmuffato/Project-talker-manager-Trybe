@@ -14,4 +14,18 @@ module.exports = {
 
     next();
   },
+
+  validatePassword(req, res, next) {
+    const { password } = req.body;
+    
+    try {
+      if (!password) throw new Error('O campo "password" é obrigatório');
+      const validPasswordLength = password.length >= 6;
+      if (!validPasswordLength) throw new Error('O "password" deve ter pelo menos 6 caracteres');
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+
+    next();
+  },
 };
