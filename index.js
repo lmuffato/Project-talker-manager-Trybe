@@ -32,7 +32,10 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', async (req, res) => res.status(HTTP_OK_STATUS).json(fileReader() || []));
+app.get('/talker', async (req, res) => {
+  const parsedTalker = await fileReader();
+  return res.status(HTTP_OK_STATUS).json(parsedTalker || [])
+});
 
 app.get('/talker/search', async (req, res) => {
   const { name } = req.query;
