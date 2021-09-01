@@ -113,13 +113,17 @@ function filterTalker(list, name) {
   return list.filter((object) => object.name.includes(name));
 }
 
-// function treatError(error, res) {
-//   error.forEach((element) => {
-//     if (element !== false) {
-//       return res.status(parseInt(element.error, 10)).json({ message: element.message });
-//     }
-//   });
-// }
+function treatError(error) {
+  const errNum = [];
+  const errText = [];
+    error.forEach((element) => {
+      if (element !== false) {
+        errNum.push(parseInt(element.error, 10));
+        errText.push(element.message);
+      }
+    });
+    return { errNum, errText };
+}
 
 route.get('/search', async (req, res) => {
   const { q } = req.query;
@@ -157,41 +161,24 @@ route.post('/', async (req, res) => {
     const updatedList = addTalker(talkers, { name, age, talk });
     await fs.writeFile(talkersFile, JSON.stringify(updatedList));
     return res.status(201).json({ id: 5, name, age, talk });
-  } 
-  const errNum = [];
-  const errText = [];
-    error.forEach((element) => {
-      if (element !== false) {
-        errNum.push(parseInt(element.error, 10));
-        errText.push(element.message);
-      }
-    });
-    return res.status(errNum[0]).json({ message: errText[0] });
+  }
+  const treatedError = treatError(error);
+  return res.status(treatedError.errNum[0]).json({ message: treatedError.errText[0] });
 });
-// if (error === false) {
-//   const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
-//   const id = talkers.length + 1;
-//   talkers.push({ id, name, age, talk });
-//   await fs.writeFile(talkersFile, JSON.stringify(talkers));
-//   return res.status(201).json({ id, name, age, talk });
-// }
 
 route.put('/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
   const { name, age, talk } = req.body;
   const token = req.headers.authorization;
   const error = validateAll(name, age, talk, token);
-  if (error === false) {
+  if (error === 'ok') {
     const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
     const updatedList = updateTalker(talkers, { id, name, age, talk });
     await fs.writeFile(talkersFile, JSON.stringify(updatedList));
     return res.status(200).json({ id, name, age, talk });
   }
-  error.forEach((element2) => {
-    if (element2 !== false) {
-      return res.status(parseInt(element2.error, 10)).json({ message: element2.message });
-    }
-  });
+  const treatedError = treatError(error);
+    return res.status(treatedError.errNum[0]).json({ message: treatedError.errText[0] });
 });
 
 route.delete('/:id', async (req, res) => {
