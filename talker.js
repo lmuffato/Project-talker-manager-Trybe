@@ -96,7 +96,7 @@ route.post('/', async (req, res) => {
   const error = validateAll(name, age, talk, token);
   if (error === false) {
     const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
-    talkers.push({ id: `${talkers.length}`, name, age, talk });
+    talkers.push({ id: (talkers.length + 1), name, age, talk });
     await fs.writeFile(talkersFile, JSON.stringify(talkers));
     return res.status(201).json({ id: 5, name, age, talk });
   }
