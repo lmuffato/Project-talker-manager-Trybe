@@ -39,7 +39,19 @@ function validatePassword(req, res, next) {
 function validateName(req, res, next) {
   const { name } = req.body;
   const nameMinLength = 3;
+
+  if(!name) {
+    return res
+      .status(400)
+      .json({message: "O campo \"name\" é obrigatório"});
+  }
   
+  if (name.length < nameMinLength) {
+    res
+    .status(400)
+    .json({ message: "O \"name\" ter pelo menos 3 caracteres" });
+  }
+
   next();
 }
 
