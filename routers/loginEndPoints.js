@@ -2,19 +2,24 @@ const { Router } = require('express');
 
 const router = Router();
 
-const fs = require('fs').promises;
+const fsP = require('fs').promises;
+const fs = require('fs');
 const crypto = require('crypto');
 
-async function createToken(req, res) {
+function readLogedUsers(email) {
+  const fileLogers = JSON.parse(fs.readFileSync('./logedUsers.json', 'utf8'));
+  const logedUsers = fileLogers.filter((user) => user.email !== email);
+  return logedUsers;
+}
+
+function createToken(req, res) {
   const { email } = req.body;
   const token = crypto.randomBytes(8).toString('hex');
-  const logedUsers = await fs.readFile('../logedUsers.json', 'utf8')
-    .then((response) => JSON.parse(response))
-    .then((fullList) => fullList.filter((user) => user.email !== email))
-    .catch((err) => console.log(err.message));
+  const logedUsers = readLogedUsers(email);
   const newLog = { email, token };
   logedUsers.push(newLog);
-  await fs.writeFile('../logedUsers.json', JSON.stringify(logedUsers))
+  console.log(logedUsers);
+  fsP.writeFile('./logedUsers.json', JSON.stringify(logedUsers))
     .then(() => console.log('token registrado com sucesso'))
     .catch((err) => console.log(err.message));
   return res.status(200).json({ token });
@@ -39,7 +44,7 @@ function validatePassword(req, res, next) {
   if (req.body === undefined) {
     return res.status(400).json({ message: 'O campo "password" é obrigatório' });
   }
-  const { password } = res.body;
+  const { password } = req.body;
   if (password === undefined) {
     return res.status(400).json({ message: 'O campo "password" é obrigatório' });
   }
