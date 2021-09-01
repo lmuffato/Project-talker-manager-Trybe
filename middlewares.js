@@ -64,5 +64,3 @@ const ultilies = [
 ];
 
 module.exports = ultilies;
-
-// teste
