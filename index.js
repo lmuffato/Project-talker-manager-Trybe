@@ -182,3 +182,18 @@ app.put('/talker/:id', [
   rateValidation,
   putTalker,
 ]);
+
+// Requisito 6: 
+
+const deleteTalker = async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readTalkers();
+  const newTalkers = talkers.filter((t) => t.id !== parseInt(id, 10));
+  await fs.writeFile('talker.json', JSON.stringify(newTalkers));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+};
+
+app.delete('/talker/:id', [
+  tokenValidation,
+  deleteTalker,
+]);
