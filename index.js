@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
-const { validaEmail, validaPassword, generateToken } = require('./validation');
+const { validaEmail, validaPassword, generateToken, validaToken } = require('./validation');
 
 const app = express();
 app.use(bodyParser.json());
@@ -34,7 +34,27 @@ return response.status(HTTP_OK_STATUS).json(res);
 
 // req 03
 app.post('/login', validaEmail, validaPassword, (_request, response) =>
-  response.status(200).json({ token: generateToken(16) }));
+  response.status(HTTP_OK_STATUS).json({ token: generateToken(16) }));
+
+// req 06
+// app.delete('/talker/:id', validaToken, async (_request, response) => {
+//   const { id } = _request.params;
+//   fs.readFile('./talker.json', 'utf8').then((talkers) => {
+//   const talkerjson = JSON.parse(talkers);
+//   const talkerId = talkerjson.filter((talker) => talker.id !== parseInt(id, 10));
+//   fs.writeFile('./talker.json', JSON.stringify(talkerId)).then(() => 
+//   response.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' }));
+// });
+// });
+
+app.delete('/talker/:id', validaToken, async (_request, response) => {
+  const { id } = _request.params;
+  const read = await fs.readFile('.talker.json', 'utf8');
+  const parse = JSON.parse(read);
+  const talkerId = parse.filter((talker) => talker.id !== parseInt(id, 10));
+  await fs.writeFile('./talker.json', JSON.stringify(talkerId));
+  response.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
 
 app.listen(PORT, () => {
   console.log('Online');
