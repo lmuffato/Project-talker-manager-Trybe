@@ -15,6 +15,7 @@ const getTalkerById = require('./desafio2');
 const login = require('./desafio3');
 const createTalker = require('./desafio4');
 const updateTalker = require('./desafio5');
+const deleteTalker = require('./Desafio6');
 
 const app = express();
 app.use(bodyParser.json());
@@ -55,6 +56,9 @@ app.put('/talker/:id',
   validateTalkDate,
   validateTalkRate,
   updateTalker);
+
+// Desafio 6
+app.delete('/talker/:id', validateToken, deleteTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
