@@ -23,15 +23,19 @@ const { returnArrayDifferentID } = require('../utils/talkerFilters');
 */
 
 async function editTalkers(request, response) {
-    const { id } = request.params;
-    const { name, age, talk } = request.body;
-    const talkerDBPath = './talker.json';
-    const talkerDB = await readJsonReturnArray(talkerDBPath);
-    const newTalkersList = returnArrayDifferentID(talkerDB, id);
-    const talkerToAdd = { name, age, talk, id: Number(id) };
-    newTalkersList.push(talkerToAdd);
-    await writeAnObjectIntoAJSONFile(newTalkersList);
-    return response.status(200).json(talkerToAdd);
+    try {
+        const { id } = request.params;
+        const { name, age, talk } = request.body;
+        const talkerDBPath = './talker.json';
+        const talkerDB = await readJsonReturnArray(talkerDBPath);
+        const newTalkersList = returnArrayDifferentID(talkerDB, id);
+        const talkerToAdd = { name, age, talk, id: Number(id) };
+        newTalkersList.push(talkerToAdd);
+        await writeAnObjectIntoAJSONFile(newTalkersList);
+        return response.status(200).json(talkerToAdd);
+    } catch (err) {
+        return { ERROR: err };
+    }
 }
 
 module.exports = editTalkers;

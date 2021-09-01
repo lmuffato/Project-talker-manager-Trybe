@@ -35,20 +35,19 @@ function talkCheck(request, response, next) {
 }
 
 async function registerTalker(request, response) {
-  const { name, age, talk } = request.body;
-  const talkerDBPath = './talker.json';
-  const talkerDB = await readJsonReturnArray(talkerDBPath);
-  const id = talkerDB.length + 1;
-  const talkerToAdd = {
-    name,
-    age,
-    talk,
-    id,
-  };
-
-  talkerDB.push(talkerToAdd);
-  await writeAnObjectIntoAJSONFile(talkerDB);
-  return response.status(201).json(talkerToAdd);
+  try {
+    const { name, age, talk } = request.body;
+    const talkerDBPath = './talker.json';
+    const talkerDB = await readJsonReturnArray(talkerDBPath);
+    const id = talkerDB.length + 1;
+    const talkerToAdd = { name, age, talk, id };
+  
+    talkerDB.push(talkerToAdd);
+    await writeAnObjectIntoAJSONFile(talkerDB);
+    return response.status(201).json(talkerToAdd);
+  } catch (err) {
+    return { ERROR: err };
+  }
 }
 
 module.exports = {
