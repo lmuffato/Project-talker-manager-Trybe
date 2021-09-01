@@ -6,10 +6,10 @@ const readContentFile = require('../utils/readContentFile');
 
 const HTTP_OK_STATUS = 200;
 
-const pathFile = './talker.json';
+const PATH = './talker.json';
 
 router.get('/', async (_req, res) => {
-  const content = await readContentFile(pathFile) || [];
+  const content = await readContentFile(PATH) || [];
   res.status(HTTP_OK_STATUS).json(content);
 });
 
