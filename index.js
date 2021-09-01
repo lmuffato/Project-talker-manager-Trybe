@@ -66,6 +66,26 @@ app.post(
 },
 );
 
+app.put('/talker/:id',
+validateToken,
+validateName,
+validateAge,
+validateTalk,
+validateTalkEmptyValues,
+validateTalkKeys,
+async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talker = await readTalker();
+  const talkerIndex = talker.findIndex((t) => t.id === +id);
+  if (talkerIndex === -1) {
+    return res.status(404);
+  }
+  talker[talkerIndex] = { id: +id, name, age, talk };
+  writeTalker(talker);
+  return res.status(200).json(talker[talkerIndex]);
+});
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
     const talker = await readTalker();
