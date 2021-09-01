@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 app.use('/talker', routerTalker);
 
 const HTTP_OK_STATUS = 200;
+const HTTP_NOT_FOUND_STATUS = 404;
 const PORT = '3000';
 
 app.post('/login', validateEmail, validatePassword, getToken, (request, response) => {
@@ -20,6 +21,9 @@ app.post('/login', validateEmail, validatePassword, getToken, (request, response
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
+
+app.use('*', (_request, response) => response
+  .status(HTTP_NOT_FOUND_STATUS).json({ message: '404 not found' }));
 
 app.listen(PORT, () => {
   console.log('Online');
