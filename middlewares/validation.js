@@ -1,3 +1,5 @@
+const checkLength = require('../utils/checkLength');
+
 module.exports = {
   validateEmail(req, res, next) {
     const { email } = req.body;
@@ -19,9 +21,7 @@ module.exports = {
     const { password } = req.body;
     
     try {
-      if (!password) throw new Error('O campo "password" é obrigatório');
-      const validPasswordLength = password.length >= 6;
-      if (!validPasswordLength) throw new Error('O "password" deve ter pelo menos 6 caracteres');
+      checkLength({ password }, 6);
     } catch (error) {
       res.status(400).json({ message: error.message });
     }
