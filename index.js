@@ -91,21 +91,35 @@ function ageValidation(req, res, next) {
   next();
 }
 
-function talkValidation(req, res) {
-  const { talk: { watchedAt, rate } } = req.body;
+function talkValidation(req, res, next) {
   const { talk } = req.body;
-  const dataRegex = /\n# $&:\n\t/;
-  if (dataRegex.test(watchedAt) === false) {
-    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
-  } if (rate < 1 || rate > 5) {
+  if (!talk || !talk.watchedAt || !talk.rate) {
+    return res.status(400).json({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
+  }
+  next();
+}
+
+function rateValidation(req, res, next) {
+  const { talk: { rate } } = req.body; 
+  if (rate < 1 || rate > 5) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
-  } if (!talk || !watchedAt || !rate) {
+  }
+  next();
+}
+
+function watchedValidation(res, req) {
+  const { talk: { watchedAt } } = req.body;
+  const regex = /\n# $&:\n\t/;
+  if (!regex.test(watchedAt) === false) {
     return res.status(400).json({ 
-      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios', 
-    }); 
+      message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
+    });
   }
 }
 
-app.post('/talker', nameValidation, ageValidation, talkValidation, (req, res) => {
+app.post('/talker', nameValidation, 
+  ageValidation, talkValidation, rateValidation, watchedValidation, (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
 });
