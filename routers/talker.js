@@ -30,6 +30,17 @@ router.get('/', rescue(async (_req, res) => {
   return res.status(HTTP_OK_STATUS).json(talkerContent);
 }));
 
+router.get('/search', validateToken, rescue(async (req, res) => {
+  const talkers = await getTalkerFile();
+  const { q } = req.query;
+
+  if (!q) res.status(HTTP_OK_STATUS).json(talkers);
+
+  const selectedTalkers = talkers.filter(({ name }) => name.includes(q));
+
+  res.status(HTTP_OK_STATUS).json(selectedTalkers);
+}));
+
 router.get('/:id', rescue(async (req, res) => {
   const talkers = await getTalkerFile();
   const talkerById = talkers.find(({ id }) => id === parseFloat(req.params.id));
@@ -61,8 +72,9 @@ router.post('/', talkerMiddlewares, rescue(async (req, res) => {
     age,
     talk,
   };
-  
-  setNewTalker(newTalker);
+
+  talkers.push(newTalker);
+  setNewTalker(talkers);
   
   res.status(HTTP_CREATED_STATUS)
   .json(newTalker);

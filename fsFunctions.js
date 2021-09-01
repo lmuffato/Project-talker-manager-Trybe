@@ -9,7 +9,10 @@ const getTalkerFile = async () => {
 };
 
 const setNewTalker = async (newTalker) => {
-  fs.writeFile('./talker.json', JSON.stringify([newTalker]));
+  // const talkerFile = await getTalkerFile();
+  // talkerFile.push(newTalker);
+
+  fs.writeFile('./talker.json', JSON.stringify(newTalker));
 };
 
 const setUpdate = (newTalker) => {
