@@ -5,16 +5,21 @@ const router = express.Router();
 const rescue = require('express-rescue');
 
 const HTTP_OK_STATUS = 200;
+const HTTP_CREATED_STATUS = 201;
 const HTTP_NOTFOUND_STATUS = 404;
 
 const {
   getTalkerFile,
+  setNewTalker,
 } = require('../fsFunctions');
 
 const {
   validateToken,
   validateName,
   validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateTalkRate,
 } = require('../middlewares/talkerMiddlewares');
 
 router.get('/', rescue(async (_req, res) => {
@@ -35,8 +40,33 @@ router.get('/:id', rescue(async (req, res) => {
     : res.status(HTTP_OK_STATUS).json(talkerById);
 }));
 
-const talkerMiddlewares = [validateToken, validateName, validateAge];
+const talkerMiddlewares = [
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateTalkRate,
+];
 
-router.post('/', talkerMiddlewares);
+router.post('/', talkerMiddlewares, rescue(async (req, res) => {
+  const { name, age, talk } = req.body;
+
+  const talkers = await getTalkerFile();
+
+  const lastTalker = talkers.length + 1;
+
+  const newTalker = {
+    id: lastTalker,
+    name,
+    age,
+    talk,
+  };
+
+  setNewTalker(newTalker);
+
+  res.status(HTTP_CREATED_STATUS)
+    .json(newTalker);
+}));
 
 module.exports = router;

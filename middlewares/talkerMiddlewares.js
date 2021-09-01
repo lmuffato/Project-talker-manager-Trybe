@@ -1,5 +1,3 @@
-// const HTTP_OK_STATUS = 200;
-// const HTTP_NOTFOUND_STATUS = 404;
 const HTTP_NOTOK_STATUS = 400;
 const HTTP_UNAUTHORIZED_STATUS = 401;
 
@@ -50,45 +48,57 @@ const validateAge = (req, res, next) => {
   next();
 };
 
-// }
-// O campo talk deverá ser um objeto com as seguintes chaves:
+const isCorrectDate = (date) => {
+  const patternData = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/;
+  const isValid = patternData.test(date);
+  return isValid;
+};
 
-// A chave watchedAt deve ser uma data no formato dd/mm/aaaa.
+const validateTalk = (req, res, next) => {
+  const { talk } = req.body;
+  // const { watchedAt, rate } = talk;
 
-// Caso a data não respeito o formato dd/mm/aaaa retorne status 400, com o seguinte corpo:
-// {
-//   "message": "O campo \"watchedAt\" deve ter o formato \"dd/mm/aaaa\""
-// }
-// A chave rate deve ser um inteiro de 1 à 5.
+  if (!talk
+      || talk === ' '
+      || !talk.watchedAt
+      || !talk.rate) {
+    res.status(HTTP_NOTOK_STATUS)
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+  next();
+};
 
-// Caso a nota não seja um inteiro de 1 à 5 retorne status 400, com o seguinte corpo:
+const validateTalkDate = (req, res, next) => {
+  const { talk } = req.body;
+  const { watchedAt } = talk;
 
-// {
-//   "message": "O campo \"rate\" deve ser um inteiro de 1 à 5"
-// }
-// O campo talk é obrigatório e nenhuma das chaves citadas anteriormente podem ser vazias.
+  if (!isCorrectDate(watchedAt)) {
+    res.status(HTTP_NOTOK_STATUS)
+      .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
 
-// Caso o campo não seja informado, esteja vazio ou então alguma de suas chaves não tenham sido informadas retorne status 400, com o seguinte corpo:
+  next();
+};
 
-// {
-//   "message": "O campo \"talk\" é obrigatório e \"watchedAt\" e \"rate\" não podem ser vazios"
-// }
-// Caso esteja tudo certo, retorne o status 201 e a pessoa cadastrada.
+const validateTalkRate = (req, res, next) => {
+  const { talk } = req.body;
+  const { rate } = talk;
 
-// O endpoint deve retornar o status 201 e a pessoa palestrante que foi cadastrada, da seguinte forma:
+  const convertedRate = parseFloat(rate);
 
-// {
-//   "id": 1,
-//   "name": "Danielle Santos",
-//   "age": 56,
-//   "talk": {
-//     "watchedAt": "22/10/2019",
-//     "rate": 5
-//   }
-// }
+  if (convertedRate <= 0 || convertedRate > 5) {
+    res.status(HTTP_NOTOK_STATUS)
+      .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+
+  next();
+};
 
 module.exports = {
   validateToken,
   validateName,
   validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateTalkRate,
 };
