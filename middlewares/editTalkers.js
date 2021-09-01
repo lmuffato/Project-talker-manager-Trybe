@@ -11,7 +11,7 @@ async function editTalkers(request, response) {
     const talkerToAdd = { name, age, talk, id };
     newTalkersList.push(talkerToAdd);
     await writeAnObjectIntoAJSONFile(talkerDB);
-    return response.status(201).json(talkerToAdd);
+    return response.status(200).json(talkerToAdd);
 }
 
 module.exports = editTalkers;
