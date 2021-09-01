@@ -95,7 +95,9 @@ route.post('/', async (req, res) => {
   const token = req.headers.authorization;
   const error = validateAll(name, age, talk, token);
   if (error === false) {
-    await fs.writeFile(talkersFile, JSON.stringify({ id: 1, name, age, talk }));
+    const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
+    talkers.push({ id: `${talkers.length}`, name, age, talk });
+    await fs.writeFile(talkersFile, JSON.stringify(talkers));
     return res.status(201).json({ id: 5, name, age, talk });
   }
   error.forEach((element) => {
