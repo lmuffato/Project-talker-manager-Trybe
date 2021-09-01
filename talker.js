@@ -87,6 +87,18 @@ function updateTalker(list, { id, name, age, talk }) {
   return newArr;
 }
 
+function deleteTalker(list, id) {
+  const newArr = list;
+  let deleteIndex;
+  list.forEach((object, index) => {
+    if (object.id === id) {
+      deleteIndex = index;
+    }
+  });
+  newArr.splice(deleteIndex, 1);
+  return newArr;
+}
+
 function treatError(error, res) {
   error.forEach((element) => {
     if (element !== false) {
@@ -135,6 +147,19 @@ route.put('/:id', async (req, res) => {
     return res.status(200).json({ id, name, age, talk });
   }
   return treatError(error, res);
+});
+
+route.delete('/:id', async (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const token = req.headers.authorization;
+  const error = validateToken(token);
+  if (error === false) {
+    const talkers = JSON.parse(await fs.readFile(talkersFile, 'utf8'));
+    const updatedList = deleteTalker(talkers, id);
+    await fs.writeFile(talkersFile, JSON.stringify(updatedList));
+    return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  }
+  return res.status(parseInt(error.error, 10)).json({ message: error.message });
 });
 
 module.exports = route;
