@@ -1,9 +1,10 @@
-/* const { Router } = require('express');
+const { Router } = require('express');
+const { getAllTalkers, getTalkerById } = require('./getAllTalkers');
 
-const router = Router();
+const routerTalker = Router();
 
-router.get('/', (req, res) => res.send('retornou do teste'));
-router.post(':id', nomefuncao => )
-rote
+routerTalker.get('/', getAllTalkers);
 
-module.exports = router; */
+routerTalker.get('/:id', getTalkerById);
+
+module.exports = routerTalker;
