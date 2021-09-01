@@ -16,7 +16,7 @@ router.get('/', async (_req, res) => {
 
 router.post('/', ultility, async (req, res) => {
   const { name, age, talk } = req.body;
-  const talker = await peopleRegister();
+  const talker = JSON.parse(await peopleRegister());
   const newTalker = {
     id: talker.length + 1,
     name,
@@ -24,6 +24,7 @@ router.post('/', ultility, async (req, res) => {
     talk,
   };
   talker.push(newTalker);
+  await fs.writeFile('talker.json', JSON.stringify(newTalker));
   res.status(201).json(newTalker);
 });
 
