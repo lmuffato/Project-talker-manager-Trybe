@@ -1,17 +1,20 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const getAllTalkers = require('./desafio1');
-const getTalkerById = require('./desafio2');
-const login = require('./desafio3');
-
-const { validateAge,
+const { 
+  validateAge,
   validateName,
   validateTalk,
   validateTalkDate,
   validateTalkRate,
-  validateToken, 
-  createTalker } = require('./desafio4');
+  validateToken,
+  } = require('./validations');
+
+const getAllTalkers = require('./desafio1');
+const getTalkerById = require('./desafio2');
+const login = require('./desafio3');
+const createTalker = require('./desafio4');
+const updateTalker = require('./desafio5');
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,12 +39,22 @@ app.post('/login', login);
 // Desafio 4
 app.post('/talker', 
   validateToken,
-  validateAge,
   validateName,
+  validateAge,
   validateTalk,
   validateTalkDate,
   validateTalkRate,
   createTalker);  
+
+// Desafio 5
+app.put('/talker/:id', 
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateTalkRate,
+  updateTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
