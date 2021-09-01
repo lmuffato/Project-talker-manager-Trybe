@@ -1,7 +1,7 @@
 const validateToken = (req, res, next) => {
-  const { token } = req.headers;
-  if (!token) return res.status(401).json({ message: 'Token não encontrado' });
-  if (token.length !== 16) return res.status(401).json({ message: 'Token inválido' });
+  const { authorization } = req.headers;
+  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
+  if (authorization.length !== 16) return res.status(401).json({ message: 'Token inválido' });
   next();
 };
 
@@ -18,7 +18,7 @@ const validateName = (req, res, next) => {
 
 const validateAge = (req, res, next) => {
   const { age } = req.body;
-  if (!age || age.length === '') {
+  if (!age || typeof age !== 'number') {
     res.status(400).json({ message: 'O campo "age" é obrigatório' });
   }
   if (parseInt(age, 10) < 18) {
@@ -29,7 +29,7 @@ const validateAge = (req, res, next) => {
 
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
-  if (!talk || !talk.watchedAt || (!talk.rate && talk.rate !== 0)) {
+  if (!talk || !talk.watchedAt || talk.rate) {
     return res.status(400).json({
        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
@@ -48,7 +48,7 @@ const validateDate = (req, res, next) => {
 
 const validateRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
-  if (rate >= 1 || rate < 6) {
+  if (rate > 5 || rate < 1) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   next();
