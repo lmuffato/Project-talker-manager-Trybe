@@ -12,6 +12,6 @@ const talkerUpdate = async (req, res) => {
   await writeFile('talker.json', JSON.stringify(filterTalker));
 
   return res.status(200).json(editedTalker);
-}
+};
 
 module.exports = talkerUpdate;
