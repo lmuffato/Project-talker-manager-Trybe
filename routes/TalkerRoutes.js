@@ -125,4 +125,16 @@ router
   return res.status(201).json(newTalker);
 });
 
+router.put('/:id', getAuth, getTalkerName, getAge, getTalkField, getDate, getRate, (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkers = readFileFn();
+  const talkerPeople = talkers.findIndex((result) => result.id === Number(id));
+
+  talkers[talkerPeople] = { ...talkers[talkerPeople], name, age, talk };
+
+  writeFileSync('./talker.json', JSON.stringify(talkers));
+  res.status(200).json(talkers[talkerPeople]);
+});
+
 module.exports = router;
