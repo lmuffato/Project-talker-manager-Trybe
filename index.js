@@ -9,8 +9,18 @@ const {
   validateAge,
   validateName,
   validateTalk,
-  isTokenValid,
+  validateToken,
+  validateDateFormat,
+  validateRate
 } = require('./middlewares/validators');
+
+const talkerValidators = [
+  validateAge,
+  validateName,
+  validateTalk,
+  validateDateFormat,
+  validateRate
+];
 
 const app = express();
 app.use(bodyParser.json());
@@ -39,35 +49,46 @@ app.get('/talker/:id', async (req, res) => {
   return res.status(200).json(talker);
 });
 
-app.post('/talker', validateName, validateAge, validateTalk, (req, res) => {
+app.post('/talker', validateToken, talkerValidators, async (req, res) => {
   const { name, age, talk } = req.body;
-  const { authorization: token } = req.headers;
+  
+  const talkers = await fs.readFile('./talker.json', 'utf-8');
+  const parsedTalkers = JSON.parse(talkers);
 
   const talker = {
-    id: data.length + 1,
+    id: parsedTalkers.length + 1,
     name,
     age,
     talk,
   };
+
+  const newTalkers = [...parsedTalkers, talker];
   
-  if (!token) {
- return res
-    .status(401)
-    .json({ message: 'Token não encontrado' }); 
-}
-  
-  if (!isTokenValid(token)) {
- return res
-    .status(401)
-    .json({ message: 'Token inválido' }); 
-}
-  
+  await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
   return res.status(201).json(talker);
 });
 
 app.post('/login', validateEmail, validatePassword, (req, res) => {
   const randomToken = crypto.randomBytes(8).toString('hex');
   return res.status(200).json({ token: randomToken });
+});
+
+app.put('/talker/:id', validateToken, talkerValidators, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkers = await fs.readFile('./talker.json', 'utf-8');
+  const parsedTalkers = JSON.parse(talkers);
+  const filteredTalkersObj = parsedTalkers.filter((t) => t.id !== +id);
+  
+  const editedTalker = {
+    id: +id,
+    name,
+    age,
+    talk,
+  };
+  const newTalkers = [...filteredTalkersObj, editedTalker];
+  await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
+  return res.status(200).json(editedTalker);
 });
 
 app.listen(PORT, () => {
