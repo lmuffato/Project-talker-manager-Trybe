@@ -11,14 +11,14 @@ async function editTalker(req, res) {
        index = i;
     }
   });
-  const updateData = {
-    id: index,
+  const updateData = { id: index + 1,
     name,
     age, 
     talk,
   };
-  originalDatas[index] = updateData;
-  await writeInTalker(originalDatas);
+  const uptadeDatas = [...originalDatas];
+  uptadeDatas[index] = updateData;
+  await writeInTalker(uptadeDatas);
   res.status(200).json(updateData);
 }
 
