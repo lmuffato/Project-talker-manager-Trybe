@@ -12,6 +12,7 @@ const {
   checkWatched, checkRate, checkTalk,
   addTalker,
 } = require('./middlewares/postTalker');
+const upTalk = require('./middlewares/putTalkerById');
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
@@ -26,6 +27,8 @@ app.get('/talker/:id', getTalkerById);
 
 app.post('/login', checkEmail, checkPassword, generateToken);
 app.post('/talker', checkToken, checkName, checkAge, checkTalk, checkWatched, checkRate, addTalker);
+
+app.put('/talker/:id', checkToken, checkName, checkAge, checkTalk, checkWatched, checkRate, upTalk);
 
 app.listen(PORT, () => {
   console.log('Online');
