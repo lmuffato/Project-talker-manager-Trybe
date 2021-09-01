@@ -2,14 +2,11 @@ const readFileTalker = require('../services/readFileTalker.js');
 const writeInTalker = require('../services/writeInTalker.js');
 
 async function createTalker(req, res) {
-  const { name, age, watchedAt, rate } = req.body;
+  const { name, age, talk } = req.body;
   const newData = {
     name,
     age, 
-    talk: {
-      watchedAt,
-      rate,
-    },
+    talk,
   };
 
   const originalDatas = await readFileTalker();
