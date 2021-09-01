@@ -1,7 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const getAllTalkers = require('./middles/getAllTalkers');
+const getAllTalkers = require('./middlewares/getAllTalkers');
+const getTalkerByID = require('./middlewares/getTalkerByID');
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +17,7 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', getAllTalkers);
+app.get('/talker/:id', getTalkerByID);
 
 // ---------------------
 
