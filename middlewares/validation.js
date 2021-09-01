@@ -28,4 +28,15 @@ module.exports = {
 
     next();
   },
+
+  validateName(req, res, next) {
+    const { name } = req.body;
+    try {
+      checkLength({ name }, 3);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+
+    next();
+  },
 };
