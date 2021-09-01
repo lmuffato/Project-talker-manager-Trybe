@@ -10,6 +10,7 @@ const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
 // Requisito 1 :Crie o endpoint GET /talker
+// Requisito 2: Crie o endpoint GET /talker/:id
 app.use('/talker', talkerRouter);
 
 // não remova esse endpoint, e para o avaliador funcionar
