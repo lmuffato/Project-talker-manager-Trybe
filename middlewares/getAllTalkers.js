@@ -1,4 +1,4 @@
-const readFileTalker = require('../services/readFileTalkers.js');
+const readFileTalker = require('../services/readFileTalker.js');
 
 async function getAllTalkers(_req, res, next) {
   try {
