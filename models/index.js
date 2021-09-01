@@ -7,8 +7,8 @@ const data = async () => {
   return readData;
 };
 
-const addTalker = async (insertUser) => {
+const addEditTalker = async (insertUser) => {
   await fs.writeFile('./talker.json', JSON.stringify(insertUser));
 };
 
-module.exports = { data, addTalker };
+module.exports = { data, addEditTalker };

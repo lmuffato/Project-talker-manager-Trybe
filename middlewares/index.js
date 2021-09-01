@@ -48,7 +48,7 @@ const checkToken = rescue((req, res, next) => {
   next();
 });
 
-const checkName = (req, res, next) => {
+const checkName = rescue((req, res, next) => {
   const { name } = req.body;
   if (!name) {
     res.status(status.badRequest).json({ message: message.invalidName });
@@ -57,9 +57,9 @@ const checkName = (req, res, next) => {
     res.status(status.badRequest).json({ message: message.shortName });
   }
   next();
-};
+});
 
-const checkAge = (req, res, next) => {
+const checkAge = rescue((req, res, next) => {
   const { age } = req.body;
   if (!age) {
     res.status(status.badRequest).json({ message: message.ageNotFound });
@@ -68,9 +68,9 @@ const checkAge = (req, res, next) => {
     res.status(status.badRequest).json({ message: message.underAge });
   }
   next();
-};
+});
 
-const checkRate = (req, res, next) => {
+const checkRate = rescue((req, res, next) => {
   const { talk: { rate } } = req.body;
 
   if (rate < 1 || rate > 5) {
@@ -81,9 +81,9 @@ const checkRate = (req, res, next) => {
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
     next();
-};
+});
 
-const checkDate = (req, res, next) => {
+const checkDate = rescue((req, res, next) => {
   const { talk: { watchedAt } } = req.body;
   const formatData = /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/
   .test(watchedAt);
@@ -95,15 +95,15 @@ const checkDate = (req, res, next) => {
     res.status(status.badRequest).json({ message: message.invalidData });
   }
     next();
-};
+});
 
-const checkTalk = (req, res, next) => {
+const checkTalk = rescue((req, res, next) => {
   const { talk } = req.body;
    if (!talk) {
     res.status(status.badRequest).json({ message: message.invalidTalk });
   }
   next();
-};
+});
 
 module.exports = {
   checkAll,

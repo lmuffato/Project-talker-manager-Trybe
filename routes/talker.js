@@ -10,5 +10,6 @@ const route = express.Router();
 route.get('/talker', middlewares.checkAll, controller.getAll);
 route.get('/talker/:id', middlewares.getById, controller.getById);
 route.post('/talker', middlewaresCreate, controller.createTalker);
+route.put('/talker/:id', middlewaresCreate, controller.editUser);
 
 module.exports = route;
