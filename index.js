@@ -34,6 +34,7 @@ app.get('/talker', getAllTalkers);
 app.get('/talker/:id', getTalkerByID);
 app.post('/login', emailValidation, passwordValidation, tokenDispatch);
 app.post('/talker', validateToken, nameCheck, ageCheck, talkCheck, registerTalker);
+app.post('/talker/:id', validateToken);
 // ---------------------
 
 app.listen(PORT, () => {
