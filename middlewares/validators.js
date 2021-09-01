@@ -121,9 +121,11 @@ function validateToken(req, res, next) {
        .json({ message: 'Token não encontrado' });
   }
   
-  if(token.length !== tokenLength) return res
+  if (token.length !== tokenLength) {
+ return res
   .status(401)
-  .json({ message: 'Token inválido' });
+  .json({ message: 'Token inválido' }); 
+}
 
   next();
 }
@@ -136,5 +138,5 @@ module.exports = {
   validateTalk,
   validateDateFormat,
   validateRate,
-  validateToken
+  validateToken,
 };
