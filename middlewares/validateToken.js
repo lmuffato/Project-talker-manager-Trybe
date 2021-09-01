@@ -1,12 +1,12 @@
 const tokenValidator = require('../utils/tokenValidator');
 
 function validateToken(request, response, next) {
-  const { authorization } = req.headers;
+  const { authorization } = request.headers;
   const validate = tokenValidator(authorization);
-  if(validate === 0) {
+  if (validate === 0) {
     return next();
   }
-  return res.status(401).json(validate);
+  return response.status(401).json(validate);
 }
 
 module.exports = validateToken;
