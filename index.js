@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const getAllTalkers = require('./middlewares/getAllTalkers.js');
 const getTalkerById = require('./middlewares/getTalkerById.js');
+const { geraToken, validaEmail, validaPassword } = require('./middlewares/login');
 
 const app = express();
 app.use(bodyParser.json());
@@ -20,3 +21,4 @@ app.listen(PORT, () => {
 
 app.get('/talker', getAllTalkers);
 app.get('/talker/:id', getTalkerById);
+app.post('/login', validaEmail, validaPassword, geraToken);
