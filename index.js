@@ -8,7 +8,7 @@ const {
   emailValidation,
   passwordValidation,
   tokenDispatch
-} = require('./middlewares/login');
+} = require('./middlewares/checkLogin');
 
 const app = express();
 app.use(bodyParser.json());
