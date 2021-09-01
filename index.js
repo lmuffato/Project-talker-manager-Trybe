@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const randToken = require('rand-token');
 
 const app = express();
 app.use(bodyParser.json());
@@ -25,6 +26,57 @@ app.get('/talker/:id', async (req, res) => {
   }
 
   res.status(200).json(talker[0]);
+});
+
+const validationEmail = (email) => {
+  const re = /\S+@\S+\.\S+/;
+
+  if (!email || email === '') {
+    return {
+      message: 'O campo "email" é obrigatório',
+    };
+  }
+
+  if (!re.test(email)) {
+    return {
+      message: 'O "email" deve ter o formato "email@email.com"',
+    };
+  }
+
+  return 'Err';
+};
+
+const validationPassword = (password) => {
+  if (!password || password === '') {
+    return {
+      message: 'O campo "password" é obrigatório',
+    };
+  }
+
+  if (password.length < 6) {
+    return {
+      message: 'O "password" deve ter pelo menos 6 caracteres',
+    };
+  }
+
+  return 'err';
+};
+
+app.post('/login', async (req, res) => {
+  const { password, email } = req.body;
+  const resultEmail = validationEmail(email);
+  const resultPasswod = validationPassword(password);
+
+  if (resultEmail.message) {
+    return res.status(400).json(resultEmail);
+  }
+
+  if (resultPasswod.message) {
+    return res.status(400).json(resultPasswod);
+  }
+
+  const token = randToken.generate(16);
+  return res.status(200).json({ token });
 });
 
 const HTTP_OK_STATUS = 200;
