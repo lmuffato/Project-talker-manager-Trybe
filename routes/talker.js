@@ -11,5 +11,6 @@ route.get('/talker', middlewares.checkAll, controller.getAll);
 route.get('/talker/:id', middlewares.getById, controller.getById);
 route.post('/talker', middlewaresCreate, controller.createTalker);
 route.put('/talker/:id', middlewaresCreate, controller.editUser);
+route.delete('/talker/:id', middlewares.checkToken, controller.deleteUser);
 
 module.exports = route;

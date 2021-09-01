@@ -10,6 +10,7 @@ const status = {
 
 const message = {
   ageNotFound: 'O campo "age" é obrigatório',
+  deleteUser: 'Pessoa palestrante deletada com sucesso',
   emailNotFound: 'O campo "email" é obrigatório',
   invalidData: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
   incorrectEmail: 'O "email" deve ter o formato "email@email.com"',

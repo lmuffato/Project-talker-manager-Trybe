@@ -3,7 +3,7 @@
 const rescue = require('express-rescue');
 const crypto = require('crypto');
 const { data, addEditTalker } = require('../models');
-const { status } = require('../schema');
+const { status, message } = require('../schema');
 
 const getAll = rescue(async (_req, res) => {
   const getTalkers = await data();
@@ -38,12 +38,20 @@ const editUser = rescue(async (req, res) => {
   const dataTalker = await data();
   console.log(dataTalker);
   const dataForUpdate = { id: +userId, name, age, talk };
-  console.log();
+  console.log(dataForUpdate);
   const newDataTalker = dataTalker.map(({ id }) => (id === +userId ? dataForUpdate : id));
-  console.log();
+  console.log(newDataTalker);
   addEditTalker(newDataTalker);
-  console.log();
-  res.status(status.ok).json(dataForUpdate);
+  console.log(addEditTalker);
+  return res.status(status.ok).json(dataForUpdate);
+});
+
+const deleteUser = rescue(async (req, res) => {
+  const userId = req.params.id;
+  const dataTalker = await data();
+  const erase = dataTalker.find(({ id }) => id !== +userId);
+  addEditTalker(erase);
+  return res.status(status.ok).json({ message: message.deleteUser });
 });
 
 module.exports = {
@@ -52,4 +60,5 @@ module.exports = {
   loginUser,
   createTalker,
   editUser,
+  deleteUser,
 };
