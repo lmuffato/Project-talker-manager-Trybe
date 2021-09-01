@@ -1,9 +1,9 @@
 function tokenValidator(tk) {
   if (!tk) {
-    return false;
+    return { message: 'Token não encontrado' };
   }
   if (tk.length !== 16 || tk === '                ') {
-    return false;
+    return { message: 'Token inválido' };
   }
-  return true;
+  return 0;
 }
