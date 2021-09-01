@@ -7,7 +7,7 @@ const validateToken = (req, res, next) => {
 
 const validateName = (req, res, next) => {
   const { name } = req.body;
-  if (!name || name.length === '') {
+  if (!name) {
     return res.status(400).json({ message: 'O campo "name" é obrigatório' });
   }
   if (name.length < 3) {
@@ -21,7 +21,7 @@ const validateAge = (req, res, next) => {
   if (!age || typeof age !== 'number') {
     res.status(400).json({ message: 'O campo "age" é obrigatório' });
   }
-  if (parseInt(age, 10) < 18) {
+  if (age < 18) {
     return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
   }
   next();
@@ -29,7 +29,7 @@ const validateAge = (req, res, next) => {
 
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
-  if (!talk || !talk.watchedAt || talk.rate) {
+  if (!talk || !talk.watchedAt || !talk.rate) {
     return res.status(400).json({
        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
