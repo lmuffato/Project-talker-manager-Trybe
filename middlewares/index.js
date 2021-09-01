@@ -37,7 +37,7 @@ const checkLogin = rescue((req, res, next) => {
   next();
 });
 
-const checkToken = (req, res, next) => {
+const checkToken = rescue((req, res, next) => {
   const { authorization: token } = req.headers;
   if (!token) {
     res.status(status.unauthorized).json({ message: message.tokenNotFound });
@@ -46,7 +46,7 @@ const checkToken = (req, res, next) => {
     res.status(status.unauthorized).json({ message: message.invalidToken });
   }
   next();
-};
+});
 
 const checkName = (req, res, next) => {
   const { name } = req.body;
@@ -61,7 +61,6 @@ const checkName = (req, res, next) => {
 
 const checkAge = (req, res, next) => {
   const { age } = req.body;
-// ora o teste reconhece isso, e ora o teste não reconhece = quando tiver tempo, ver com calma esse erro
   if (!age) {
     res.status(status.badRequest).json({ message: message.ageNotFound });
   }

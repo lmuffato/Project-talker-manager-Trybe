@@ -10,26 +10,26 @@ const getAll = rescue(async (_req, res) => {
   res.status(status.ok).json(getTalkers);
 });
 
-const getById = async (req, res) => {
+const getById = rescue(async (req, res) => {
   const getParams = req.params.id;
   const dataTalker = await data();
   const findTalker = dataTalker.find(({ id }) => id === +getParams);
   res.status(status.ok).json(findTalker);
-};
+});
 
-const loginUser = (_req, res) => {
+const loginUser = rescue((_req, res) => {
   const token = crypto.randomBytes(8).toString('hex');
   res.status(status.ok).json({ token });
-};
+});
 
-const createTalker = async (req, res) => {
+const createTalker = rescue(async (req, res) => {
   const { name, age, talk } = req.body;
   const dataTalker = await data();
   const add = { id: dataTalker.length + 1, name, age, talk };
   const dataUsers = [...dataTalker, add];
   addTalker(dataUsers);
   res.status(status.created).json(add);
-};
+});
 
 module.exports = {
   getAll,
