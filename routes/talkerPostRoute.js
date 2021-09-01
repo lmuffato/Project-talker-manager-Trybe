@@ -14,28 +14,25 @@ const invalidToken = {
     message: 'Token inválido',
   };
 
-// const getTalkers = () => {
-//     const data = fs.existsSync(filePath)
-//     ? fs.readFileSync(filePath)
-//     : [];
-
-//     try {
-//         return JSON.parse(data);
-//     } catch (error) {
-//         return [];
-//     }
-// };
-
-const getTalker = (req, res) => {
-    const datas = fs.readFileSync(filePath);
-    const answer = JSON.parse(datas);
-    const defAnswer = answer.find(({ id }) => id === parseInt(req.params.id, 10));
-    const message = {
-        message: 'Pessoa palestrante não encontrada',
-      };
-      if (!defAnswer) return res.status(404).send(message);
-      if (defAnswer) return res.status(200).send(defAnswer);
-};
+  const editingTalker = async (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+    let allTalkers;
+    try {
+      allTalkers = JSON.parse(await readFile(filePath, 'utf-8'));
+    } catch (error) {
+      console.error(error);
+    }
+    const othersTalkers = allTalkers.filter((talker) => talker.id !== parseInt(id, 10));
+  
+    const theTalker = { name, age, talk, id: Number(id) };
+  
+    othersTalkers.push(theTalker);
+  
+    await writeFile(filePath, JSON.stringify(othersTalkers));
+  
+    return res.status(200).json(theTalker);
+  };
 
 const noneEmail = {
     message: 'O campo "email" é obrigatório',
@@ -185,6 +182,8 @@ const talkerPostRoute = (app) => {
     .post(tokenValidation, validatingName, validatingAge, validatingTalk,
       validatingDate, validatingRate, registeringTalker);
     app.route('/talker/:id')
+    .put(tokenValidation, validatingName, validatingAge, validatingTalk,
+      validatingDate, validatingRate, editingTalker)
     .delete((req, res) => {
       deleteTalker(req, res);
     });
