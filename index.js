@@ -13,6 +13,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+// Requirement 01
 app.get('/talker', async (_req, res) => {
   try {
     const file = await fs.readFile('talker.json');
