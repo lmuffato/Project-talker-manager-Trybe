@@ -108,7 +108,7 @@ router.put('/:id', tokenValidation, nameValidation, ageValidation, talkValidatio
     name,
     age,
     talk,
-    id: Number(id)
+    id: Number(id),
   };
 
   talkerById.push(updatetalker);
