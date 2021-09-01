@@ -1,5 +1,4 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const { errorHandler } = require('./errors/client');
 const initdom = require('./domain');
 const initroutes = require('./routes');
@@ -41,7 +40,8 @@ module.exports = class Server {
 
     preRoutesMiddlewares = () => {
         this.app.disable(ETAG);
-        this.app.use(bodyParser.json());
+        this.app.use(express.json());
+        this.app.use(express.urlencoded({ extended: true }));
     }
 
     posRoutesMiddlewares = () => {
