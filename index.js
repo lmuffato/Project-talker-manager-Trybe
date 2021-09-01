@@ -2,6 +2,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const talkerRouter = require('./routers/talkers');
+const loginRouter = require('./routers/login');
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,6 +14,7 @@ app.get('/', (_request, response) => {
   response.status(200).send();
 });
 
+app.use('/login', loginRouter);
 app.use('/talker', talkerRouter);
 
 app.listen(PORT, () => {
