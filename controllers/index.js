@@ -54,6 +54,14 @@ const deleteUser = rescue(async (req, res) => {
   return res.status(status.ok).json({ message: message.deleteUser });
 });
 
+const searchTalk = rescue(async (req, res) => {
+  const queryParam = req.query.q;
+  const dataTalker = await data();
+  const search = dataTalker.filter((talker) => 
+      talker.name.toLowerCase().includes(queryParam.toLowerCase()));
+  return res.status(status.ok).json(search);
+});
+
 module.exports = {
   getAll,
   getById,
@@ -61,4 +69,5 @@ module.exports = {
   createTalker,
   editUser,
   deleteUser,
+  searchTalk,
 };
