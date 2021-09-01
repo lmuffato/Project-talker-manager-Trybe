@@ -38,9 +38,8 @@ app.get(
   '/talker/:id',
   rescue(async (req, res) => {
     const fileTalkers = await getAllTalkers();
-    console.log(fileTalkers);
     const { id } = req.params;
-    const talker = fileTalkers.find((t) => t.id === parseFloat(id));
+    const talker = fileTalkers.find((t) => t.id === parseInt(id, 10));
     
     if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 
@@ -70,8 +69,24 @@ app.post(
     fileTalkers.push({ name, age, id, talk });
 
     writeTalker(fileTalkers);
-    
+
     res.status(HTTP_CREATED_STATUS).json({ name, age, id, talk });
+  }),
+);
+
+app.delete(
+  '/talker/:id',
+  verifiToken,
+  rescue(async (req, res) => {
+    const fileTalkers = await getAllTalkers();
+    const { id } = req.params;
+    const deletedTalker = fileTalkers.findIndex((t) => t.id === parseInt(id, 10));
+
+    fileTalkers.splice(deletedTalker, 1);
+
+    writeTalker(fileTalkers);
+
+    res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
   }),
 );
 
