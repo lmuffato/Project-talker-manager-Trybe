@@ -23,7 +23,17 @@ async function write(newFile) {
 
 function generateToken() {
 return crypto.randomBytes(8).toString('hex');
-} 
+}
+function maxId(arr) {
+  const maxID = arr.reduce(
+     (accumulator, currentValue) => {
+       console.log(accumulator);
+       console.log(currentValue);
+       return accumulator.id > currentValue.id ? accumulator.id : currentValue.id;
+     },
+ );
+ return maxID;
+}
 
 const app = express();
 app.use(bodyParser.json());
@@ -64,7 +74,8 @@ validateTalk, validateName, validateToken, validateWatchedAtAndRate, validateAge
    async (req, res) => {
   const { name, age, talk } = req.body;
   const data = await read();
-  const id = 5;
+  const max = maxId(data) || 0;
+  const id = max + 1;
   const newObj = ({ name, age, id, talk });
   data.push(newObj);
   write(data);
@@ -72,7 +83,23 @@ validateTalk, validateName, validateToken, validateWatchedAtAndRate, validateAge
   return res.status(201).json(newObj);
 });
 
+app.put('/talker/:id',
+validateToken, validateTalk, validateName, validateWatchedAtAndRate, validateAge, 
+async (req, res) => {
+  const { id } = req.params;
+  const data = await read();
+  const { name, age, talk } = req.body;
+  const talkerIndex = data.findIndex((talker) => talker.id === +id);
+  if (talkerIndex === -1) return res.status(404).json({ message: 'Talker not found!' });
+
+  data[talkerIndex].name = name;
+  data[talkerIndex].age = age;
+  data[talkerIndex].talk = talk;
+  write(data);
+
+  res.status(200).json(data[talkerIndex]);
+});
+
 app.listen(PORT, async () => {
-  // console.log(await read());
   console.log('Online');
 });
