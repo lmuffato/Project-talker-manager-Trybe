@@ -1,4 +1,5 @@
 const { ddmmyyValidator } = require('./dateFormatValidators');
+const rateValidator = require('./rateValidator');
 
 function nameValidator(name) {
   if (!name || name === '') {
@@ -24,18 +25,19 @@ function ageValidator(age) {
 
 function talkValidator(talk) {
   const { watchedAt, rate } = talk;
-  if (!talk || !watchedAt || !rate ) {
+  if (!watchedAt || !rate) {
     return {
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     };
   }
-  
+
   if (!ddmmyyValidator(watchedAt)) {
     return { message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' };
   }
-
-  if (rate < 1 || rate > 5) {
-    return { message: 'O campo "rate" deve ser um inteiro de 1 à 5' };
+  
+  const rateCheck = rateValidator(rate);
+  if (rateCheck !== 0) {
+    return rateCheck;
   }
 
   return 0;
