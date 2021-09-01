@@ -90,14 +90,15 @@ router.put('/:id', talkerMiddlewares, rescue(async (req, res) => {
     talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
   }
   talkers[talkerIndex] = { ...talkers[talkerIndex], name, age, talk };
-  await setUpdate(talkers);
+
   res.status(HTTP_OK_STATUS)
-  .json({
-    id: parseFloat(id),
-    name,
-    age,
-    talk,
-  });
+    .json({
+      id: parseFloat(id),
+      name,
+      age,
+      talk,
+    });
+  setUpdate(talkers);
 }));
 
 router.delete('/:id', validateToken, rescue(async (req, res) => {

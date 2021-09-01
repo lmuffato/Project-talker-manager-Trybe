@@ -35,7 +35,12 @@ const validateName = (req, res, next) => {
 const validateAge = (req, res, next) => {
   const { age } = req.body;
 
-  if (!age || parseFloat(age) % 1 !== 0) {
+  if (!age) {
+    res.status(HTTP_NOTOK_STATUS)
+      .json({ message: 'O campo "age" é obrigatório' });
+  }
+
+  if (typeof age !== 'number') {
     res.status(HTTP_NOTOK_STATUS)
       .json({ message: 'O campo "age" é obrigatório' });
   }
