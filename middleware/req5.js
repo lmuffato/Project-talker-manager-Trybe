@@ -4,7 +4,7 @@ const app = express();
 
 const bodyParser = require('body-parser');
 const rescue = require('express-rescue');
-const fs = require('../utils/fileSystem');
+const fs = require('../models/fileSystem');
 
 app.use(bodyParser.json());
 
@@ -17,13 +17,10 @@ const editTalker = rescue(async (request, response) => {
   const { name, age, talk } = request.body;
   
   const talkers = await fs.getTalker();
-  console.log(talkers);
 
   const find = talkers.find(((obj) => obj.id === +id));
 
   talkers[find] = { ...talkers[find], name, age, id: +id, talk };
-
-  console.log(talkers);
 
   await fs.setTalker([talkers, talkers[find]]);
   

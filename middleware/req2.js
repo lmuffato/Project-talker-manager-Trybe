@@ -1,5 +1,5 @@
 const rescue = require('express-rescue');
-const fs = require('../utils/fileSystem');
+const fs = require('../models/fileSystem');
 
 const { getTalker } = fs;
 const HTTP_OK_STATUS = 200;

@@ -4,7 +4,7 @@ const app = express();
 
 const bodyParser = require('body-parser');
 const rescue = require('express-rescue');
-const fs = require('../utils/fileSystem');
+const fs = require('../models/fileSystem');
 
 app.use(bodyParser.json());
 
