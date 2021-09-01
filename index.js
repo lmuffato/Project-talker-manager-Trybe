@@ -34,7 +34,7 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', async (req, res) => {
   const parsedTalker = await fileReader();
-  return res.status(HTTP_OK_STATUS).json(parsedTalker || [])
+  return res.status(HTTP_OK_STATUS).json(parsedTalker || []);
 });
 
 app.get('/talker/search', validateToken, async (req, res) => {
