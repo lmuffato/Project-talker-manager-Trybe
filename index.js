@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const fileReader = require('./fileManager');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,24 +23,22 @@ app.get('/', (_request, response) => {
     res.status(500).json({ error: e.message });
   }
   next();
-}
+} */
 
-app.get('/talker', getDados, (req, res) => {
-   try { 
-       res.status(200).json(JSON.parse(getDados));
-} catch (e) {
-  res.status(500).json({ message: 'Pessoa palestrante não encontrada' });
-} 
-}); */
-// at1
 app.get('/talker', async (req, res) => {
+  const talkers = await fileReader();
+  res.status(200).json(talkers || []);
+});
+
+// at1
+/* app.get('/talker', async (req, res) => {
   try {
       const response = await fs.readFile('./talker.json', 'utf-8');
       res.status(200).json(JSON.parse(response));
   } catch (e) {
     res.status(500).json({ error: e.message });
   }
-});
+}); */
 // at2
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
@@ -72,17 +71,17 @@ app.post('/login', (req, res, next) => {
       next();
   },
   (req, res, next) => {
-  const { password } = req.body;
-  if (!password || password === '') {
-    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
-  }
-  if (password.length < 6) {
-  return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
-  }
-    next();
-  },
+    const { password } = req.body;
+    if (!password || password === '') {
+      return res.status(400).json({ message: 'O campo "password" é obrigatório' });
+    }
+    if (password.length < 6) {
+    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+    }
+      next();
+    },
   (req, res) => {
-    res.status(200).json({ token: '7mqaVRXJSp886CGr' }); 
+  res.status(200).json({ token: '7mqaVRXJSp886CGr' }); 
 });
 
 app.listen(PORT, () => {
