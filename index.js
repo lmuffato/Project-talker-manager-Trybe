@@ -39,6 +39,14 @@ const writeTalker = async (data) => {
   await fs.writeFile('talker.json', JSON.stringify(data));
 };
 
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  console.log(q);
+  const talker = await readTalker();
+  const filteredTalker = talker.filter((t) => t.name.includes(q));
+  return res.status(200).json(filteredTalker);
+});
+
 app.get('/talker', async (_req, res) => {
   try {
     const talker = await readTalker();
