@@ -17,14 +17,17 @@ const editTalker = rescue(async (request, response) => {
   const { name, age, talk } = request.body;
   
   const talkers = await fs.getTalker();
+  console.log(talkers);
 
-  const find = talkers.findIndex(((obj) => obj.id === +id));
+  const find = talkers.find(((obj) => obj.id === +id));
 
-  talkers[find] = { ...talkers[find], name, age, id, talk };
+  talkers[find] = { ...talkers[find], name, age, id: +id, talk };
+
+  console.log(talkers);
+
+  await fs.setTalker([talkers, talkers[find]]);
   
-  await fs.setTalker(talkers[find]);
-  
-  response.status(HTTP_OK_STATUS).json([talkers[id]]);
+  response.status(HTTP_OK_STATUS).json(talkers[find]);
 });
 
 module.exports = editTalker;
