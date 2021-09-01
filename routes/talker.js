@@ -16,7 +16,7 @@ const {
   createTalker,
   updateTalker,
   deleteTalker,
-} = require('../middlewares/createNewTalker');
+} = require('../middlewares/talker');
 
 const HTTP_OK_STATUS = 200;
 const HTTP_CREATED_STATUS = 201;

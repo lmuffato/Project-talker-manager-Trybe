@@ -2,6 +2,10 @@ const fs = require('fs').promises;
 
 const HTTP_BAD_REQUEST_STATUS = 400;
 const HTTP_UNAUTHORIZED_STATUS = 401;
+const TALKERS_JSON = './talker.json';
+
+const getTalkers = async () => JSON
+  .parse(await fs.readFile(TALKERS_JSON, { encoding: 'utf-8' }));
 const validateToken = (request, response, next) => {
   const { authorization } = request.headers;
   if (!authorization || authorization === '') {
@@ -107,7 +111,7 @@ const validateTalkInfos = (request, response, next) => {
 
 const createTalker = async (request, _response, next) => {
   const { name, age, talk } = request.body;
-  const talkers = await JSON.parse(await fs.readFile('./talker.json', { encoding: 'utf-8' }));
+  const talkers = await getTalkers();
   const id = talkers.reduce((maxId, talker) => (
     (talker.id > maxId) ? talker.id : maxId),
     talkers[0].id) + 1;
@@ -118,14 +122,14 @@ const createTalker = async (request, _response, next) => {
     talk,
   }];
   request.userId = id;
-  await fs.writeFile('./talker.json', JSON.stringify(newTalker));
+  await fs.writeFile(TALKERS_JSON, JSON.stringify(newTalker));
   next();
 };
 
 const updateTalker = async (request, _response, next) => {
   const { id } = request.params;
   const { name, age, talk } = request.body;
-  const talkers = await JSON.parse(await fs.readFile('./talker.json', { encoding: 'utf-8' }));
+  const talkers = await getTalkers();
   const updatedTalker = {
     id: Number(id),
     name,
@@ -135,15 +139,15 @@ const updateTalker = async (request, _response, next) => {
   const updatedFile = talkers.filter((talker) => talker.id !== id);
   updatedFile.push(updatedTalker);
   request.updatedTalker = updatedTalker;
-  await fs.writeFile('./talker.json', JSON.stringify(updatedFile));
+  await fs.writeFile(TALKERS_JSON, JSON.stringify(updatedFile));
   next();
 };
 
 const deleteTalker = async (request, _response, next) => {
   const { id } = request.params;
-  const talkers = await JSON.parse(await fs.readFile('./talker.json', { encoding: 'utf-8' }));
+  const talkers = await getTalkers();
   await fs
-    .writeFile('./talker.json', JSON
+    .writeFile(TALKERS_JSON, JSON
       .stringify(talkers
         .filter((talker) => talker.id !== +id)));
   next();

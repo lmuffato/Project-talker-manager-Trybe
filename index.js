@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const routerTalker = require('./routes/talker');
-const { validateEmail, validatePassword, getToken } = require('./middlewares/authMiddleware');
+const { validateEmail, validatePassword, getToken } = require('./middlewares/auth');
 
 const app = express();
 app.use(bodyParser.json());
