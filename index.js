@@ -94,7 +94,7 @@ async (req, res) => {
   data[talkerIndex].talk = talk;
   write(data);
 
-  res.status(HTTP_OK_STATUS.json(data[talkerIndex]));
+  res.status(HTTP_OK_STATUS).json(data[talkerIndex]);
 });
 
 app.delete('/talker/:id', validateToken, async (req, res) => {
@@ -105,8 +105,7 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   data.splice(talkerIndex, 1);
   write(data);
 
-  res.status(HTTP_OK_STATUS)
-  .json({ message: 'Pessoa palestrante deletada com sucesso' });
+  res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 app.listen(PORT, async () => {
