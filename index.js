@@ -7,7 +7,7 @@ const getTalkerByID = require('./middlewares/getTalkerByID');
 const {
   emailValidation,
   passwordValidation,
-  tokenDispatch
+  tokenDispatch,
 } = require('./middlewares/checkLogin');
 
 const app = express();
