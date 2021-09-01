@@ -1,8 +1,11 @@
 const express = require('express');
 
-const { getTalkers, getTalker } = require('../service/TalkerService');
+const { getTalkers, getTalker, registerTalker } = require('../service/TalkerService');
+const { tokenIsValid } = require('../service/LoginService');
 
-const { HTTP_OK_STATUS, HTTP_NOT_FOUND_STATUS } = require('../config/Server');
+const {
+  HTTP_OK_STATUS, HTTP_NOT_FOUND_STATUS, HTTP_UNAUTHORIZED, HTTP_BAD_REQUEST, HTTP_CREATED,
+} = require('../config/Server');
 const { ROUTE_BASE, ROUTE_TALKER_GET_BY_ID } = require('../config/Routes');
 const { SRC_TALKER_DATA } = require('../config/Files');
 
@@ -20,9 +23,33 @@ talkerController.get(ROUTE_TALKER_GET_BY_ID, async (request, response) => {
   const talker = await getTalker(id, SRC_TALKER_DATA);
   const messageError = { message: 'Pessoa palestrante não encontrada' };
 
-  if (!talker) return response.status(HTTP_NOT_FOUND_STATUS).json(messageError);
+  if (!talker) {
+    response.status(HTTP_NOT_FOUND_STATUS).json(messageError);
+    return;
+  }
 
   response.status(HTTP_OK_STATUS).json(talker);
+});
+
+talkerController.post(ROUTE_BASE, async (request, response) => {
+  const { authorization } = request.headers;
+  const talker = request.body;
+
+  try {
+    tokenIsValid(authorization);
+  } catch (error) {
+    const { message } = error;
+    response.status(HTTP_UNAUTHORIZED).json({ message });
+    return;
+  }
+
+  try {
+    const talkerRegistered = await registerTalker(talker);
+    response.status(HTTP_CREATED).json(talkerRegistered);
+  } catch (error) {
+    const { message } = error;
+    response.status(HTTP_BAD_REQUEST).json({ message });
+  }
 });
 
 module.exports = talkerController;
