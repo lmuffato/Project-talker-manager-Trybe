@@ -4,6 +4,12 @@ const bodyParser = require('body-parser');
 const getTalkersList = require('./middlewares/getTalkersList');
 const getTalkerId = require('./middlewares/getTalkerId');
 const { checkEmail, checkPassword } = require('./middlewares/login');
+const {
+  checkAuth,
+  checkName,
+  checkAge,
+  checkTalkWatchDate,
+  checkTalkRate } = require('./middlewares/createTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,6 +27,8 @@ app.get('/talker', getTalkersList);
 app.get('/talker/:id', getTalkerId);
 
 app.post('/login', checkEmail, checkPassword);
+
+app.post('/talker', checkAuth, checkName, checkAge, checkTalkWatchDate, checkTalkRate);
 
 app.use((err, _req, res, _next) => {
   console.log('Passou pelo middleware');
