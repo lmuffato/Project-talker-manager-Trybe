@@ -6,7 +6,7 @@ const login = require('./middleware/req3');
 const createTalker = require('./middleware/req4');
 const editTalker = require('./middleware/req5');
 const deleteTalker = require('./middleware/req6');
-// const searchTalker = require('./middleware/req7');
+const searchTalker = require('./middleware/req7');
 
 const validations = require('./validations/validations');
 
@@ -31,6 +31,9 @@ app.get('/talker', getAllTalkers);
 // requisito 4
 app.post('/talker', validations, createTalker);
 
+// requisito 7
+app.get('/talker/search', validateToken, searchTalker);
+
 // requisito 2
 app.get('/talker/:id', getTalkerById);
 
@@ -39,9 +42,6 @@ app.put('/talker/:id', validations, editTalker);
 
 // requisito 6
 app.delete('/talker/:id', validateToken, deleteTalker);
-
-// requisito 7
-// app.get('/talker/search', validateToken, searchTalker);
 
 // requisito 3
 app.post('/login', validateEmail, validatePassword, login);
