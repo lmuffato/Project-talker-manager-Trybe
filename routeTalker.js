@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs').promises;
 const ultility = require('./middlewares');
+const createTalker = require('./createTalker');
 
 const router = express.Router({
   mergeParams: true,
@@ -14,19 +15,7 @@ router.get('/', async (_req, res) => {
   res.status(200).json(talkers);
 });
 
-router.post('/', ultility, async (req, res) => {
-  const { name, age, talk } = req.body;
-  const talker = JSON.parse(await peopleRegister());
-  const newTalker = {
-    id: talker.length + 1,
-    name,
-    age,
-    talk,
-  };
-  talker.push(newTalker);
-  await fs.writeFile('talker.json', JSON.stringify(talker));
-  res.status(201).json(newTalker);
-});
+router.post('/', ultility, createTalker);
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
