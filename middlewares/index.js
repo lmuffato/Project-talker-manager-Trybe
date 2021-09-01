@@ -85,7 +85,19 @@ talkers[talkerIndex].talk = talk;
 writeFile(talkers);
 
 return res.status(200).json(talkers[talkerIndex]);
-}); 
+});
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readFile();
+  const talkerIndex = talkers.findIndex((talker) => talker.id === Number(id));
+  if (talkerIndex === -1) return res.status(404).json({ message: 'ID não encontrado' });
+  
+  talkers.splice(talkerIndex, 1);
+  writeFile(talkers);
+  
+  return res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  }); 
 
 module.exports = {
   app,
