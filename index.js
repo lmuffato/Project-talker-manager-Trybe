@@ -18,9 +18,25 @@ const palestrante = async () => {
   return JSON.parse(talker);
 };
 
+const findIdPalestrante = async (id) => {
+  const findId = parseInt(id, 10);
+  const arrayPalestrante = await palestrante();
+  const talkerID = arrayPalestrante.find((talker) => talker.id === findId);
+  return talkerID;
+};
+
 app.get('/talker', async (_req, res) => {
   const talker = await palestrante();
   return res.status(200).json(talker);
+});
+
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const findId = await findIdPalestrante(id);
+  if (!findId) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  res.status(200).json(findId);
 });
 
 app.listen(PORT, () => {
