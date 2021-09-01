@@ -35,13 +35,47 @@ const validaIdade = (req, res, next) => {
   next();
 };
 
-const validaTalk = (req, res, next) => {
+const validaTalkDeclarado = (req, res, next) => {
+  const { talk } = req.body;
+  
+  if (!talk) {
+    return res.status(400)
+      .json(
+        { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
+      );
+  }
+
+  next();
+};
+
+const validaWatchedAt = (req, res, next) => {
   const watchedAtRegex = /\d{2}[/]\d{2}[/]\d{4}/;
   const { talk } = req.body;
-  const { watchedAt, rate } = talk;
+  const { watchedAt } = talk;
+
+  if (!watchedAt || watchedAt === '') {
+    return res.status(400)
+      .json(
+        { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
+      );
+  }
 
   if (!watchedAtRegex.test(watchedAt)) { 
     return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+
+  next();
+};
+
+const validaRate = (req, res, next) => {
+  const { talk } = req.body;
+  const { rate } = talk;
+
+  if (!rate || rate === '') {
+    return res.status(400)
+      .json(
+        { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
+      );
   }
 
   if (+rate < 1 || +rate > 5) {
@@ -55,7 +89,9 @@ const validationTalker = [
   validaToken,
   validaNome,
   validaIdade,
-  validaTalk,
+  validaTalkDeclarado,
+  validaWatchedAt,
+  validaRate,
 ];
 
 module.exports = validationTalker;
