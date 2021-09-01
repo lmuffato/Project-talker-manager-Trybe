@@ -138,7 +138,7 @@ route.get('/:id', async (req, res) => {
   const person = await findPerson(id);
   if (!person) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 
-  res.status(200).json(person);
+  return res.status(200).json(person);
 });
 
 route.post('/', async (req, res) => {
