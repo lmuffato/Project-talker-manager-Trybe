@@ -1,9 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const fs = require('fs').promises;
 const routerLogin = require('./routerLogin');
 const routerPostTalker = require('./postTalker');
 const fileTalker = require('./fileTalker');
 const putTalker = require('./putTalker');
+const { validateToken } = require('./middlewares');
 
 const app = express();
 app.use(bodyParser.json());
@@ -44,6 +46,16 @@ app.use('/talker', routerPostTalker);
 
 // Requirement 05
 app.use('/talker', putTalker);
+
+// Requirement 06
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const file = await fileTalker();
+  const deleteFile = file.findIndex((elem) => elem.id === Number(id));
+  file.splice(1, deleteFile);
+   await fs.writeFile('talker.json', JSON.stringify(file));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
 
 app.listen(PORT, () => {
   console.log('Online');
