@@ -21,3 +21,5 @@ app.listen(PORT, () => {
 app.use('/talker', talkerRouter);
 
 app.use('/login', loginRouter);
+
+app.use('*', (req, res) => { res.status(404).json({ message: 'Page not found' }); });
