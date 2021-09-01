@@ -54,7 +54,7 @@ app.get('/talker/:id', async (req, res) => {
 app.post('/talker', validateToken, talkerValidators, async (req, res) => {
   const { name, age, talk } = req.body;
   
-  const parsedTalkers = fileReader();
+  const parsedTalkers = await fileReader();
 
   const talker = {
     id: parsedTalkers.length + 1,
