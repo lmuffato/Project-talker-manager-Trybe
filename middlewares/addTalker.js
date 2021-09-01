@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 const fs = require('fs');
 
 const addTalker = (req, res) => {

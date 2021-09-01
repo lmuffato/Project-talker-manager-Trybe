@@ -1,15 +1,10 @@
-/* eslint-disable max-lines-per-function */
-function validateRate(rate) {
-  return (+rate < 1 || +rate > 5);
-}
+const { checkTalk, validateRate } = require('../services/checkTalk');
 
-// eslint-disable-next-line max-lines-per-function
-// eslint-disable-next-line complexity
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
   const regx = /^([0]?[1-9]|[1|2][0-9]|[3][0|1])[./-]([0]?[1-9]|[1][0-2])[./-]([0-9]{4}|[0-9]{2})$/;
 
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (checkTalk(talk)) {
     return res.status(400).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
