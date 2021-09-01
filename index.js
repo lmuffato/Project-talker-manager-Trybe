@@ -14,6 +14,7 @@ const {
   validateAge,
   validateTalk,
   addTalker,
+  editTalker,
 } = middlewares;
 
 const app = express();
@@ -29,6 +30,8 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', getTalkers);
 app.get('/talker/:id', findTalkerById);
+
+app.put('/talker/:id', validateToken, validateName, validateAge, validateTalk, editTalker);
 
 app.post('/login', validateEmail, validatePassword, generateToken);
 app.post(

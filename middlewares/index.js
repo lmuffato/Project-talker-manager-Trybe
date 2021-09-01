@@ -8,6 +8,7 @@ const validateName = require('./validadeName');
 const validateAge = require('./validateAge');
 const validateTalk = require('./validateTalk');
 const addTalker = require('./addTalker');
+const editTalker = require('./editTalker');
 
 module.exports = {
   getTalkers,
@@ -20,4 +21,5 @@ module.exports = {
   validateAge,
   validateTalk,
   addTalker,
+  editTalker,
 };

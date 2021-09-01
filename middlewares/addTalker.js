@@ -1,17 +1,13 @@
 const fs = require('fs');
+const talkerNew = require('../services/newTalker');
 
 const addTalker = (req, res) => {
   const { name, age, talk } = req.body;
-  const { watchedAt, rate } = talk;
 
   const talker = JSON.parse(fs.readFileSync('./talker.json', 'UTF-8'));
-  
-  const newTalker = {
-    name,
-    age,
-    id: talker.length + 1,
-    talk: { watchedAt, rate },
-  };
+  const id = talker.length + 1;
+
+  const newTalker = talkerNew(name, age, id, talk);
 
   talker.push(newTalker);
 
