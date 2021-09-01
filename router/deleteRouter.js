@@ -3,23 +3,10 @@ const fs = require('fs').promises;
 
 const router = Router();
 
-const findToken = (req, res, next) => {
-  const { authorization } = req.headers;
+const functions = require('./functions');
 
-  if (!authorization) {
-    return res.status(401).json({ message: 'Token não encontrado' });
-  }
-  next();
-};
-
-const checkToken = (req, res, next) => {
-  const { authorization } = req.headers;
-
-  if (authorization.length !== 16) {
-    return res.status(401).json({ message: 'Token inválido' });
-  }
-  next();
-};
+const { findToken,
+  checkToken } = functions;
 
 router.delete('/:id', findToken, checkToken, async (req, res) => {
   const { id } = req.params;

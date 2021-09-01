@@ -60,30 +60,30 @@ app.get('/talker', async (_req, res) => {
 
 // 2 - Crie o endpoint GET /talker/:id
 
-const talkerIdRouter = require('./talkerIdRouter');
+const talkerIdRouter = require('./router/talkerIdRouter');
 
 app.use('/talker/', talkerIdRouter);
 
 // 3 - Crie o endpoint POST /login
 
-const loginRouter = require('./loginRouter');
+const loginRouter = require('./router/loginRouter');
 
 app.use('/login', loginRouter);
 
 // 4 - Crie o endpoint POST /talker
 
-const talkerRouter = require('./talkerRouter');
+const talkerRouter = require('./router/talkerRouter');
 
 app.use('/talker', talkerRouter);
 
 // 5 - Crie o endpoint PUT /talker/:id
 
-const editRouter = require('./editRouter');
+const editRouter = require('./router/editRouter');
 
 app.use('/talker/', editRouter);
 
 // 6 - Crie o endpoint DELETE /talker/:id
 
-const deleteRouter = require('./deleteRouter');
+const deleteRouter = require('./router/deleteRouter');
 
 app.use('/talker/', deleteRouter);

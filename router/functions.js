@@ -1,7 +1,50 @@
-const { Router } = require('express');
-const fs = require('fs').promises;
+const verifyEmailExists = (req, res, next) => {
+  const { email } = req.body;
+  
+  if (!email) {
+    return res.status(400).json({ message: 'O campo "email" é obrigatório' });
+  } 
+    next();
+};
 
-const router = Router();
+const verifyEmailPattern = (req, res, next) => {
+  const { email } = req.body;
+  const emailPattern = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+  
+  if (emailPattern.test(email) === false) {
+    return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
+  }
+    next();
+};
+
+const verifyPasswordExists = (req, res, next) => {
+  const { password } = req.body;
+  
+  if (!password) {
+    return res.status(400).json({ message: 'O campo "password" é obrigatório' });
+  }
+    next();
+};
+
+const verifyPasswordLenght = (req, res, next) => {
+  const { password } = req.body;
+  
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+  } 
+    next();
+};
+
+const generateToken = () => {
+  const length = 16;
+  const a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
+  const b = [];  
+  for (let i = 0; i < length; i += 1) {
+      const j = (Math.random() * (a.length - 1)).toFixed(0);
+      b[i] = a[j];
+  }
+  return b.join('');
+};
 
 const findToken = (req, res, next) => {
   const { authorization } = req.headers;
@@ -104,27 +147,20 @@ const checkWhachedAt = (req, res, next) => {
   next();
 };
 
-router.post('/', 
-findToken, checkToken, 
-findName, checkName, 
-findAge, checkAge, 
-findTalk, checkTalk,
-checkRate, checkWhachedAt, async (req, res) => {
-const { name, age, talk: { watchedAt, rate } } = req.body;
-const content = await fs.readFile('./talker.json');
-const talker = JSON.parse(content);
-const newTalker = {
-  name,
-  age,
-  id: (talker.length + 1),
-  talk: {
-    rate,
-    watchedAt,
-  },
+module.exports = {
+  verifyEmailExists, 
+  verifyEmailPattern, 
+  verifyPasswordExists, 
+  verifyPasswordLenght, 
+  generateToken,
+  findToken,
+  checkToken,
+  findName,
+  checkName,
+  findAge,
+  checkAge,
+  findTalk,
+  checkTalk,
+  checkRate, 
+  checkWhachedAt,
 };
-  talker.push(newTalker);
-  await fs.writeFile('./talker.json', JSON.stringify(talker));
-  res.status(201).json(newTalker);
-});
-
-module.exports = router;
