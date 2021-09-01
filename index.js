@@ -86,6 +86,18 @@ async (req, res) => {
   return res.status(200).json(talker[talkerIndex]);
 });
 
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const talker = await readTalker();
+  const talkerIndex = talker.findIndex((t) => t.id === +id);
+  if (talkerIndex === -1) {
+    return res.status(404);
+  }
+  talker.splice(talkerIndex, 1);
+  writeTalker(talker);
+  return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
     const talker = await readTalker();
