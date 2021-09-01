@@ -13,7 +13,7 @@ const getTalker = async (req, res) => {
 
   const talke = talkers.find((talker) => talker.id === parseInt(id, 10));
 
-  if (!id) {
+  if (!talke) {
     return res.status(HTTP_NOT_FOUND_STATUS)
       .json({ message: 'Pessoa palestrante não encontrada' }); 
   }
