@@ -1,12 +1,12 @@
 const validateToken = (req, res, next) => {
-  const { Authorization } = req.headers;
+  const { authorization } = req.headers;
   const magicNum = 16;
-  if (!Authorization) {
+  if (!authorization) {
     return res.status(401).json({
       message: 'Token não encontrado',
     });
   }
-  if (Authorization.length !== magicNum) {
+  if (authorization.length !== magicNum) {
     return res.status(401).json({
       message: 'Token inválido',
     });

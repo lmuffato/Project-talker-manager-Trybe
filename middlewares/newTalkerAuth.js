@@ -2,6 +2,8 @@
 https://stackoverflow.com/questions/15196451/
 regular-expression-to-validate-datetime-format-mm-dd-yyyy */
 
+const validateToken = require('./tokenAuthMiddle');
+
 const validateName = (req, res, next) => {
   const { name } = req.body;
   if (!name) {
@@ -47,7 +49,7 @@ const validateTalk = (req, res, next) => {
 const validateRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
   const intRate = parseInt(rate, 10);
-  const sentece = intRate >= 1 || intRate <= 5;
+  const sentece = intRate >= 1 && intRate <= 5;
   if (!sentece) {
     return res.status(400).json({
       message: 'O campo "rate" deve ser um inteiro de 1 à 5',
@@ -68,6 +70,7 @@ const validateDate = (req, res, next) => {
 };
 
 const validateNewTalker = [
+  validateToken,
   validateName,
   validateAge,
   validateTalk,
