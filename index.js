@@ -32,6 +32,25 @@ app.get('/talker', async (_req, res) => {
   }
 });
 
+// Quesito 02
+const HTTP_NOT_FOUND_STATUS = 404;
+const mensage = 'Pessoa palestrante não encontrada';
+
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const talker = await reading('talker.json');
+    const talke = talker.find((t) => t.id === +id);
+
+    if (!talke) return res.status(HTTP_NOT_FOUND_STATUS).send({ message: mensage });
+
+    res.status(HTTP_OK_STATUS).send(talke);
+  } catch (_e) {
+    return null;
+  }
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
