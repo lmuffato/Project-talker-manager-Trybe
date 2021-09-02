@@ -1,16 +1,18 @@
 const { StatusCodes } = require('http-status-codes');
 const moment = require('moment');
 
-const 
-    MIN_AGE = 18,
-    MAX_RATE = 5,
-    MIN_RATE = 1;
-
 module.exports = {
     validateName,
     validateAge,
     validateTalker,
 };
+
+const 
+    MIN_AGE = 18,
+    MAX_RATE = 5,
+    MIN_RATE = 1,
+    DEFAULT_BASE = 10,
+    MIN_NAME_LENGTH = 3;
 
 async function validateName(req, res, next) {
     try {
@@ -21,7 +23,7 @@ async function validateName(req, res, next) {
                 message: 'O campo "name" é obrigatório',
             });
         }
-        if (talker.name.length < 3) {
+        if (talker.name.length < MIN_NAME_LENGTH) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: 'O "name" deve ter pelo menos 3 caracteres',
             });
@@ -36,7 +38,7 @@ async function validateName(req, res, next) {
 async function validateAge(req, res, next) {
     try {
         let { age } = req.body;
-        age = parseInt(age, 10);
+        age = parseInt(age, DEFAULT_BASE);
         
         if (!age) {
             return res.status(StatusCodes.BAD_REQUEST).json({
@@ -73,7 +75,7 @@ async function validateTalker(req, res, next) {
             });
         }
     
-        const parsedRate = parseInt(rate, 10);
+        const parsedRate = parseInt(rate, DEFAULT_BASE);
         if (parsedRate > MAX_RATE || parsedRate < MIN_RATE) {
             return res.status(StatusCodes.BAD_REQUEST).json({
                 message: 'O campo "rate" deve ser um inteiro de 1 à 5',
