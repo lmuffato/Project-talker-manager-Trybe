@@ -7,6 +7,12 @@ const readContentFile = require('../utils/readContentFile');
 const writeContentFile = require('../utils/writeContentFile');
 
 const { 
+  HTTP_OK_STATUS,
+  HTTP_CREATED_STATUS,
+  HTTP_NOT_FOUND_STATUS,
+} = require('../utils/statusHTTP');
+
+const { 
   isValidToken, 
   isValidName,
   isValidAge,
@@ -15,15 +21,11 @@ const {
   isValidTalkKeys,
 } = require('../middleWares/validations');
 
-const HTTP_OK = 200;
-const HTTP_CREATED = 201;
-const HTTP_NOT_FOUND = 404;
-
 const PATH = './talker.json';
 
 router.get('/', async (_, res) => {
   const talkers = await readContentFile(PATH) || [];
-  res.status(HTTP_OK).json(talkers);
+  res.status(HTTP_OK_STATUS).json(talkers);
 });
 
 const VALIDATIONS = [
@@ -48,7 +50,7 @@ router.post('/', VALIDATIONS, async (req, res) => {
     console.log(err.message);
     return null;
   }
-  res.status(HTTP_CREATED).json(newTalker);
+  res.status(HTTP_CREATED_STATUS).json(newTalker);
 });
 
 router.get('/:id', async (req, res) => {
@@ -59,11 +61,11 @@ router.get('/:id', async (req, res) => {
 
   if (!talkerFilteredById) {
     return res
-    .status(HTTP_NOT_FOUND)
+    .status(HTTP_NOT_FOUND_STATUS)
     .json({ message: 'Pessoa palestrante não encontrada' }); 
   }
 
-  res.status(HTTP_OK).json(talkerFilteredById);
+  res.status(HTTP_OK_STATUS).json(talkerFilteredById);
 });
 
 module.exports = router;
