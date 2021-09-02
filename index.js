@@ -68,6 +68,18 @@ validateAge, validateTalk, validateWatchedAt, validateRate, async (req, res) => 
   writeFileSync('./talker.json', JSON.stringify(talkerArr));
   res.status(200).send(talkerArr[talkerIndex]);
 });
+// req 6
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const talkerArr = await readFileCustom();
+  const talkerIndex = talkerArr.findIndex((t) => t.id === +id);
+  if (talkerIndex === -1) {
+    return res.status(401).send({ message: 'Palestrante não encontrado' });
+  }
+  talkerArr.splice(talkerIndex, 1);
+  writeFileSync('./talker.json', JSON.stringify(talkerArr));
+  return res.status(200).send({ message: 'Pessoa palestrante deletada com sucesso' });
+});
 // FINAL MINHAS IMPLEMENTAÇÕES
 
 // não remova esse endpoint, e para o avaliador funcionar
