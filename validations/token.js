@@ -1,12 +1,13 @@
 const { StatusCodes } = require('http-status-codes');
 
-module.exports = (token) => {
-  const isValid = /^[\w]{16}$/i;
-  if (!token) {
-    return { status: `${StatusCodes.UNAUTHORIZED}`, message: 'Token não encontrado' };
+module.exports = (req, res, next) => {
+  const { authorization } = req.headers;
+  // const isValid = /^[\w]{16}$/i;
+  if (!authorization) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Token não encontrado' });
   }
-  if (!isValid.test(token)) {
-    return { status: `${StatusCodes.UNAUTHORIZED}`, message: 'Token inválido' };
+  if (authorization.length !== 16) {
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Token inválido' });
   }
-  return '';
+  next();
 };
