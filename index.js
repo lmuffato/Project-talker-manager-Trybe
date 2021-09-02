@@ -11,6 +11,7 @@ const watchedAtValidation = require('./middleware/watchedAtValidation');
 const rateValidation = require('./middleware/rateValidation');
 const talkValidation = require('./middleware/talkValidation');
 const addTalker = require('./middleware/addTalker');
+const editTalker = require('./middleware/editTalker');
 
 const readFile = async () => {
   const data = await fs.readFile('./talker.json', 'utf-8');
@@ -54,6 +55,15 @@ talkerAgeValidation,
 watchedAtValidation,
 rateValidation,
 addTalker);
+
+app.put('/talker/:id',
+talkValidation,
+tokenValidation,
+talkerNameValidation,
+talkerAgeValidation,
+rateValidation,
+watchedAtValidation,
+editTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
