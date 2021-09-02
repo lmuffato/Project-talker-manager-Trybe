@@ -17,6 +17,12 @@ const PORT = '3000';
 
 const getTalkers = async () => fs.readFile(arrayPeople, 'utf-8').then((data) => JSON.parse(data));
 
+// Requisito 3 - Crie o endpoint POST /login
+
+app.use('/login', loginRouter);
+
+// ----------------------------------------
+
 // Requisito 7 - Crie o endpoint GET /talker/search?q=searchTerm
 
 app.get('/talker/search', validateToken, async (req, res) => {
@@ -36,16 +42,8 @@ app.get('/talker/search', validateToken, async (req, res) => {
 app.get('/talker', async (_req, res) => {
   const arrayToSend = await getTalkers();
 
-  // if (!arrayToSend) return res.status(HTTP_OK_STATUS).json([]);
-
   res.status(HTTP_OK_STATUS).json(arrayToSend);
 });
-
-// ----------------------------------------
-
-// Requisito 3 - Crie o endpoint POST /login
-
-app.use('/login', loginRouter);
 
 // ----------------------------------------
 
@@ -94,7 +92,7 @@ app.put('/talker/:id', validateToken, talkerValidation, async (req, res) => {
   const arrayToSend = await getTalkers();
   const talkerToChange = arrayToSend.findIndex((talker) => talker.id === Number(id));
 
-  // if (talkerToChange === -1) return res.status(404).json({ message: 'Pessoa não encontrada' });
+  if (talkerToChange === -1) return res.status(404).json({ message: 'Pessoa não encontrada' });
 
   arrayToSend[talkerToChange] = { ...arrayToSend[talkerToChange], name, age, talk };
 

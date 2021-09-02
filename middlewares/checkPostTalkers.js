@@ -30,7 +30,7 @@ const checkTalkDate = (req, res, next) => {
   const { talk } = req.body;
   const regexDate = /^[0-9]{2}[/]{1}[0-9]{2}[/]{1}[0-9]{4}$/g;
 
-  if (!talk.watchedAt) {
+  if (talk.watchedAt === undefined) {
     return res.status(400)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
@@ -45,7 +45,7 @@ const checkTalkDate = (req, res, next) => {
 const checkTalkRate = (req, res, next) => {
   const { talk } = req.body;
 
-  if (!talk.rate) {
+  if (talk.rate === undefined) {
     return res.status(400)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
@@ -60,7 +60,7 @@ const checkTalkRate = (req, res, next) => {
 const checkTalk = (req, res, next) => {
   const { talk } = req.body;
 
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (talk === undefined) {
     return res.status(400)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
@@ -72,6 +72,6 @@ module.exports = [
   checkName,
   checkAge,
   checkTalk,
-  checkTalkRate,
   checkTalkDate,
+  checkTalkRate,
 ];
