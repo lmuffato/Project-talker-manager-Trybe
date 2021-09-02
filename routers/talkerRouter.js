@@ -28,11 +28,11 @@ router.get('/', async (_, res) => {
   res.status(HTTP_OK_STATUS).json(talkers);
 });
 
-const VALIDATIONS = [
+const VALIDATIONS_POST_AND_PUT_TALKER = [
   isValidToken, isValidName, isValidAge, isValidTalkKeys, isValidWatchedAt, isValidRate,
 ];
 
-router.post('/', VALIDATIONS, async (req, res) => {
+router.post('/', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
   let newTalker;
 
@@ -51,6 +51,40 @@ router.post('/', VALIDATIONS, async (req, res) => {
     return null;
   }
   res.status(HTTP_CREATED_STATUS).json(newTalker);
+});
+
+// router.put('/:id', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
+//   const { id } = req.params;
+//   const { name, age, talk: { watchedAt, rate } } = req.body;
+
+//   const talkers = await readContentFile(PATH);
+//   const indexTalkerForEditing = talkers.findIndex((talker) => talker.id === +id);
+//   console.log(talkers[indexTalkerForEditing]);
+
+//   if (indexTalkerForEditing !== -1) {
+//     const newTalker = { id, name, age, talker: { watchedAt, rate } };
+//     talkers[indexTalkerForEditing] = newTalker;
+//     await writeContentFile('./talker.json', talkers);
+//     return res.status(HTTP_OK_STATUS).json(newTalker);
+//   }
+
+//   res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
+// });
+
+router.put('/:id', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk: { watchedAt, rate } } = req.body;
+
+  const talkers = await readContentFile(PATH);
+  const indexTalkerForEditing = talkers.findIndex((talker) => talker.id === +id);
+
+  if (indexTalkerForEditing !== -1) {
+    const newTalker = { id: +id, name, age, talk: { watchedAt, rate } };
+    await writeContentFile('./talker.json', newTalker, id);
+    return res.status(HTTP_OK_STATUS).json(newTalker);
+  }
+
+  res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
 });
 
 router.get('/:id', async (req, res) => {
