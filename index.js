@@ -10,7 +10,13 @@ const HTTP_NOT_OK_STATUS = 404;
 const PORT = '3000';
 
 const crypto = require('crypto');
-const { validateEmail, validatePassword } = require('./validations/validationsPassAndEmail');
+const { validateEmail, 
+  validatePassword, 
+  validateToken, 
+  validateName, 
+  validateAge, 
+  validateRateAndWhatchedAt, 
+  validateTalk } = require('./validations/allValidationsReq4&3');
 
 function generateToken() {
   return crypto.randomBytes(8).toString('hex');
@@ -43,6 +49,24 @@ app.post('/login', validateEmail, validatePassword, (req, res) => {
   console.log(token);
   return res.status(HTTP_OK_STATUS).json({ token });
 });
+
+app.post('/talker',
+  validateToken,
+  validateName,
+  validateAge, 
+  validateTalk, 
+  validateRateAndWhatchedAt, 
+
+    (req, res) => {
+     const { name, age, talk } = req.body;
+     const readf = fs.readFileSync('talker.json', 'utf-8');
+     const readJson = JSON.parse(readf);
+     const id = 5;
+     const objectWithId = ({ name, age, talk, id });
+     readJson.push(objectWithId); 
+     fs.writeFileSync('talker.json', JSON.stringify(readJson));
+     res.status(201).json({ name, age, talk, id });
+   });
 
 // https://stackoverflow.com/questions/17604866/difference-between-readfile-and-readfilesync
 // https://www.geeksforgeeks.org/node-js-crypto-randombytes-method/
