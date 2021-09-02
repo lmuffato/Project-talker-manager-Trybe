@@ -65,4 +65,16 @@ module.exports = {
       return res.status(400).json({ message: error.message });
     }
   },
+
+  async deleteTalker(req, res) {
+    try {
+      const { id } = req.params;
+      const talkers = await getAllTalkers();
+      const talkersFiltered = talkers.filter((talker) => talker.id !== Number(id));
+      await fs.writeFile('./talker.json', JSON.stringify(talkersFiltered));
+      return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+    } catch (error) {
+      return res.status(401).json({ message: error.message });
+    }
+  },
 };
