@@ -52,57 +52,57 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/',
-  isValidToken,
-  isValidName,
-  isValidAge,
-  isValidTalk,
-  isValidDate,
-  isValidRate,
-  async (req, res) => {
-    try {
-      const { name, age, talk } = req.body;
-      const data = await getFile();
-      const id = data.length + 1;
-      const newTalker = {
-        name,
-        age,
-        id,
-        talk,
-      };
-      createTalker(newTalker);
-      res.status(201).json(newTalker);
-    } catch (e) {
-      console.log(`Erro: ${e}`);
-    }
-  });
+const validations = [isValidToken, isValidName, isValidAge, isValidTalk, isValidDate, isValidRate];
 
-// router.put('/:id',
-//   isValidToken,
-//   isValidName,
-//   isValidAge,
-//   isValidTalk,
-//   isValidDate,
-//   isValidRate,
-//   async (req, res) => {
-//     try {
-//       const { name, age, talk } = req.body;
-//       const { id } = req.params;
-//       const data = await getFile();
-//       const talker = data.find((t) => t.id === parseInt(id, 0));
-//       const newTalker = {
-//         ...talker,
-//         name,
-//         age,
-//         talk,
-//       };
-//       data.splice(talker, 1, newTalker);
-//       fs.writeFile('talker.json', JSON.stringify(data));
-//       const showtalker = data.find((t) => t.id === parseInt(id, 0));
-//       res.status(200).json(showtalker);
-//     } catch (e) {
-//       console.error(`Erro: ${e}`);
-//     }
-//   });
+router.post('/', validations, async (req, res) => {
+  try {
+    const { name, age, talk } = req.body;
+    const data = await getFile();
+    const id = data.length + 1;
+    const newTalker = {
+      name,
+      age,
+      id,
+      talk,
+    };
+    createTalker(newTalker);
+    res.status(201).json(newTalker);
+  } catch (e) {
+    console.log(`Erro: ${e}`);
+  }
+});
+
+router.put('/:id', validations, async (req, res) => {
+  try {
+    const { name, age, talk } = req.body;
+    const { id } = req.params;
+    const data = await getFile();
+    const talker = data.find((t) => t.id === parseInt(id, 0));
+    const newTalker = {
+      ...talker,
+      name,
+      age,
+      talk,
+    };
+    data.splice(talker, 1, newTalker);
+    fs.writeFile('talker.json', JSON.stringify(data));
+    const showtalker = data.find((t) => t.id === parseInt(id, 0));
+    res.status(200).json(showtalker);
+  } catch (e) {
+    console.error(`Erro: ${e}`);
+  }
+});
+
+router.delete('/:id', isValidToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = await getFile();
+    const newData = data.filter((t) => t.id !== parseInt(id, 0));
+    fs.writeFile('talker.json', JSON.stringify(newData));
+    res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  } catch (e) {
+    console.error(`Erro: ${e}`);
+  }
+});
 
 module.exports = router;
