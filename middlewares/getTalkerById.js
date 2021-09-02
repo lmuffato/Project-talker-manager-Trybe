@@ -1,6 +1,5 @@
 const getTalkers = require('../fs-utils/getTalkers');
-
-const HTTP_OK_STATUS = 200;
+const { HTTP_OK_STATUS, NOT_FOUND } = require('../fs-utils/statusHttp');
 
 const getTalkerById = async (req, res) => {
   const talkers = await getTalkers();
@@ -8,7 +7,7 @@ const getTalkerById = async (req, res) => {
   const chosenTalker = talkers.find(({ id }) => id === chosenTalkerId);
 
   if (!chosenTalker) {
-    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    return res.status(NOT_FOUND).json({ message: 'Pessoa palestrante não encontrada' });
   }
 
   return res.status(HTTP_OK_STATUS).json(chosenTalker);

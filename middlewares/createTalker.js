@@ -1,7 +1,6 @@
 const editTalkers = require('../fs-utils/editTalkers');
 const getTalkers = require('../fs-utils/getTalkers');
-
-const HTTP_OK_STATUS = 201;
+const { CREATED } = require('../fs-utils/statusHttp');
 
 const createTalker = async (req, res) => {
   const { name, age, talk } = req.body;
@@ -15,7 +14,7 @@ const createTalker = async (req, res) => {
   };
   talkersList.push(newTalker);
   await editTalkers(talkersList).catch((err) => console.error(err));
-  return res.status(HTTP_OK_STATUS).json(newTalker);
+  return res.status(CREATED).json(newTalker);
 };
 
 module.exports = createTalker;

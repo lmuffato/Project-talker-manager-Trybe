@@ -11,11 +11,11 @@ const createTalker = require('./middlewares/createTalker');
 const editTalker = require('./middlewares/editTalker');
 const deleteTalker = require('./middlewares/deleteTalker');
 const searchTalker = require('./middlewares/searchTalker');
+const { HTTP_OK_STATUS } = require('./fs-utils/statusHttp');
 
 const app = express();
 app.use(bodyParser.json());
 
-const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar

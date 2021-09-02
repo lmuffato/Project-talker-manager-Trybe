@@ -1,12 +1,12 @@
-const FAIL_STATUS = 401;
+const { UNAUTHORIZED } = require('../fs-utils/statusHttp');
 
 const validateToken = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {
-    return res.status(FAIL_STATUS).json({ message: 'Token não encontrado' });
+    return res.status(UNAUTHORIZED).json({ message: 'Token não encontrado' });
   }
   if (authorization.length < 16) {
-    return res.status(FAIL_STATUS).json({ message: 'Token inválido' });
+    return res.status(UNAUTHORIZED).json({ message: 'Token inválido' });
   }
   next();  
 };
