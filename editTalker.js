@@ -10,7 +10,7 @@ const editTalker = async (req, res) => {
   const editedTalker = { name, age, talk, id: Number(id) };
   filteredTalkers.push(editedTalker);
   await writeFile('talker.json', JSON.stringify(talkers));
-  return res.status(200).json(editedTalker);
+  res.status(200).json(editedTalker);
 };
 
 module.exports = editTalker;
