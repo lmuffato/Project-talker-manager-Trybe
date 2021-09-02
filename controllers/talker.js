@@ -25,6 +25,19 @@ module.exports = {
     }
   },
 
+  async searchTalker(req, res) {
+    try {
+      const { q } = req.query;
+      const talkers = await getAllTalkers();
+      const foundTalkers = talkers.filter(
+        (talker) => talker.name.toLowerCase().includes(q.toLowerCase()),
+      );
+      return res.status(200).json(foundTalkers);
+    } catch (error) {
+      return res.status(400).json({ message: error.message });
+    }
+  },
+
   async postTalker(req, res) {
     try {
       let highestId = 0;

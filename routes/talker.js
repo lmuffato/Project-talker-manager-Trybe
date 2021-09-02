@@ -5,6 +5,7 @@ const {
   postTalker,
   putTalker,
   deleteTalker,
+  searchTalker,
 } = require('../controllers/talker');
 const { tokenAuthentication } = require('../middlewares/authentication');
 const { validateName, validateAge, validateTalk } = require('../middlewares/validation');
@@ -12,6 +13,7 @@ const { validateName, validateAge, validateTalk } = require('../middlewares/vali
 const routes = Router();
 
 routes.get('/', getTalkers);
+routes.get('/search', tokenAuthentication, searchTalker);
 routes.get('/:id', getTalker);
 routes.post('/', tokenAuthentication, validateName, validateAge, validateTalk, postTalker);
 routes.put('/:id', tokenAuthentication, validateName, validateAge, validateTalk, putTalker);
