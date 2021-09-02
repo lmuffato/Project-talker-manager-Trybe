@@ -8,6 +8,7 @@ const validateToken = require('./middlewares/validateToken');
 const { validateName, validateAge, validateTalk,
    validateTalkDate, validateTalkRate } = require('./middlewares/validateTalker');
 const createTalker = require('./middlewares/createTalker');
+const editTalker = require('./middlewares/editTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,6 +22,15 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker/:id', getTalkerById);
+
+app.put('/talker/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateTalkRate,
+  editTalker);
 
 app.get('/talker', showTalkers);
 
