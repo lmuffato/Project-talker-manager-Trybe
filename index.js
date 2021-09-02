@@ -1,7 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
-const { validaEmail, validaPassword, generateToken, validaToken } = require('./validation');
+
+const file = './talker.json';
+const { validaEmail, 
+  validaPassword,
+  generateToken,
+  validaToken,
+  validaName,
+  validaAge,
+  validaTalker,
+  validaDate,
+  validaRate } = require('./validation');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,16 +25,16 @@ app.get('/', (_request, response) => {
 });
 
 // req01
-app.get('/talker', (_request, response) => {
-  fs.readFile('./talker.json', 'utf8')
+app.get('/talker', (request, response) => {
+  fs.readFile(file, 'utf8')
   .then((content) => response.status(HTTP_OK_STATUS).send(JSON.parse(content)))
   .catch(() => response.status(401).json([]));
 });
 
 // req 02
-app.get('/talker/:id', (_request, response) => {
- const { id } = _request.params;
- fs.readFile('./talker.json', 'utf8').then((talkers) => {
+app.get('/talker/:id', (request, response) => {
+ const { id } = request.params;
+ fs.readFile(file, 'utf8').then((talkers) => {
  const talkerjson = JSON.parse(talkers);
  const res = talkerjson.find((talkerId) => talkerId.id === parseInt(id, 10));
 if (!res) return response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -33,26 +43,32 @@ return response.status(HTTP_OK_STATUS).json(res);
 });
 
 // req 03
-app.post('/login', validaEmail, validaPassword, (_request, response) =>
+app.post('/login', validaEmail, validaPassword, (request, response) =>
   response.status(HTTP_OK_STATUS).json({ token: generateToken(16) }));
 
-// req 06
-// app.delete('/talker/:id', validaToken, async (_request, response) => {
-//   const { id } = _request.params;
-//   fs.readFile('./talker.json', 'utf8').then((talkers) => {
-//   const talkerjson = JSON.parse(talkers);
-//   const talkerId = talkerjson.filter((talker) => talker.id !== parseInt(id, 10));
-//   fs.writeFile('./talker.json', JSON.stringify(talkerId)).then(() => 
-//   response.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' }));
-// });
-// });
+// req 04
+app.post('/talker', 
+  validaToken,
+  validaName, 
+  validaAge, 
+  validaTalker, 
+  validaDate, 
+  validaRate,   
+  async (request, response) => {
+  const { name, age, talk } = request.body;
+  const talkerlist = JSON.parse(await fs.readFile(file, 'utf8'));
+  talkerlist.push({ id: talkerlist.length + 1, name, age, talk });
+  await fs.writeFile(file, JSON.stringify(talkerlist));
+  return response.status(201).json({ id: talkerlist.length, name, age, talk });
+});
 
-app.delete('/talker/:id', validaToken, async (_request, response) => {
-  const { id } = _request.params;
-  const read = await fs.readFile('.talker.json', 'utf8');
+// req 06 - feito com a ajuda do instrutor Italo
+app.delete('/talker/:id', validaToken, async (request, response) => {
+  const { id } = request.params;
+  const read = await fs.readFile(file, 'utf8');
   const parse = JSON.parse(read);
   const talkerId = parse.filter((talker) => talker.id !== parseInt(id, 10));
-  await fs.writeFile('./talker.json', JSON.stringify(talkerId));
+  await fs.writeFile(file, JSON.stringify(talkerId));
   response.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
