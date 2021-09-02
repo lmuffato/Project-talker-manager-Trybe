@@ -12,6 +12,7 @@ const rateValidation = require('./middleware/rateValidation');
 const talkValidation = require('./middleware/talkValidation');
 const addTalker = require('./middleware/addTalker');
 const editTalker = require('./middleware/editTalker');
+const deleteTalker = require('./middleware/deleteTalker');
 
 const readFile = async () => {
   const data = await fs.readFile('./talker.json', 'utf-8');
@@ -64,6 +65,8 @@ talkerAgeValidation,
 rateValidation,
 watchedAtValidation,
 editTalker);
+
+app.delete('/talker/:id', tokenValidation, deleteTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
