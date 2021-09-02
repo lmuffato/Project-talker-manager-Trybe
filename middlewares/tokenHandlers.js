@@ -22,7 +22,7 @@ function createToken(req, res) {
 function validateToken(req, res, next) {
   const { token } = req.header;
   if (token === undefined) {
-    return res.status(400).json({ message: 'Token não encontrado' });
+    return res.status(401).json({ message: 'Token não encontrado' });
   }
   const isTokenValid = readLogedUsers().reduce((acc, user) => {
     if (user.token === token) {
@@ -31,7 +31,7 @@ function validateToken(req, res, next) {
     return acc;
   }, false);
   if (!isTokenValid) {
-    return res.status(400).json({ message: 'Token inválido' });
+    return res.status(401).json({ message: 'Token inválido' });
   }
   next();
 }
