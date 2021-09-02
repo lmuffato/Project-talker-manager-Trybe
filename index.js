@@ -13,6 +13,7 @@ const {
   addTalker,
 } = require('./middlewares/postTalker');
 const upTalk = require('./middlewares/putTalkerById');
+const deleteTalker = require('./middlewares/deleteTalker');
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
@@ -29,6 +30,8 @@ app.post('/login', checkEmail, checkPassword, generateToken);
 app.post('/talker', checkToken, checkName, checkAge, checkTalk, checkWatched, checkRate, addTalker);
 
 app.put('/talker/:id', checkToken, checkName, checkAge, checkTalk, checkWatched, checkRate, upTalk);
+
+app.delete('/talker/:id', checkToken, deleteTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
