@@ -4,9 +4,9 @@ const { getFilteredTalker, getTalkerList } = require('../middlewares/getTalkers'
 
 const { validateToken } = require('../middlewares/tokenHandlers');
 
-const { newTalkerValidation } = require('../middlewares/talkerValidations');
+const { newTalkerValidation, createTalker } = require('../middlewares/talkerValidations');
 
-const { createTalker } = require('../middlewares/createTalker');
+// const { createTalker } = require('../middlewares/createTalker');
 
 const router = Router();
 

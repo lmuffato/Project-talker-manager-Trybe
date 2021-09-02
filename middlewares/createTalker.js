@@ -4,10 +4,12 @@ const fs = require('fs');
 
 function createTalker(req, res) {
   const { talk } = req.body;
+  console.log('chegou aqui');
+  console.log(req);
   const talkers = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
   talkers.push(talk);
   fsP.writeFile('./talker.json', JSON.stringify(talkers))
-    .then(() => console.log('Pessoa palestrante registrada com sucesso'))
+    .then(() => console.log('Pessoa palestrante registrada com sucesso', talk))
     .catch((err) => console.log(err.message));
   return res.status(201).json(talk);
 }

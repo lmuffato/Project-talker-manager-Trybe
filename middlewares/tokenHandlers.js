@@ -14,13 +14,13 @@ function createToken(req, res) {
   const newLog = { email, token };
   logedUsers.push(newLog);
   fsP.writeFile('./logedUsers.json', JSON.stringify(logedUsers))
-    .then(() => console.log('token registrado com sucesso'))
+    // .then(() => console.log('token registrado com sucesso ', token))
     .catch((err) => console.log(err.message));
   return res.status(200).json({ token });
 }
 
 function validateToken(req, res, next) {
-  const { token } = req.header;
+  const { authorization: token } = req.headers;
   if (token === undefined) {
     return res.status(401).json({ message: 'Token não encontrado' });
   }

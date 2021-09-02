@@ -12,7 +12,7 @@ function validateTalkerName(req, res, next) {
 function validateTalkerAge(req, res, next) {
   const { age } = req.body;
   if (age === undefined || age === '') {
-    return res.status(400).json({ message: 'O campo "name" é obrigatório' });
+    return res.status(400).json({ message: 'O campo "age" é obrigatório' });
   }
   if (+age < 18) {
     return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
@@ -61,4 +61,30 @@ function validateTalk(req, res, next) {
   next();
 }
 
-module.exports = { newTalkerValidation: [validateTalkerName, validateTalkerAge, validateTalk] };
+const fsP = require('fs').promises;
+
+const fs = require('fs');
+
+const getMaxId = (talkersList) => (
+  talkersList.reduce((maxId, talker) => {
+    if (talker.id > maxId) return talker.id;
+    return maxId;
+  }, 0)
+);
+
+function createTalker(req, res) {
+  const talker = req.body;
+  console.log(req.body);
+  const talkers = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
+  const newTalker = { id: 1 + getMaxId(talkers), ...talker };
+  talkers.push(newTalker);
+  fsP.writeFile('./talker.json', JSON.stringify(talkers))
+    .then(() => console.log('Pessoa palestrante registrada com sucesso'))
+    .catch((err) => console.log(err.message));
+  return res.status(201).json(newTalker);
+}
+
+module.exports = {
+  newTalkerValidation: [validateTalkerName, validateTalkerAge, validateTalk],
+  createTalker,
+};
