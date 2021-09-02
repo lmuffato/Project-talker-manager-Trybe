@@ -1,3 +1,5 @@
+const isKeyExists = require('../utils/isKeyExists');
+
 const HTTP_BAD_REQUEST = 400;
 const HTTP_UNAUTHORIZED_STATUS = 401;
 
@@ -89,41 +91,36 @@ const isValidAge = (req, res, next) => {
   next();
 };
 
-const isKeyExist = (object, key) => {
-  try {
-    const result = Object.prototype.hasOwnProperty.call(object, key);
-    return result;
-  } catch (e) {
-    console.log(e.message);
-    return null;
-  }
-};
-
-const isValidTalk = (req, res, next) => {
-  const { talk } = req.body;
-  const watchedAt = isKeyExist(talk, 'watchedAt');
-  const rate = isKeyExist(talk, 'rate');
-    if (!talk || !watchedAt || !rate) {
-      return res.status(HTTP_BAD_REQUEST).json({ 
-        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios', 
-    }); 
-  }
-  next();
-};
-
-const isValidTalkKeys = (req, res, next) => {
-  const { talk: { watchedAt, rate } } = req.body;
-
+const isValidWatchedAt = (req, res, next) => {
+  const { talk: { watchedAt } } = req.body;
   const regexWatchedAt = /\d{2}\/\d{2}\/\d{4}/g;
 
   if (!regexWatchedAt.test(watchedAt)) {
     return res.status(HTTP_BAD_REQUEST)
     .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' }); 
   }
+  next();
+};
+
+const isValidRate = (req, res, next) => {
+  const { talk: { rate } } = req.body;
 
   if (!(rate >= 1 && rate <= 5) || (rate - Math.floor(rate)) !== 0) {
     return res.status(HTTP_BAD_REQUEST)
     .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+
+  next();
+};
+
+const isValidTalkKeys = (req, res, next) => {
+  const { talk } = req.body;
+  const watchedAt = isKeyExists(talk, 'watchedAt');
+  const rate = isKeyExists(talk, 'rate');
+    if (!talk || !watchedAt || !rate) {
+      return res.status(HTTP_BAD_REQUEST).json({ 
+        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios', 
+    }); 
   }
 
   next();
@@ -135,6 +132,7 @@ module.exports = {
   isValidToken,
   isValidName,
   isValidAge,
-  isValidTalk,
+  isValidWatchedAt,
+  isValidRate,
   isValidTalkKeys,
 };

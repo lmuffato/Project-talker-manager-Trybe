@@ -7,11 +7,12 @@ const readContentFile = require('../utils/readContentFile');
 const writeContentFile = require('../utils/writeContentFile');
 
 const { 
-  isValidAge,
-  isValidName,
-  isValidTalk,
-  isValidTalkKeys,
   isValidToken, 
+  isValidName,
+  isValidAge,
+  isValidWatchedAt,
+  isValidRate,
+  isValidTalkKeys,
 } = require('../middleWares/validations');
 
 const HTTP_OK = 200;
@@ -20,13 +21,13 @@ const HTTP_NOT_FOUND = 404;
 
 const PATH = './talker.json';
 
-router.get('/', async (_req, res) => {
+router.get('/', async (_, res) => {
   const talkers = await readContentFile(PATH) || [];
   res.status(HTTP_OK).json(talkers);
 });
 
-const VALIDATIONS = [isValidToken, isValidAge, isValidName, isValidTalk,
-  isValidTalkKeys,
+const VALIDATIONS = [
+  isValidToken, isValidName, isValidAge, isValidWatchedAt, isValidRate, isValidTalkKeys,
 ];
 
 router.post('/', VALIDATIONS, async (req, res) => {
