@@ -1,9 +1,7 @@
-/* eslint-disable */
-
 const fs = require('fs').promises;
+
 const deleteTalker = async (req, res) => {
     const { id } = req.params;
-    
     const talkers = await fs.readFile('./talker.json', 'utf-8');
     const talkersInJSON = JSON.parse(talkers);
     

@@ -50,6 +50,7 @@ app.put('/talker/:id',
   validateTalk,
   validateTalkDate,
   validateTalkRate,
+  validateIdFromURL,
   updateTalker);
 
 // Desafio 4
