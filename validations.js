@@ -82,6 +82,15 @@ const validateTalkRate = (req, res, next) => {
     next();
 };
 
+const validateIdFromURL = (req, res, next) => {
+    const { id } = req.params;
+    if (id === undefined || id > 4 || id < 1) {
+        return res.send('ID INVALIDO');
+    }
+
+    next();
+};
+
 module.exports = {
     validateAge,
     validateName,
@@ -89,4 +98,5 @@ module.exports = {
     validateTalkDate,
     validateTalkRate,
     validateToken,
+    validateIdFromURL,
 };

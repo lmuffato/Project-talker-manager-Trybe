@@ -8,6 +8,7 @@ const {
   validateTalkDate,
   validateTalkRate,
   validateToken,
+  validateIdFromURL,
   } = require('./validations');
 
 const getAllTalkers = require('./desafio1');
@@ -32,24 +33,14 @@ app.get('/', (_request, response) => {
 // Desafio 7
 app.get('/talker/search', validateToken, searchTalker);
 
-// Desafio 1
-app.get('/talker', getAllTalkers);
-
 // Desafio 2
 app.get('/talker/:id', getTalkerById);
 
 // Desafio 3
 app.post('/login', login);
 
-// Desafio 4
-app.post('/talker', 
-  validateToken,
-  validateName,
-  validateAge,
-  validateTalk,
-  validateTalkDate,
-  validateTalkRate,
-  createTalker);  
+// Desafio 6
+app.delete('/talker/:id', validateToken, validateIdFromURL, deleteTalker);
 
 // Desafio 5
 app.put('/talker/:id', 
@@ -61,9 +52,18 @@ app.put('/talker/:id',
   validateTalkRate,
   updateTalker);
 
-// Desafio 6
-app.delete('/talker/:id', validateToken, deleteTalker);
+// Desafio 4
+app.post('/talker', 
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateTalkRate,
+  createTalker);  
 
+// Desafio 1
+app.get('/talker', getAllTalkers);
 
 app.listen(PORT, () => {
   console.log('Online');

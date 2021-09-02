@@ -2,8 +2,6 @@ const fs = require('fs').promises;
 
 const searchTalker = async (req, res) => {
     const { q } = req.query;
-    
-    console.log('q', q);
 
     const talkers = await fs.readFile('./talker.json', 'utf-8');
     const talkersInJSON = JSON.parse(talkers);
