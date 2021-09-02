@@ -16,8 +16,8 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', async (_req, res) => {
-  const dataTalker = await fs.readFile(talker, 'utf8');
-  res.status(HTTP_OK_STATUS).json(JSON.parse(dataTalker));
+  const dataTalker = JSON.parse(await fs.readFile(talker, 'utf8'));
+  res.status(HTTP_OK_STATUS).json(dataTalker);
 });
 
 app.listen(PORT, () => {
