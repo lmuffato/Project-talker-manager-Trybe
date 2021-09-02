@@ -67,5 +67,3 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
-
-// http POST :3000/talker name='Anderson Nascimento' age:=31 'talk.watchedAt'=31/08/2022 talk:='{"watchedAt": "31/08/2022", "rate": 10}'
