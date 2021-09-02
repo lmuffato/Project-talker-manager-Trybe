@@ -8,7 +8,7 @@ const router = Router();
 
 const Validation = [emailValidation, passwordValidation];
 
-router.post('/', Validation[0], Validation[1], (_req, res) => {
+router.post('/', ...Validation, (_req, res) => {
   const token = tokenGenerator();
   return res.status(StatusCodes.OK).json({ token });
 });
