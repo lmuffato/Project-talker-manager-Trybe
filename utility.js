@@ -10,7 +10,7 @@ const readFiles = async () => {
 };
 
 const writeFiles = async (newTalker) => {
-  const write = await fs.writeFile(TALKERS, JSON.stringify(newTalker));
+  const write = await fs.writeFile(TALKERS, JSON.stringify(newTalker), 'utf-8');
   return write;
 };
 
