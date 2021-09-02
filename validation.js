@@ -1,8 +1,5 @@
 const validToken = (req, res, next) => {
-  console.log('entrei no validToken');
   const { authorization } = req.headers;
-  console.log('authorization');
-  console.log(authorization);
   if (!authorization) {
     return res.status(401).json({
       message: 'Token não encontrado',
@@ -15,7 +12,6 @@ const validToken = (req, res, next) => {
 };
 
 const validName = (req, res, next) => {
-  console.log('cheguei no validName');
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({ message: 'O campo "name" é obrigatório' });
@@ -28,7 +24,6 @@ const validName = (req, res, next) => {
 };
 
 const validAge = (req, res, next) => {
-  console.log('cheguei no validAge');
   const { age } = req.body;
   if (!age || age.length === '') {
     return res.status(400).json({ message: 'O campo "age" é obrigatório' });
@@ -40,18 +35,16 @@ const validAge = (req, res, next) => {
 };
 
 const validTalk = (req, res, next) => {
-  console.log('cheguei no validTalk');
   const { talk } = req.body;
-  const { watchedAt, rate } = talk; 
-  if (!talk || !watchedAt || (!rate && rate !== 0)) {
+  if (!talk || !talk.watchedAt || (!talk.rate && talk.rate !== 0)) {
     return res.status(400).json({
-      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
   }
   next();
 };
 
 const validTalkKeys = (req, res, next) => {
-  console.log('cheguei no validTalkKeys');
   const { talk: { watchedAt, rate } } = req.body;
   const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
 
