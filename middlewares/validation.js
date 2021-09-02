@@ -1,7 +1,7 @@
 const checkLength = require('../utils/checkLength');
+const { validateDateFormat } = require('../utils/dateValidation');
 
-module.exports = {
-  validateEmail(req, res, next) {
+function validateEmail(req, res, next) {
     const { email } = req.body;
     // regexr.com/2ri2c
     const emailPattern = /\b[\w.-]+@[\w.-]+\.\w{2,4}\b/gi;
@@ -15,9 +15,9 @@ module.exports = {
     }
 
     next();
-  },
+  }
 
-  validatePassword(req, res, next) {
+function validatePassword(req, res, next) {
     const { password } = req.body;
     
     try {
@@ -27,9 +27,9 @@ module.exports = {
     }
 
     next();
-  },
+  }
 
-  validateName(req, res, next) {
+function validateName(req, res, next) {
     const { name } = req.body;
     try {
       checkLength({ name }, 3);
@@ -38,9 +38,9 @@ module.exports = {
     }
 
     next();
-  },
+  }
 
-  validateAge(req, res, next) {
+function validateAge(req, res, next) {
     const { age } = req.body;
     try {
       if (!age) throw new Error('O campo "age" é obrigatório');
@@ -50,5 +50,45 @@ module.exports = {
     }
 
     next();
+  }
+
+const validateTalk = {
+  rateAndWatchedAtExists(body) {
+    if (!body.talk || !body.talk.rate || !body.talk.watchedAt) {
+      throw new Error('O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios');
+    }
   },
+
+  dateFormat(watchedAt) {
+    if (!validateDateFormat(watchedAt, 'dd/mm/yyyy')) {
+      throw new Error('O campo "watchedAt" deve ter o formato "dd/mm/aaaa"');
+    }
+  },
+
+  rate(rate) {
+    if (!(typeof rate === 'number' && rate > 0 && rate < 6)) {
+      throw new Error('O campo "rate" deve ser um inteiro de 1 à 5');
+    }
+  },
+
+  validate(req, res, next) {
+    try {
+      validateTalk.rateAndWatchedAtExists(req.body);
+      const { talk } = req.body;
+      validateTalk.dateFormat(talk.watchedAt);
+      validateTalk.rate(talk.rate);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+
+    next();
+  },
+};
+
+module.exports = {
+  validateEmail,
+  validatePassword,
+  validateName,
+  validateAge,
+  validateTalk: validateTalk.validate,
 };
