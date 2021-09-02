@@ -16,6 +16,7 @@ const login = require('./desafio3');
 const createTalker = require('./desafio4');
 const updateTalker = require('./desafio5');
 const deleteTalker = require('./Desafio6');
+const searchTalker = require('./desafio7');
 
 const app = express();
 app.use(bodyParser.json());
@@ -27,6 +28,9 @@ const PORT = '3000';
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
+
+// Desafio 7
+app.get('/talker/search', validateToken, searchTalker);
 
 // Desafio 1
 app.get('/talker', getAllTalkers);
@@ -59,6 +63,7 @@ app.put('/talker/:id',
 
 // Desafio 6
 app.delete('/talker/:id', validateToken, deleteTalker);
+
 
 app.listen(PORT, () => {
   console.log('Online');
