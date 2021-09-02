@@ -11,11 +11,11 @@ const validToken = (req, res, next) => {
   if (authorization.lenght < 16 || authorization.lenght > 16) {
     return res.status(401).json({ message: 'Token inválido' });
   }
-  console.log('cheguei no next');
   next();
 };
-/* 
+
 const validName = (req, res, next) => {
+  console.log('cheguei no validName');
   const { name } = req.body;
   if (!name) {
     return res.status(400).json({ message: 'O campo "name" é obrigatório' });
@@ -28,6 +28,7 @@ const validName = (req, res, next) => {
 };
 
 const validAge = (req, res, next) => {
+  console.log('cheguei no validAge');
   const { age } = req.body;
   if (!age || age.length === '') {
     return res.status(400).json({ message: 'O campo "age" é obrigatório' });
@@ -39,6 +40,7 @@ const validAge = (req, res, next) => {
 };
 
 const validTalk = (req, res, next) => {
+  console.log('cheguei no validTalk');
   const { talk } = req.body;
   const { watchedAt, rate } = talk; 
   if (!talk || !watchedAt || !rate) {
@@ -49,8 +51,10 @@ const validTalk = (req, res, next) => {
 };
 
 const validTalkKeys = (req, res, next) => {
+  console.log('cheguei no validTalkKeys');
+  const { talk: { watchedAt, rate } } = req.body;
   const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
-  const { talk: watchedAt, rate } = req.body;
+
   if (!dateRegex.test(watchedAt)) {
     return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
@@ -58,14 +62,14 @@ const validTalkKeys = (req, res, next) => {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   next();
-}; */
+};
 
 const allTalkerValidations = [
   validToken,
-  /*  validName,
+  validName,
   validAge,
   validTalk,
-  validTalkKeys, */
+  validTalkKeys,
 ];
 
   module.exports = { allTalkerValidations };

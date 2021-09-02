@@ -33,7 +33,7 @@ res.status(200).json(talkerById);
 // só pra né
 
 const addTalker = async (req, res) => {
-console.log('cheguei aqui');
+console.log('cheguei aqui na funcao addTalker');
 const { name, age, talk } = req.body;
 const oldTalkers = await readingFile();
 const newTalker = {
@@ -42,7 +42,6 @@ const newTalker = {
   talk,
   id: oldTalkers.length + 1,
 };
-console.log(newTalker);
 oldTalkers.push(newTalker);
 await fs.writeFile('talker.json', JSON.stringify(oldTalkers));
   res.status(200).json(newTalker);
