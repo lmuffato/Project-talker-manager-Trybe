@@ -143,7 +143,7 @@ function validateName(_req, res, name) {
 
 function validateAge(_req, res, age) {
   const minAgeAllowed = 18;
-  if (!age) return res.status(HTTP_ERROR400_STATUS).json(messageAgeRequired);
+  if (!age || age === '') return res.status(HTTP_ERROR400_STATUS).json(messageAgeRequired);
   if (age < minAgeAllowed) {
     return res.status(HTTP_ERROR400_STATUS).json(messageAgeInvalid);
   }
@@ -160,7 +160,7 @@ function validateTalk(req, res, talk) {
   validateTalkExists(req, res, talk);
   if (talk.watchedAt.split('/').length !== 3) {
     return res.status(HTTP_ERROR400_STATUS).json(messageWatchFormat);
-  } if (talk.rate > 5 || talk.rate < 1) {
+  } if (talk.rate > 5 || (talk.rate < 1 || talk.rate === 0)) {
     return res.status(HTTP_ERROR400_STATUS).json(messageRateFormat);
   }
     return true;
@@ -196,12 +196,10 @@ async function updateTalker(req, res) {
   const { name, age, talk } = req.body;
   try {
     const dataTalkers = await readFile();
-    const editTalker = { name, age, id, talk };
-    const updateListOfTalkers = [...dataTalkers].map((talker) => (
-      +talker.id === +id ? { ...editTalker } : talker
-    ));
-    await fs.writeFile('talker.json', JSON.stringify(updateListOfTalkers));
-    console.log({ name, age, id, talk });
+    const editTalker = { name, age, id: +id, talk };
+    const filteredTalkers = dataTalkers.filter((talker) => (talker.id !== id));
+    filteredTalkers.push(editTalker);
+    await fs.writeFile('talker.json', JSON.stringify(filteredTalkers));
     return res.status(HTTP_OK_STATUS).json(editTalker);
   } catch (error) {
     return error;
@@ -214,4 +212,5 @@ app.post('/login', validateEmail, validatePass, generateAuth);
 // Requisito 4
 app.post('/talker', validateTalker, createTalker);
 
+// Requisito 5
 app.put('/talker/:id', validateTalker, updateTalker);
