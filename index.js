@@ -10,6 +10,7 @@ const { validateName, validateAge, validateTalk,
 const createTalker = require('./middlewares/createTalker');
 const editTalker = require('./middlewares/editTalker');
 const deleteTalker = require('./middlewares/deleteTalker');
+const searchTalker = require('./middlewares/searchTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -21,6 +22,8 @@ const PORT = '3000';
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
+
+app.get('/talker/search', validateToken, searchTalker);
 
 app.get('/talker/:id', getTalkerById);
 
