@@ -7,7 +7,7 @@ const editTalker = async (req, res) => {
   const filteredTalkers = talkers.filter((r) => r.id !== parseInt(id, 10));
   const editedTalker = { name, age, talk, id: Number(id) };
   filteredTalkers.push(editedTalker);
-  await writeFile('talker.json', JSON.stringify(talkers));
+  await writeFile('talker.json', JSON.stringify(filteredTalkers));
   res.status(200).json(editedTalker);
 };
 
