@@ -44,7 +44,7 @@ const newTalker = {
 };
 oldTalkers.push(newTalker);
 await fs.writeFile('talker.json', JSON.stringify(oldTalkers));
-  res.status(200).json(newTalker);
+  res.status(201).json(newTalker);
 };
 
 module.exports = { getAllTalkers, getTalkerById, addTalker };
