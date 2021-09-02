@@ -11,6 +11,24 @@ const {
   deleteTalker,
 } = require('../middlewares');
 
+router.get('/search', [
+  validateToken,
+  getTalkers,
+  async (req, res) => {
+    const { q } = req.query;
+    const { talkers } = req;
+    console.log(talkers);
+    if (!q || q === '') return res.status(200).json(talkers);
+
+    const talkersMatched = talkers
+      .filter(({ name }) => name.toLowerCase().includes(q.toLowerCase()));
+
+    if (!talkersMatched.length) return res.status(200).send([]);
+    
+    return res.status(200).json(talkersMatched);
+  },
+]);
+
 router.get('/', getTalkers, async (req, res) => {
     if (req.talkers.length === 0) return res.status(200).send([]);
     
