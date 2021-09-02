@@ -9,9 +9,15 @@ const readFiles = async () => {
   return parsedTalkers;
 };
 
+const writeFiles = async (newTalker) => {
+  const write = await fs.writeFile(TALKERS, JSON.stringify(newTalker));
+  return write;
+};
+
 const tokenGenerator = () => crypto.randomBytes(8).toString('hex');
 
 module.exports = {
   readFiles,
   tokenGenerator,
+  writeFiles,
 };
