@@ -1,5 +1,5 @@
 const express = require('express');
-const { dataTalkers } = require('../index');
+const { dataTalkers } = require('../Middlewares/dataTalkers');
 
 const talkers = express.Router();
 
