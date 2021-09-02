@@ -25,6 +25,16 @@ app.get('/talker', async (_req, res) => {
   if (!talker) return res.status(HTTP_OK_STATUS).send([]);
   res.status(HTTP_OK_STATUS).send(talker);
 });
+// req 7
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const talkerArr = await readFileCustom();
+  const arrMatch = talkerArr.filter((t) => t.name.includes(q)); // filtro
+  if (!q || q === '') {
+    return res.status(200).send(talkerArr);
+  }
+  return res.status(200).send(arrMatch);
+});
 // req 2
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
@@ -52,6 +62,7 @@ validateAge, validateTalk, validateWatchedAt, validateRate, async (req, res) => 
   writeFileSync('./talker.json', JSON.stringify(talkers));
   return res.status(201).json(newTalker);
 });
+
 // req 5
 app.put('/talker/:id', validateToken, validateName,
 validateAge, validateTalk, validateWatchedAt, validateRate, async (req, res) => {
@@ -80,6 +91,7 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   writeFileSync('./talker.json', JSON.stringify(talkerArr));
   return res.status(200).send({ message: 'Pessoa palestrante deletada com sucesso' });
 });
+
 // FINAL MINHAS IMPLEMENTAÇÕES
 
 // não remova esse endpoint, e para o avaliador funcionar
