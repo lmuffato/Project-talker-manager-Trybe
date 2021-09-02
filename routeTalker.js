@@ -3,6 +3,7 @@ const fs = require('fs').promises;
 const ultility = require('./middlewares');
 const createTalker = require('./createTalker');
 const editTalker = require('./editTalker');
+const deleteTalker = require('./deleteTalker');
 
 const router = express.Router({
   mergeParams: true,
@@ -27,5 +28,7 @@ router.get('/:id', async (req, res) => {
   if (!filterId) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   res.status(200).json(filterId);
 });
+
+router.delete('/:id', ultility[0], deleteTalker);
 
 module.exports = router;
