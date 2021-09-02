@@ -61,6 +61,7 @@ const messageRateFormat = {
 const messageWatchAndRateRequired = {
   message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
 };
+const messageDeleteTalker = { message: 'Pessoa palestrante deletada com sucesso' };
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -206,6 +207,24 @@ async function updateTalker(req, res) {
   }
 }
 
+function validateTokenForDeleteTalker(req, res, next) {
+  const { authorization } = req.headers;
+  validateToken(req, res, authorization);
+  next();
+}
+
+async function deleteTalker(req, res) {
+  const { id } = req.params;
+  try {
+    const dataTalkers = await readFile();
+    const newDataTalkers = dataTalkers.filter((talker) => talker.id !== +id);
+    await fs.writeFile('talker.json', JSON.stringify(newDataTalkers));
+    return res.status(HTTP_OK_STATUS).json(messageDeleteTalker);
+  } catch (error) {
+    return error;
+  }
+}
+
 // Requisito 3
 app.post('/login', validateEmail, validatePass, generateAuth);
 
@@ -214,3 +233,6 @@ app.post('/talker', validateTalker, createTalker);
 
 // Requisito 5
 app.put('/talker/:id', validateTalker, updateTalker);
+
+// Requisito 6
+app.delete('/talker/:id', validateTokenForDeleteTalker, deleteTalker);
