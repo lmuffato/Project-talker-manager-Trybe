@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs').promises;
 const ultility = require('./middlewares');
 const createTalker = require('./createTalker');
+const editTalker = require('./editTalker');
 
 const router = express.Router({
   mergeParams: true,
@@ -16,6 +17,8 @@ router.get('/', async (_req, res) => {
 });
 
 router.post('/', ultility, createTalker);
+
+router.put('/:id', ultility, editTalker);
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;

@@ -32,5 +32,3 @@ router.post('/', validateEmail, validatePassword, (_req, res) => {
 });
 
 module.exports = router;
-
-// teste
