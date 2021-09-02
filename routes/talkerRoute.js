@@ -28,7 +28,7 @@ router.post('/', validateNewTalker, async (req, res) => {
   const { body } = req;
   console.log(body);
   const newTalker = await postNewTalker(body);
-  res.status(201).json(newTalker);
+  return res.status(201).json(newTalker);
 })
 
 module.exports = router;
