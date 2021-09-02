@@ -2,7 +2,7 @@ const HTTP_UNAUTHORIZED_STATUS = 401;
 const HTTP_BAD_REQUEST_STATUS = 400;
 // const HTTP_OK_STATUS = 200;
 
-function verifiToken(req, res, next) {
+function verifyToken(req, res, next) {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -75,7 +75,7 @@ function validateTalk(req, res, next) {
 }
 
 module.exports = { 
-  verifiToken,
+  verifyToken,
   validateName,
   validateAge,
   validateTalkDate,

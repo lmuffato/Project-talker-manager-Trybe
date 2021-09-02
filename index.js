@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const { getAllTalkers, writeTalker } = require('./fsFunctions');
 const { createToken, validateEmail, validatePassword } = require('./middlewares/middlewaresLogin');
 const {
-  verifiToken,
+  verifyToken,
   validateName,
   validateAge,
   validateTalkDate,
@@ -35,6 +35,23 @@ app.get(
 );
 
 app.get(
+  '/talker/search',
+  verifyToken,
+  rescue(async (req, res) => {
+    const { q } = req.query;
+    const fileTalkers = await getAllTalkers();
+    
+    const filteredTalkers = fileTalkers.filter((talker) => talker.name.includes(q));
+    
+    if (!q || q === '') return res.status().json([]);
+    
+    if (!filteredTalkers) return res.status().json(fileTalkers);
+  
+    res.status(HTTP_OK_STATUS).json(filteredTalkers);
+  }),
+);
+
+app.get(
   '/talker/:id',
   rescue(async (req, res) => {
     const fileTalkers = await getAllTalkers();
@@ -54,7 +71,7 @@ app.post('/login', createToken, validateEmail, validatePassword, (req, res) => {
 
 app.post(
   '/talker',
-  verifiToken,
+  verifyToken,
   validateName,
   validateAge,
   validateTalk,
@@ -76,7 +93,7 @@ app.post(
 
 app.delete(
   '/talker/:id',
-  verifiToken,
+  verifyToken,
   rescue(async (req, res) => {
     const fileTalkers = await getAllTalkers();
     const { id } = req.params;
