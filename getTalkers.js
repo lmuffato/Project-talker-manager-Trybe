@@ -7,13 +7,14 @@ const fs = require('fs').promises;
   .then((data) => JSON.parse(data));
 } */
 
-function readingFile() {
+async function readingFile() {
   const theFile = 'talker.json';
   let talkersData;
   try {
-    talkersData = fs.readFile(theFile, 'utf8')
-  .then((data) => JSON.parse(data));
-   } catch (error) { console.log(error); }
+    talkersData = await fs.readFile(theFile, 'utf8')
+    .then((data) => JSON.parse(data));
+} catch (error) { console.log(error); }
+console.log(talkersData);
   return talkersData;
 }
 
