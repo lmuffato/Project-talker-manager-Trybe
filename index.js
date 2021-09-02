@@ -151,7 +151,7 @@ function validateAge(_req, res, age) {
 }
 
 function validateTalkExists(_req, res, talk) {
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (!talk || !talk.watchedAt || (!talk.rate && talk.rate !== 0)) {
     return res.status(HTTP_ERROR400_STATUS).json(messageWatchAndRateRequired);
   }
   return true;
@@ -191,8 +191,27 @@ async function createTalker(req, res) {
   }
 }
 
+async function updateTalker(req, res) {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  try {
+    const dataTalkers = await readFile();
+    const editTalker = { name, age, id, talk };
+    const updateListOfTalkers = [...dataTalkers].map((talker) => (
+      +talker.id === +id ? { ...editTalker } : talker
+    ));
+    await fs.writeFile('talker.json', JSON.stringify(updateListOfTalkers));
+    console.log({ name, age, id, talk });
+    return res.status(HTTP_OK_STATUS).json(editTalker);
+  } catch (error) {
+    return error;
+  }
+}
+
 // Requisito 3
 app.post('/login', validateEmail, validatePass, generateAuth);
 
 // Requisito 4
 app.post('/talker', validateTalker, createTalker);
+
+app.put('/talker/:id', validateTalker, updateTalker);
