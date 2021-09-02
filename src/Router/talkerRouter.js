@@ -40,6 +40,17 @@ router.get('/', async (_req, res) => {
   }
 });
 
+router.get('/search', isValidToken, async (req, res) => {
+  try {
+    const { q } = req.query;
+    const data = await getFile();
+    const filterTalker = data.filter((t) => t.name.includes(q));
+    res.status(200).json(filterTalker);
+  } catch (e) {
+    console.log(`Erro - Req 7 ${e}`);
+  }
+});
+
 router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -68,7 +79,7 @@ router.post('/', validations, async (req, res) => {
     createTalker(newTalker);
     res.status(201).json(newTalker);
   } catch (e) {
-    console.log(`Erro: ${e}`);
+    console.log(`Erro req 4: ${e}`);
   }
 });
 
@@ -89,7 +100,7 @@ router.put('/:id', validations, async (req, res) => {
     const showtalker = data.find((t) => t.id === parseInt(id, 0));
     res.status(200).json(showtalker);
   } catch (e) {
-    console.error(`Erro: ${e}`);
+    console.error(`Erro Req 5: ${e}`);
   }
 });
 
@@ -101,7 +112,7 @@ router.delete('/:id', isValidToken, async (req, res) => {
     fs.writeFile('talker.json', JSON.stringify(newData));
     res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
   } catch (e) {
-    console.error(`Erro: ${e}`);
+    console.error(`Erro Req 6: ${e}`);
   }
 });
 
