@@ -39,8 +39,7 @@ router.get('/search', validateToken, rescue(async (req, res) => {
   if (!filteredTalkers) return res.status(200).json([]);
 
   res.status(200).json(filteredTalkers);
-
-}));
+  }));
 
 router.get('/:id', rescue(async (req, res) => {
   const { id } = req.params;
