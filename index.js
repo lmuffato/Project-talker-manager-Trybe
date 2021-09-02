@@ -91,6 +91,23 @@ app.put('/talker/:id', validateToken, talkerValidation, async (req, res) => {
 
 // ----------------------------------------
 
+// Requisito 6 - Crie o endpoint DELETE /talker/:id
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+
+  const arrayToSend = await getTalkers();
+  const talkerToChange = arrayToSend.findIndex((talker) => talker.id === Number(id));
+
+  delete arrayToSend[talkerToChange];
+
+  await fs.writeFile('./talker.json', JSON.stringify(arrayToSend));
+
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
+// ----------------------------------------
+
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
