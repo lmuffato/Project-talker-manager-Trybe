@@ -44,4 +44,25 @@ module.exports = {
       res.status(400).json({ message: error.message });
     }
   },
+
+  async putTalker(req, res) {
+    try {
+      const { id } = req.params;
+      let talkers = await getAllTalkers();
+      let talkerUpdated = {};
+      const { name, age, talk } = req.body;
+      talkers = talkers.map((talker) => {
+        let talkerUpdate = talker;
+        if (talkerUpdate.id === Number(id)) {
+          talkerUpdate = { name, age, talk, id: Number(id) };
+          talkerUpdated = talkerUpdate;
+        } 
+        return talkerUpdate;
+      });
+      await fs.writeFile('./talker.json', JSON.stringify(talkers));
+      res.status(200).json(talkerUpdated);
+    } catch (error) {
+      res.status(400).json({ message: error.message });
+    }
+  },
 };
