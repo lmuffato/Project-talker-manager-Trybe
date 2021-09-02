@@ -4,6 +4,13 @@ const fs = require('fs').promises;
 const emailValidation = require('./middleware/emailValidation');
 const passwordlValidation = require('./middleware/passwordValidation');
 const tokenGeneration = require('./middleware/tokenGeneration');
+const tokenValidation = require('./middleware/tokenValidation');
+const talkerNameValidation = require('./middleware/talkerNameValidation');
+const talkerAgeValidation = require('./middleware/talkerAgeValidation');
+const watchedAtValidation = require('./middleware/watchedAtValidation');
+const rateValidation = require('./middleware/rateValidation');
+const talkValidation = require('./middleware/talkValidation');
+const addTalker = require('./middleware/addTalker');
 
 const readFile = async () => {
   const data = await fs.readFile('./talker.json', 'utf-8');
@@ -38,6 +45,15 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 app.post('/login', emailValidation, passwordlValidation, tokenGeneration);
+
+app.post('/talker', 
+talkValidation,
+tokenValidation, 
+talkerNameValidation, 
+talkerAgeValidation, 
+watchedAtValidation,
+rateValidation,
+addTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
