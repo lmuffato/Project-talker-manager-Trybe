@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const emailValidation = require('./Middlewares/emailValidation');
+const passwordlValidation = require('./Middlewares/passwordValidation');
+const generateToken = require('./Middlewares/generateToken');
 
 const app = express();
 app.use(bodyParser.json());
@@ -35,9 +38,7 @@ app.get('/talker/:id', async (request, response) => {
 
 // Requisito 3
 
-// app.post('/login', (request, response) => {
-//
-// });
+app.post('/login', emailValidation, passwordlValidation, generateToken);
 
 app.listen(PORT, () => {
   console.log('Online');
