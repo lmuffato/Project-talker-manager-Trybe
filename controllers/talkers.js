@@ -23,4 +23,17 @@ const editTalker = async (req, res) => {
   res.status(200).json(newTalker);
 };
 
-module.exports = { addTalker, editTalker };
+const deleteTalker = async (req, res) => {
+  const talker = await palestrante();
+  const intId = parseInt(req.params.id, 10);
+  const talkerDeletId = talker.findIndex(({ id }) => id === intId);
+  if (talkerDeletId === -1) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' }); 
+  }
+  const talkerDelete = talker.splice(talkerDeletId, 1)[0];
+  console.log(deleteTalker);
+  await fs.writeFile('talker.json', JSON.stringify(talkerDelete));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+};
+
+module.exports = { addTalker, editTalker, deleteTalker };

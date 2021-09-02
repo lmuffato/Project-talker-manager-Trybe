@@ -11,7 +11,7 @@ const {
   isValidaRate, 
   } = require('./validations/talker');
 
-const { addTalker, editTalker } = require('./controllers/talkers'); 
+const { addTalker, editTalker, deleteTalker } = require('./controllers/talkers'); 
 
 const app = express();
 app.use(bodyParser.json());
@@ -73,7 +73,9 @@ app.put('/talker/:id',
   isValidTalk, 
   isValidaDate, 
   isValidaRate, 
-  editTalker); 
+  editTalker);
+
+app.delete('/talker/:id', isValidToken, deleteTalker);
   
 app.listen(PORT, () => {
   console.log('Online');
