@@ -4,7 +4,18 @@ const router = express.Router();
 
 const readContentFile = require('../utils/readContentFile');
 
+const writeContentFile = require('../utils/writeContentFile');
+
+const { 
+  isValidAge,
+  isValidName,
+  isValidTalk,
+  isValidTalkKeys,
+  isValidToken, 
+} = require('../middleWares/validations');
+
 const HTTP_OK = 200;
+const HTTP_CREATED = 201;
 const HTTP_NOT_FOUND = 404;
 
 const PATH = './talker.json';
@@ -14,8 +25,29 @@ router.get('/', async (_req, res) => {
   res.status(HTTP_OK).json(talkers);
 });
 
-router.post('/', (req, res) => {
-  
+const VALIDATIONS = [isValidToken, isValidAge, isValidName, isValidTalk,
+  isValidTalkKeys,
+];
+
+router.post('/', VALIDATIONS, async (req, res) => {
+  const { name, age, talk: { watchedAt, rate } } = req.body;
+  let newTalker;
+
+  try {
+    const talkers = await readContentFile(PATH);
+    const id = talkers[talkers.length - 1].id + 1;
+    newTalker = { id, name, age, talk: { watchedAt, rate } };
+  } catch (err) {
+    console.log(err.message);
+    return null;
+  }
+  try {
+    await writeContentFile('./talker.json', newTalker);
+  } catch (err) {
+    console.log(err.message);
+    return null;
+  }
+  res.status(HTTP_CREATED).json(newTalker);
 });
 
 router.get('/:id', async (req, res) => {
@@ -34,3 +66,5 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
+// http POST :3000/talker name='Anderson Nascimento' age:=31 'talk.watchedAt'=31/08/2022 talk:='{"watchedAt": "31/08/2022", "rate": 10}'
