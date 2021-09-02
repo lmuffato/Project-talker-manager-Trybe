@@ -111,7 +111,11 @@ function validatePass(req, res, next) {
 }
 
 function generateToken() {
-  return Math.random().toString(16).substr(8) + Math.random().toString(16).substr(6);
+  const token = Math.random().toString(16).substr(8) + Math.random().toString(16).substr(6);
+  if (token.length !== 16) {
+    return Math.random().toString(16).substr(8) + Math.random().toString(16).substr(6);
+  }
+  return token;
 }
 
 function generateAuth(_req, res) {
