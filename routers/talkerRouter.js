@@ -27,7 +27,7 @@ router.get('/', async (_, res) => {
 });
 
 const VALIDATIONS = [
-  isValidToken, isValidName, isValidAge, isValidWatchedAt, isValidRate, isValidTalkKeys,
+  isValidToken, isValidName, isValidAge, isValidTalkKeys, isValidWatchedAt, isValidRate,
 ];
 
 router.post('/', VALIDATIONS, async (req, res) => {
