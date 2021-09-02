@@ -1,5 +1,5 @@
 const moment = require('moment');
-const { checkToken } = require('./funtions');
+const { checkToken } = require('../utils/funtions');
 
 const ERROR_EMAIL_VAZIO = 'O campo "email" é obrigatório';
 const ERROR_EMAIL_INVALID = 'O "email" deve ter o formato "email@email.com"';
