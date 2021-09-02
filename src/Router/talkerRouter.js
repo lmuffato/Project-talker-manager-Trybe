@@ -59,7 +59,7 @@ router.get('/:id', async (req, res) => {
     if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
     res.status(200).json(talker);
   } catch (e) {
-    console.error(`Erro: ${e}`);
+    console.error(`Erro Req 2: ${e}`);
   }
 });
 
