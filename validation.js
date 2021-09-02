@@ -1,4 +1,5 @@
 const validToken = (req, res, next) => {
+  console.log('entrei no validToken');
   const { authorization } = req.headers;
   if (!authorization) {
     return res.status(401).json({
@@ -8,9 +9,10 @@ const validToken = (req, res, next) => {
   if (authorization.lenght !== 16) {
     return res.status(401).json({ message: 'Token inválido' });
   }
+  console.log('cheguei no next');
   next();
 };
-
+/* 
 const validName = (req, res, next) => {
   const { name } = req.body;
   if (!name) {
@@ -54,14 +56,14 @@ const validTalkKeys = (req, res, next) => {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   next();
-};
+}; */
 
 const allTalkerValidations = [
   validToken,
-   validName,
+  /*  validName,
   validAge,
   validTalk,
-  validTalkKeys,
+  validTalkKeys, */
 ];
 
   module.exports = { allTalkerValidations };
