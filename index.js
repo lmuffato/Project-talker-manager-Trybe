@@ -9,6 +9,7 @@ const { validateName, validateAge, validateTalk,
    validateTalkDate, validateTalkRate } = require('./middlewares/validateTalker');
 const createTalker = require('./middlewares/createTalker');
 const editTalker = require('./middlewares/editTalker');
+const deleteTalker = require('./middlewares/deleteTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,6 +32,8 @@ app.put('/talker/:id',
   validateTalkDate,
   validateTalkRate,
   editTalker);
+
+app.delete('/talker/:id', validateToken, deleteTalker);
 
 app.get('/talker', showTalkers);
 
