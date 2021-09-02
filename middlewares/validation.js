@@ -54,7 +54,7 @@ function validateAge(req, res, next) {
 
 const validateTalk = {
   rateAndWatchedAtExists(body) {
-    if (!body.talk || !body.talk.rate || !body.talk.watchedAt) {
+    if (!body.talk || body.talk.rate === undefined || !body.talk.watchedAt) {
       throw new Error('O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios');
     }
   },
