@@ -1,5 +1,4 @@
 const fs = require('fs').promises;
-// const validToken = require('./validation');
 
 /* function readingFile() {
   const theFile = 'talker.json';
@@ -14,7 +13,6 @@ async function readingFile() {
     talkersData = await fs.readFile(theFile, 'utf8')
     .then((data) => JSON.parse(data));
 } catch (error) { console.log(error); }
-console.log(talkersData);
   return talkersData;
 }
 
@@ -37,21 +35,16 @@ res.status(200).json(talkerById);
 const addTalker = async (req, res) => {
 console.log('cheguei aqui');
 const { name, age, talk } = req.body;
-let oldTalkers;
-try {
-  oldTalkers = await readingFile();
-} catch (error) {
-  console.log(error); 
-}
-console.log('oldTalkers ');
-console.log(oldTalkers);
+const oldTalkers = await readingFile();
 const newTalker = {
-  name, age, talk, id: oldTalkers.lenght + 1,
+  name,
+  age,
+  talk,
+  id: oldTalkers.length + 1,
 };
-const attTalkers = oldTalkers.push(newTalker);
-console.log('attTalkers');
-console.log(attTalkers);
-await fs.writeFile('talker.json', JSON.stringify(attTalkers));
+console.log(newTalker);
+oldTalkers.push(newTalker);
+await fs.writeFile('talker.json', JSON.stringify(oldTalkers));
   res.status(200).json(newTalker);
 };
 

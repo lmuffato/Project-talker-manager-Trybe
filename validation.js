@@ -1,12 +1,14 @@
 const validToken = (req, res, next) => {
   console.log('entrei no validToken');
   const { authorization } = req.headers;
+  console.log('authorization');
+  console.log(authorization);
   if (!authorization) {
     return res.status(401).json({
       message: 'Token não encontrado',
     });
   }
-  if (authorization.lenght !== 16) {
+  if (authorization.lenght < 16 || authorization.lenght > 16) {
     return res.status(401).json({ message: 'Token inválido' });
   }
   console.log('cheguei no next');
