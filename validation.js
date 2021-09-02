@@ -1,8 +1,9 @@
-const express = require('express');
-const app = express();
-
 const validateToken = (req, res, next) => {
- 
+  const { token } = req.headers;
+  if (token.length < 17) {
+    res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+  }
+
   next();
 };
 
