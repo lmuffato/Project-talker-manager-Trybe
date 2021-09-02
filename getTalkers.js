@@ -1,10 +1,20 @@
 const fs = require('fs').promises;
 // const validToken = require('./validation');
 
-function readingFile() {
+/* function readingFile() {
   const theFile = 'talker.json';
   return fs.readFile(theFile, 'utf8')
   .then((data) => JSON.parse(data));
+} */
+
+function readingFile() {
+  const theFile = 'talker.json';
+  let talkersData;
+  try {
+    talkersData = fs.readFile(theFile, 'utf8')
+  .then((data) => JSON.parse(data));
+   } catch (error) { console.log(error); }
+  return talkersData;
 }
 
 const getAllTalkers = async (_req, res) => {
@@ -24,18 +34,24 @@ res.status(200).json(talkerById);
 // só pra né
 
 const addTalker = async (req, res) => {
+console.log('cheguei aqui');
 const { name, age, talk } = req.body;
-// leitura dos palestrantes
-const oldTalkers = await readingFile();
-// cria variavel do novo palestrante
+let oldTalkers;
+try {
+  oldTalkers = await readingFile();
+} catch (error) {
+  console.log(error); 
+}
+console.log('oldTalkers ');
+console.log(oldTalkers);
 const newTalker = {
   name, age, talk, id: oldTalkers.lenght + 1,
 };
-// cria variavel que adiciona aos antigos palestrantes, o novo
 const attTalkers = oldTalkers.push(newTalker);
-// escreve no arquivo o novo dado de palestrantes
-await fs.writeFile('talker.json', JSON.stringfy(attTalkers));
-  res.status(20).json(newTalker);
+console.log('attTalkers');
+console.log(attTalkers);
+await fs.writeFile('talker.json', JSON.stringify(attTalkers));
+  res.status(200).json(newTalker);
 };
 
 module.exports = { getAllTalkers, getTalkerById, addTalker };
