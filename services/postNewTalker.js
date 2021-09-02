@@ -1,0 +1,1 @@
+const getTalkers = require('./getTalkers');

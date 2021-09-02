@@ -1,6 +1,7 @@
 const express = require('express');
 const getTalkers = require('../services/getTalkers');
 const getTalkersById = require('../services/getTalkerById');
+const validateNewTalker = require('../middlewares/newTalkerAuth');
 
 const router = express.Router();
 
@@ -21,5 +22,9 @@ router.get('/:id', async (req, res) => {
   }
   return res.status(200).json(talker);
 });
+
+router.post('/', validateNewTalker, (req, res) => {
+  
+})
 
 module.exports = router;
