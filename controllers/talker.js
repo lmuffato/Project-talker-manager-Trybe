@@ -7,9 +7,9 @@ module.exports = {
   async getTalkers(req, res) {
     try {
       const talkers = await getAllTalkers();
-      res.status(200).json(talkers);
+      return res.status(200).json(talkers);
     } catch (error) {
-      res.status(400).json({ error: error.message });
+      return res.status(400).json({ error: error.message });
     }
   },
 
@@ -19,9 +19,9 @@ module.exports = {
       const talkers = await getAllTalkers();
       const talker = talkers.find((person) => person.id === Number(id));
       if (!talker) throw new Error('Pessoa palestrante não encontrada');
-      res.status(200).json(talker);
+      return res.status(200).json(talker);
     } catch (error) {
-      res.status(404).json({ message: error.message });
+      return res.status(404).json({ message: error.message });
     }
   },
 
@@ -39,9 +39,9 @@ module.exports = {
       };
       talkers.push(talker);
       await fs.writeFile('./talker.json', JSON.stringify(talkers));
-      res.status(201).json(talker);
+      return res.status(201).json(talker);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
   },
 
@@ -60,9 +60,9 @@ module.exports = {
         return talkerUpdate;
       });
       await fs.writeFile('./talker.json', JSON.stringify(talkers));
-      res.status(200).json(talkerUpdated);
+      return res.status(200).json(talkerUpdated);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
   },
 };

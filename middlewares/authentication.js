@@ -7,7 +7,7 @@ module.exports = {
       const validToken = typeof authorization === 'string' && authorization.length === 16;
       if (!validToken) throw new Error('Token inválido');
     } catch (error) {
-      res.status(401).json({ message: error.message });
+      return res.status(401).json({ message: error.message });
     }
 
     next();

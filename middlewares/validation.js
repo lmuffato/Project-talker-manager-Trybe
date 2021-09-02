@@ -11,7 +11,7 @@ function validateEmail(req, res, next) {
       const validEmail = email.match(emailPattern);
       if (!validEmail) throw new Error('O "email" deve ter o formato "email@email.com"');
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
 
     next();
@@ -23,7 +23,7 @@ function validatePassword(req, res, next) {
     try {
       checkLength({ password }, 6);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
 
     next();
@@ -34,7 +34,7 @@ function validateName(req, res, next) {
     try {
       checkLength({ name }, 3);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
 
     next();
@@ -46,7 +46,7 @@ function validateAge(req, res, next) {
       if (!age) throw new Error('O campo "age" é obrigatório');
       if (age < 18) throw new Error('A pessoa palestrante deve ser maior de idade');
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
 
     next();
@@ -78,7 +78,7 @@ const validateTalk = {
       validateTalk.dateFormat(talk.watchedAt);
       validateTalk.rate(talk.rate);
     } catch (error) {
-      res.status(400).json({ message: error.message });
+      return res.status(400).json({ message: error.message });
     }
 
     next();
