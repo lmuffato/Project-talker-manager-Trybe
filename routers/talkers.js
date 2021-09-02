@@ -1,6 +1,7 @@
 const { Router } = require('express');
 
 const addTalker = require('../talkers/addTalker');
+const deleteTalker = require('../talkers/deleteTalker');
 const editTalker = require('../talkers/editTalker');
 const getter = require('../talkers/get');
 const getById = require('../talkers/getID');
@@ -13,4 +14,5 @@ router.get('/', getter);
 router.get('/:id', getById);
 router.post('/', ...addValidation, addTalker);
 router.put('/:id', ...addValidation, editTalker);
+router.delete('/:id', token, deleteTalker);
 module.exports = router;
