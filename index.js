@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs').promises;
 const fileReader = require('./fileManager');
+/* const validEmail = require('./validEmail'); */
 
 const app = express();
 app.use(bodyParser.json());
@@ -14,37 +14,16 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-/* async function getDados(_req, res, next) {
-   try { 
-    const response = await fs.readFile('./talke.json', 'utf-8');
-    res.status(200).json(JSON.parse(response));
-   // if (!response || response === '') return res.status(400).json({ message: 'Invalid data!' }); 
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-  next();
-} */
-
 app.get('/talker', async (req, res) => {
   const talkers = await fileReader();
   res.status(200).json(talkers || []);
 });
 
-// at1
-/* app.get('/talker', async (req, res) => {
-  try {
-      const response = await fs.readFile('./talker.json', 'utf-8');
-      res.status(200).json(JSON.parse(response));
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-}); */
 // at2
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   try {
-      const response = await fs.readFile('./talker.json', 'utf-8');
-      const arrayOfTalkers = JSON.parse(response);
+      const arrayOfTalkers = await fileReader();
       const filterId = arrayOfTalkers.find((talker) => talker.id === +id);
       if (!filterId) {
         return res.status(404).json(
@@ -57,9 +36,13 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
+/* app.post('/login', validEmail, (req, res) => {
+  res.status(200).json({ token: '7mqaVRXJSp886CGr' }); 
+}); */
+
 // at3
-app.post('/login', (req, res, next) => {
-    const { email } = req.body;
+ app.post('/login', (req, res, next) => {
+     const { email } = req.body;
     const re = /\S+@\S+\.\S+/;
     const regex = re.test(email);
     if (!email || email === '') {
@@ -79,10 +62,10 @@ app.post('/login', (req, res, next) => {
     return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
     }
       next();
-    },
+    }, 
   (req, res) => {
   res.status(200).json({ token: '7mqaVRXJSp886CGr' }); 
-});
+}); 
 
 app.listen(PORT, () => {
   console.log('Online');
