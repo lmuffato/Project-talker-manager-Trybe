@@ -11,6 +11,8 @@ const {
   isValidaRate, 
   } = require('./validations/talker');
 
+const { addTalker, editTalker } = require('./controllers/talkers'); 
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -55,15 +57,24 @@ app.post('/login', isValidEmail, isValidPassword, async (req, res) => {
   res.status(200).json({ token });
 });
 
-app.post('/talker', isValidToken, isValidName, isValidAge, isValidTalk, isValidaDate, isValidaRate, 
-  async (req, res) => {
-  const { body } = req;
-  const talker = await palestrante();
-  const newTalker = ({ id: talker.length + 1, ...body });
-  await fs.writeFile('talker.json', JSON.stringify([...talker, newTalker]));
-  res.status(201).json(newTalker);
-});
+app.post('/talker', 
+  isValidToken, 
+  isValidName, 
+  isValidAge, 
+  isValidTalk, 
+  isValidaDate, 
+  isValidaRate, 
+  addTalker);
 
+app.put('/talker/:id', 
+  isValidToken, 
+  isValidName, 
+  isValidAge, 
+  isValidTalk, 
+  isValidaDate, 
+  isValidaRate, 
+  editTalker); 
+  
 app.listen(PORT, () => {
   console.log('Online');
 });
