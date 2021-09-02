@@ -71,6 +71,26 @@ app.post('/talker', validateToken, talkerValidation, async (req, res) => {
 
 // ----------------------------------------
 
+// Requisito 5 - Crie o endpoint PUT /talker/:id
+
+app.put('/talker/:id', validateToken, talkerValidation, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+
+  const arrayToSend = await getTalkers();
+  const talkerToChange = arrayToSend.findIndex((talker) => talker.id === Number(id));
+
+  // if (talkerToChange === -1) return res.status(404).json({ message: 'Pessoa não encontrada' });
+
+  arrayToSend[talkerToChange] = { ...arrayToSend[talkerToChange], name, age, talk };
+
+  await fs.writeFile('./talker.json', JSON.stringify(arrayToSend));
+
+  res.status(200).json(arrayToSend[talkerToChange]);
+});
+
+// ----------------------------------------
+
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
