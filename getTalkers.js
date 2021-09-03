@@ -12,8 +12,9 @@ async function readingFile() {
   try {
     talkersData = await fs.readFile(theFile, 'utf8')
     .then((data) => JSON.parse(data));
-} catch (error) { console.log(error); }
-  return talkersData;
+  } catch (error) { console.log(error); }
+  // return res.status(x).json({ message: 'cxxxx'})}
+return talkersData;
 }
 
 const getAllTalkers = async (_req, res) => {
@@ -30,10 +31,7 @@ const getTalkerById = async (req, res) => {
 res.status(200).json(talkerById);
 };
 
-// só pra né
-
 const addTalker = async (req, res) => {
-console.log('cheguei aqui na funcao addTalker');
 const { name, age, talk } = req.body;
 const oldTalkers = await readingFile();
 const newTalker = {
@@ -47,6 +45,23 @@ await fs.writeFile('talker.json', JSON.stringify(oldTalkers));
   res.status(201).json(newTalker);
 };
 
-module.exports = { getAllTalkers, getTalkerById, addTalker };
+const editTalker = async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const editingTalker = {
+    id: Number(id),
+    name,
+    age,
+    talk,
+  };
+  const previousTalkers = await readingFile();
+  console.log(previousTalkers); // array
+  previousTalkers.filter((t) => Number(t.id) !== Number(id));
+  previousTalkers.push(editingTalker);
+  await fs.writeFile('talker.json', JSON.stringify(previousTalkers));
+  return res.status(200).json(editingTalker);
+};
+
+module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker };
 
 // referência parseInt : https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
