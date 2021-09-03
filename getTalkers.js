@@ -8,13 +8,10 @@ const fs = require('fs').promises;
 
 async function readingFile() {
   const theFile = 'talker.json';
-  let talkersData;
   try {
-    talkersData = await fs.readFile(theFile, 'utf8')
-    .then((data) => JSON.parse(data));
+    const talkersData = await fs.readFile(theFile, 'utf8');
+    return JSON.parse(talkersData);
   } catch (error) { console.log(error); }
-  // return res.status(x).json({ message: 'cxxxx'})}
-return talkersData;
 }
 
 const getAllTalkers = async (_req, res) => {
@@ -55,18 +52,20 @@ const editTalker = async (req, res) => {
     talk,
   };
   const previousTalkers = await readingFile();
-  previousTalkers.filter((t) => Number(t.id) !== Number(id));
-  previousTalkers.push(editingTalker);
-  await fs.writeFile('talker.json', JSON.stringify(previousTalkers));
+  const otherTalkers = previousTalkers.filter((t) => Number(t.id) !== Number(id));
+  otherTalkers.push(editingTalker);
+  await fs.writeFile('talker.json', JSON.stringify(otherTalkers));
   return res.status(200).json(editingTalker);
 };
 
 const deleteTalker = async (req, res) => {
-  const { id } = req.params;
-  const previousTalkers = await readingFile();
-  previousTalkers.filter((t) => Number(t.id) !== Number(id));
-  await fs.writeFile('talker.json', JSON.stringify(previousTalkers));
-  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  try {
+    const { id } = req.params;
+    const talkersData = await readingFile();
+    const attTalker = talkersData.filter((talk) => talk.id !== Number(id));
+    await fs.writeFile('talker.json', JSON.stringify(attTalker));
+    res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  } catch (e) { res.status(500).json({ message: e.message }); }
 };
 
 module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker };

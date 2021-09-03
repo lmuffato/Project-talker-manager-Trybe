@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const {
   getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker } = require('./getTalkers');
-const { allTalkerValidations } = require('./validation');
+const { allTalkerValidations, validToken } = require('./validation');
 
 const routerTalker = Router();
 
@@ -13,6 +13,6 @@ routerTalker.post('/', allTalkerValidations, addTalker);
 
 routerTalker.put('/:id', allTalkerValidations, editTalker);
 
-routerTalker.delete('/:id', deleteTalker);
+routerTalker.delete('/:id', validToken, deleteTalker);
 
 module.exports = routerTalker;

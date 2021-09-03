@@ -65,7 +65,7 @@ const allTalkerValidations = [
   validTalkKeys,
 ];
 
-  module.exports = { allTalkerValidations };
+  module.exports = { allTalkerValidations, validToken };
 
 /* Referência de regex de IagoFerreira:
 https://github.com/tryber/sd-010-a-project-talker-manager/pull/4/files ;
