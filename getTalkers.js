@@ -1,11 +1,5 @@
 const fs = require('fs').promises;
 
-/* function readingFile() {
-  const theFile = 'talker.json';
-  return fs.readFile(theFile, 'utf8')
-  .then((data) => JSON.parse(data));
-} */
-
 async function readingFile() {
   const theFile = 'talker.json';
   try {
@@ -15,47 +9,54 @@ async function readingFile() {
 }
 
 const getAllTalkers = async (_req, res) => {
-  const allTalkersList = await readingFile();
-  return res.status(200).json(allTalkersList);
+  try {
+    const allTalkersList = await readingFile();
+    return res.status(200).json(allTalkersList);
+  } catch (e) { res.status(500).json({ message: e.message }); }
 };
 
 const getTalkerById = async (req, res) => {
-  const { id } = req.params;
-  const allTalkers = await readingFile();
-  const talkerById = allTalkers.find((talk) => talk.id === parseInt(id, 10));
-  if (!talkerById) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-
-res.status(200).json(talkerById);
+  try {
+    const { id } = req.params;
+    const allTalkers = await readingFile();
+    const talkerById = allTalkers.find((talk) => talk.id === parseInt(id, 10));
+    if (!talkerById) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+    res.status(200).json(talkerById);
+  } catch (e) { res.status(500).json({ message: e.message }); }
 };
 
 const addTalker = async (req, res) => {
-const { name, age, talk } = req.body;
-const oldTalkers = await readingFile();
-const newTalker = {
-  name,
-  age,
-  talk,
-  id: oldTalkers.length + 1,
-};
-oldTalkers.push(newTalker);
-await fs.writeFile('talker.json', JSON.stringify(oldTalkers));
-  res.status(201).json(newTalker);
+  try {
+    const { name, age, talk } = req.body;
+    const oldTalkers = await readingFile();
+    const newTalker = {
+      name,
+      age,
+      talk,
+      id: oldTalkers.length + 1,
+    };
+    oldTalkers.push(newTalker);
+    await fs.writeFile('talker.json', JSON.stringify(oldTalkers));
+      res.status(201).json(newTalker);
+  } catch (e) { res.status(500).json({ message: e.message }); }
 };
 
 const editTalker = async (req, res) => {
-  const { id } = req.params;
-  const { name, age, talk } = req.body;
-  const editingTalker = {
-    id: Number(id),
-    name,
-    age,
-    talk,
-  };
-  const previousTalkers = await readingFile();
-  const otherTalkers = previousTalkers.filter((t) => Number(t.id) !== Number(id));
-  otherTalkers.push(editingTalker);
-  await fs.writeFile('talker.json', JSON.stringify(otherTalkers));
-  return res.status(200).json(editingTalker);
+  try {
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+    const editingTalker = {
+      id: Number(id),
+      name,
+      age,
+      talk,
+    };
+    const previousTalkers = await readingFile();
+    const otherTalkers = previousTalkers.filter((t) => Number(t.id) !== Number(id));
+    otherTalkers.push(editingTalker);
+    await fs.writeFile('talker.json', JSON.stringify(otherTalkers));
+    return res.status(200).json(editingTalker); 
+  } catch (e) { res.status(500).json({ message: e.message }); }
 };
 
 const deleteTalker = async (req, res) => {
