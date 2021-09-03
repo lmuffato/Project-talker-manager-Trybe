@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const crypto = require('crypto');
 
-const { validateToken, validateEmail, validatePassword } = require('./validation.js');
+const { validateEmail, validatePassword } = require('./validation.js');
 
 const app = express();
 app.use(bodyParser.json());
@@ -45,9 +45,9 @@ app.post('/login', validateEmail, validatePassword, (_req, res) => {
 });
 
 // // requisito 4
-app.post('/taker', validateToken, validateEmail, validatePassword, (_req, res) => {
+// app.post('/taker', validateToken, validateEmail, validatePassword, (_req, res) => {
   
-});
+// });
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
