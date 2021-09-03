@@ -7,6 +7,7 @@ const talkerRouter = require('./router/talkerRouter');
 const app = express();
 
 app.use(bodyParser.json());
+
 app.use('/talker', talkerRouter);
 app.use('/login', loginRouter);
 

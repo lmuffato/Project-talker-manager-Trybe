@@ -92,6 +92,19 @@ router.put('/:id',
     return res.status(HTTP_OK_STATUS).json(newData[newData.length - 1]);
   });
 
+  router.delete('/:id',
+  validateToken,
+
+  async (req, res) => {
+    const { id } = req.params;    
+    const data = await readData();
+    const dataFiltered = data.filter((d) => d.id !== parseInt(id, 10));
+   
+    await writeData(dataFiltered);
+
+    return res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  });
+
 module.exports = router;
 
 // Durante o desenvolvimento do requisito 4 foi consultado o repositório do colega Gabriel Pereira
