@@ -7,7 +7,8 @@ const { validateToken } = require('../middlewares/tokenHandlers');
 const {
   newTalkerValidation,
   createTalker,
-  editTalker } = require('../middlewares/newTalkerHandler');
+  editTalker,
+  deleteTalker } = require('../middlewares/talkerListHandler');
 
 const router = Router();
 
@@ -18,5 +19,7 @@ router.get('/:id', getFilteredTalker);
 router.post('/', validateToken, newTalkerValidation, createTalker);
 
 router.put('/:id', validateToken, newTalkerValidation, editTalker);
+
+router.delete('/:id', validateToken, deleteTalker);
 
 module.exports = router;

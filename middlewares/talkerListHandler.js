@@ -72,32 +72,43 @@ const getMaxId = (talkersList) => (
   }, 0)
 );
 
+const saveTalkerList = (talkerList) => {
+  fsP.writeFile('./talker.json', JSON.stringify(talkerList))
+    .then(() => console.log('Lista de pessoas palestrantes salva com sucesso'))
+    .catch((err) => console.log(err.message));
+};
+
+const readTalkerList = () => JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
+
 function createTalker(req, res) {
   const talker = req.body;
-  const talkers = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
+  const talkers = readTalkerList();
   const newTalker = { id: 1 + getMaxId(talkers), ...talker };
   talkers.push(newTalker);
-  fsP.writeFile('./talker.json', JSON.stringify(talkers))
-    .then(() => console.log('Pessoa palestrante registrada com sucesso'))
-    .catch((err) => console.log(err.message));
+  saveTalkerList(talkers);
   return res.status(201).json(newTalker);
 }
 
 function editTalker(req, res) {
   const { id } = req.params;
   const talker = req.body;
-  const talkers = JSON.parse(fs.readFileSync('./talker.json', 'utf8'))
-    .filter((talkerReg) => talkerReg.id !== +id);
+  const talkers = readTalkerList().filter((talkerReg) => talkerReg.id !== +id);
   const editedTalker = { id: +id, ...talker };
   talkers.push(editedTalker);
-  fsP.writeFile('./talker.json', JSON.stringify(talkers))
-    .then(() => console.log('Pessoa palestrante editada com sucesso'))
-    .catch((err) => console.log(err.message));
+  saveTalkerList(talkers);
   return res.status(200).json(editedTalker);
+}
+
+function deleteTalker(req, res) {
+  const { id } = req.params;
+  const talkers = readTalkerList().filter((talkerReg) => talkerReg.id !== +id);
+  saveTalkerList(talkers);
+  return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 }
 
 module.exports = {
   newTalkerValidation: [validateTalkerName, validateTalkerAge, validateTalk],
   createTalker,
   editTalker,
+  deleteTalker,
 };
