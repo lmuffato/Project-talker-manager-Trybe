@@ -55,7 +55,13 @@ const validateAge = (req, res, next) => {
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
 
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (!talk || !talk.watchedAt) {
+    return res.status(400).json({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
+  }
+
+  if (talk.rate === undefined || talk.rate === '') {
     return res.status(400).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
@@ -68,6 +74,12 @@ const validateWatchedAt = (req, res, next) => {
   const { talk } = req.body;
   const dateFormat = /^(0?[1-9]|[12][0-9]|3[01])[/-](0?[1-9]|1[012])[/-]\d{4}$/;
   // Ref para o regex: https://github.com/tryber/sd-010-a-project-talker-manager/pull/46/files
+  
+  if (talk.watchedAt === undefined || talk.watchedAt === '') {
+    return res.status(400).json({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
+  }
 
   if (dateFormat.test(talk.watchedAt) === false) {
     return res.status(400).json({
@@ -79,15 +91,15 @@ const validateWatchedAt = (req, res, next) => {
 };
 
 const validateRate = (req, res, next) => {
-  const { talk } = req.body;
+  const { talk: { rate } } = req.body;
 
-  if (+talk.rate < 1) {
+  if (rate === undefined || rate === '') {
     return res.status(400).json({
-      message: 'O campo "rate" deve ser um inteiro de 1 à 5',
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
-
-  if (+talk.rate > 5) {
+  
+  if (rate < 1 || rate > 5) {
     return res.status(400).json({
       message: 'O campo "rate" deve ser um inteiro de 1 à 5',
     });

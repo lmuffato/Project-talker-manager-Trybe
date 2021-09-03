@@ -28,6 +28,7 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', getTalkers);
+app.get('/talker/search', validateToken, searchTalker);
 app.get('/talker/:id', getTalkerById);
 app.post('/login', validateEmail, validatePassword, postToken);
 app.post('/talker',
@@ -43,11 +44,11 @@ validateToken,
 validateName,
 validateAge,
 validateTalk,
-validateRate,
 validateWatchedAt,
+validateRate,
 editTalker);
+
 app.delete('/talker/:id', validateToken, deleteTalker);
-app.get('/talker/search', validateToken, searchTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
