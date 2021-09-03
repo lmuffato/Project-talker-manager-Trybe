@@ -50,6 +50,7 @@ const validateRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
   const intRate = parseInt(rate, 10);
   const sentece = intRate >= 1 && intRate <= 5;
+  // console.log(intRate);
   if (!sentece) {
     return res.status(400).json({
       message: 'O campo "rate" deve ser um inteiro de 1 à 5',
