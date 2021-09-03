@@ -55,13 +55,18 @@ const editTalker = async (req, res) => {
     talk,
   };
   const previousTalkers = await readingFile();
-  console.log(previousTalkers); // array
   previousTalkers.filter((t) => Number(t.id) !== Number(id));
   previousTalkers.push(editingTalker);
   await fs.writeFile('talker.json', JSON.stringify(previousTalkers));
   return res.status(200).json(editingTalker);
 };
 
-module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker };
+const deleteTalker = async (req, res) => {
+  const { id } = req.params;
+  const previousTalkers = await readingFile();
+  previousTalkers.filter((t) => Number(t.id) !== Number(id));
+  await fs.writeFile('talker.json', JSON.stringify(previousTalkers));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+};
 
-// referência parseInt : https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/parseInt
+module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker };
