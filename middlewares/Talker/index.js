@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const { fileReader, fileWriter } = require('../../utils/talkersFileOperations');
 
@@ -21,7 +22,7 @@ const talkerValidators = [
 
 router.get('/', async (_req, res) => {
   const parsedTalker = await fileReader();
-  return res.status(HTTP_OK_STATUS).json(parsedTalker || []);
+  return res.status(200).json(parsedTalker || []);
 });
 
 router.get('/search', validateToken, async (req, res) => {
