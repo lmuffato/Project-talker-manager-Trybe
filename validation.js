@@ -7,12 +7,13 @@ const validateToken = (req, res, next) => {
   next();
 };
 
-function EmailIsValid(email) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
 const validateEmail = (req, res, next) => {
   const { email } = req.body;
+
+  function EmailIsValid(emailvalid) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailvalid);
+  }
+  
   const valid = EmailIsValid(email);
 
   if (!email || email === '') {
@@ -33,7 +34,7 @@ const validatePassword = (req, res, next) => {
     res.status().json({ message: 'O campo "password" é obrigatório' });
   }
 
-  if (password.length < 6) {
+  if (password.length < 7) {
     res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
 
