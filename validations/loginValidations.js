@@ -49,3 +49,6 @@ module.exports = {
   validatePassword,
   generateToken,
 };
+
+// Utilizada a biblioteca Chance para gerar o token aleatório
+// https://chancejs.com/basics/string.html

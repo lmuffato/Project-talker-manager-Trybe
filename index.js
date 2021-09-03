@@ -23,6 +23,3 @@ app.get('/', (_request, response) => {
 app.listen(PORT, () => {
   console.log('Online');
 });
-
-// Utilizada a biblioteca Chance para gerar o token aleatório
-// https://chancejs.com/basics/string.html

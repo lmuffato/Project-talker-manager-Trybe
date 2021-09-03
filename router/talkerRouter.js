@@ -124,3 +124,4 @@ module.exports = router;
 
 // Durante o desenvolvimento do requisito 4 foi consultado o repositório do colega Gabriel Pereira
 // https://github.com/tryber/sd-010-a-project-talker-manager/blob/gbl97-sd-010-a-project-talker-manager/crud.js
+// Também recebi dicas do colega Sergio Murillo Gonçalves para utilizar o router nas salas de breakroom.
