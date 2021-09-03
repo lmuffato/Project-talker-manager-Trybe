@@ -2,7 +2,9 @@ const express = require('express');
 const getTalkers = require('../services/getTalkers');
 const getTalkersById = require('../services/getTalkerById');
 const postNewTalker = require('../services/postNewTalker');
+const deleteTalker = require('../services/deleteTalker');
 const putTalker = require('../services/putTalker');
+const validateToken = require('../middlewares/tokenAuthMiddle');
 const validateTalker = require('../middlewares/newTalkerAuth');
 
 const router = express.Router();
@@ -35,8 +37,15 @@ router.put('/:id', validateTalker, async (req, res) => {
   const { id } = req.params;
   const { body } = req;
   const updatedTalker = await putTalker(body, id);
-  // console.log(updatedTalker);
   return res.status(200).json(updatedTalker);
+});
+
+router.delete('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  await deleteTalker(id);
+  return res.status(200).json({
+    message: 'Pessoa palestrante deletada com sucesso',
+  });
 });
 
 module.exports = router;
