@@ -1,6 +1,6 @@
 const { Router } = require('express');
 
-const { getFilteredTalker, getTalkerList } = require('../middlewares/getTalkers');
+const { getFilteredTalker, getTalkerList, searchTalkers } = require('../middlewares/getTalkers');
 
 const { validateToken } = require('../middlewares/tokenHandlers');
 
@@ -13,6 +13,8 @@ const {
 const router = Router();
 
 router.get('/', getTalkerList);
+
+router.get('/search', validateToken, searchTalkers);
 
 router.get('/:id', getFilteredTalker);
 

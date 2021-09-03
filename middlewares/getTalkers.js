@@ -1,17 +1,15 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 
-async function getTalkerList(_req, res) {
-  const talkers = await fs.readFile('./talker.json', 'utf8')
-    .then((response) => JSON.parse(response))
-    .catch((err) => console.log(err.message));
+const readTalkerList = () => JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
+
+function getTalkerList(_req, res) {
+  const talkers = readTalkerList();
   return res.status(200).json(talkers);
 }
 
-async function getFilteredTalker(req, res) {
+function getFilteredTalker(req, res) {
   const { id } = req.params;
-  const talkers = await fs.readFile('./talker.json', 'utf8')
-    .then((response) => JSON.parse(response))
-    .catch((err) => console.log(err.message));
+  const talkers = readTalkerList();
   const filteredTalker = talkers.find((talker) => talker.id === +id);
   console.log(filteredTalker);
   if (filteredTalker === undefined) { 
@@ -20,4 +18,14 @@ async function getFilteredTalker(req, res) {
   return res.status(200).json(filteredTalker);
 }
 
-module.exports = { getFilteredTalker, getTalkerList };
+function searchTalkers(req, res) {
+  const { q: keyWord } = req.query;
+  const talkersList = readTalkerList();
+  if (keyWord === undefined || keyWord === '') {
+    return res.status(200).json(talkersList);
+  }
+  const filteredTalkers = talkersList.filter((talker) => talker.name.includes(keyWord));
+  return res.status(200).json(filteredTalkers);
+}
+
+module.exports = { getFilteredTalker, getTalkerList, searchTalkers };
