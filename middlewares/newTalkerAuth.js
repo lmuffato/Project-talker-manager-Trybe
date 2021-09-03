@@ -35,8 +35,19 @@ const validateAge = (req, res, next) => {
   next();
 };
 
+const handleUndefined = (obj) => {
+  if (!obj) {
+    return {};
+  }
+  return obj;
+};
+
 const validateTalk = (req, res, next) => {
-  const { talk } = req.body;
+  let { talk } = req.body;
+  talk = handleUndefined(talk);
+  if (talk.rate === 0) {
+    talk.rate = talk.rate.toString();
+  }
   const sentece = talk && talk.watchedAt && talk.rate;
   if (!sentece) {
     return res.status(400).json({
@@ -50,7 +61,6 @@ const validateRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
   const intRate = parseInt(rate, 10);
   const sentece = intRate >= 1 && intRate <= 5;
-  // console.log(intRate);
   if (!sentece) {
     return res.status(400).json({
       message: 'O campo "rate" deve ser um inteiro de 1 à 5',
