@@ -74,7 +74,6 @@ const getMaxId = (talkersList) => (
 
 function createTalker(req, res) {
   const talker = req.body;
-  console.log(req.body);
   const talkers = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
   const newTalker = { id: 1 + getMaxId(talkers), ...talker };
   talkers.push(newTalker);
@@ -84,7 +83,21 @@ function createTalker(req, res) {
   return res.status(201).json(newTalker);
 }
 
+function editTalker(req, res) {
+  const { id } = req.params;
+  const talker = req.body;
+  const talkers = JSON.parse(fs.readFileSync('./talker.json', 'utf8'))
+    .filter((talkerReg) => talkerReg.id !== +id);
+  const editedTalker = { id: +id, ...talker };
+  talkers.push(editedTalker);
+  fsP.writeFile('./talker.json', JSON.stringify(talkers))
+    .then(() => console.log('Pessoa palestrante editada com sucesso'))
+    .catch((err) => console.log(err.message));
+  return res.status(200).json(editedTalker);
+}
+
 module.exports = {
   newTalkerValidation: [validateTalkerName, validateTalkerAge, validateTalk],
   createTalker,
+  editTalker,
 };
