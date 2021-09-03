@@ -5,7 +5,7 @@ const router = express.Router();
 
 const {
   validateEmail,
-  validatePassword
+  validatePassword,
 } = require('../validators');
 
 router.post('/', validateEmail, validatePassword, (_req, res) => {
