@@ -1,5 +1,10 @@
 const fs = require('fs').promises;
 
+const STATUS_OK = 200;
+const STATUS_OK_ADD = 201;
+const STATUS_ERRO = 500;
+const STATUS_NOT_FOUND = 404;
+
 async function readingFile() {
   const theFile = 'talker.json';
   try {
@@ -11,8 +16,8 @@ async function readingFile() {
 const getAllTalkers = async (_req, res) => {
   try {
     const allTalkersList = await readingFile();
-    res.status(200).json(allTalkersList);
-  } catch (e) { console.log(e);/* res.status(500).json({ message: e.message }); */ }
+    res.status(STATUS_OK).json(allTalkersList);
+  } catch (e) { res.status(STATUS_ERRO).json({ message: e.message }); }
 };
 
 const getSearch = async (req, res) => {
@@ -20,13 +25,11 @@ const getSearch = async (req, res) => {
     const { query } = req.query;
     console.log(query);
     const alltalkers = await readingFile();
-    if (!query || query === '') return res.status(200).json(alltalkers);
+    if (!query || query === '') return res.status(STATUS_OK).json(alltalkers);
     const filtredTalkers = alltalkers.filter((talk) => talk.name.includes(query));
-    if (!filtredTalkers) return res.status(200).json([]);
-    res.status(200).json(filtredTalkers);  
-  } catch (e) /* { res.status(500).json({ message: e.message }); } */ {
-    console.log(e);
-  }
+    if (!filtredTalkers) return res.status(STATUS_OK).json([]);
+    res.status(STATUS_OK).json(filtredTalkers);  
+  } catch (e) { res.status(STATUS_ERRO).json({ message: e.message }); }
 };
 
 const getTalkerById = async (req, res) => {
@@ -34,9 +37,11 @@ const getTalkerById = async (req, res) => {
     const { id } = req.params;
     const allTalkers = await readingFile();
     const talkerById = allTalkers.find((talk) => talk.id === parseInt(id, 10));
-    if (!talkerById) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-    res.status(200).json(talkerById);
-  } catch (e) { res.status(500).json({ message: e.message }); }
+    if (!talkerById) { 
+      return res.status(STATUS_NOT_FOUND).json({ message: 'Pessoa palestrante não encontrada' });
+    }
+    res.status(STATUS_OK).json(talkerById);
+  } catch (e) { res.status(STATUS_ERRO).json({ message: e.message }); }
 };
 
 const addTalker = async (req, res) => {
@@ -51,8 +56,8 @@ const addTalker = async (req, res) => {
     };
     oldTalkers.push(newTalker);
     await fs.writeFile('talker.json', JSON.stringify(oldTalkers));
-      res.status(201).json(newTalker);
-  } catch (e) { res.status(500).json({ message: e.message }); }
+      res.status(STATUS_OK_ADD).json(newTalker);
+  } catch (e) { res.status(STATUS_ERRO).json({ message: e.message }); }
 };
 
 const editTalker = async (req, res) => {
@@ -69,8 +74,8 @@ const editTalker = async (req, res) => {
     const otherTalkers = previousTalkers.filter((t) => Number(t.id) !== Number(id));
     otherTalkers.push(editingTalker);
     await fs.writeFile('talker.json', JSON.stringify(otherTalkers));
-    return res.status(200).json(editingTalker); 
-  } catch (e) { res.status(500).json({ message: e.message }); }
+    return res.status(STATUS_OK).json(editingTalker); 
+  } catch (e) { res.status(STATUS_ERRO).json({ message: e.message }); }
 };
 
 const deleteTalker = async (req, res) => {
@@ -79,8 +84,8 @@ const deleteTalker = async (req, res) => {
     const talkersData = await readingFile();
     const attTalker = talkersData.filter((talk) => talk.id !== Number(id));
     await fs.writeFile('talker.json', JSON.stringify(attTalker));
-    res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
-  } catch (e) { res.status(500).json({ message: e.message }); }
+    res.status(STATUS_OK).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  } catch (e) { res.status(STATUS_ERRO).json({ message: e.message }); }
 };
 
 module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker, getSearch };

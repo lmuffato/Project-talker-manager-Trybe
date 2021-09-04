@@ -1,7 +1,7 @@
 const { Router } = require('express');
 const {
   getAllTalkers, getTalkerById, addTalker,
-  editTalker, deleteTalker, getSearch } = require('./getTalkers');
+  editTalker, deleteTalker, getSearch } = require('./Talkers');
 const { allTalkerValidations, validToken } = require('./validation');
 
 const routerTalker = Router();
