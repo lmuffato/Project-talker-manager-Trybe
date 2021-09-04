@@ -2,6 +2,8 @@ const crypto = require('crypto');
 
 const HTTP_OK_STATUS = 200;
 const HTTP_BAD_REQUEST_STATUS = 400;
+const SIX = 6;
+const EIGHT = 8;
 
 const validEmail = (req, res, next) => {
   const { email } = req.body;
@@ -12,12 +14,12 @@ const validEmail = (req, res, next) => {
     return res.status(HTTP_BAD_REQUEST_STATUS).json({ message: 'O campo "email" é obrigatório' });
   }
 
-  if (emailValido) {
+  if (!emailValido) {
     return res.status(HTTP_BAD_REQUEST_STATUS)
       .json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
 
-  return next();
+  next();
 };
 
 const validPassword = (req, res, next) => {
@@ -28,15 +30,15 @@ const validPassword = (req, res, next) => {
       .json({ message: 'O campo "password" é obrigatório' });
   }
 
-  if (password < 6) {
+  if (password.length < SIX) {
     return res.status(HTTP_BAD_REQUEST_STATUS)
       .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
-  return next();
+  next();
 };
 
 const tokenCrypto = (_req, res) => {
-  const token = crypto.randomBytes(8).toString('hex');
+  const token = crypto.randomBytes(EIGHT).toString('hex');
 
   // console.log('teste do token', token);
 
