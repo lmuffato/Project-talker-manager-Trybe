@@ -1,17 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const showTalkers = require('./middlewares/showTalkers');
-const getTalkerById = require('./middlewares/getTalkerById');
-const login = require('./middlewares/login');
-const validateToken = require('./middlewares/validateToken');
-const { validateName, validateAge, validateTalk,
-   validateTalkDate, validateTalkRate } = require('./middlewares/validateTalker');
-const createTalker = require('./middlewares/createTalker');
-const editTalker = require('./middlewares/editTalker');
-const deleteTalker = require('./middlewares/deleteTalker');
-const searchTalker = require('./middlewares/searchTalker');
-const { HTTP_OK_STATUS } = require('./fs-utils/statusHttp');
+const { showTalkers, getTalkerById, login, validateToken,
+  validateTalker, createTalker, editTalker,
+  deleteTalker, searchTalker } = require('./middlewares');
+
+const { HTTP_OK_STATUS } = require('./utils/statusHttp');
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,11 +23,11 @@ app.get('/talker/:id', getTalkerById);
 
 app.put('/talker/:id',
   validateToken,
-  validateName,
-  validateAge,
-  validateTalk,
-  validateTalkDate,
-  validateTalkRate,
+  validateTalker.validateName,
+  validateTalker.validateAge,
+  validateTalker.validateTalk,
+  validateTalker.validateTalkDate,
+  validateTalker.validateTalkRate,
   editTalker);
 
 app.delete('/talker/:id', validateToken, deleteTalker);
@@ -42,11 +36,11 @@ app.get('/talker', showTalkers);
 
 app.post('/talker',
   validateToken,
-  validateName,
-  validateAge,
-  validateTalk,
-  validateTalkDate,
-  validateTalkRate,
+  validateTalker.validateName,
+  validateTalker.validateAge,
+  validateTalker.validateTalk,
+  validateTalker.validateTalkDate,
+  validateTalker.validateTalkRate,
   createTalker);
 
 app.post('/login', login);
