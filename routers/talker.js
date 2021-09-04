@@ -15,4 +15,14 @@ router.get('/', async (_req, res) => {
   res.status(200).json(palestrantes);
 });
 
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  const palestrantes = await getPalestrantes();
+  const idPalestrantes = palestrantes.find((idP) => idP.id === Number(id));
+  if (!idPalestrantes) {
+    return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  return res.status(200).json(idPalestrantes);
+});
+
 module.exports = router;
