@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const getTalkers = require('./routes/getAllTalkers');
 const getTalkerById = require('./routes/getTalkerById');
+const authVerification = require('./routes/authVerification');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +16,8 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', getTalkers);
+
+app.post('/login', authVerification);
 
 app.get('/talker/:id', getTalkerById);
 
