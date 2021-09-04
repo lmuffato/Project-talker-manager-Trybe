@@ -2,6 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 
+const getData = async () => fs.readFile('./talker.json', 'utf-8')
+  .then((data) => JSON.parse(data));
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -14,8 +17,17 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', async (_req, res) => {
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
-  const result = await JSON.parse(talkers);
+  const result = await getData();
+  res.status(200).json(result);
+});
+
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const allTalkers = await getData();
+  const result = allTalkers.find((talker) => talker.id === +id);
+
+  if (!result) return res.status(404).json({ message: 'Talker not found' });
+
   res.status(200).json(result);
 });
 
