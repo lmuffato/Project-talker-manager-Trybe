@@ -1,14 +1,13 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs').promises;
 
 const app = express();
 app.use(bodyParser.json());
 const talkerRoutes = require('./routes/talkerRoutes');
+const getTalkerByIdRoutes = require('./talkers/getTalkerById');
 
 const HTTP_OK_STATUS = 200;
 const BAD_REQUEST = 400;
-const NOT_FOUND = 404;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -18,19 +17,7 @@ app.get('/', (_request, response) => {
 
 app.use('/', talkerRoutes);
 
-// cria endpoint /talker/id que retorna o palestrante pelo id
-app.get('/talker/:id', async (request, response) => {
-  const { id } = request.params;
-  const talker = await fs.readFile('./talker.json', 'utf-8');
-  const result = await JSON.parse(talker);
-  const speaker = result.find((obj) => obj.id === parseInt(id, 0));
-  if (!speaker) {
-    return response.status(NOT_FOUND).json({
-      message: 'Pessoa palestrante não encontrada',
-    });
-  }
-  response.status(HTTP_OK_STATUS).json(speaker);
-});
+app.use('/', getTalkerByIdRoutes);
 
 // cria endpoint /login
 const checarEmail = (req, res, next) => {
