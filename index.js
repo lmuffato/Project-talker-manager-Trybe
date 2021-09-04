@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+const auth = require('./auth');
 
 const getData = async () => fs.readFile('./talker.json', 'utf-8')
   .then((data) => JSON.parse(data));
@@ -30,6 +31,8 @@ app.get('/talker/:id', async (req, res) => {
 
   res.status(200).json(result);
 });
+
+app.use('/login', auth);
 
 app.listen(PORT, () => {
   console.log('Online');
