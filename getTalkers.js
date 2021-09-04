@@ -11,8 +11,22 @@ async function readingFile() {
 const getAllTalkers = async (_req, res) => {
   try {
     const allTalkersList = await readingFile();
-    return res.status(200).json(allTalkersList);
-  } catch (e) { res.status(500).json({ message: e.message }); }
+    res.status(200).json(allTalkersList);
+  } catch (e) { console.log(e);/* res.status(500).json({ message: e.message }); */ }
+};
+
+const getSearch = async (req, res) => {
+  try {
+    const { query } = req.query;
+    console.log(query);
+    const alltalkers = await readingFile();
+    if (!query || query === '') return res.status(200).json(alltalkers);
+    const filtredTalkers = alltalkers.filter((talk) => talk.name.includes(query));
+    if (!filtredTalkers) return res.status(200).json([]);
+    res.status(200).json(filtredTalkers);  
+  } catch (e) /* { res.status(500).json({ message: e.message }); } */ {
+    console.log(e);
+  }
 };
 
 const getTalkerById = async (req, res) => {
@@ -69,4 +83,4 @@ const deleteTalker = async (req, res) => {
   } catch (e) { res.status(500).json({ message: e.message }); }
 };
 
-module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker };
+module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker, getSearch };
