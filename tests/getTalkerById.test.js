@@ -4,7 +4,7 @@ const path = require('path');
 
 const url = 'http://localhost:3000';
 
-describe.skip('2 - Crie o endpoint GET /talker/:id', () => {
+describe('2 - Crie o endpoint GET /talker/:id', () => {
   beforeEach(() => {
     const talkerSeed = fs.readFileSync(
       path.join(__dirname, 'seed.json'),
