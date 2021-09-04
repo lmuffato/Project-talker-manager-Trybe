@@ -14,10 +14,9 @@ const validateRate = require('../utils/validateRate');
 const validateDateTwice = require('../utils/validateDateII');
 const editTalker = require('../utils/editTalker');
 const removeTalker = require('../utils/removeTalker');
+const searchTalker = require('../utils/searchTalker');
 
 const router = express.Router();
-
-router.get('/:id', getTalkerById);
 
 router.get('/', async (_req, res) => {
   const talkers = await getAllTalkers();
@@ -33,6 +32,12 @@ router.post('/',
   validateDateTwice,
   validateRate,
   addNewTalker);
+
+router.get('/search',
+validateToken,
+searchTalker);
+
+router.get('/:id', getTalkerById);
 
 router.put('/:id',
   validateToken,

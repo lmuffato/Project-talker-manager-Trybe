@@ -1,6 +1,5 @@
-// const editTalkersList = require('../readDataFromFiles');
 const { getAllTalkers, editData } = require('../readData');
-// const { HTTP_CREATE_STATUS } = require('./httpStatus');
+const { HTTP_CREATE_STATUS } = require('./httpStatus');
 
 const addNewTalker = async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
@@ -19,7 +18,7 @@ const addNewTalker = async (req, res) => {
     await editData(talkers);
   }
   const newList = await getAllTalkers();
-  res.status(201).json(newList[newList.length - 1]);
+  res.status(HTTP_CREATE_STATUS).json(newList[newList.length - 1]);
 };
 
 module.exports = addNewTalker;
