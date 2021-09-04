@@ -19,15 +19,17 @@ const { validateEmail,
   validateRateAndWhatchedAt, 
   validateTalk } = require('./validations/allValidationsReq4&3');
 
+  const talkJson = 'talker.json';
+
 function generateToken() {
   return crypto.randomBytes(8).toString('hex');
   // 1 Byte usa 2 caracteres no hexadecimal, por isso é normal vermos 32 bytes sendo representados como 64 bytes.
 }
 
-app.get('/talker/:id', async (req, res) => {
+app.get('/talker/:id', (req, res) => {
   const { id } = req.params;
-  const talkerData = await fs.promises.readFile('talker.json', 'utf-8');
-  const parsedTalker = await JSON.parse(talkerData);
+  const talkerData = fs.readFileSync('talker.json', 'utf-8');
+  const parsedTalker = JSON.parse(talkerData);
   const foundTalker = parsedTalker.find((findId) => findId.id === +id);
   console.log(foundTalker);
   if (!foundTalker) {
@@ -75,14 +77,14 @@ app.put('/talker/:id',
   validateAge, 
   validateTalk, 
   validateRateAndWhatchedAt,
-  async (req, res) => {
+  (req, res) => {
     const { name, age, talk } = req.body;
     const { id } = req.params;
-    const talker = await fs.promises.readFile('/talker.json', 'utf-8');
-    const parsedTalker = await JSON.parse(talker);
+    const talker = fs.readFileSync(talkJson, 'utf-8');
+    const parsedTalker = JSON.parse(talker);
     const findIndexObj = parsedTalker.findIndex((e) => e.id === +id);
-    const finalTalker = { ...findIndexObj, name, age, talk };
-    await fs.promises.writeFile('/talker.json', JSON.stringify(finalTalker));
+    parsedTalker[findIndexObj] = { ...parsedTalker[findIndexObj], name, age, talk };
+    fs.writeFileSync(talkJson, JSON.stringify(parsedTalker));
     return res.status(200).json(parsedTalker[findIndexObj]);
   });
 
