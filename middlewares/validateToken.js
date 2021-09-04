@@ -1,4 +1,4 @@
-const { UNAUTHORIZED } = require('../fs-utils/statusHttp');
+const { UNAUTHORIZED } = require('../utils/statusHttp');
 
 const validateToken = (req, res, next) => {
   const { authorization } = req.headers;

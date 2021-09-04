@@ -1,5 +1,5 @@
-const getTalkers = require('../fs-utils/getTalkers');
-const { HTTP_OK_STATUS } = require('../fs-utils/statusHttp');
+const getTalkers = require('../utils/getTalkers');
+const { HTTP_OK_STATUS } = require('../utils/statusHttp');
 
 const showTalkers = async (_req, res) => {
   const talkers = await getTalkers();

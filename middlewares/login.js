@@ -1,5 +1,5 @@
-const createToken = require('../fs-utils/createToken');
-const { HTTP_OK_STATUS, BAD_REQUEST } = require('../fs-utils/statusHttp');
+const createToken = require('../utils/createToken');
+const { HTTP_OK_STATUS, BAD_REQUEST } = require('../utils/statusHttp');
 
 const login = (req, res) => {
   const { email, password } = req.body;

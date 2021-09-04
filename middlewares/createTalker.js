@@ -1,6 +1,6 @@
-const editTalkers = require('../fs-utils/editTalkers');
-const getTalkers = require('../fs-utils/getTalkers');
-const { CREATED } = require('../fs-utils/statusHttp');
+const editTalkers = require('../utils/editTalkers');
+const getTalkers = require('../utils/getTalkers');
+const { CREATED } = require('../utils/statusHttp');
 
 const createTalker = async (req, res) => {
   const { name, age, talk } = req.body;

@@ -1,4 +1,4 @@
-const { BAD_REQUEST } = require('../fs-utils/statusHttp');
+const { BAD_REQUEST } = require('../utils/statusHttp');
 
 const validateName = (req, res, next) => {
   const { name } = req.body;
