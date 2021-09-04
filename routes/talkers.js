@@ -19,8 +19,11 @@ router.get('/', async (_req, res) => {
   res.status(HTTP_OK_STATUS).json(talkers);
 });
 
-const validations = [validateAge, validateTalk, validateName, validateToken];
-
-router.post('/', validations, addNewTalker);
+router.post('/',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  addNewTalker);
 
 module.exports = router;
