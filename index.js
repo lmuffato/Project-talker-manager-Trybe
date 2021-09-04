@@ -4,6 +4,7 @@ const fs = require('fs').promises;
 
 const app = express();
 app.use(bodyParser.json());
+const talkerRoutes = require('./routes/talkerRoutes');
 
 const HTTP_OK_STATUS = 200;
 const BAD_REQUEST = 400;
@@ -15,12 +16,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-// cria endpoint /talker
-app.get('/talker', async (_request, response) => {
-  const talker = await fs.readFile('./talker.json', 'utf8');
-  const result = await JSON.parse(talker);
-  response.status(HTTP_OK_STATUS).json(result);
-});
+app.use('/', talkerRoutes);
 
 // cria endpoint /talker/id que retorna o palestrante pelo id
 app.get('/talker/:id', async (request, response) => {
