@@ -3,10 +3,10 @@ const getAllTalkers = require('./getAllTalkers');
 const TALKERS_LIST = require('../talker.json');
 const { HTTP_CREATE_STATUS } = require('./httpStatus');
 
-const validateTalk = require('./validateTalk');
-const validateAge = require('./validateAge');
-const validateName = require('./validateName');
-const validateToken = require('./validateToken');
+// const validateTalk = require('./validateTalk');
+// const validateAge = require('./validateAge');
+// const validateName = require('./validateName');
+// const validateToken = require('./validateToken');
 
 const addNewTalker = async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
