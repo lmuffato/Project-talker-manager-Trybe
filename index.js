@@ -20,6 +20,14 @@ app.get('/talker', async (_req, res) => {
   res.status(200).json(talkers);
 });
 
+// Requisito 2
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const talker = await talkerModel.getTalkerById(id);
+  if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
+  res.status(200).json(talker);
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
