@@ -62,6 +62,31 @@ app.post('/talker',
   return response.status(201).json({ id: talkerlist.length, name, age, talk });
 });
 
+// req 05
+app.put('/talker/:id',
+  validaToken,
+  validaName, 
+  validaAge, 
+  validaTalker, 
+  validaDate, 
+  validaRate,   
+  async (request, response) => {
+  const { id } = request.params;
+  const { name, age, talk } = request.body;
+  const talkersList = JSON.parse(await fs.readFile(file, 'utf-8'));
+  const talkerIndex = talkersList.findIndex((talker) => talker.id === Number(id));
+  if (talkerIndex === -1) {
+    return response.status(404).json({
+      message: 'Pessoa palestrante não encontrada',
+    });
+  }
+
+  talkersList[talkerIndex] = { ...talkersList[talkerIndex], name, age, talk };
+  await fs.writeFile('./talker.json', JSON.stringify(talkersList));
+
+  return response.status(200).send(talkersList[talkerIndex]);
+});
+
 // req 06 - feito com a ajuda do instrutor Italo
 app.delete('/talker/:id', validaToken, async (request, response) => {
   const { id } = request.params;
@@ -73,9 +98,9 @@ app.delete('/talker/:id', validaToken, async (request, response) => {
 });
 
 // req 07
-app.get('/search', validaToken, async (request, response) => {
+app.get('/search', validaToken, (request, response) => {
   const { q } = request.query;
-  const talkerlist = JSON.parse(await fs.readFile(file, 'utf8'));
+  const talkerlist = JSON.parse(fs.readFileSync(file, 'utf8'));
   const arrayResult = talkerlist.filter((talker) => talker.name.includes(q));
   if (!arrayResult || arrayResult === 0) { 
     return response.status(401).json(talkerlist); 
