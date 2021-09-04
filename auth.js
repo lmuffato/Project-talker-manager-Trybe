@@ -3,9 +3,7 @@ const crypto = require('crypto');
 
 const auth = express.Router();
 
-const createToken = () => {
-  return crypto.randomBytes(8).toString('hex');
-};
+const createToken = () => crypto.randomBytes(8).toString('hex');
 
 const checkEmail = (req, res, next) => {
   const { email } = req.body;
