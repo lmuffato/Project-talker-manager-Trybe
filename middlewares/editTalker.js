@@ -4,8 +4,9 @@ const {
   checkAuth, checkName, checkAge, checkTalkWatchDate, checkTalkRate, checkTalk,
  } = require('./checkTalker');
 
-async function checkRate(res, rate) {
-  if (rate < 1 || rate > 5) {
+async function checkRate(req, res) {
+  const { talk } = req.body;
+  if (talk.rate < 1 || talk.rate > 5) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
 }
@@ -17,7 +18,7 @@ const editTalker = async (req, res) => {
   await checkName(req, res);
   await checkAge(req, res);
   await checkTalk(req, res);
-  await checkRate(res, talk.rate);
+  await checkRate(req, res);
   await checkTalkWatchDate(req, res);
   await checkTalkRate(req, res);
   try {
