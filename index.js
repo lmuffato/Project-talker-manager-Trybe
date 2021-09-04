@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const talkerModel = require('./model/talkerModel');
+const { validateEmail, validatePassword } = require('./utils/middlewares');
+const { createToken } = require('./utils/tokenGenerator');
 
 const app = express();
 app.use(bodyParser.json());
@@ -26,6 +28,12 @@ app.get('/talker/:id', async (req, res) => {
   const talker = await talkerModel.getTalkerById(id);
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
   res.status(200).json(talker);
+});
+
+// Requisito 3
+app.post('/login', validateEmail, validatePassword, (req, res) => {
+  const token = createToken(16);
+  res.status(200).json({ token });
 });
 
 app.listen(PORT, () => {
