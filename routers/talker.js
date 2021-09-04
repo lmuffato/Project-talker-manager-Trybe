@@ -54,4 +54,21 @@ router.post(
 },
 );
 
+router.put('/:id', 
+  verifyLogin,
+  verifyName,
+  verifyAge,
+  verifyTalk,
+  verifyDate,
+  verifyRate,
+  async (req, res) => {
+    const { id } = req.params;
+    const palestrantes = await getPalestrantes();
+    const idPalestrantes = palestrantes.filter((idP) => idP.id !== Number(id));
+    const newPalestrante = { ...req.body, id: Number(id) };
+    const updatePalestrante = [...idPalestrantes, newPalestrante];
+    await setPalestrante(updatePalestrante);
+  res.status(200).json(newPalestrante);
+});
+
 module.exports = router;
