@@ -88,6 +88,22 @@ app.put('/talker/:id',
     return res.status(200).json(parsedTalker[findIndexObj]);
   });
 
+  app.delete('/talker/:id', validateToken, (req, res) => {
+    const { id } = req.params;
+    const talker = fs.readFileSync(talkJson, 'utf-8');
+    const parsedTalker = JSON.parse(talker);
+    
+    const talkerIndex = parsedTalker.findIndex((e) => e.id === +id);
+  
+    if (talkerIndex === -1) return res.status(404).send({ message: 'Pessoa não encontrada' });
+  
+    parsedTalker.splice(talkerIndex, 1);
+
+    fs.writeFileSync(talkJson, JSON.stringify(parsedTalker));
+  
+    res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+  });
+
 // https://stackoverflow.com/questions/17604866/difference-between-readfile-and-readfilesync
 // https://www.geeksforgeeks.org/node-js-crypto-randombytes-method/
 // https://stackoverflow.com/questions/55104802/nodejs-crypto-randombytes-to-string-hex-doubling-size
