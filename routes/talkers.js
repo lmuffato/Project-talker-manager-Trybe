@@ -12,6 +12,7 @@ const validateToken = require('../utils/validateToken');
 const validateDate = require('../utils/validateDate');
 const validateRate = require('../utils/validateRate');
 const validateDateTwice = require('../utils/validateDateII');
+const editTalker = require('../utils/editTalker');
 
 const router = express.Router();
 
@@ -31,5 +32,15 @@ router.post('/',
   validateDateTwice,
   validateRate,
   addNewTalker);
+
+router.put('/:id',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateDate,
+  validateDateTwice,
+  validateRate,
+  editTalker);
 
 module.exports = router;
