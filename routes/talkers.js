@@ -13,4 +13,6 @@ router.get('/', async (_req, res) => {
 
 router.get('/:id', getTalkerById);
 
+router.post('/', async () => {});
+
 module.exports = router;

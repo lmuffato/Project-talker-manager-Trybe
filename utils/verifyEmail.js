@@ -9,7 +9,7 @@ const verifyEmail = (req, res, next) => {
   }
   if (!validEmail) {
     return res.status(BAD_REQUEST).json({
-      message: 'O "email" deve ter o formato email@email.com' });
+      message: 'O "email" deve ter o formato "email@email.com"' });
   }
 
   next();
