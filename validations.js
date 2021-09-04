@@ -8,13 +8,14 @@ const EIGHT = 8;
 const validEmail = (req, res, next) => {
   const { email } = req.body;
   const emailCondicion = /^([\w.\-_]+)?\w+@[\w-_]+(\.\w+){1,}$/igm; // => https://regexr.com
-  const emailValido = email.match(emailCondicion);
+
+  // const emailValido = email.match(emailCondicion); // não passou no teste usando o ( '.match' ?)
 
   if (!email || email === '') {
     return res.status(HTTP_BAD_REQUEST_STATUS).json({ message: 'O campo "email" é obrigatório' });
   }
 
-  if (!emailValido) {
+  if (!emailCondicion.test(email)) {
     return res.status(HTTP_BAD_REQUEST_STATUS)
       .json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
