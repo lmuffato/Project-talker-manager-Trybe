@@ -18,7 +18,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', (_request, response) => {
+app.get('/talker', (request, response) => {  
   response.status(HTTP_OK_STATUS).json(talkerJson);
 });
 
