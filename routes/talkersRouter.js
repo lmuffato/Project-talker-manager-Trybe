@@ -6,6 +6,10 @@ const { setTalkers } = require('../middlewares');
 const router = express.Router();
 const middlewares = require('../middlewares');
 
+router.get('/search', 
+  middlewares.tokenVerification,
+  middlewares.searchTalker);
+
 router.get('/:id', middlewares.endpoint);
 
 router.post('/', 
