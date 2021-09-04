@@ -19,3 +19,8 @@ const validateDate = (req, res, next) => {
 };
 
 module.exports = validateDate;
+
+// Documentação método test:
+// https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+// Referência para o regex:
+// https://www.regextester.com/99555

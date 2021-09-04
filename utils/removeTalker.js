@@ -16,3 +16,6 @@ const removeTalker = async (req, res) => {
 };
 
 module.exports = removeTalker;
+
+// Com consulta ao código disponibilizado pelo Instrutor Renato:
+// https://github.com/tryber/sd-10a-live-lectures/blob/lecture/26.5/app-express/booksRouter.js

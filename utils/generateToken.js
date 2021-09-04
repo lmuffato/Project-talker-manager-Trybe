@@ -5,3 +5,5 @@ function generateToken() {
 }
 
 module.exports = generateToken;
+
+// Tomou-se por base o código disponibilizado no Course

@@ -14,3 +14,6 @@ const getTalkerById = async (req, res) => {
 };
 
 module.exports = getTalkerById;
+
+// Foi consultado o código disponibilizado pelo Instrutor Renato:
+// https://github.com/tryber/sd-10a-live-lectures/blob/lecture/26.5/app-express/booksRouter.js
