@@ -1,4 +1,5 @@
 const express = require('express');
+const rescue = require('express-rescue');
 const fs = require('fs').promises;
 const { setTalkers } = require('../middlewares');
 
@@ -14,23 +15,21 @@ router.post('/',
   middlewares.talkObjectVerification,
   middlewares.watchedAtVerification,
   middlewares.rateVerification,
-  async (req, res) => {
+  rescue(async (req, res) => {
     const { name, age, talk } = req.body;
 
-    const talkers = await fs.readFile('./talker.json', 'utf-8')
-    .then((fileContent) => JSON.parse(fileContent)).catch((err) => console.log(err));
-    const id = talkers.length + 1;
+    const TalkerJSON = await fs.readFile('./talker.json', 'utf-8')
+    .then((fileContent) => JSON.parse(fileContent));
+    const id = TalkerJSON.length + 1;
 
     const newTalker = ({ name, age, id, talk });
 
-    talkers.push(newTalker);
+    TalkerJSON.push(newTalker);
 
-    const stringifyTalkers = JSON.stringify(talkers);
-
-    await setTalkers(stringifyTalkers);
+    await setTalkers(TalkerJSON);
 
     res.status(201).json(newTalker);
-  });
+  }));
 
 router.get('/', middlewares.getTalkers);
 
