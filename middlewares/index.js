@@ -9,6 +9,7 @@ const watchedAtVerification = require('./watchedAtVerification');
 const rateVerification = require('./rateVerification');
 const talkObjectVerification = require('./talkObjectVerification');
 const setTalkers = require('./setTalkers');
+const deleteTalker = require('./deleteTalker');
 
 module.exports = {
   getTalkers,
@@ -22,4 +23,5 @@ module.exports = {
   rateVerification,
   talkObjectVerification,
   setTalkers,
+  deleteTalker,
 };

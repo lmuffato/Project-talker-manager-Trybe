@@ -31,6 +31,10 @@ router.post('/',
     res.status(201).json(newTalker);
   }));
 
+router.delete('/:id', 
+  middlewares.tokenVerification, 
+  middlewares.deleteTalker);
+
 router.get('/', middlewares.getTalkers);
 
 module.exports = router;
