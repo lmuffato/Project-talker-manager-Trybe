@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const getTalkers = require('./routes/getAllTalkers');
-const getTalkerById = require('./routes/getTalkerById');
+const talkerRoutes = require('./routes/talkers');
+
 const authVerification = require('./routes/authVerification');
 
 const app = express();
@@ -15,10 +15,9 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker/:id', getTalkerById);
-app.get('/talker', getTalkers);
+app.use('/talker', talkerRoutes);
 
-app.post('/login', authVerification);
+app.use('/login', authVerification);
 
 app.listen(PORT, () => {
   console.log('Online');
