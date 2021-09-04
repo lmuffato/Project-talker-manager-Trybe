@@ -13,6 +13,7 @@ const validateDate = require('../utils/validateDate');
 const validateRate = require('../utils/validateRate');
 const validateDateTwice = require('../utils/validateDateII');
 const editTalker = require('../utils/editTalker');
+const removeTalker = require('../utils/removeTalker');
 
 const router = express.Router();
 
@@ -42,5 +43,9 @@ router.put('/:id',
   validateDateTwice,
   validateRate,
   editTalker);
+
+router.delete('/:id',
+  validateToken,
+  removeTalker);
 
 module.exports = router;
