@@ -1,8 +1,6 @@
 const express = require('express');
-// const fs = require('fs').promises;
 const { getAllTalkers } = require('../readData');
 const { HTTP_OK_STATUS } = require('../utils/httpStatus');
-// const TALKERS_LIST = require('../talker.json');
 const getTalkerById = require('../utils/getTalkerById');
 const addNewTalker = require('../utils/addNewTalker');
 const validateTalk = require('../utils/validateTalk');
