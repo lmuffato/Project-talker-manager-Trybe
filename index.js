@@ -10,6 +10,7 @@ const HTTP_NOT_OK_STATUS = 404;
 const PORT = '3000';
 
 const crypto = require('crypto');
+
 const { validateEmail, 
   validatePassword, 
   validateToken, 
@@ -23,10 +24,10 @@ function generateToken() {
   // 1 Byte usa 2 caracteres no hexadecimal, por isso é normal vermos 32 bytes sendo representados como 64 bytes.
 }
 
-app.get('/talker/:id', (req, res) => {
+app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
-  const talkerData = fs.readFileSync('talker.json', 'utf-8');
-  const parsedTalker = JSON.parse(talkerData);
+  const talkerData = await fs.promises.readFile('talker.json', 'utf-8');
+  const parsedTalker = await JSON.parse(talkerData);
   const foundTalker = parsedTalker.find((findId) => findId.id === +id);
   console.log(foundTalker);
   if (!foundTalker) {
@@ -59,7 +60,7 @@ app.post('/talker',
 
     (req, res) => {
      const { name, age, talk } = req.body;
-     const readf = fs.readFileSync('talker.json', 'utf-8');
+     const readf = fs.readFileSync('./talker.json', 'utf-8');
      const readJson = JSON.parse(readf);
      const id = 5;
      const objectWithId = ({ name, age, talk, id });
@@ -67,6 +68,23 @@ app.post('/talker',
      fs.writeFileSync('talker.json', JSON.stringify(readJson));
      res.status(201).json({ name, age, talk, id });
    });
+
+app.put('/talker/:id',
+  validateToken,
+  validateName,
+  validateAge, 
+  validateTalk, 
+  validateRateAndWhatchedAt,
+  async (req, res) => {
+    const { name, age, talk } = req.body;
+    const { id } = req.params;
+    const talker = await fs.promises.readFile('/talker.json', 'utf-8');
+    const parsedTalker = await JSON.parse(talker);
+    const findIndexObj = parsedTalker.findIndex((e) => e.id === +id);
+    const finalTalker = { ...findIndexObj, name, age, talk };
+    await fs.promises.writeFile('/talker.json', JSON.stringify(finalTalker));
+    return res.status(200).json(parsedTalker[findIndexObj]);
+  });
 
 // https://stackoverflow.com/questions/17604866/difference-between-readfile-and-readfilesync
 // https://www.geeksforgeeks.org/node-js-crypto-randombytes-method/
@@ -76,6 +94,7 @@ app.post('/talker',
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
+app.use((err, _req, res, _next) => res.status(500).json({ error: `Erro: ${err.message}` }));
 
 app.listen(PORT, () => {
   console.log('Online');

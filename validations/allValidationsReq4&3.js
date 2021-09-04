@@ -72,7 +72,7 @@ module.exports = {
   validateAge,
   validateRateAndWhatchedAt,
   validateTalk,
-  
+
 };
 // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/String/match
 // https://stackoverflow.com/questions/940577/javascript-regular-expression-email-validation
