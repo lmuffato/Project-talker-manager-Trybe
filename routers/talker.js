@@ -71,4 +71,12 @@ router.put('/:id',
   res.status(200).json(newPalestrante);
 });
 
+router.delete('/:id', verifyLogin, async (req, res) => {
+  const { id } = req.params;
+  const palestrantes = await getPalestrantes();
+  const deletePalestrante = palestrantes.find((idP) => idP.id !== +id);
+  setPalestrante(deletePalestrante);
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
 module.exports = router;
