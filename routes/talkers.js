@@ -1,6 +1,6 @@
 const express = require('express');
 // const fs = require('fs').promises;
-const getAllTalkers = require('../utils/getAllTalkers');
+const { getAllTalkers } = require('../readData');
 const { HTTP_OK_STATUS } = require('../utils/httpStatus');
 // const TALKERS_LIST = require('../talker.json');
 const getTalkerById = require('../utils/getTalkerById');
@@ -9,6 +9,9 @@ const validateTalk = require('../utils/validateTalk');
 const validateAge = require('../utils/validateAge');
 const validateName = require('../utils/validateName');
 const validateToken = require('../utils/validateToken');
+const validateDate = require('../utils/validateDate');
+const validateRate = require('../utils/validateRate');
+const validateDateTwice = require('../utils/validateDateII');
 
 const router = express.Router();
 
@@ -24,6 +27,9 @@ router.post('/',
   validateName,
   validateAge,
   validateTalk,
+  validateDate,
+  validateDateTwice,
+  validateRate,
   addNewTalker);
 
 module.exports = router;

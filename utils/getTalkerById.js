@@ -1,4 +1,4 @@
-const getAllTalkers = require('./getAllTalkers');
+const { getAllTalkers } = require('../readData');
 const { HTTP_OK_STATUS, HTTP_NOT_FOUND } = require('./httpStatus');
 
 const getTalkerById = async (req, res) => {
