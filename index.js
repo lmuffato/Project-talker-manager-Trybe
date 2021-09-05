@@ -13,6 +13,7 @@ const {
   validatePostTalkerDate,
   validatePostTalkerRate,
   addTalker,
+  editTalker,
 } = require('./service/talkerService');
 const { createToken } = require('./utils/tokenGenerator');
 const { saveToken } = require('./model/authModel');
@@ -65,6 +66,25 @@ app.post(
     const newTalker = await addTalker({ name, age, talk: { watchedAt, rate } });
 
     return res.status(201).json(newTalker);
+  },
+);
+
+// Requisito 5
+app.put(
+  '/talker/:id',
+  validateToken,
+  validatePostTalkerName, 
+  validatePostTalkerAge,
+  validatePostTalkerDate,
+  validatePostTalkerRate,
+  validatePostTalkerTalk,
+  async (req, res) => {
+    const { name, age, talk: { watchedAt, rate } } = req.body;
+    let { id } = req.params;
+    id = parseInt(id, 10);
+    const editedTalker = await editTalker(id, { name, age, talk: { watchedAt, rate } });
+    console.log(editedTalker);
+    return res.status(200).json(editedTalker);
   },
 );
 
