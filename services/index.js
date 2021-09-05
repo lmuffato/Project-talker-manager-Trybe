@@ -1,13 +1,13 @@
+const validateToken = require('./validateToken');
+const generateToken = require('./generateToken');
+const validateCreateTalker = require('./validateCreateTalker');
 const validateEmail = require('./validateEmail');
 const validatePassword = require('./validatePassword');
-const validateToken = require('./validateToken');
-const validateCreateTalker = require('./validateCreateTalker');
-const generateToken = require('./generateToken');
 
 module.exports = {
+  validateToken,
+  generateToken,
+  validateCreateTalker,
   validateEmail,
   validatePassword,
-  validateToken,
-  validateCreateTalker,
-  generateToken,
 };

@@ -1,26 +1,23 @@
-// 4 - Crie o endpoint POST /talker
+const { readFileSync, writeFileSync } = require('fs');
+const { validateToken, validateCreateTalker } = require('../services');
 
-const { readFile, writeFile } = require('fs').promises;
-const { validateCreateTalker, validateToken } = require('../services');
-
-const createTalker = async (req, res) => {
+const createTalker = (req, res) => {
   const { name, age, talk } = req.body;
-  const { authorization } = req.header;
+  const { authorization } = req.headers;
+  const validToken = validateToken(authorization);
+  const validTalker = validateCreateTalker(name, age, talk);
 
-  const isValidCreateTalker = validateCreateTalker(name, age, talk);
-  const isToken = validateToken(authorization);
-
-  if (!isValidCreateTalker.ok) {
-    return res.status(isValidCreateTalker.status).json({ message: isValidCreateTalker.message });
+  if (!validToken.ok) {
+    return res.status(validToken.status).json({ message: validToken.message });
   }
-  if (!isToken.ok) {
-    return res.status(isToken.status).json({ message: isToken.message });
+  if (!validTalker.ok) {
+    return res.status(validTalker.status).json({ message: validTalker.message });
   }
 
-  const talkers = await JSON.parse(readFile('talker.json'));
+  const talkers = JSON.parse(readFileSync('talker.json', 'utf-8'));
   const newTalker = { id: talkers.length + 1, name, age, talk };
   talkers.push(newTalker);
-  writeFile('talker.json', JSON.stringify(talkers));
+  writeFileSync('talker.json', JSON.stringify(talkers));
   return res.status(201).json(newTalker);
 };
 
