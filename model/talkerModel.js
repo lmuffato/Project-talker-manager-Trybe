@@ -17,8 +17,18 @@ async function updateTalkerList(updatedTalkerList) {
   await fs.writeFile('./talker.json', JSON.stringify(updatedTalkerList));
 }
 
+async function getTalkersByString(string) {
+  const allTalkers = await fs.readFile('./talker.json');
+  const allTalkersData = JSON.parse(allTalkers);
+  const filteredTalkers = allTalkersData.filter(
+    (talker) => talker.name.toLowerCase().includes(string),
+  );
+  return filteredTalkers;
+}
+
 module.exports = {
   getAllTalkers,
   getTalkerById,
   updateTalkerList,
+  getTalkersByString,
 };
