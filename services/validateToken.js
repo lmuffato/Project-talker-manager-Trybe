@@ -9,7 +9,7 @@ const validateToken = (auth) => {
     return { status: 401, message: 'Token inválido' };
   }
 
-  return '';
+  return { ok: true };
 };
 
 module.exports = validateToken;
