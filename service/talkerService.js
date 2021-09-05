@@ -24,13 +24,13 @@ function validatePostTalkerAge(req, res, next) {
       message: 'O campo "age" é obrigatório',
     });
   }
-
+  
   if (age < 18) {
     return res.status(400).json({
       message: 'A pessoa palestrante deve ser maior de idade',
     });
   }
-
+  
   next();
 }
 
@@ -86,7 +86,7 @@ async function addTalker(newTalkerData) {
 
 async function editTalker(id, newData) {
   const allTalkers = await talkerModel.getAllTalkers();
-  const talkerToBeEditedIndex = allTalkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  const talkerToBeEditedIndex = allTalkers.findIndex((talker) => talker.id === id);
   const editedTalker = { id, ...newData };
   allTalkers[talkerToBeEditedIndex] = editedTalker;
   await talkerModel.updateTalkerList(allTalkers);
