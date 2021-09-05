@@ -1,6 +1,7 @@
 const { getToken } = require('../model/authModel');
 
 function validateEmail(req, res, next) {
+  console.log('validateEmail chamada');
   const { email } = req.body;
   if (!email) {
     return res.status(400).json({
@@ -17,6 +18,7 @@ function validateEmail(req, res, next) {
 }
 
 function validatePassword(req, res, next) {
+  console.log('validatePassword chamada');
   const { password } = req.body;
 
   if (!password) {
@@ -35,12 +37,12 @@ function validatePassword(req, res, next) {
 }
 
 async function validateToken(req, res, next) {
-  console.log('validateToken called');
+  console.log('validateToken chamada');
   const { token: currentToken } = await getToken();
   if (!currentToken) return res.status(401).json({ message: 'Token não encontrado' });
 
   const { authorization: incomingToken } = req.headers;
-  
+
   const validToken = incomingToken === currentToken;
 
   if (!validToken) return res.status(401).json({ message: 'Token inválido' });
