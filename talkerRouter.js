@@ -10,11 +10,12 @@ const fsAsync = require('fs').promises;
 
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
+const TALKER_FILE = './talker.json';
 
 // REQUISITO 1
 
 router.get('/', async (_req, res) => {
-  const talkers = await fsAsync.readFile('./talker.json', 'utf-8');
+  const talkers = await fsAsync.readFile(TALKER_FILE, 'utf-8');
   const formatedTalkers = await JSON.parse(talkers);
   if (!formatedTalkers) return res.status(HTTP_OK_STATUS).json([]);
   res.status(HTTP_OK_STATUS).json(formatedTalkers);
@@ -27,7 +28,7 @@ router.get('/', async (_req, res) => {
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
-  const talkers = await fsAsync.readFile('./talker.json', 'utf-8');
+  const talkers = await fsAsync.readFile(TALKER_FILE, 'utf-8');
   const formatedTalkers = await JSON.parse(talkers);
   const chosedTalker = await formatedTalkers.find((talker) => talker.id === parseInt(id, 10));
 
@@ -74,10 +75,18 @@ const validateAge = (req, res, next) => {
  next();
 };
 
+const validateRate = (req, res, next) => {
+  const { talk } = req.body;
+  if (parseInt(talk.rate, 10) < 1 || parseInt(talk.rate, 10) > 5) {
+    return res.status(400)
+     .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' }); 
+   }
+   next();
+};
+
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
-
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (!talk || !talk.watchedAt || talk.rate === undefined) {
  return res.status(400)
   .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' }); 
 }
@@ -95,20 +104,10 @@ const validateWatchedAt = (req, res, next) => {
    next();
 };
 
-const validateRate = (req, res, next) => {
-  const { talk } = req.body;
-
-  if (parseInt(talk.rate, 10) < 1 || parseInt(talk.rate, 10) > 5) {
-    return res.status(400)
-     .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' }); 
-   }
-   next();
-};
-
 router.post('/', validateToken,
  validateName, validateAge, validateTalk, validateWatchedAt, validateRate, async (req, res) => {
   const { name, age, talk } = req.body;
-  const allTalker = await fsAsync.readFile('./talker.json', 'utf-8');
+  const allTalker = await fsAsync.readFile(TALKER_FILE, 'utf-8');
  const allTalkerJson = await JSON.parse(allTalker);
  const responseObj = {
     id: allTalkerJson.length + 1,
@@ -117,11 +116,33 @@ router.post('/', validateToken,
     talk,
   };
 
- await allTalkerJson.push(responseObj);
+  await allTalkerJson.push(responseObj);
   
- await fsAsync.writeFile('./talker.json', JSON.stringify(allTalkerJson));
+  await fsAsync.writeFile(TALKER_FILE, JSON.stringify(allTalkerJson));
   
   return res.status(201).json(responseObj);
+});
+
+router.put('/:id', validateToken,
+validateName, validateAge, validateTalk, validateWatchedAt, validateRate, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const allTalker = await fsAsync.readFile(TALKER_FILE, 'utf-8');
+  const allTalkerJson = await JSON.parse(allTalker);
+  const talkerIndex = allTalkerJson.findIndex((talker) => talker.id === parseInt(id, 10));
+
+  allTalkerJson[talkerIndex] = {
+    id: parseInt(id, 10),
+    name,
+    age: Number(age),
+    talk: {
+      watchedAt: talk.watchedAt,
+      rate: Number(talk.rate),
+    },
+  };
+  
+  await fsAsync.writeFile(TALKER_FILE, JSON.stringify(allTalkerJson));
+  res.status(HTTP_OK_STATUS).json(allTalkerJson[talkerIndex]);
 });
 
 module.exports = router;
