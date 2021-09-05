@@ -6,13 +6,13 @@ const verifyEmail = async (req, res, next) => {
 
   if (!email) {
     return res.status(400).json({
-      message: 'O campo \\"email\\" é obrigatório',
+      message: 'O campo "email" é obrigatório',
     });
   }
 
   if (!validateEmail) {
     return res.status(400).json({
-      message: 'O email deve ter o formato \\"email@email.com\\"', 
+      message: 'O "email" deve ter o formato "email@email.com"', 
     });
   }
 
@@ -24,13 +24,13 @@ const verifyPassword = async (req, res, next) => {
 
   if (!password) {
     return res.status(400).json({
-      message: 'O campo \\"password\\" é obrigatório',
+      message: 'O campo "password" é obrigatório',
     });
   }
 
   if (password <= 5) {
     return res.status(400).json({
-      message: 'O \\"password\\" deve ter pelo menos 6 caracteres',
+      message: 'O "password" deve ter pelo menos 6 caracteres',
     });
   }
 
