@@ -7,8 +7,10 @@ const {
   createTalker,
   editTalker,
   deleteTalker,
+  searchTalker,
 } = require('../middlewares');
 
+router.get('/search', searchTalker);
 router.get('/', getTalkers);
 router.get('/:id', getTalkersById);
 router.post('/', createTalker);
