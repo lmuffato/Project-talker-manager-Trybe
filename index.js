@@ -36,6 +36,17 @@ app.get('/talker', async (_req, res) => {
   res.status(200).json(talkers);
 });
 
+// Requisito 7
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  if (!q) {
+    const talkers = await talkerModel.getAllTalkers();
+    return res.status(200).json(talkers);
+  }
+  const filteredTalkers = await talkerModel.getTalkersByString(q.toLowerCase());
+  res.status(200).json(filteredTalkers);
+});
+
 // Requisito 2
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
