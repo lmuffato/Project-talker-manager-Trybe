@@ -3,6 +3,11 @@ const fs = require('fs').promises;
 
 const router = express.Router();
 
+const fileData = async (path) => {
+    const data = await fs.readFile(path, 'utf-8');
+    return JSON.parse(data);
+  };
+
 router.get('/', async (_req, res) => {
     try {
         const data = await fs.readFile('./talker.json', 'utf-8');
@@ -16,7 +21,7 @@ router.get('/', async (_req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-      const data = await fs.readFile('./talker.json', 'utf-8');
+      const data = fileData('./talker.json');
       const talker = data.find((response) => response.id === parseInt(id, 10));
       
       if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
