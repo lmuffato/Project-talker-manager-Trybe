@@ -1,6 +1,11 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const rescue = require('express-rescue');
 const fs = require('fs').promises;
+
+const notFound = require('./notFound');
+
+let TalkerNotFoundError;
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,6 +29,19 @@ app.get('/', (_request, response) => {
 app.listen(PORT, () => {
   console.log('Online');
 });
+
+app.get('/talker/:id',
+  rescue(async (req, res) => {
+    const { id } = req.params;    
+    const talker = await getTalkers().then((talkers) =>
+      talkers.find((t) => t.id === Number(id)));
+    if (!talker) {
+      throw new Error();
+    }
+    res.status(HTTP_OK_STATUS).json(talker);
+  }));
+
+app.use(notFound);
 
 app.get('/talker', async (_req, res) => {
   const talkers = await getTalkers();
