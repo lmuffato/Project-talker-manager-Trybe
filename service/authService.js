@@ -39,9 +39,11 @@ function validatePassword(req, res, next) {
 async function validateToken(req, res, next) {
   console.log('validateToken chamada');
   const { token: currentToken } = await getToken();
-  if (!currentToken) return res.status(401).json({ message: 'Token não encontrado' });
-
   const { authorization: incomingToken } = req.headers;
+
+  if (!currentToken || !incomingToken) {
+    return res.status(401).json({ message: 'Token não encontrado' });
+  }
 
   const validToken = incomingToken === currentToken;
 
