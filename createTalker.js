@@ -65,13 +65,11 @@ const talkAuthorized = (req, res, next) => {
   const { talk } = req.body;
   if (!talk || !talk.watchedAt) {
     return res.status(HTTP_BAD_REQUEST_STATUS)
-      .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e' 
-      + '"rate" não podem ser vazios' });
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
   if (!talk.rate && talk.rate !== 0) {
     return res.status(HTTP_BAD_REQUEST_STATUS)
-      .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e'
-      + '"rate" não podem ser vazios' });
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
   next();
 };
@@ -81,7 +79,7 @@ const dateAuthorized = (req, res, next) => {
   const regexDate = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/; // https://www.regextester.com
   if (!regexDate.test(talk.watchedAt)) {
     return res.status(HTTP_BAD_REQUEST_STATUS)
-      .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa' });
+      .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
   next();
 };
