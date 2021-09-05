@@ -36,7 +36,7 @@ function validatePostTalkerAge(req, res, next) {
 
 function validatePostTalkerTalk(req, res, next) {
   const { talk } = req.body;
-  if (!talk.watchedAt || !talk.rate) {
+  if (!talk || !talk.watchedAt || !talk.rate) {
     return res.status(400).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
@@ -84,6 +84,15 @@ async function addTalker(newTalkerData) {
   return newTalker;
 }
 
+async function editTalker(id, newData) {
+  const allTalkers = await talkerModel.getAllTalkers();
+  const talkerToBeEditedIndex = allTalkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  const editedTalker = { id, ...newData };
+  allTalkers[talkerToBeEditedIndex] = editedTalker;
+  await talkerModel.updateTalkerList(allTalkers);
+  return editedTalker;
+}
+
 module.exports = {
   validatePostTalkerName,
   validatePostTalkerAge,
@@ -91,4 +100,5 @@ module.exports = {
   validatePostTalkerDate,
   validatePostTalkerRate,
   addTalker,
+  editTalker,
  };
