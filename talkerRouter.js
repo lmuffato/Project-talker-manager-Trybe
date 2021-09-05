@@ -7,7 +7,6 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 
 const fsAsync = require('fs').promises;
-const { route } = require('./loginRouter');
 
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
