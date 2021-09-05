@@ -12,7 +12,12 @@ async function getTalkerById(talkerId) {
   return talkerById;
 }
 
+async function updateTalkerList(updatedTalkerList) {
+  await fs.writeFile('./talker.json', JSON.stringify(updatedTalkerList));
+}
+
 module.exports = {
   getAllTalkers,
   getTalkerById,
+  updateTalkerList,
 };
