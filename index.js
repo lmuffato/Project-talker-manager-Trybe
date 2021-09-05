@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const { getTalker } = require('./endpoints');
+const { getTalkerID } = require('./endpoints');
 
 const app = express();
 app.use(bodyParser.json());
@@ -10,6 +12,9 @@ const PORT = '3000';
 
 // Início
 
+// getTalkerID precisa vir antes de getTalker
+// senão exibirá a lista completa
+app.use('/talker/:id', getTalkerID);
 app.use('/talker', getTalker);
 
 // Fim
