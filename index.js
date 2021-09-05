@@ -14,6 +14,7 @@ const {
   validatePostTalkerRate,
   addTalker,
   editTalker,
+  deleteTalker,
 } = require('./service/talkerService');
 const { createToken } = require('./utils/tokenGenerator');
 const { saveToken } = require('./model/authModel');
@@ -87,6 +88,17 @@ app.put(
     return res.status(200).json(editedTalker);
   },
 );
+
+// Requisito 6
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  let { id } = req.params;
+  id = parseInt(id, 10);
+  await deleteTalker(id);
+
+  return res.status(200).json({
+    message: 'Pessoa palestrante deletada com sucesso',
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Online na porta ${PORT}`);
