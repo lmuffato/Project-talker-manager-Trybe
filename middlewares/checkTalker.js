@@ -51,11 +51,9 @@ const checkTalkRate = (req, res) => {
   }
 };
 
-module.exports = {
-  checkAuth,
-  checkName,
-  checkAge,
-  checkTalk,
-  checkTalkWatchDate,
-  checkTalkRate,
+const checkTalker = async (req, res) => {
+  checkAuth(req, res);
+  checkName(req, res);
 };
+
+module.exports = { checkTalker };
