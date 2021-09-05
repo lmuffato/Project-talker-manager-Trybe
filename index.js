@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const routerTalker = require('./routerTalker');
-const token = require('./token');
+const { gerarToken } = require('./token');
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,19 +19,17 @@ app.post('/login', (req, res) => {
   if (!email) return res.status(400).json({ message: 'O campo "email" é obrigatório' });
   if (!email.match(/\S+@\S+\.\S+/)) {
  return res.status(400).json(
-    {
-     message: 'O "email" deve ter o formato "email@email.com"', 
-    },
-); 
+    { message: 'O "email" deve ter o formato "email@email.com"' },
+  ); 
 }
   if (!password) return res.status(400).json({ message: 'O campo "password" é obrigatório' });
   if (password.length < 6) {
  return res.status(400).json(
-    { message: 'O "password" deve ter pelo menos 6 caracteres', 
-  },
-); 
+    { message: 'O "password" deve ter pelo menos 6 caracteres' },
+  ); 
 }
-  res.status(200).json({ token: token() });
+
+  res.status(200).json({ token: gerarToken() });
 });
 
 app.use('/talker', routerTalker);
