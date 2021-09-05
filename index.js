@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const middleware = require('./schemas');
 const { TokenGenerator } = require('./TokenGenerator/TokenGenerator');
-const M = require('./Messages/Messages');
+const M = require('./Messages/Messages.js');
 
 // const M = require('./messages.js');
 
@@ -117,10 +117,6 @@ app.put(
     }
   },
 );
- // Não entendo o porquê desta função não ser executada??
- // const updatedTalkers = talkers.map((t) => t.id).includes(talkerIdUpdate)
-      //   ? { ...DATA }
-      //   : { ...talkers };
 
 app.delete('/talker/:id', middleware.validationAndRegexToken, (req, res) => {
   try {
