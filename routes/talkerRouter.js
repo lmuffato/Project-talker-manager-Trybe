@@ -2,6 +2,9 @@ const express = require('express');
 
 const parsedData = require('../utils/parseData');
 const getById = require('../utils/getTalkerById');
+const createTalker = require('../utils/createTalker');
+const tokenValidate = require('../middlewares/tokenValidate');
+const validations = require('../middlewares/validations');
 
 const router = express.Router();
 
@@ -25,12 +28,17 @@ router.get('/:id', async (req, res, next) => {
       statusCode: 404,
       message: 'Pessoa palestrante não encontrada',
     });
-    // return res
-    //   .status(404)
-    //   .json({ message: 'Pessoa palestrante não encontrada' });
   }
 
   res.status(200).json(talker);
+});
+
+router.post('/', tokenValidate, validations, async (req, res) => {
+  const { name, age, talk } = req.body;
+
+  const newTalker = await createTalker({ name, age, talk });
+
+  return res.status(201).json(newTalker);
 });
 
 module.exports = router;
