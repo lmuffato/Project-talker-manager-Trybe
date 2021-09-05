@@ -2,8 +2,20 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const talkerModel = require('./model/talkerModel');
-const { validateEmail, validatePassword } = require('./utils/middlewares');
+const {
+  validateEmail,
+  validatePassword,
+  validateToken } = require('./service/authService');
+const {
+  validatePostTalkerName, 
+  validatePostTalkerAge,
+  validatePostTalkerTalk,
+  validatePostTalkerDate,
+  validatePostTalkerRate,
+  addTalker,
+} = require('./service/talkerService');
 const { createToken } = require('./utils/tokenGenerator');
+const { saveToken } = require('./model/authModel');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,11 +43,30 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 // Requisito 3
-app.post('/login', validateEmail, validatePassword, (req, res) => {
+app.post('/login', validateEmail, validatePassword, async (req, res) => {
   const token = createToken(16);
+  await saveToken(token);
+
   res.status(200).json({ token });
 });
 
+// Requisito 4
+app.post(
+  '/talker',
+  validateToken,
+  validatePostTalkerName, 
+  validatePostTalkerAge,
+  validatePostTalkerTalk,
+  validatePostTalkerDate,
+  validatePostTalkerRate,
+  async (req, res) => {
+    const { name, age, talk: { watchedAt, rate } } = req.body;
+    const newTalker = await addTalker({ name, age, talk: { watchedAt, rate } });
+
+    return res.status(201).json(newTalker);
+  },
+);
+
 app.listen(PORT, () => {
-  console.log('Online');
+  console.log(`Online na porta ${PORT}`);
 });
