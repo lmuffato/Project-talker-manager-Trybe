@@ -39,7 +39,7 @@ async function validateToken(req, res, next) {
   const { token: currentToken } = await getToken();
   if (!currentToken) return res.status(401).json({ message: 'Token não encontrado' });
 
-  const { token: incomingToken } = req.headers;
+  const { Authorization: incomingToken } = req.headers;
 
   const validToken = incomingToken === currentToken;
 
