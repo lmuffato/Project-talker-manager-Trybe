@@ -75,9 +75,9 @@ app.put(
   validateToken,
   validatePostTalkerName, 
   validatePostTalkerAge,
+  validatePostTalkerTalk,
   validatePostTalkerDate,
   validatePostTalkerRate,
-  validatePostTalkerTalk,
   async (req, res) => {
     const { name, age, talk: { watchedAt, rate } } = req.body;
     let { id } = req.params;
