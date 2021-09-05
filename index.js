@@ -19,6 +19,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/talker', Router.talkerRouter);
+app.use('/login', Router.loginRouter);
 
 app.use(error);
 
