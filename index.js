@@ -44,10 +44,11 @@ app.get('/talker/:id', async (req, res) => {
 
 // Requisito 3
 app.post('/login', validateEmail, validatePassword, async (_req, res) => {
+  console.log('rota de POST login acionada');
   const token = createToken(16);
   await saveToken(token);
 
-  res.status(200).json({ token });
+  return res.status(200).json({ token });
 });
 
 // Requisito 4
