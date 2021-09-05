@@ -6,7 +6,6 @@ const generateToken = (tokenNumber) => {
   const codeLength = code.length;
   for (let index = 0; index < tokenNumber; index += 1) {
     token += code.charAt(Math.floor(Math.random() * codeLength)); 
-// (Math.random() * (code.length - 1)).toFixed(0);
   }
   return token;
 };

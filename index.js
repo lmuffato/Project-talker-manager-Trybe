@@ -56,14 +56,14 @@ app.get('/talker/:id', async (request, response) => {
       return response.status(400).json({ message: EMPTY_PASSWORD_ERROR });
     }
     if (password.length < 6) return response.status(400).json({ message: INVALID_PASSWORD_ERROR });
-
     next();
   };
 
 app.post('/login', emailValidation, passwordValidation, (_request, response) => {
-
     response.status(200).json({ token: generateToken(16) });
 });
+
+// requisito 4
 
 app.listen(PORT, () => {
   console.log('Online');
