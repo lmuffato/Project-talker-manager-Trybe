@@ -47,7 +47,7 @@ function validatePostTalkerTalk(req, res, next) {
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
-  
+
   next();
 }
 
@@ -100,6 +100,12 @@ async function editTalker(id, newData) {
   return editedTalker;
 }
 
+async function deleteTalker(id) {
+  const allTalkers = await talkerModel.getAllTalkers();
+  const updatedTalkers = allTalkers.filter((talker) => talker.id !== id);
+  await talkerModel.updateTalkerList(updatedTalkers);
+}
+
 module.exports = {
   validatePostTalkerName,
   validatePostTalkerAge,
@@ -108,4 +114,5 @@ module.exports = {
   validatePostTalkerRate,
   addTalker,
   editTalker,
+  deleteTalker,
  };
