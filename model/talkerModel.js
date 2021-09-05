@@ -2,6 +2,7 @@ const fs = require('fs').promises;
 
 async function getAllTalkers() {
   const allTalkers = await fs.readFile('./talker.json');
+  if (!allTalkers) return [];
   return JSON.parse(allTalkers);
 }
 
