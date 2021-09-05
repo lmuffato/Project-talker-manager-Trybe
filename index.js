@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const talker = require('./talker.json');
+const loginAuth = require('./routes/login');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,7 +16,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', (req, res) => {
+app.get('/talker', (_req, res) => {
   fs.readFile(FILEPATH, (error, data) => {
     if (error) {
       return res.status(HTTP_OK_STATUS).send([]);
@@ -39,6 +40,8 @@ app.get('/talker/:id', (req, res) => {
 
   res.status(200).json(talkerById);
 });
+
+app.use('/login', loginAuth);
 
 app.listen(PORT, () => {
   console.log('Online');
