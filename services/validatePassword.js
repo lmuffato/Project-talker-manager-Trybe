@@ -7,7 +7,7 @@ const validatePassword = (password) => {
     return { status: 400, message: 'O "password" deve ter pelo menos 6 caracteres' };
   }
 
-  return '';
+  return { ok: true };
 };
 
 module.exports = validatePassword;

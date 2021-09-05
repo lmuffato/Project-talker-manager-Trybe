@@ -9,7 +9,7 @@ const validateEmail = (email) => {
     return { status: 400, message: 'O "email" deve ter o formato "email@email.com"' };
   }
 
-  return '';
+  return { ok: true };
 };
 
 module.exports = validateEmail;
