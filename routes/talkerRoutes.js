@@ -6,8 +6,8 @@ const getTalkerById = require('../talkers/getTalkerById');
 
 const router = new Router();
 
-router.get('/talker', getTalkers);
+router.get('/', getTalkers);
 
-router.get('/talker/:id', getTalkerById);
+router.get('/:id', getTalkerById);
 
 module.exports = router;
