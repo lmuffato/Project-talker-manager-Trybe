@@ -12,6 +12,13 @@ const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
 const TALKER_FILE = './talker.json';
 
+const validateToken = (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
+  if (authorization.length !== 16) return res.status(401).json({ message: 'Token inválido' });
+  next();
+};
+
 // REQUISITO 1
 
 router.get('/', async (_req, res) => {
@@ -23,6 +30,17 @@ router.get('/', async (_req, res) => {
 
 // fonte para o entendimento do JSON.parse: 
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+
+router.get('/search', validateToken, async (req, res) => {
+  const { name } = req.query;
+  
+  const allTalker = await fsAsync.readFile(TALKER_FILE, 'utf-8');
+  const allTalkerJson = await JSON.parse(allTalker);
+  if (!name || name === '') return res.status(HTTP_OK_STATUS).json(allTalkerJson);
+  const filteredTalkers = allTalkerJson.filter((talker) => talker.name.includes(name));
+  if (filteredTalkers === null) return res.status(200).json([]);
+  res.status(HTTP_OK_STATUS).json(filteredTalkers);
+});
 
 // REQUISITO 2
 
@@ -44,13 +62,6 @@ router.get('/:id', async (req, res) => {
 // https://eslint.org/docs/rules/radix
 
 // REQUISITO 4
-
-const validateToken = (req, res, next) => {
-  const { authorization } = req.headers;
-  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
-  if (authorization.length !== 16) return res.status(401).json({ message: 'Token inválido' });
-  next();
-};
 
 const validateName = (req, res, next) => {
   const { name } = req.body;
