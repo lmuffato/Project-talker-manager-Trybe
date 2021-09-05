@@ -1,21 +1,24 @@
 // 3 - Crie o endpoint POST /login
 
-const { validateEmail, validatePassword } = require('../services');
+const { validateEmail, validatePassword, generateToken } = require('../services');
 
-const login = (req, res, next) => {
+const login = (req, res) => {
   const { password, email } = req.body;
-  const validEmail = validateEmail(email);
-  const validPassword = validatePassword(password);
+  const token = generateToken();
+  const isValidEmail = validateEmail(email);
+  const IsValidPassword = validatePassword(password);
 
-  if (validEmail !== '') {
-    return res.status(validEmail.status).json({ message: validEmail.message });
+  if (!isValidEmail.ok) {
+    return res.status(isValidEmail.status).json({ message: isValidEmail.message });
   }
 
-  if (validPassword !== '') {
-    return res.status(validPassword.status).json({ message: validPassword.message });
+  if (!IsValidPassword.ok) {
+    return res.status(IsValidPassword.status).json({ message: IsValidPassword.message });
   }
 
-  next();
+  if (isValidEmail.ok && IsValidPassword.ok) {
+    return res.status(200).json({ token });
+  }
 };
 
 module.exports = login;
