@@ -2,11 +2,9 @@ const fs = require('fs');
 
 const bodyParser = require('body-parser');
 const express = require('express');
-const middleware = require('./schemas');
-const { TokenGenerator } = require('./TokenGenerator/TokenGenerator');
-const M = require('./Messages/Messages.js');
 
-// const M = require('./messages.js');
+const M = require('./Messages/Messages');
+const middleware = require('./schemas');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,19 +13,26 @@ const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
-app.get('/', (_request, response) => {
-  response.status(HTTP_OK_STATUS).send();
-});
-
 const getTalkerJSON = () => JSON.parse(fs.readFileSync('talker.json', 'utf8'));
 
-app.get('/talker', (_req, res) => {
-  try {
-    const talkers = getTalkerJSON();
-    res.status(200).send(talkers);
-  } catch (err) {
-    return res.status(500).send({ err });
+const createToken = () => {
+  const UPPER_CASE_LETTERS = 'ABCDEFGIJKLMNOPQRSTUVWXYZ';
+  const LOWER_CASE_LETTERS = UPPER_CASE_LETTERS.toLowerCase();
+  const NUMBERS = '1234567890';
+  const ALPHA_NUMERICAL_CHARS = NUMBERS.concat(LOWER_CASE_LETTERS, UPPER_CASE_LETTERS);
+
+  let token = '';
+
+  for (let index = 0; index < 16; index += 1) {
+    const randomIndex = Math.floor(Math.random() * ALPHA_NUMERICAL_CHARS.length);
+    token += ALPHA_NUMERICAL_CHARS[randomIndex];
   }
+
+  return token;
+};
+
+app.get('/', (_request, response) => {
+  response.status(HTTP_OK_STATUS).send();
 });
 
 app.get('/talker/search', middleware.validationAndRegexToken, (req, res, next) => {
@@ -50,8 +55,17 @@ app.get('/talker/search', middleware.validationAndRegexToken, (req, res, next) =
   }
 });
 
+app.get('/talker', (_req, res) => {
+  try {
+    const talkers = getTalkerJSON();
+    res.status(200).send(talkers);
+  } catch (err) {
+    return res.status(500).send({ err });
+  }
+});
+
 app.post('/login', middleware.loginValidation, (_req, res) => {
-  const token = TokenGenerator();
+  const token = createToken();
   res.status(200).send({ token });
 });
 
@@ -117,6 +131,10 @@ app.put(
     }
   },
 );
+ // Não entendo o porquê desta função não ser executada??
+ // const updatedTalkers = talkers.map((t) => t.id).includes(talkerIdUpdate)
+      //   ? { ...DATA }
+      //   : { ...talkers };
 
 app.delete('/talker/:id', middleware.validationAndRegexToken, (req, res) => {
   try {

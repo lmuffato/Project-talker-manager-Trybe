@@ -1,5 +1,9 @@
 const M = require('./Messages/Messages.js');
 
+/**
+ * Validações e seus Regex descritos. *
+ * PS: Montei desta forma por acreditar ser mais legível posteriormente cada mensagem descrita.
+ */
 const validationAndRegexToken = (req, res, next) => {
   const auth = req.headers.authorization;
   const REGEX_VALIDATION_TOKEN = /^[0-9a-zA-Z]{16}$/;
