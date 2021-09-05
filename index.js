@@ -64,6 +64,29 @@ app.get(
   }),
 );
 
+app.put(
+  '/talker/:id',
+  verifyToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkDate,
+  validateRate,
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+
+    const fileTalkers = await getAllTalkers();
+    const talkerIndex = fileTalkers.find((talker) => talker.id === +id);
+
+    fileTalkers[talkerIndex] = { ...fileTalkers[talkerIndex], name, age, id: +id, talk };
+
+    writeTalker([fileTalkers, fileTalkers[talkerIndex]]);
+
+    res.status(HTTP_OK_STATUS).json({ name, age, id: +id, talk });
+  }),
+);
+
 app.post('/login', createToken, validateEmail, validatePassword, (req, res) => {
   const { token } = req;
   res.status(HTTP_OK_STATUS).json({ token });
