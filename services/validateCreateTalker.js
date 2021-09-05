@@ -13,11 +13,11 @@ const validateAge = (age) => {
 };
 
 const validateTalker = (talk) => {
-  if (!talk || !talk.watchedAt || (!talk.rate && talk.rate !== 0)) {
+  if (!talk || !talk.watchedAt || (talk.watchedAt === '' && talk.rate !== 0)) {
     return {
       status: 400,
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
-    }; 
+    };
   }
   return { ok: true };
 };
@@ -25,7 +25,7 @@ const validateTalker = (talk) => {
 const validatewatchedAtAndRate = (talk) => {
   const rateRegex = /^[1-5]{1}$/;
   const watchedAtRegex = /^\d{2}\/\d{2}\/\d{4}$/;
-
+  console.log(talk);
   if (!watchedAtRegex.test(talk.watchedAt)) {
     return { status: 400, message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' };
   }
