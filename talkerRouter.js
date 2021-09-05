@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 router.use(bodyParser.json());
 
 const fsAsync = require('fs').promises;
+const { route } = require('./loginRouter');
 
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
@@ -144,5 +145,20 @@ validateName, validateAge, validateTalk, validateWatchedAt, validateRate, async 
   await fsAsync.writeFile(TALKER_FILE, JSON.stringify(allTalkerJson));
   res.status(HTTP_OK_STATUS).json(allTalkerJson[talkerIndex]);
 });
+
+router.delete('/:id', validateToken, async (req, res) => {
+const { id } = req.params;
+const allTalker = await fsAsync.readFile(TALKER_FILE, 'utf-8');
+const allTalkerJson = await JSON.parse(allTalker);
+const talkerIndex = allTalkerJson.findIndex((talker) => talker.id === parseInt(id, 10));
+
+allTalkerJson.splice(talkerIndex, 1);
+
+await fsAsync.writeFile(TALKER_FILE, JSON.stringify(allTalkerJson));
+res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
+// fonte para o entendimento do método splice: 
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice 
 
 module.exports = router;
