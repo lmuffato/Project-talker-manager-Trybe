@@ -43,7 +43,7 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 // Requisito 3
-app.post('/login', validateEmail, validatePassword, async (req, res) => {
+app.post('/login', validateEmail, validatePassword, async (_req, res) => {
   const token = createToken(16);
   await saveToken(token);
 
