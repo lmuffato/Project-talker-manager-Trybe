@@ -57,7 +57,7 @@ router.get('/:id', async (req, res) => {
   
   if (!people) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 
-  res.status(201).json(people);
+  res.status(200).json(people);
 });
 
 router.put('/:id',
