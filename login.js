@@ -4,7 +4,7 @@ const midd = require('./middleware');
 
 const router = express.Router();
 
-router.post('/', midd.emailValidate, midd.passwordValidate, async (req, res) => {
+router.post('/', midd.emailValidate, midd.passwordValidate, async (_req, res) => {
     try {
         const token = crypto.randomBytes(8).toString('hex');
         return res.status(200).json(token);
