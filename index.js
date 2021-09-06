@@ -5,7 +5,6 @@ const routes = require('./middlewares/routes');
 const validateEmail = require('./middlewares/validateEmail');
 const validatePassword = require('./middlewares/validatePassword');
 const generateToken = require('./middlewares/generateToken');
-// const checkAuth = require('./checkAuth');
 
 const app = express();
 app.use(bodyParser.json());

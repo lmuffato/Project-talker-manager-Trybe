@@ -31,6 +31,7 @@ router.get(
       res.status(404).json({
         message: 'Pessoa palestrante não encontrada',
       });
+      return;
     }
     res.status(HTTP_OK_STATUS).json(talker);
   }),
