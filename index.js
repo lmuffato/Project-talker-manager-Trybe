@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { readFile } = require('fs').promises;
+const { readFile, writeFile } = require('fs').promises;
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,7 +13,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-// Quesito 01
+// --------------------------------------------------- Quesito 01 --------------------------------------------------------------------
 
 const reading = async (file) => {
   let readfile = await readFile(file);
@@ -32,7 +32,7 @@ app.get('/talker', async (_req, res) => {
   }
 });
 
-// Quesito 02
+// --------------------------------------------------- Quesito 02 ----------------------------------------------------------------------
 const HTTP_NOT_FOUND_STATUS = 404;
 const mensage = 'Pessoa palestrante não encontrada';
 
@@ -51,7 +51,7 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
-// Quesito 03
+// -------------------------------------------- Quesito 03 -----------------------------------------------------------------------------
 // Referencia para a criação do tolken: https://nodejs.org/api/crypto.html#crypto_crypto_randombytes_size_callback
 
 const HTTP_BAD_REQUEST_STATUS = 400;
@@ -89,6 +89,142 @@ app.post('/login', (req, res) => {
     }
 
     res.status(HTTP_OK_STATUS).json({ token: tokenGenerator() });
+  } catch (_e) {
+    return null;
+  }
+});
+
+// --------------------------------------------- Quesito 04 ---------------------------------------------------------------------------
+const HTTP_UNAUTHORIZED_STATUS = 401;
+const HTTP_CREATED_STATUS = 201;
+
+const validationToken = (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(HTTP_UNAUTHORIZED_STATUS).send({ message: 'Token não encontrado' }); 
+  }
+  if (authorization.length !== 16) {
+    return res.status(HTTP_UNAUTHORIZED_STATUS).send({ message: 'Token inválido' });
+  }
+
+  next();
+};
+
+const validationName = (req, res, next) => {
+  const { name } = req.body;
+  if (!name) {
+    return res.status(HTTP_BAD_REQUEST_STATUS).send({ message: 'O campo "name" é obrigatório' });
+  }  
+  if (name.length < 3) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+    .send({ message: 'O "name" deve ter pelo menos 3 caracteres' });
+  }
+
+  next();
+};
+
+const validationAge = (req, res, next) => {
+  const { age } = req.body;
+  if (!age) {
+    return res.status(HTTP_BAD_REQUEST_STATUS).send({ message: 'O campo "age" é obrigatório' });
+  }  
+  if (age < 18) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+    .send({ message: 'A pessoa palestrante deve ser maior de idade' });
+  }
+
+  next();
+};
+
+const validationWatchedAt = (req, res, next) => {
+  const { watchedAt } = req.body.talk;
+  const validationwatchedAt = /\d{2}\/\d{2}\/\d{4}/g.test(watchedAt);
+  if (!watchedAt) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+  .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+  if (!validationwatchedAt) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+    .send({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+
+  next();
+};
+
+const validationRates = (req, res, next) => {
+  const { rate } = req.body.talk;
+  if (rate === undefined) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+  .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+  if (rate < 1 || rate > 5) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+    .send({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+
+  next();
+};
+
+const validationTalk = (req, res, next) => {
+  const { talk } = req.body;
+  if (!talk) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+    .send({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+
+  next();
+};
+
+function writing(newTalker) {
+  return writeFile('./talker.json', JSON.stringify(newTalker));
+}
+
+app.post('/talker',
+validationToken,
+validationName,
+validationAge,
+validationTalk,
+validationWatchedAt,
+validationRates,
+ async (req, res) => {
+  const talker = await reading('talker.json');
+  const { name, age, talk: { watchedAt, rate } } = req.body;
+  const newTalke = { id: talker.length + 1, name, age, talk: { watchedAt, rate } };
+  talker.push(newTalke);
+
+  try {
+    await writing(talker);
+    res.status(HTTP_CREATED_STATUS).json(newTalke);
+  } catch (_e) {
+    return null;
+  }
+});
+
+// --------------------------------------------- Quesito 05 ---------------------------------------------------------------------------
+
+app.put('/talker/:id',
+validationToken,
+validationName,
+validationAge,
+validationTalk,
+validationWatchedAt,
+validationRates,
+ async (req, res) => {
+  const { name, age, talk } = req.body;
+  const talker = await reading('talker.json');
+  const { id } = req.params;
+  const talkerToEdit = {
+    id: Number(id),
+    name,
+    age,
+    talk,
+  };
+  talker.filter((talke) => Number(talke.id) !== Number(id));
+  talker.push(talkerToEdit);
+
+  try {
+    await writing(talker);
+    res.status(HTTP_OK_STATUS).json(talkerToEdit);
   } catch (_e) {
     return null;
   }
