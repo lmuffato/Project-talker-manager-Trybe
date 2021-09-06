@@ -3,6 +3,9 @@ const bodyParser = require('body-parser');
 
 const { getTalker } = require('./endpoints');
 const { getTalkerID } = require('./endpoints');
+const { tokenLogin } = require('./endpoints');
+const { validarEmail } = require('./endpoints');
+const { validarPassword } = require('./endpoints');
 
 const app = express();
 app.use(bodyParser.json());
@@ -14,8 +17,11 @@ const PORT = '3000';
 
 // getTalkerID precisa vir antes de getTalker
 // senão exibirá a lista completa
-app.use('/talker/:id', getTalkerID);
-app.use('/talker', getTalker);
+app.get('/talker/:id', getTalkerID);
+
+app.get('/talker', getTalker);
+
+app.post('/login', validarEmail, validarPassword, tokenLogin);
 
 // Fim
 
