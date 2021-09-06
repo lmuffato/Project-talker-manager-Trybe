@@ -81,5 +81,19 @@ rateValidation,
   await fs.writeFile('talker.json', JSON.stringify(talkerId));
   return res.status(200).json(editTalker);
 });
+
+router.delete('/:id', validateToken, async (req, res) => {
+const talker = await fs.readFile(talkerJSON, 'utf8');
+const talkerParse = JSON.parse(talker);
+const { id } = req.params;
+
+const talkerId = talkerParse.findIndex((p) => p.id === +id);
+
+talkerParse.splice(talkerId, 1);
+
+await fs.writeFile('talker.json', JSON.stringify(talkerParse));
+
+res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
     
 module.exports = router;
