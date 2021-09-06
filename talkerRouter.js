@@ -1,6 +1,8 @@
 const fs = require('fs').promises;
 const express = require('express');
 
+const FILE = './talker.json';
+
 const router = express.Router();
 
 const verificaToken = (token) => {
@@ -15,6 +17,8 @@ const verificaToken = (token) => {
     err.code = 401;
     throw err;
   }
+
+  return true;
 };
 
 const verificaNome = (name) => {
@@ -54,7 +58,7 @@ const verificaWatchedAt = (watchedAt) => {
 };
 
 const verificaRate = (rate) => {
-  if (rate < 1 || rate > 5) {
+  if (rate < 1 || rate > 5 || typeof rate !== 'number') {
     const err = new Error('O campo "rate" deve ser um inteiro de 1 à 5');
     err.code = 400;
     throw err;
@@ -62,7 +66,7 @@ const verificaRate = (rate) => {
 };
 
 const verificaTalk = (talk) => {
-  if (!talk || !talk.rate || !talk.watchedAt) {
+  if (!talk || talk === {} || typeof (talk.rate) === 'undefined' || !talk.watchedAt) {
     const err = new Error(
       'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     );
@@ -77,13 +81,13 @@ const verificaTalk = (talk) => {
 const getMaxId = (data) => data.reduce((acc, cur) => (cur.id > acc ? cur.id : acc), 0);
 
 router.get('/', (_req, res) => {
-  fs.readFile('./talker.json')
+  fs.readFile(FILE)
     .then((result) => res.status(200).json(JSON.parse(result)))
     .catch((err) => res.status(404).json({ message: err.message }));
 });
 
 router.get('/:id', (req, res) => {
-  fs.readFile('./talker.json')
+  fs.readFile(FILE)
     .then((result) => JSON.parse(result))
     .then((result) => result.filter((entry) => entry.id === +req.params.id))
     .then((result) => {
@@ -96,20 +100,45 @@ router.get('/:id', (req, res) => {
     .catch((err) => res.status(404).json({ message: err.message }));
 });
 
+const checks = (authorization, name, age, talk) => {
+  verificaToken(authorization);
+  verificaNome(name);
+  verificaIdade(age);
+  verificaTalk(talk);
+};
+
 router.post('/', (req, res) => {
   const { name, age, talk } = req.body;
-  fs.readFile('./talker.json')
+  fs.readFile(FILE)
     .then((result) => JSON.parse(result))
     .then((data) => {
       const { authorization } = req.headers;
-      verificaToken(authorization);
-      verificaNome(name);
-      verificaIdade(age);
-      verificaTalk(talk);
+      checks(authorization, name, age, talk);
       const newEntry = { id: getMaxId(data) + 1, name, age, talk };
-      fs.writeFile('./talker.json', JSON.stringify([...data, newEntry]))
+      fs.writeFile(FILE, JSON.stringify([...data, newEntry]))
         .then(() => console.log('ok'));
       res.status(201).json(newEntry);
+    })
+    .catch((err) => res.status(err.code).json({ message: err.message }));
+});
+
+router.put('/:id', (req, res) => {
+  const { authorization } = req.headers;
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  fs.readFile(FILE)
+    .then((result) => JSON.parse(result))
+    .then((data) => {
+      const index = data.findIndex((item) => item.id === +id);
+      const arr = [...data];
+      checks(authorization, name, age, talk);
+      if (index === -1) {
+        res.status(404).json({ message: 'Not found' });
+      } else {
+        arr[index] = { id: +id, name, age, talk };
+        fs.writeFile(FILE, JSON.stringify(arr));
+      }
+      res.status(200).json(arr[index]);
     })
     .catch((err) => res.status(err.code).json({ message: err.message }));
 });
