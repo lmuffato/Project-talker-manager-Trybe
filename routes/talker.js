@@ -7,16 +7,19 @@ const { verifyAge,
   verifyToken } = require('../middlewares/talker');
 
 const loadTalkers = require('../utils/loadTalkers');
+const editTalker = require('../utils/editTalker');
 
 const FILEPATH = './talker.json';
 
 const router = express.Router();
 
-router.post('/', verifyToken, 
-verifyAge,
-verifyName,
-verifyTalkRate,
-verifyTalkWatchedAt,
+const validators = [verifyToken, 
+  verifyAge,
+  verifyName,
+  verifyTalkRate,
+  verifyTalkWatchedAt];
+
+router.post('/', validators,
  async (req, res) => {
   const { name, age, talk } = req.body;
 
@@ -34,5 +37,7 @@ verifyTalkWatchedAt,
 
   return res.status(201).json(newTalker);
 });
+
+router.put('/:id', validators, editTalker);
 
 module.exports = router;
