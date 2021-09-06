@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const { generateToken } = require('./utils/functions');
 
+const readFileTalker = require('./Routes/talkerRoutes');
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -16,11 +18,7 @@ app.get('/', (_request, response) => {
 
 // requisito 1
 
-app.get('/talker', async (_request, response) => {
-  const talkers = await fs.readFile('./talker.json');
-  const result = await JSON.parse(talkers);
-  response.status(200).json(result);
-});
+app.use('/talker', readFileTalker);
 
 // requisito 2 
 
