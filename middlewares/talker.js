@@ -82,7 +82,7 @@ const verifyTalkWatchedAt = (req, res, next) => {
 
   if (!moment(talk.watchedAt, 'DD/MM/YYYY', true).isValid()) {
     return res.status(400).json({
-      message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa',
+      message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
     });
   }
 
