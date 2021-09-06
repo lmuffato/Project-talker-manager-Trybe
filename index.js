@@ -13,6 +13,19 @@ const fileTalkers = async () => {
   talkers = await util.readFile('./talker.json');
 };
 
+app.get('/talker/search', async (req, res) => {
+  const { authorization } = req.headers;
+  const Tokem = util.validationToken(authorization);
+  if (Tokem.message) return res.status(401).json(Tokem);
+
+  const { q } = req.query;
+  if (!q || q === '') return res.status(200).json(talkers);
+
+  await fileTalkers();
+  const newtal = talkers.filter(({ name }) => name.includes(q));
+  res.status(200).json(newtal);
+});
+
 app.get('/talker', async (_req, res) => {
   await fileTalkers();
   return res.status(200).json(talkers);
