@@ -9,7 +9,6 @@ app.use(bodyParser.json());
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
-const fileTalker = './talker.json';
 // não remova esse endpoint, eh para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
@@ -18,7 +17,7 @@ app.get('/', (_request, response) => {
 // requisito 1
 
 app.get('/talker', async (_request, response) => {
-  const talkers = await fs.readFile(fileTalker);
+  const talkers = await fs.readFile('./talker.json');
   const result = await JSON.parse(talkers);
   response.status(200).json(result);
 });
@@ -27,7 +26,7 @@ app.get('/talker', async (_request, response) => {
 
 app.get('/talker/:id', async (request, response) => {
   const { id } = request.params;
-  const talkers = await fs.readFile(fileTalker);
+  const talkers = await fs.readFile('./talker.json');
   const result = await JSON.parse(talkers);
   const talkerId = result.find((talker) => talker.id === +id);
   if (!talkerId) response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -136,7 +135,7 @@ talkWatchedAtValidation,
 talkRateValidation,
 async (request, response) => {
   const { name, age, talk: { watchedAt, rate } } = request.body;
-  const talkers = await fs.readFile(fileTalker);
+  const talkers = await fs.readFile('./talker.json');
   const talker = await JSON.parse(talkers);
   const newTalker = {
   id: (talker.length + 1),
@@ -144,7 +143,7 @@ async (request, response) => {
   age,
   talk: { watchedAt, rate } };
   talker.push(newTalker);
-  await fs.writeFile(fileTalker, JSON.stringify(talker));
+  await fs.writeFile('./talker.json', JSON.stringify(talker));
   response.status(201).json(newTalker);
 });
 
@@ -168,7 +167,7 @@ rateValidation,
 async (request, response) => {
   const { id } = request.params;
   const { name, age, talk: { watchedAt, rate } } = request.body;
-  const talkersFile = await fs.readFile(fileTalker);
+  const talkersFile = await fs.readFile('./talker.json');
   const talkers = await JSON.parse(talkersFile);
   const otherNewTalker = talkers.filter((talker) => talker.id === id);
   const editTalker = {
