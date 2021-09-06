@@ -8,6 +8,8 @@ const { verifyAge,
 
 const loadTalkers = require('../utils/loadTalkers');
 
+const FILEPATH = './talker.json';
+
 const router = express.Router();
 
 router.post('/', verifyAge,
@@ -26,8 +28,8 @@ verifyToken, async (req, res) => {
     talk,
   };
 
-  const addNewTalker = talkers.push(newTalker);
-  await fs.writeFile('../talker.json', JSON.stringify(addNewTalker));
+  talkers.push(newTalker);
+  await fs.writeFile(FILEPATH, JSON.stringify(talkers), (error) => { if (error) throw error; });
 
   return res.status(201).json(newTalker);
 });
