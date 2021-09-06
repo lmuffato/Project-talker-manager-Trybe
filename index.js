@@ -4,6 +4,7 @@ const fs = require('fs').promises;
 const { generateToken } = require('./utils/functions');
 
 const readFileTalker = require('./Routes/talkerRoutes');
+const talkerByID = require('./Routes/talkerRoutes');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,14 +23,7 @@ app.use('/talker', readFileTalker);
 
 // requisito 2 
 
-app.get('/talker/:id', async (request, response) => {
-  const { id } = request.params;
-  const talkers = await fs.readFile('./talker.json');
-  const result = await JSON.parse(talkers);
-  const talkerId = result.find((talker) => talker.id === +id);
-  if (!talkerId) response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-  response.status(200).json(talkerId);
-});
+app.use('/talker/:id', talkerByID);
 
 // requisito 3
 
