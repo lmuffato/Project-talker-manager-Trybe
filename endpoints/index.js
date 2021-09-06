@@ -12,8 +12,11 @@ const {
   validarToken,
   validarNome,
   validarIdade,
-  validarDataEvento,
-  validarNota } = require('./postTalker');
+  validarTalk,
+  validarNota,
+  talkWatchedAtValidation } = require('./postTalker');
+
+  const editarPalestrante = require('./editarPalestrante');
 
 module.exports = {
   getTalker,
@@ -25,6 +28,8 @@ module.exports = {
   validarToken,
   validarNome,
   validarIdade,
-  validarDataEvento,
+  validarTalk,
   validarNota,
+  talkWatchedAtValidation,
+  editarPalestrante,
 };

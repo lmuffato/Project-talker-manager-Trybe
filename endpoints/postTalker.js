@@ -20,7 +20,7 @@ const validarNome = (req, res, next) => {
   }
 
   if (name.length < 3) {
-    return res.status(400).json({ message: 'O campo "name" deve ter pelo menos 3 caracteres' });
+    return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
   }
 
   next();
@@ -39,30 +39,67 @@ const validarIdade = (req, res, next) => {
   next();
 };
 
-const validarDataEvento = (req, res, next) => {
-  const { talk: { watchedAt } } = req.body;
-
-  // Recebi ajuda do estudante Lucas Lara (T10-A) sobre esse padrão de Regex
-  const pattern = /^\d{2}\/\d{2}\/\d{4}$/;
-  const compararPattern = watchedAt.match(pattern);
-
-  if (!compararPattern) {
-    return res.status(400)
-      .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+const validarTalk = (request, response, next) => {
+  const { talk } = request.body;
+  
+  if (!talk || (!talk.rate && talk.rate !== 0)) {
+    return response.status(400)
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
 
   next();
 };
 
-const validarNota = (req, res, next) => {
-  const { talk: { rate } } = req.body;
+const validarNota = (request, response, next) => {
+  const { talk } = request.body;
+  const { rate } = talk;
+
+  if (!rate) {
+    return response.status(400)
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+
   if (rate < 1 || rate > 5) {
-    return res.status(400)
-      .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+    return response.status(400)
+    .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
 
   next();
 };
+
+const talkWatchedAtValidation = (request, response, next) => {
+  const { talk } = request.body;
+  const { watchedAt } = talk;
+  const watchedAtTest = /\d\d\/\d\d\/\d\d\d\d/g.test(watchedAt);
+  if (!watchedAt) {
+    return response.status(400)
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+
+  if (!watchedAtTest) {
+    return response.status(400)
+    .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+  next();
+};
+
+/* const validarData = (request, response, next) => {
+  const { talk } = request.body;
+  const { watchedAt } = talk;
+  
+  if (!watchedAt) {
+    return response.status(400)
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+  
+  const watchedAtTest = /\d\d\/\d\d\/\d\d\d\d/g.test(watchedAt);
+  if (!watchedAtTest) {
+    return response.status(400)
+    .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+
+  next();
+}; */
 
 const addPalestrante = async (req, res, _next) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
@@ -89,6 +126,7 @@ module.exports = {
   validarToken,
   validarNome,
   validarIdade,
-  validarDataEvento,
+  validarTalk,
   validarNota,
+  talkWatchedAtValidation,
 };

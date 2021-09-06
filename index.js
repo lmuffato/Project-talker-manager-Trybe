@@ -7,12 +7,15 @@ const { tokenLogin } = require('./endpoints');
 const { validarEmail } = require('./endpoints');
 const { validarPassword } = require('./endpoints');
 
-const { addPalestrante } = require('./endpoints/index');
+const { addPalestrante } = require('./endpoints');
 const { validarToken } = require('./endpoints');
 const { validarNome } = require('./endpoints');
 const { validarIdade } = require('./endpoints');
-const { validarDataEvento } = require('./endpoints');
+const { talkWatchedAtValidation } = require('./endpoints');
 const { validarNota } = require('./endpoints');
+const { validarTalk } = require('./endpoints');
+
+const { editarPalestrante } = require('./endpoints');
 
 const app = express();
 app.use(bodyParser.json());
@@ -34,12 +37,14 @@ const teste = [
   validarToken,
   validarNome,
   validarIdade,
-  validarDataEvento,
+  validarTalk,
   validarNota,
-  addPalestrante,
- ];
+  talkWatchedAtValidation,
+];
 
-app.post('/talker', teste);
+app.put('/talker/:id', teste, editarPalestrante);
+
+app.post('/talker', teste, addPalestrante);
 
 // Fim
 
