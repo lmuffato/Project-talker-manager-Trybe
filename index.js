@@ -15,6 +15,9 @@ app.get('/', (_request, response) => {
 
 app.use('/talker', routerTalker);
 
+app.post('/login',
+(_request, response) => response.status(HTTP_OK_STATUS).json({ token: '7mqaVRXJSp886CGr' }));
+
 app.listen(PORT, () => {
   console.log('Online');
 });
