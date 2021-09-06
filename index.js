@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 
 const getTalkers = require('./getTalkers');
 const getTalker = require('./getTalker');
+const putTalker = require('./editTalker');
 const { validEmail, validPassword, tokenCrypto } = require('./validations');
 
 const {
@@ -42,6 +43,15 @@ talkAuthorized,
 dateAuthorized,
 rateAuthorized,
 createdTalker);
+
+app.put('/talker/:id',
+tokenAuthorized,
+nameAuthorized,
+ageAuthorized,
+talkAuthorized,
+dateAuthorized,
+rateAuthorized,
+putTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
