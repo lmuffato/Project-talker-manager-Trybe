@@ -143,12 +143,23 @@ router.put('/:id', (req, res) => {
     .catch((err) => res.status(err.code).json({ message: err.message }));
 });
 
-router.use((err, _req, res, _next) => {
-  if (err.code && err.status) {
-    return res.status(err.status).json({ message: err.message, code: err.code });
-  }
-
-  return res.status(500).json({ message: err.message });
+router.delete('/:id', (req, res) => {
+  const { authorization } = req.headers;
+  const { id } = req.params;
+  fs.readFile(FILE)
+    .then((result) => JSON.parse(result))
+    .then((result) => {
+      const arr = [...result];
+      const index = result.findIndex((item) => item.id === +id);
+      verificaToken(authorization);
+      if (index === -1) {
+        res.status(404).json({ message: 'Not found!' });
+      }
+      arr.splice(index, 1);
+      fs.writeFile(FILE, JSON.stringify(arr));
+      res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+    })
+    .catch((err) => res.status(err.code).json({ message: err.message }));
 });
 
 module.exports = router;
