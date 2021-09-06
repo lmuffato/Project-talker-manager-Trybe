@@ -65,22 +65,6 @@ app.post('/login', async (req, res) => {
   return res.status(200).json({ token });
 });
 
-const validationToken = (authorization) => {
-  const regexToken = /[A-Z0-9a-z]{16}/;
-
-  if (!authorization) {
-    return {
-      message: 'Token não encontrado',
-    };
-  }
-
-  if (!regexToken.test(authorization)) {
-    return { message: 'Token inválido' };
-  }
-
-  return true;
-};
-
 const validationName = (name) => {
   if (!name || name === '') {
     return {
@@ -168,7 +152,7 @@ const validetionTalk = (talk) => {
 function talkerExtend(req) {
   const { name, age, talk } = req.body;
   const { authorization } = req.headers;
-  const token = validationToken(authorization);
+  const token = util.validationToken(authorization);
   const resultName = validationName(name);
   const resultAge = validetionAge(age);
   const resultTalk = validetionTalk(talk);
@@ -218,6 +202,23 @@ app.put('/talker/:id', async (req, res) => {
   await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
 
   return res.status(200).json(newTalkers[newTalkers.length - 1]);
+});
+
+app.delete('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const { authorization } = req.headers;
+  const token = util.validationToken(authorization);
+
+  if (token.message) {
+    return res.status(401).json(token);
+  }
+
+  await fileTalkers();
+
+  const newTalkers = talkers.filter((talker) => talker.id !== Number(id));
+  await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
+
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 const HTTP_OK_STATUS = 200;

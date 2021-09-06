@@ -22,7 +22,24 @@ function readFile(file) {
     .then((res) => JSON.parse(res));
 }
 
+const validationToken = (authorization) => {
+  const regexToken = /[A-Z0-9a-z]{16}/;
+
+  if (!authorization) {
+    return {
+      message: 'Token não encontrado',
+    };
+  }
+
+  if (!regexToken.test(authorization)) {
+    return { message: 'Token inválido' };
+  }
+
+  return true;
+};
+
 module.exports = {
   validationEmail,
   readFile,
+  validationToken,
 };
