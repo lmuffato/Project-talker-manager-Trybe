@@ -28,7 +28,7 @@ const verifyPassword = async (req, res, next) => {
     });
   }
 
-  if (password <= 5) {
+  if (password.length <= 5) {
     return res.status(400).json({
       message: 'O "password" deve ter pelo menos 6 caracteres',
     });
