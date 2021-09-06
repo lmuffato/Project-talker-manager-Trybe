@@ -143,6 +143,19 @@ async (request, response) => {
   response.status(200).json(editTalker);
 });
 
+// requisito 6 
+
+app.delete('/talker/:id',
+tokenValidation,
+async (request, response) => {
+const { id } = request.params;
+const talkersFile = await fs.readFile('./talker.json', 'utf-8');
+const talkers = await JSON.parse(talkersFile);
+const otherTalker = talkers.filter((talker) => talker.id === id);
+await fs.writeFile('talker.json', JSON.stringify(otherTalker), 'utf-8');
+response.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
