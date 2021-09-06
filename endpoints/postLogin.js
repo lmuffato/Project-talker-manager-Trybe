@@ -11,9 +11,9 @@ const validarEmail = (req, res, next) => {
   const pattern = /\b[\w.-]+@[\w.-]+\.\w{2,4}\b/gi;
 
   // Mesmo padrão de comparação utilizado no projeto App de Receitas
-  const compararPattern = email.match(pattern);
+    const compararPattern = email.match(pattern);
   if (!compararPattern) {
-    return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com' });
+    return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
 
   next();
