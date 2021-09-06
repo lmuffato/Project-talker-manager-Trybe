@@ -2,22 +2,26 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const randToken = require('rand-token');
+const util = require('./util');
 
 const app = express();
 app.use(bodyParser.json());
 
-app.get('/talker', async (_req, res) => {
-  const talkers = await fs.readFile('./talker.json', 'utf8');
+let talkers = [];
 
-  return res.status(200).json(JSON.parse(talkers));
+const fileTalkers = async () => {
+  talkers = await util.readFile('./talker.json');
+};
+
+app.get('/talker', async (_req, res) => {
+  await fileTalkers();
+  return res.status(200).json(talkers);
 });
 
 app.get('/talker/:id', async (req, res) => {
+  await fileTalkers();
   const { id } = req.params;
-
-  const talkers = await fs.readFile('./talker.json', 'utf8');
-  const talker = JSON.parse(talkers)
-    .filter((tal) => tal.id === Number(id));
+  const talker = talkers.filter((tal) => tal.id === Number(id));
 
   if (talker.length < 1) {
     return res.status(404).json({
@@ -27,24 +31,6 @@ app.get('/talker/:id', async (req, res) => {
 
   res.status(200).json(talker[0]);
 });
-
-const validationEmail = (email) => {
-  const re = /\S+@\S+\.\S+/;
-
-  if (!email || email === '') {
-    return {
-      message: 'O campo "email" é obrigatório',
-    };
-  }
-
-  if (!re.test(email)) {
-    return {
-      message: 'O "email" deve ter o formato "email@email.com"',
-    };
-  }
-
-  return 'Err';
-};
 
 const validationPassword = (password) => {
   if (!password || password === '') {
@@ -64,7 +50,7 @@ const validationPassword = (password) => {
 
 app.post('/login', async (req, res) => {
   const { password, email } = req.body;
-  const resultEmail = validationEmail(email);
+  const resultEmail = util.validationEmail(email);
   const resultPasswod = validationPassword(password);
 
   if (resultEmail.message) {
@@ -129,8 +115,7 @@ const validetionAge = (age) => {
 
 function extendValidations(watchedAt, rate) {
   const regexData = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/;
-
-  if (rate > 5 || rate < 1) {
+  if (rate > 5 || rate < 0) {
     return {
       message: 'O campo "rate" deve ser um inteiro de 1 à 5',
     };
@@ -145,6 +130,23 @@ function extendValidations(watchedAt, rate) {
   return true;
 }
 
+function validationRate(talk) {
+  const { watchedAt, rate } = talk;
+  if (rate === 0) {
+    return {
+      message: 'O campo "rate" deve ser um inteiro de 1 à 5',
+    };
+  }
+
+  if (!watchedAt || !rate) {
+    return {
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    };
+  }
+
+  return true;
+}
+
 const validetionTalk = (talk) => {
   if (!talk) {
     return {
@@ -152,12 +154,10 @@ const validetionTalk = (talk) => {
     };
   }
 
+  const resultRate = validationRate(talk);
+  if (resultRate.message) return resultRate;
+
   const { watchedAt, rate } = talk;
-  if (!watchedAt || !rate) {
-    return {
-      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
-    };
-  }
 
   const extend = extendValidations(watchedAt, rate);
   if (extend.message) return extend;
@@ -185,7 +185,24 @@ function talkerExtend(req) {
 }
 
 app.post('/talker', async (req, res) => {
-  const talkers = await fs.readFile('./talker.json', 'utf8');
+  await fileTalkers();
+  const validations = talkerExtend(req);
+
+  if (validations.status) {
+    const { status, response } = validations;
+    return res.status(status).json(response);
+  }
+
+  const newTalkers = [...talkers, { id: talkers.length + 1, ...req.body }];
+
+  await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
+
+  return res.status(201).json(newTalkers[newTalkers.length - 1]);
+});
+
+app.put('/talker/:id', async (req, res) => {
+  await fileTalkers();
+  const { id } = req.params;
 
   const validations = talkerExtend(req);
 
@@ -194,12 +211,13 @@ app.post('/talker', async (req, res) => {
     return res.status(status).json(response);
   }
 
-  const newTalkers = JSON.parse(talkers);
-  newTalkers.push({ id: newTalkers.length + 1, ...req.body });
+  const newTalkers = talkers.filter((tal) => tal.id !== Number(id));
+
+  newTalkers.push({ id: Number(id), ...req.body });
 
   await fs.writeFile('./talker.json', JSON.stringify(newTalkers));
 
-  return res.status(201).json(newTalkers[newTalkers.length - 1]);
+  return res.status(200).json(newTalkers[newTalkers.length - 1]);
 });
 
 const HTTP_OK_STATUS = 200;
