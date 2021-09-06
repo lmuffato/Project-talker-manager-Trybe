@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
+const fileTalker = './talker.json';
 // não remova esse endpoint, eh para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
@@ -17,7 +18,7 @@ app.get('/', (_request, response) => {
 // requisito 1
 
 app.get('/talker', async (_request, response) => {
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
+  const talkers = await fs.readFile(fileTalker);
   const result = await JSON.parse(talkers);
   response.status(200).json(result);
 });
@@ -26,7 +27,7 @@ app.get('/talker', async (_request, response) => {
 
 app.get('/talker/:id', async (request, response) => {
   const { id } = request.params;
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
+  const talkers = await fs.readFile(fileTalker);
   const result = await JSON.parse(talkers);
   const talkerId = result.find((talker) => talker.id === +id);
   if (!talkerId) response.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -119,7 +120,7 @@ const talkWatchedAtValidation = (request, response, next) => {
 const talkRateValidation = (request, response, next) => {
   const { talk } = request.body;
   const { rate } = talk;
-  if (!rate) return response.status(400).json({ message: TALK_ERROR });
+  if (!rate || rate === '') return response.status(400).json({ message: TALK_ERROR });
   if (rate < 1 || rate > 5) {
     return response.status(400).json({ message: RATE_ERROR });
   }
@@ -132,20 +133,54 @@ nameValidation,
 ageValidation,
 talkValidation,
 talkWatchedAtValidation,
-talkRateValidation, async (request, response) => {
+talkRateValidation,
+async (request, response) => {
   const { name, age, talk: { watchedAt, rate } } = request.body;
-  const talkers = await fs.readFile('./talker.json');
-  const talker = JSON.parse(talkers);
+  const talkers = await fs.readFile(fileTalker);
+  const talker = await JSON.parse(talkers);
   const newTalker = {
   id: (talker.length + 1),
   name,
   age,
   talk: { watchedAt, rate } };
   talker.push(newTalker);
-  await fs.writeFile('./talker.json', JSON.stringify(talker));
+  await fs.writeFile(fileTalker, JSON.stringify(talker));
   response.status(201).json(newTalker);
 });
-  //
+
+  // requisito 5
+
+  const rateValidation = (request, response, next) => {
+    const { talk } = request.body;
+    const { rate } = talk;
+    if (rate < 1) return response.status(400).json({ message: RATE_ERROR });
+    if (rate > 5) return response.status(400).json({ message: RATE_ERROR });
+    next();
+  };
+
+app.put('/talker/:id',
+tokenValidation,
+nameValidation,
+ageValidation,
+talkValidation,
+talkWatchedAtValidation,
+rateValidation,
+async (request, response) => {
+  const { id } = request.params;
+  const { name, age, talk: { watchedAt, rate } } = request.body;
+  const talkersFile = await fs.readFile(fileTalker);
+  const talkers = await JSON.parse(talkersFile);
+  const otherNewTalker = talkers.filter((talker) => talker.id === id);
+  const editTalker = {
+    id: +id,
+    name,
+    age,
+    talk: { watchedAt, rate },
+  };
+  otherNewTalker.push(editTalker);
+  await fs.writeFile('./talker.json', otherNewTalker);
+  response.status(HTTP_OK_STATUS).json(editTalker);
+});
 
 app.listen(PORT, () => {
   console.log('Online');
