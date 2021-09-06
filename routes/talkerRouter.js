@@ -4,7 +4,11 @@ const router = express.Router();
 const rescue = require('express-rescue');
 const getAllTalkers = require('../utils/readFile');
 const writeNewTalker = require('../utils/writeFile');
-const { verifiedToken, verifiedName, verifiedAge } = require('../middlewares/talkerValidation');
+const { 
+    verifiedToken,
+    verifiedName, 
+    verifiedAge, 
+    verifiedTalk } = require('../middlewares/talkerValidation');
 
 router.get('/', rescue(async (req, res) => {
     const talkers = await getAllTalkers();
@@ -21,13 +25,18 @@ router.get('/:id', rescue(async (req, res) => {
     res.status(200).json(talker);
 }));
 
-router.post('/', verifiedToken, verifiedName, verifiedAge, rescue(async (req, res) => {
+router.post('/', 
+    verifiedToken,
+    verifiedName,
+    verifiedAge, 
+    verifiedTalk, 
+    rescue(async (req, res) => {
     const { name, age, talk } = req.body;
     // const { watchedAt, rate } = req.body.talk;
 
     const talkers = await getAllTalkers();
     
-    talkers.push({ name, age, talk });
+    talkers.push({ id: talkers.length + 1, name, age, talk });
 
     await writeNewTalker(talkers);
 
