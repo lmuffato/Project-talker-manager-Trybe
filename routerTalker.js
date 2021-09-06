@@ -7,7 +7,8 @@ const { validateToken } = require('./token');
 const { 
   nameValidation, 
   ageValidation, 
-  talkValidation, 
+  rateValidation,
+  dateValidation,
   talkValidationMandatory,
 } = require('./MiddlewaresValidation');
 
@@ -28,8 +29,9 @@ router.post('/',
 validateToken, 
 nameValidation, 
 ageValidation, 
-talkValidation, 
 talkValidationMandatory, 
+dateValidation,
+rateValidation,
 async (req, res) => {
   const talker = await fs.readFile(talkerJSON, 'utf8');
   const talkerParse = JSON.parse(talker);
@@ -55,14 +57,16 @@ router.get('/:id', async (req, res) => {
   
   if (!people) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
 
-  res.status(200).json(people);
+  res.status(201).json(people);
 });
 
-router.put('/:id', validateToken, 
+router.put('/:id',
+validateToken,
 nameValidation, 
 ageValidation, 
-talkValidation, 
 talkValidationMandatory,
+dateValidation, 
+rateValidation,
  async (req, res) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;

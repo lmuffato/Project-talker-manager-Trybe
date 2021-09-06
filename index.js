@@ -37,3 +37,5 @@ app.use('/talker', routerTalker);
 app.listen(PORT, () => {
   console.log('Online');
 });
+
+// ref validar email - https://ui.dev/validate-email-address-javascript/
