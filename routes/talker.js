@@ -12,11 +12,12 @@ const FILEPATH = './talker.json';
 
 const router = express.Router();
 
-router.post('/', verifyAge,
+router.post('/', verifyToken, 
+verifyAge,
 verifyName,
 verifyTalkRate,
 verifyTalkWatchedAt,
-verifyToken, async (req, res) => {
+ async (req, res) => {
   const { name, age, talk } = req.body;
 
   const talkers = await loadTalkers();
