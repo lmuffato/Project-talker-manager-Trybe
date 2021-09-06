@@ -18,6 +18,8 @@ const {
 
   const editarPalestrante = require('./editarPalestrante');
 
+  const deleteTalker = require('./deleteTalker');
+
 module.exports = {
   getTalker,
   getTalkerID,
@@ -32,4 +34,5 @@ module.exports = {
   validarNota,
   talkWatchedAtValidation,
   editarPalestrante,
+  deleteTalker,
 };

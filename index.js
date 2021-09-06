@@ -17,6 +17,8 @@ const { validarTalk } = require('./endpoints');
 
 const { editarPalestrante } = require('./endpoints');
 
+const { deleteTalker } = require('./endpoints');
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -45,6 +47,8 @@ const teste = [
 app.put('/talker/:id', teste, editarPalestrante);
 
 app.post('/talker', teste, addPalestrante);
+
+app.delete('/talker/:id', validarToken, deleteTalker);
 
 // Fim
 

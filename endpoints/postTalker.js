@@ -83,24 +83,6 @@ const talkWatchedAtValidation = (request, response, next) => {
   next();
 };
 
-/* const validarData = (request, response, next) => {
-  const { talk } = request.body;
-  const { watchedAt } = talk;
-  
-  if (!watchedAt) {
-    return response.status(400)
-    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
-  }
-  
-  const watchedAtTest = /\d\d\/\d\d\/\d\d\d\d/g.test(watchedAt);
-  if (!watchedAtTest) {
-    return response.status(400)
-    .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
-  }
-
-  next();
-}; */
-
 const addPalestrante = async (req, res, _next) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
 
