@@ -7,6 +7,13 @@ const { tokenLogin } = require('./endpoints');
 const { validarEmail } = require('./endpoints');
 const { validarPassword } = require('./endpoints');
 
+const { addPalestrante } = require('./endpoints/index');
+const { validarToken } = require('./endpoints');
+const { validarNome } = require('./endpoints');
+const { validarIdade } = require('./endpoints');
+const { validarDataEvento } = require('./endpoints');
+const { validarNota } = require('./endpoints');
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -22,6 +29,17 @@ app.get('/talker/:id', getTalkerID);
 app.get('/talker', getTalker);
 
 app.post('/login', validarEmail, validarPassword, tokenLogin);
+
+const teste = [
+  validarToken,
+  validarNome,
+  validarIdade,
+  validarDataEvento,
+  validarNota,
+  addPalestrante,
+ ];
+
+app.post('/talker', teste);
 
 // Fim
 

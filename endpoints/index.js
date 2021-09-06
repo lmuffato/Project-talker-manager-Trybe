@@ -2,11 +2,18 @@
 
 const getTalker = require('./getTalker');
 const getTalkerID = require('./getTalkerID');
-// tokenLogin, validarEmail e validarPassword estão entre {} SOMENTE
-// abaixo porque o arquivo postLogin exporta mais de um módulo.
-const { tokenLogin } = require('./postLogin');
-const { validarEmail } = require('./postLogin');
-const { validarPassword } = require('./postLogin');
+
+// Os módulos abaixo estão entre {} porque são exportados
+// mais de um módulo dentro do mesmo arquivo JavaScript.
+const { tokenLogin, validarEmail, validarPassword } = require('./postLogin');
+
+const {
+  addPalestrante,
+  validarToken,
+  validarNome,
+  validarIdade,
+  validarDataEvento,
+  validarNota } = require('./postTalker');
 
 module.exports = {
   getTalker,
@@ -14,4 +21,10 @@ module.exports = {
   tokenLogin,
   validarEmail,
   validarPassword,
+  addPalestrante,
+  validarToken,
+  validarNome,
+  validarIdade,
+  validarDataEvento,
+  validarNota,
 };

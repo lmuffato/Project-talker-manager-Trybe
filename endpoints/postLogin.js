@@ -27,9 +27,7 @@ const validarPassword = (req, res, next) => {
     return res.status(400).json({ message: 'O campo "password" é obrigatório' });
   }
 
-  // Mesmo padrão de verificação utilizado no projeto App de Receitas
-  const digits = 6;
-  if (password.length < digits) {
+  if (password.length < 6) {
     return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
 
