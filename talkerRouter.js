@@ -86,6 +86,22 @@ router.get('/', (_req, res) => {
     .catch((err) => res.status(404).json({ message: err.message }));
 });
 
+router.get('/search', (req, res) => {
+  const { authorization } = req.headers;
+  const { q } = req.query;
+  fs.readFile(FILE)
+    .then((result) => JSON.parse(result))
+    .then((result) => {
+      verificaToken(authorization);
+      if (!q || q === '') {
+        res.status(200).json(result);
+      }
+      const arr = result.filter((item) => item.name.includes(q));
+      res.status(200).json(arr);
+    })
+    .catch((err) => res.status(401).json({ message: err.message }));
+});
+
 router.get('/:id', (req, res) => {
   fs.readFile(FILE)
     .then((result) => JSON.parse(result))
@@ -115,8 +131,7 @@ router.post('/', (req, res) => {
       const { authorization } = req.headers;
       checks(authorization, name, age, talk);
       const newEntry = { id: getMaxId(data) + 1, name, age, talk };
-      fs.writeFile(FILE, JSON.stringify([...data, newEntry]))
-        .then(() => console.log('ok'));
+      fs.writeFile(FILE, JSON.stringify([...data, newEntry]));
       res.status(201).json(newEntry);
     })
     .catch((err) => res.status(err.code).json({ message: err.message }));
