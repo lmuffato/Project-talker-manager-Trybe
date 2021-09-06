@@ -57,7 +57,7 @@ const verifyAge = (req, res, next) => {
 const verifyTalkRate = (req, res, next) => {
   const { talk } = req.body;
 
-  if (!talk.rate) {
+  if (!talk.rate || !talk) {
     return res.status(400).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
@@ -74,7 +74,7 @@ const verifyTalkRate = (req, res, next) => {
 
 const verifyTalkWatchedAt = (req, res, next) => {
   const { talk } = req.body;
-  if (!talk.watchedAt) {
+  if (!talk.watchedAt || !talk) {
     return res.status(400).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
