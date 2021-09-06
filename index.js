@@ -15,6 +15,7 @@ const {
   rateAuthorized,
   createdTalker,
 } = require('./createTalker');
+const deleteTalker = require('./deleteTalker');
 
 // const { createdTalker } = require('./createTalker');
 
@@ -52,6 +53,8 @@ talkAuthorized,
 dateAuthorized,
 rateAuthorized,
 putTalker);
+
+app.delete('/talker/:id', tokenAuthorized, deleteTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
