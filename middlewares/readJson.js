@@ -6,7 +6,7 @@ async function readJson() {
       console.error(err.message);
       process.exit(1);
     }
-    return data;
+    return JSON.parse(data);
   });
   return file;
 }

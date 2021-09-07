@@ -1,9 +1,9 @@
-const fsAsync = require('fs').promises;
+const readJson = require('./readJson');
 
 async function showTalkerById(req, res) {
   try {
     const { id } = req.params;
-    const resp = await fsAsync.readFile('./talker.json', 'utf-8');
+    const resp = await readJson();
     const respJson = JSON.parse(resp);
     const filteredTalker = respJson.find((e) => e.id === parseInt(id, 10));
     if (!filteredTalker) {

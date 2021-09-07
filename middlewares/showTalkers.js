@@ -1,8 +1,8 @@
-const fsAsync = require('fs').promises;
+const readJson = require('./readJson');
 
 async function showTalkers(_req, res) {
   try {
-    const resp = await fsAsync.readFile('./talker.json', 'utf-8');
+    const resp = await readJson();
     if (!resp) return res.status(500).json({ message: 'no data found' });
     res.status(200).json(JSON.parse(resp));
   } catch (err) {

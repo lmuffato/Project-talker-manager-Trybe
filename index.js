@@ -1,8 +1,10 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const authToken = require('./middlewares/authToken');
 const showTalkers = require('./middlewares/showTalkers');
 const showTalkerById = require('./middlewares/showTalkerById');
 const createLogin = require('./middlewares/createLogin');
+const deleteTalker = require('./middlewares/deleteTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -15,6 +17,8 @@ const PORT = '3000';
 app.post('/login', createLogin);
 
 app.get('/talker/:id', showTalkerById);
+
+app.delete('/talker/:id', authToken, deleteTalker);
 
 app.get('/talker', showTalkers);
 
