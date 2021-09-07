@@ -6,7 +6,8 @@ async function createTalker(req, res) {
     const { talk } = req.body;
     const newTalker = { name: req.body.name, age: req.body.age, talk };
     const array = await readJson();
-    const newArray = [...JSON.parse(array), newTalker];
+    const newArray = JSON.parse(array);
+    newArray.push(newTalker);
     await fsAsync.writeFile('./talker.json', JSON.stringify(newArray));
     return res.status(201).json(JSON.parse(array));
   } catch (err) {
