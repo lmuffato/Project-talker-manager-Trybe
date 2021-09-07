@@ -6,4 +6,9 @@ async function fileReader() {
   return talkers;
 }
 
-module.exports = fileReader;
+async function fileWrite(text) {
+  const newTalker = await fs.writeFile('./talker.json', JSON.stringify(text));
+  return newTalker;
+}
+
+module.exports = { fileReader, fileWrite };

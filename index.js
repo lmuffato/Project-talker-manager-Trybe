@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fileReader = require('./fileManager');
-/* const validEmail = require('./validEmail'); */
+const { fileReader, fileWrite } = require('./fileManager');
+const { validEmail, validPassword } = require('./validation');
 
 const app = express();
 app.use(bodyParser.json());
@@ -36,36 +36,22 @@ app.get('/talker/:id', async (req, res) => {
   }
 });
 
-/* app.post('/login', validEmail, (req, res) => {
-  res.status(200).json({ token: '7mqaVRXJSp886CGr' }); 
-}); */
-
-// at3
- app.post('/login', (req, res, next) => {
-     const { email } = req.body;
-    const re = /\S+@\S+\.\S+/;
-    const regex = re.test(email);
-    if (!email || email === '') {
-      return res.status(400).json({ message: 'O campo "email" é obrigatório' });
-    }
-    if (regex === false) {
-      return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
-    }
-      next();
-  },
-  (req, res, next) => {
-    const { password } = req.body;
-    if (!password || password === '') {
-      return res.status(400).json({ message: 'O campo "password" é obrigatório' });
-    }
-    if (password.length < 6) {
-    return res.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
-    }
-      next();
-    }, 
-  (req, res) => {
+ app.post('/login', validEmail, validPassword, (req, res) => {
   res.status(200).json({ token: '7mqaVRXJSp886CGr' }); 
 }); 
+// at 4:
+app.post('/talker', async (req, res) => {
+  const { name, age, talk } = req.body;
+  try {
+    const arrayOfTalkers = await fileReader();
+    const data = { name, age, talk, id: arrayOfTalkers.length + 1 };
+    const dataAdd = [...arrayOfTalkers, data];
+    await fileWrite(dataAdd);
+    return res.status(201).json(data);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 app.listen(PORT, () => {
   console.log('Online');
