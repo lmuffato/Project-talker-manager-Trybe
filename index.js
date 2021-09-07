@@ -6,7 +6,14 @@ const {
   login,
   generateToken,
   validateEmail,
-  validatePassword } = require('./middlewares');
+  validatePassword,
+  postTalker,
+  tokenVerify,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateDateRate,
+} = require('./middlewares');
 
 const app = express();
 app.use(bodyParser.json());
@@ -22,6 +29,8 @@ app.get('/', (_request, response) => {
 app.get('/talker', getTalkers);
 app.get('/talker/:id', talkerId);
 app.post('/login', generateToken, validateEmail, validatePassword, login);
+app.post('/talker',
+tokenVerify, validateName, validateAge, validateTalk, validateDateRate, postTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
