@@ -9,6 +9,6 @@ function passwordFormat(req, res, next) {
 );
   }
   next();
-};
+}
 
 module.exports = passwordFormat;

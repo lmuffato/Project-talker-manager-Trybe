@@ -1,7 +1,5 @@
 const fs = require('fs').promises;
-
-const HTTP_OK_STATUS = 200;
-const NOT_FOUND = 404;
+const { StatusCodes } = require('http-status-codes');
 
 // cria endpoint /talker/id que retorna o palestrante pelo id
  module.exports = async (request, response) => {
@@ -10,9 +8,9 @@ const NOT_FOUND = 404;
   const result = await JSON.parse(talker);
   const speaker = result.find((obj) => obj.id === parseInt(id, 0));
   if (!speaker) {
-    return response.status(NOT_FOUND).json({
+    return response.status(StatusCodes.NOT_FOUND).json({
       message: 'Pessoa palestrante não encontrada',
     });
   }
-  response.status(HTTP_OK_STATUS).json(speaker);
+  response.status(StatusCodes.OK).json(speaker);
 };
