@@ -13,8 +13,8 @@ route.post('/', (req, res) => {
   const validation = validateLogin({ email, password });
 
   switch (validation.status) {
-    case status.bad:
-      return res.status(status.bad).json({ message: validation.message });
+    case status.badRequest:
+      return res.status(status.badRequest).json({ message: validation.message });
     case status.ok:
       {
         const token = generateToken();
