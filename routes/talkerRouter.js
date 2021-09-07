@@ -48,7 +48,6 @@ router.post('/',
     res.status(201).json(newTalkerAuxiliation);
 }));
 
-/*
 router.delete('/:id', verifiedToken, rescue(async (req, res) => {
     const talkers = await getAllTalkers();
 
@@ -60,6 +59,5 @@ router.delete('/:id', verifiedToken, rescue(async (req, res) => {
 
     res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 }));
-*/
 
 module.exports = router;
