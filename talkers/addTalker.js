@@ -2,10 +2,12 @@ const { StatusCodes } = require('http-status-codes');
 
 const fs = require('fs').promises;
 
+const getTalkers = require('./getTalkers');
+
 // cria endpoint de post /talker
 module.exports = async (req, res) => {
   const { name, age, talk } = req.body;
-  const talkerList = await fs.readFile('./talker.json', 'utf8');
+  const talkerList = getTalkers;
   const newTalker = { id: talkerList.length + 1, name, age, talk };
   talkerList.push(newTalker);
   await fs.writeFile(talkerList);
