@@ -1,5 +1,11 @@
 const express = require('express');
 
+const util = require('util');
+
+const fs = require('fs');
+
+const writeFile = util.promisify(fs.writeFile);
+
 const bodyParser = require('body-parser');
 
 // const { parse } = require('path');
@@ -10,7 +16,13 @@ const getStuff = require('./utils/read');
 
 const { HTTP_OK_STATUS, PORT, TALKER, NOT_FOUND } = require('./utils/consts');
 
-const { generateToken, emailValidate, passwordValidate } = require('./utils/middlewares');
+const { generateToken,
+  emailValidate,
+  passwordValidate,
+  tokenValidate,
+  nameValidate,
+  ageValidate,
+  talkValidate } = require('./utils/middlewares');
 
 const app = express();
 
@@ -40,6 +52,26 @@ app.get('/talker/:id', (request, response) => {
 app.post('/login', emailValidate, passwordValidate, (request, response) => {
   const token = generateToken();
   response.status(HTTP_OK_STATUS).json({ token });
+});
+
+app.post('/talker', tokenValidate, nameValidate, ageValidate, talkValidate,
+  async (request, response) => {
+  const talker = request.body;
+
+  await getStuff(TALKER).then((content) => {
+    const jsonData = JSON.parse(content);
+
+    const id = JSON.parse(content).length + 1;
+
+    Object.assign(talker, { id });
+
+    jsonData[id - 1] = talker;
+    
+    writeFile(TALKER, JSON.stringify(jsonData), 'utf8', (err) => {
+      if (err) console.log('Error writing file:', err);
+    });
+      response.status(HTTP_OK_STATUS).json(talker);
+  });
 });
 
 // não remova esse endpoint, e para o avaliador funcionar
