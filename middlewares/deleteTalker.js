@@ -10,7 +10,7 @@ async function deleteTalker(req, res) {
     if (index === -1) return res.status(404).json({ message: 'not found' });
     parseTalkers.splice(index, 1);
     await fsAsync.writeFile('./talker.json', JSON.stringify(parseTalkers));
-    return res.status(201).json({ message: 'Pessoa palestrante deletada com sucesso' });
+    return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
   } catch (err) {
     console.error(err.message);
   }
