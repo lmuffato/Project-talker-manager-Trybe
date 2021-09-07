@@ -36,17 +36,17 @@ router.post('/',
     verifiedRate, 
     rescue(async (req, res) => {
     const { name, age, talk } = req.body;
-    const { watchedAt, rate } = talk;
 
     const talkers = await getAllTalkers();
+
+    const newTalkerAuxiliation = { id: talkers.length + 1, name, age, talk };
     
-    talkers.push({ name, age, id: talkers.length + 1, talk: { watchedAt, rate } });
+    talkers.push(newTalkerAuxiliation);
 
-    console.log(talkers);
     await writeNewTalker(talkers);
-
-    res.status(201).json(talkers);
-    console.log(talkers);
+    
+    res.status(201).json(newTalkerAuxiliation);
+   
 }));
 
 /*
