@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
-const HTTP_BAD_REQUEST = 400;
+const BAD_REQUEST = 400;
 const HTTP_NOT_FOUND = 404;
 const PORT = '3000';
 
@@ -36,19 +36,19 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password: pass } = req.body;
   const validator = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isValidEmail = validator.test(email);
-  // const isPasswordGTE6 = password.length >= 6;
-  if (!email) res.status(HTTP_BAD_REQUEST).json({ message: 'O campo "email" é obrigatório' });
+  // const isPasswordGTE6 = pass.length >= 6;
+  if (!email) return res.status(BAD_REQUEST).json({ message: 'O campo "email" é obrigatório' });
   if (!isValidEmail) {
-  res.status(HTTP_BAD_REQUEST).json({
+    return res.status(BAD_REQUEST).json({
       message: 'O "email" deve ter o formato "email@email.com"',
     }); 
 }
-  if (!password) res.status(HTTP_BAD_REQUEST).json({ message: 'O campo "password" é obrigatório' });
-  if (/* !isPasswordGTE6 */ password.length < 6) {
-  res.status(HTTP_BAD_REQUEST).json({
+  if (!pass) return res.status(BAD_REQUEST).json({ message: 'O campo "password" é obrigatório' });
+  if (/* !isPasswordGTE6  */pass.length < 6) {
+    return res.status(BAD_REQUEST).json({
     message: 'O "password" deve ter pelo menos 6 caracteres',
   }); 
 }
