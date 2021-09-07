@@ -3,7 +3,7 @@ const fs = require('fs').promises;
 const midd = require('./middleware');
 
 const router = express.Router();
-
+const TALKERPATH = './talker.json';
 const fileData = async (path) => {
     const data = await fs.readFile(path, 'utf-8');
     return JSON.parse(data);
@@ -11,7 +11,7 @@ const fileData = async (path) => {
 
 router.get('/', async (_req, res) => {
     try {
-        const data = await fs.readFile('./talker.json', 'utf-8');
+        const data = await fs.readFile(TALKERPATH, 'utf-8');
         // console.log(JSON.parse(data));
         return res.status(200).json(JSON.parse(data));
     } catch (error) {
@@ -22,7 +22,7 @@ router.get('/', async (_req, res) => {
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     try {
-      const data = await fileData('./talker.json');
+      const data = await fileData(TALKERPATH);
       const talker = data.find((response) => response.id === parseInt(id, 10));
       
       if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
@@ -42,10 +42,31 @@ router.get('/:id', async (req, res) => {
     const { name, age, talk } = req.body;
   
     try {
-      const talkers = await fileData('./talker.json');
+      const talkers = await fileData(TALKERPATH);
       const newTalker = { name, age, talk, id: (talkers.length + 1) };
-      await fs.writeFile('./talker.json', JSON.stringify([...talkers, newTalker]));
+      await fs.writeFile(TALKERPATH, JSON.stringify([...talkers, newTalker]));
       res.status(201).json(newTalker);
+    } catch (error) {
+      res.status(500).end();
+    }  
+  });
+
+  router.put('/:id',
+  midd.tokenValidate,
+  midd.nameValidate,
+  midd.ageValidate,
+  midd.talkValidate,
+  midd.fieldValidate,
+   async (req, res) => {
+    const { name, age, talk } = req.body;
+    const { id } = req.params;
+  
+    try {
+      const talkers = await fileData(TALKERPATH);
+      const newTalker = { name, age, talk, id: parseInt(id, 10) };
+      const filteredTalkers = talkers.filter((response) => response.id !== parseInt(id, 10));
+      await fs.writeFile(TALKERPATH, JSON.stringify([...filteredTalkers, newTalker]));
+      res.status(200).json(newTalker);
     } catch (error) {
       res.status(500).end();
     }  
