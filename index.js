@@ -17,9 +17,9 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', (_rej, res) => {
   try {
-    return res.status(200).send(talkerData);
+    return res.status(HTTP_OK_STATUS).send(talkerData);
   } catch (error) {
-    return res.status(200).send({ error });
+    return res.status(HTTP_OK_STATUS).json([]);
   }
 });
 
