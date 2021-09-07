@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fsAsync = require('fs').promises;
-const randToken = require('rand-token');
+const getToken = require('./middlewares/getToken');
 
 const app = express();
 app.use(bodyParser.json());
@@ -9,18 +9,23 @@ app.use(bodyParser.json());
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 
-function getToken() {
- const key = randToken.uid(16);
- return { token: key };
+async function authToken(req, res, next) {
+  const { authorization } = req.headers;
+  try {
+    if (!authorization) {
+      return res.status(401).json({ message: 'Token não encontrado' }); 
+    }
+    
+    const { token } = JSON.parse(authorization);
+    
+    if (token.length !== 16) {
+      return res.status(401).json({ message: 'Token inválido' });
+    }
+    next();
+  } catch (err) {
+    console.log(err.message);
+  }
 }
-
-// function authToken(req, res, next) {
-//   const { authorization } = req.headers;
-//   if (authorization.length !== 16 || !authorization) {
-//     return res.status(401).json({ message: 'Invalid Token' });
-//   }
-//   next();
-// }
 
 async function searchTalkerByName(req, res) {
   try {
@@ -34,8 +39,6 @@ async function searchTalkerByName(req, res) {
     res.status(401).json({ message: 'Token inválido' });
   }
 }
-
-app.get('/talker/search', searchTalkerByName);
 
 async function showTalkerById(req, res) {
   try {
@@ -52,8 +55,6 @@ async function showTalkerById(req, res) {
   }
 }
 
-app.get('/talker/:id', showTalkerById);
-
 async function showTalkers(_req, res) {
   try {
     const resp = await fsAsync.readFile('./talker.json', 'utf-8');
@@ -63,8 +64,6 @@ async function showTalkers(_req, res) {
     res.status(500).json({ message: err });
   }
 }
-
-app.get('/talker', showTalkers);
 
 function validadePassword(req, res) {
   const { password } = req.body;
@@ -76,7 +75,7 @@ function validadePassword(req, res) {
   }
 }
 
-function validadeEmail(req, res) {
+function validateEmail(req, res) {
   const { email } = req.body;
   const regex = /^[\w.]+@[a-z]+\.\w{3}$/g;
   const validEmail = regex.test(email);
@@ -91,14 +90,68 @@ function validadeEmail(req, res) {
 async function createLogin(req, res) {
   try {
     const validEmail = await validadePassword(req, res);
-    const validPassword = await validadeEmail(req, res);
+    const validPassword = await validateEmail(req, res);
     if (!validEmail && !validPassword) return res.status(200).json(getToken());
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 }
 
+function validateName(req, res, next) {
+  const { name } = req.body;
+  if (!name || name === '') {
+    return res.status(400).json({ message: 'O campo "name" é obrigatório' });
+  }
+  if (name.length < 3) {
+    return res.status(400).json({ message: 'O campo "name" deve ter pelo menos 3 caracteres' });
+  }
+  next(); 
+}
+
+function validateAge(req, res, next) {
+  const { age } = req.body;
+  if (!age || age === '') {
+    return res.status(400).json({ message: 'O campo "age" é obrigatório' });
+  }
+  if (age < 18) {
+    return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
+  }
+  next();
+} 
+
+async function readJson() {
+  const file = await fsAsync.readFile('./talker.json', 'utf-8', (err, data) => {
+    if (err) {
+      console.error(err.message);
+      process.exit(1);
+    }
+    return data;
+  });
+  return file;
+}
+
+async function createTalker(req, res) {
+  const { talk } = req.body;
+  try {
+    const newTalker = { name: req.body.name, age: req.body.age, talk };
+    const array = await readJson();
+    const newArray = [...JSON.parse(array), newTalker];
+    await fsAsync.writeFile('./talker.json', JSON.stringify(newArray));
+    res.status(201).json(JSON.parse(array));
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
 app.post('/login', createLogin);
+
+app.get('/talker/search', searchTalkerByName);
+
+app.get('/talker/:id', showTalkerById);
+
+app.get('/talker', showTalkers);
+
+app.post('/talker', authToken, validateName, validateAge, createTalker);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
