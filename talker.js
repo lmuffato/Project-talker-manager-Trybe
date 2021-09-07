@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs').promises;
+const midd = require('./middleware');
 
 const router = express.Router();
 
@@ -29,6 +30,25 @@ router.get('/:id', async (req, res) => {
     } catch (error) {
       return res.status(500).end();
     }
+  });
+
+  router.post('/', 
+  midd.tokenValidate,
+  midd.nameValidate,
+  midd.ageValidate,
+  midd.talkValidate,
+  midd.fieldValidate,
+   async (req, res) => {
+    const { name, age, talk } = req.body;
+  
+    try {
+      const talkers = await fileData('./talker.json');
+      const newTalker = { name, age, talk, id: (talkers.length + 1) };
+      await fs.writeFile('./talker.json', JSON.stringify([...talkers, newTalker]));
+      res.status(201).json(newTalker);
+    } catch (error) {
+      res.status(500).end();
+    }  
   });
 
 module.exports = router;
