@@ -12,6 +12,7 @@ const PORT = '3000';
 
 // Requisito 1 :Crie o endpoint GET /talker
 // Requisito 2 :Crie o endpoint GET /talker/:id
+// Requisito 6 :Crie o endpoint DELETE /talker/:id
 app.use('/talker', talkerRouter);
 
 // Requisito 3: Crie o endpoint POST /login
