@@ -4,7 +4,7 @@ async function authToken(req, res, next) {
     if (!authorization) {
       return res.status(401).json({ message: 'Token não encontrado' }); 
     }
-    if (authorization.token === '' || authorization.length !== 32) {
+    if (authorization === '' || authorization.length !== 16) {
       return res.status(401).json({ message: 'Token inválido' });
     }
     next();
