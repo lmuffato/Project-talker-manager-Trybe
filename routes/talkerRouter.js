@@ -46,7 +46,6 @@ router.post('/',
     await writeNewTalker(talkers);
     
     res.status(201).json(newTalkerAuxiliation);
-   
 }));
 
 /*
