@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-function ageValidation(req, res, next) {
+module.exports = (req, res, next) => {
   const { age } = req.body;
   if (!age || Number.isNaN(age) || age === '') {
     return res.status(StatusCodes.BAD_REQUEST).json({
@@ -13,6 +13,4 @@ function ageValidation(req, res, next) {
   }
 
   next();
-}
-
-module.exports = ageValidation;
+};

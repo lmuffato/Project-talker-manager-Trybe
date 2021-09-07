@@ -1,9 +1,9 @@
 const { StatusCodes } = require('http-status-codes');
 
-function nameValidation(req, res, next) {
+module.exports = (req, res, next) => {
   const { name } = req.body;
   const nameValid = /^.{3,}$/g;
-  if (!name || name === '') {
+  if (!name || name === '' || name === undefined) {
     res.status(StatusCodes.BAD_REQUEST).json({
       message: 'O campo "name" é obrigatório',
     });
@@ -13,6 +13,4 @@ function nameValidation(req, res, next) {
     });
   }
   next();
-}
-
-module.exports = nameValidation;
+};

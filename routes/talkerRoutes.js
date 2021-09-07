@@ -10,6 +10,8 @@ const getTalkerById = require('../talkers/getTalkerById');
 
 const addTalker = require('../talkers/addTalker');
 
+const editedTalker = require('../talkers/editTalker');
+
 const tokenValidation = require('../validations/tokenValidation');
 
 const nameValidation = require('../validations/nameValidation');
@@ -35,5 +37,7 @@ router.get('/', getTalkers);
 router.get('/:id', getTalkerById);
 
 router.post('/', ...validations, addTalker);
+
+router.put('/:id', ...validations, editedTalker);
 
 module.exports = router;

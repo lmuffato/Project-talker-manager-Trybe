@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-function dateRate(req, res, next) {
+module.exports = (req, res, next) => {
   const { talk } = req.body;
   const ratePattern = /^[1-5]{1}$/;
   const watchedAtPattern = /^\d{2}\/\d{2}\/\d{4}$/;
@@ -16,6 +16,4 @@ function dateRate(req, res, next) {
     });
   } 
   next();
-}
-
-module.exports = dateRate;
+};
