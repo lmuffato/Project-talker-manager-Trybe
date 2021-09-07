@@ -12,6 +12,8 @@ const addTalker = require('../talkers/addTalker');
 
 const editedTalker = require('../talkers/editTalker');
 
+const deletTalker = require('../talkers/deletTalker');
+
 const tokenValidation = require('../validations/tokenValidation');
 
 const nameValidation = require('../validations/nameValidation');
@@ -39,5 +41,7 @@ router.get('/:id', getTalkerById);
 router.post('/', ...validations, addTalker);
 
 router.put('/:id', ...validations, editedTalker);
+
+router.delete('/:id', tokenValidation, deletTalker);
 
 module.exports = router;

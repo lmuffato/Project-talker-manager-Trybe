@@ -5,9 +5,8 @@ const app = express();
 app.use(bodyParser.json());
 const { StatusCodes } = require('http-status-codes');
 const talkerRoutes = require('./routes/talkerRoutes');
-const getTalkerByIdRoutes = require('./routes/talkerRoutes');
+// const getTalkerByIdRoutes = require('./routes/talkerRoutes');
 const loginRoutes = require('./routes/loginRoutes');
-const addTalker = require('./routes/talkerRoutes');
 
 const PORT = '3000';
 
@@ -18,11 +17,9 @@ app.get('/', (_request, response) => {
 
 app.use('/talker', talkerRoutes);
 
-app.use('/talker', getTalkerByIdRoutes);
+// app.use('/talker', getTalkerByIdRoutes);
 
 app.use('/login', loginRoutes);
-
-app.use('/talker', addTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
