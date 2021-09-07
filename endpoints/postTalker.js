@@ -39,45 +39,49 @@ const validarIdade = (req, res, next) => {
   next();
 };
 
-const validarTalk = (request, response, next) => {
-  const { talk } = request.body;
+// validartalk, validarNota e validarData precisam
+// vir nessa ordem senão não passam nos testes 
+const validarTalk = (req, res, next) => {
+  const { talk } = req.body;
   
-  if (!talk || (!talk.rate && talk.rate !== 0)) {
-    return response.status(400)
+  if (!talk) {
+    return res.status(400)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
 
   next();
 };
 
-const validarNota = (request, response, next) => {
-  const { talk } = request.body;
+const validarNota = (req, res, next) => {
+  const { talk } = req.body;
   const { rate } = talk;
 
   if (rate < 1 || rate > 5) {
-    return response.status(400)
+    return res.status(400)
     .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
 
   if (!rate) {
-    return response.status(400)
+    return res.status(400)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
 
   next();
 };
 
-const talkWatchedAtValidation = (request, response, next) => {
-  const { talk } = request.body;
+const validarData = (req, res, next) => {
+  const { talk } = req.body;
   const { watchedAt } = talk;
-  const watchedAtTest = /\d\d\/\d\d\/\d\d\d\d/g.test(watchedAt);
+  // Recebi ajuda da aluna Nathi Zebral para entender esse regex
+  // Grazie mille per tutto ragazza dai capelli rossi!
+  const pattern = /\d\d\/\d\d\/\d\d\d\d/g.test(watchedAt);
   if (!watchedAt) {
-    return response.status(400)
+    return res.status(400)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
 
-  if (!watchedAtTest) {
-    return response.status(400)
+  if (!pattern) {
+    return res.status(400)
     .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
   next();
@@ -90,6 +94,7 @@ const addPalestrante = async (req, res, _next) => {
   const lido = await JSON.parse(ler);
 
   // Armazenar dados do novo palestrante
+  // id: lido.length + 1 => incrementa o ID
   const novoPalestrante = {
     id: lido.length + 1,
     name,
@@ -110,5 +115,5 @@ module.exports = {
   validarIdade,
   validarTalk,
   validarNota,
-  talkWatchedAtValidation,
+  validarData,
 };

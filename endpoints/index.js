@@ -1,10 +1,12 @@
 // Arquivo centralizador dos middlewares
 
 const getTalker = require('./getTalker');
+
 const getTalkerID = require('./getTalkerID');
 
 // Os módulos abaixo estão entre {} porque são exportados
 // mais de um módulo dentro do mesmo arquivo JavaScript.
+
 const { tokenLogin, validarEmail, validarPassword } = require('./postLogin');
 
 const {
@@ -14,11 +16,11 @@ const {
   validarIdade,
   validarTalk,
   validarNota,
-  talkWatchedAtValidation } = require('./postTalker');
+  validarData } = require('./postTalker');
 
   const editarPalestrante = require('./editarPalestrante');
 
-  const deleteTalker = require('./deleteTalker');
+  const deletarPalestrante = require('./deleteTalker');
 
 module.exports = {
   getTalker,
@@ -32,7 +34,7 @@ module.exports = {
   validarIdade,
   validarTalk,
   validarNota,
-  talkWatchedAtValidation,
+  validarData,
   editarPalestrante,
-  deleteTalker,
+  deletarPalestrante,
 };

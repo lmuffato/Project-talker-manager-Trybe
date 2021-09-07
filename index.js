@@ -1,23 +1,31 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+// Requisito 1
 const { getTalker } = require('./endpoints');
+
+// Requisito 2
 const { getTalkerID } = require('./endpoints');
+
+// Requisito 3
 const { tokenLogin } = require('./endpoints');
 const { validarEmail } = require('./endpoints');
 const { validarPassword } = require('./endpoints');
 
+// Requisito 4
 const { addPalestrante } = require('./endpoints');
 const { validarToken } = require('./endpoints');
 const { validarNome } = require('./endpoints');
 const { validarIdade } = require('./endpoints');
-const { talkWatchedAtValidation } = require('./endpoints');
+const { validarData } = require('./endpoints');
 const { validarNota } = require('./endpoints');
 const { validarTalk } = require('./endpoints');
 
+// Requisito 5
 const { editarPalestrante } = require('./endpoints');
 
-const { deleteTalker } = require('./endpoints');
+// Requisito 6
+const { deletarPalestrante } = require('./endpoints');
 
 const app = express();
 app.use(bodyParser.json());
@@ -35,20 +43,20 @@ app.get('/talker', getTalker);
 
 app.post('/login', validarEmail, validarPassword, tokenLogin);
 
-const teste = [
+const validadores = [
   validarToken,
   validarNome,
   validarIdade,
   validarTalk,
   validarNota,
-  talkWatchedAtValidation,
+  validarData,
 ];
 
-app.put('/talker/:id', teste, editarPalestrante);
+app.put('/talker/:id', validadores, editarPalestrante);
 
-app.post('/talker', teste, addPalestrante);
+app.post('/talker', validadores, addPalestrante);
 
-app.delete('/talker/:id', validarToken, deleteTalker);
+app.delete('/talker/:id', validarToken, deletarPalestrante);
 
 // Fim
 
