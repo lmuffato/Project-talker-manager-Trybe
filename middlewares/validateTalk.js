@@ -8,7 +8,7 @@ function validateTalk(req, res, next) {
     }
     next();
   } catch (err) {
-    return console.error('caiu no catch: ', err.message);
+    return console.error(err.message);
   }
 }
 
