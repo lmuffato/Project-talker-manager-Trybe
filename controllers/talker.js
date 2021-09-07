@@ -1,6 +1,14 @@
 const express = require('express');
 const fs = require('fs').promises;
 const rescue = require('express-rescue');
+const {
+  validateToken,
+  validateTalk,
+  validateRate,
+  validateName,
+  validateDate,
+  validateAge,
+} = require('../middlewares/talkerMiddlewares');
 
 const router = express.Router();
 
@@ -8,6 +16,10 @@ const getFile = async () => {
   const result = await fs.readFile('./talker.json');
 
   return JSON.parse(result);
+};
+
+const setFile = async (talkers) => {
+  await fs.writeFile('./talker.json', JSON.stringify(talkers));
 };
 
 router.get('/', rescue(async (_req, res) => {
@@ -25,5 +37,26 @@ router.get('/:id', rescue(async (req, res) => {
 
   res.status(200).json(talker);
 }));
+
+router.post(
+  '/',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateDate,
+  validateRate,
+  rescue(async (req, res) => {
+    const { name, age, talk } = req.body;
+    const { watchedAt, rate } = talk;
+
+    const talkers = await getFile();
+    const newTalker = { name, age, talk: { watchedAt, rate } };
+    const newTalkers = talkers.push(newTalker);
+    await setFile(newTalkers);
+
+    res.status(201).json(newTalker);
+  }),
+);
 
 module.exports = router; 
