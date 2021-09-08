@@ -27,9 +27,29 @@ const {
 
 const PATH = './talker.json';
 
+const VALIDATIONS_GET = [
+  isValidToken,
+];
+
 router.get('/', async (_, res) => {
   const talkers = await readContentFile(PATH) || [];
   res.status(HTTP_OK_STATUS).json(talkers);
+});
+
+router.get('/search', VALIDATIONS_GET, async (req, res) => {
+  const { searchTerm } = req.query;
+
+  const talkers = await readContentFile(PATH) || [];
+
+  if (!searchTerm || searchTerm === '') {
+    return res.status(HTTP_OK_STATUS).json(talkers);
+  }
+
+  const filteredTalker = talkers.filter((talker) => talker.name.includes(searchTerm));
+
+  if (!filteredTalker) return res.status(HTTP_OK_STATUS).json([]);
+
+  res.status(HTTP_OK_STATUS).json(filteredTalker);
 });
 
 const VALIDATIONS_POST_AND_PUT_TALKER = [
