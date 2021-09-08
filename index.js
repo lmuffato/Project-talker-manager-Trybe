@@ -71,16 +71,11 @@ const validatePassword = (req, res, next) => {
 };
 
 app.post('/login', validateEmail, validatePassword, (_req, res) => {
-  const randomtoken = Math.random().toString(36).substr(3);
+  const randomtoken = Math.random().toString(36).substr(5);
   const token = randomtoken + randomtoken;
 
-  if (token.length > 16) {
-    return res.status(BAD_REQUEST)
-      .json({ message: 'O token não tem o tamanho ideal!' });
-  }
-
   res.status(HTTP_OK_STATUS).json({ token });
-  });
+});
 
 app.listen(PORT, () => {
   console.log('Online');
