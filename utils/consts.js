@@ -3,6 +3,7 @@ const PORT = '3000';
 const TALKER = './talker.json';
 const NOT_FOUND = 404;
 const FOUR_HUNDRED = 400;
+const FOUR_HUNDRED_ONE = 401;
 
 module.exports = {
     HTTP_OK_STATUS,
@@ -10,4 +11,5 @@ module.exports = {
     TALKER,
     NOT_FOUND,
     FOUR_HUNDRED,
+    FOUR_HUNDRED_ONE,
 };

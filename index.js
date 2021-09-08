@@ -74,6 +74,23 @@ app.post('/talker', tokenValidate, nameValidate, ageValidate, talkValidate,
   });
 });
 
+app.put('/talker/:id', tokenValidate, nameValidate, ageValidate, talkValidate,
+  async (request, response) => {
+  const { id } = request.params;
+  const { name, age, talk } = request.body;
+  getStuff(TALKER).then((content) => {
+    let jsonData = JSON.parse(content);
+    let updateTalker = jsonData.find((t) => t.id === parseInt(id, 10));
+    updateTalker = { id: parseInt(id, 10), name: name, age: age, talk: talk, }
+    Object.assign(jsonData, jsonData.map(el => el.id === updateTalker.id ? updateTalker : el));
+    writeFile(TALKER, JSON.stringify(jsonData), 'utf8', (err) => {
+      if (err) console.log('Error writing file:', err);
+    });
+      response.status(HTTP_OK_STATUS).json(updateTalker);
+  });
+});
+
+
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();

@@ -1,4 +1,4 @@
-const { NOT_FOUND, FOUR_HUNDRED } = require('./consts');
+const { NOT_FOUND, FOUR_HUNDRED, FOUR_HUNDRED_ONE } = require('./consts');
 
 const generateToken = () => {
     const a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
@@ -14,9 +14,9 @@ const generateToken = () => {
 const tokenValidate = (req, res, next) => {
     const { token } = req.headers;
     if (!token) {
-        return res.status(NOT_FOUND).json({ message: 'Token não encontrado' });
-    } if (token.length !== 16) {
-        return res.status(NOT_FOUND).json({ message: 'Token inválido' });
+        return res.status(FOUR_HUNDRED_ONE).json({ message: 'Token não encontrado' });
+    } else if (token.length !== 16) {
+        return res.status(FOUR_HUNDRED_ONE).json({ message: 'Token inválido' });
     }
     next();
 };
@@ -52,7 +52,7 @@ const passwordValidate = (req, res, next) => {
     }
     if (password.length < 6) {
         res.status(FOUR_HUNDRED).json({
-        message: 'O campo "password" deve ter pelo menos 6 caracteres' });
+        message: 'O "password" deve ter pelo menos 6 caracteres' });
     }
     next();
 };
