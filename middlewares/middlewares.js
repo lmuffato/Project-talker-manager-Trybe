@@ -79,7 +79,7 @@ const verifyDate = (req, res, next) => {
 const verifyTalk = (req, res, next) => {
   const { talk } = req.body;
   if (!talk) {
-    res.status(400).json(
+    return res.status(400).json(
       { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
       );
   }
@@ -90,10 +90,10 @@ const verifyTalk = (req, res, next) => {
 const verifyRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
   if (rate < 1 || rate > 5) {
-    res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   if (!rate) {
-    res.status(400).json(
+    return res.status(400).json(
       { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
       );
   }
