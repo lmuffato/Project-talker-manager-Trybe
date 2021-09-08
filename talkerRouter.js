@@ -14,7 +14,6 @@ const CREATED = 201;
 const BAD_REQUEST = 400;
 const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
-// const PORT = '3000';
 
 router.get('/', async (_req, res) => {
   const talkers = await fs.readFile(fileTalkerJson);
@@ -81,15 +80,21 @@ const isValidAge = (req, res, next) => {
   next();
 };
 
-const patternValidator = (pattern) => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(pattern);
-
 const isValidTalk = (req, res, next) => {
   const { talk } = req.body;
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (!talk || !talk.watchedAt || (talk.rate !== 0 && !talk.rate)) {
     return res.status(BAD_REQUEST).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
   }
+  next();
+};
+
+const patternValidator = (pattern) => /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(pattern);
+
+const isValidPatern = (req, res, next) => {
+  const { talk } = req.body;
+  
   if (!patternValidator(talk.watchedAt)) {
     return res.status(BAD_REQUEST).json({
       message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"', 
@@ -117,7 +122,7 @@ const isValidTalkDotWatchedAt = (req, res, next) => { // https://stackoverflow.c
   next();
 };
 
-  const isValidRate = (req, res, next) => {
+  const isValidTalkDotRate = (req, res, next) => {
     const { talk: { rate } } = req.body;
   if (!Number.isInteger(rate) || !(gte(rate, 1) && !gte(rate, 6))) {
     return res.status(BAD_REQUEST).json({
@@ -132,8 +137,9 @@ router.post('/',
   isValidName,
   isValidAge,
   isValidTalk,
+  isValidPatern,
   isValidTalkDotWatchedAt,
-  isValidRate,
+  isValidTalkDotRate,
   async (req, res) => {
   const array = JSON.parse(await fs.readFile(fileTalkerJson));
   const id = arrayTalkerJson[arrayTalkerJson.length - 1].id + 1;
@@ -151,6 +157,31 @@ router.post('/',
     }
   }
   return addPerson(JSON.stringify(array));
+});
+
+router.put('/:id',
+  isValidToken,
+  isValidName,
+  isValidAge,
+  isValidTalk,
+  isValidPatern,
+  isValidTalkDotWatchedAt,
+  isValidTalkDotRate,
+  async (req, res) => {
+    const { id } = req.params;
+    const talkers = JSON.parse(await fs.readFile(fileTalkerJson));
+    const talkerIndex = talkers.findIndex(({ id: talkerID }) => talkerID === Number(id));
+    talkers[talkerIndex] = { id: Number(id), ...req.body };
+    async function editPerson(person) {
+      try {
+        await fs.writeFile(fileTalkerJson, person);
+        const response = JSON.parse(await fs.readFile(fileTalkerJson));
+        res.status(OK).json(response[talkerIndex]);
+      } catch (err) {
+        console.error(`Erroo aoo escrever oo arquivoo: ${err.message}`);
+      }
+    }
+    return editPerson(JSON.stringify(talkers));
 });
 
 module.exports = router;
