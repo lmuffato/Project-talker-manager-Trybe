@@ -1,4 +1,4 @@
-const { NOT_FOUND, FOUR_HUNDRED, FOUR_HUNDRED_ONE } = require('./consts');
+const { FOUR_HUNDRED, FOUR_HUNDRED_ONE } = require('./consts');
 
 const generateToken = () => {
     const a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
@@ -15,14 +15,15 @@ const tokenValidate = (req, res, next) => {
     const { token } = req.headers;
     if (!token) {
         return res.status(FOUR_HUNDRED_ONE).json({ message: 'Token não encontrado' });
-    } else if (token.length !== 16) {
+    }
+    if (token.length < 16) {
         return res.status(FOUR_HUNDRED_ONE).json({ message: 'Token inválido' });
     }
     next();
 };
 
 function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
 }
 
@@ -91,7 +92,14 @@ const talkValidate = (req, res, next) => {
     } if ([1, 2, 3, 4, 5].includes(rate) === false) {
         res.status(FOUR_HUNDRED).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5',
     });
-    } if (!validateDate(watchedAt)) {
+    }
+    next();
+};
+
+const watchedAtValidate = (req, res, next) => {
+    const { talk } = req.body;
+    const { watchedAt } = talk;
+    if (!validateDate(watchedAt)) {
         res.status(FOUR_HUNDRED).json({
             message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
         });
@@ -107,4 +115,5 @@ module.exports = {
     nameValidate,
     ageValidate,
     talkValidate,
+    watchedAtValidate,
 };
