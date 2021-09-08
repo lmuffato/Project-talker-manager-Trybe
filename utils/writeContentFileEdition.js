@@ -1,9 +1,11 @@
 const fs = require('fs').promises;
 const readContentFile = require('./readContentFile');
 
-const writeContentFile = async (path, content) => {
+const writeContentFileEdition = async (path, content, id) => {
   const talkersArray = await readContentFile(path);
-    talkersArray.push(content);
+  const indexTalkerForEditing = talkersArray.findIndex((talker) => talker.id === +id);
+  talkersArray[+indexTalkerForEditing] = content;
+
   try {
     await fs.writeFile(path, JSON.stringify(talkersArray));
     return content;
@@ -13,4 +15,4 @@ const writeContentFile = async (path, content) => {
   }
 };
 
-module.exports = writeContentFile;
+module.exports = writeContentFileEdition;

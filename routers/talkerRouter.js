@@ -6,6 +6,8 @@ const readContentFile = require('../utils/readContentFile');
 
 const writeContentFile = require('../utils/writeContentFile');
 
+const writeContentFileEdition = require('../utils/writeContentFileEdition');
+
 const { 
   HTTP_OK_STATUS,
   HTTP_CREATED_STATUS,
@@ -32,6 +34,10 @@ const VALIDATIONS_POST_AND_PUT_TALKER = [
   isValidToken, isValidName, isValidAge, isValidTalkKeys, isValidWatchedAt, isValidRate,
 ];
 
+// const VALIDATIONS_DELETE = [
+//   isValidToken,
+// ];
+
 router.post('/', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
   let newTalker;
@@ -45,31 +51,13 @@ router.post('/', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
     return null;
   }
   try {
-    await writeContentFile('./talker.json', newTalker);
+    await writeContentFile(PATH, newTalker);
   } catch (err) {
     console.log(err.message);
     return null;
   }
   res.status(HTTP_CREATED_STATUS).json(newTalker);
 });
-
-// router.put('/:id', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
-//   const { id } = req.params;
-//   const { name, age, talk: { watchedAt, rate } } = req.body;
-
-//   const talkers = await readContentFile(PATH);
-//   const indexTalkerForEditing = talkers.findIndex((talker) => talker.id === +id);
-//   console.log(talkers[indexTalkerForEditing]);
-
-//   if (indexTalkerForEditing !== -1) {
-//     const newTalker = { id, name, age, talker: { watchedAt, rate } };
-//     talkers[indexTalkerForEditing] = newTalker;
-//     await writeContentFile('./talker.json', talkers);
-//     return res.status(HTTP_OK_STATUS).json(newTalker);
-//   }
-
-//   res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
-// });
 
 router.put('/:id', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
   const { id } = req.params;
@@ -80,12 +68,25 @@ router.put('/:id', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
 
   if (indexTalkerForEditing !== -1) {
     const newTalker = { id: +id, name, age, talk: { watchedAt, rate } };
-    await writeContentFile('./talker.json', newTalker, id);
+    await writeContentFileEdition(PATH, newTalker, id);
     return res.status(HTTP_OK_STATUS).json(newTalker);
   }
 
   res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
 });
+
+// router.delete('/:id', VALIDATIONS_DELETE, async (req, res) => {
+//   const { id } = req.params;
+
+//   const talkers = await readContentFile(PATH);
+//   const talkersFiltered = talkers.filter((talker) => talker.id !== +id);
+
+//   if (!talkersFiltered) {
+//     return res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
+//   }
+//   await writeContentFile(PATH, talkersFiltered, id);
+//   res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
+// });
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
