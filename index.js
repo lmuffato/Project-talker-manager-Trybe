@@ -1,8 +1,27 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { fileReader, fileWrite } = require('./fileManager');
-const { validEmail, validPassword } = require('./validation');
+const { validEmail, 
+  validPassword, 
+  validateName, 
+  validateNameSize, 
+  validateMinority, 
+  validateage, 
+  validDate,
+  validateRate,
+  validateTalk,
+  validateToken,
+} = require('./validation');
 
+/* const validation = [validEmail, 
+  validPassword, 
+  validateName, 
+  validateNameSize, 
+  validateMinority, 
+  validateage, 
+  validDate,
+  validateRate]; */
+  
 const app = express();
 app.use(bodyParser.json());
 
@@ -40,7 +59,16 @@ app.get('/talker/:id', async (req, res) => {
   res.status(200).json({ token: '7mqaVRXJSp886CGr' }); 
 }); 
 // at 4:
-app.post('/talker', async (req, res) => {
+app.post('/talker',
+validateToken,
+validateTalk,
+validateName, 
+validateNameSize, 
+validateMinority, 
+validateage, 
+validDate,
+validateRate,
+ async (req, res) => {
   const { name, age, talk } = req.body;
   try {
     const arrayOfTalkers = await fileReader();
