@@ -92,7 +92,6 @@ const validEmail = (req, res, next) => {
   const validateToken = (req, res, next) => {
     const { authorization: token } = req.headers;
     const sizeToken = 16;
-   console.log(token);
     if (!token) {
       return res.status(401).json({ message: 'Token não encontrado' });
     }
@@ -104,6 +103,7 @@ const validEmail = (req, res, next) => {
 module.exports = { 
           validEmail, 
           validPassword, 
+          validateToken,
           validateName, 
           validateNameSize, 
           validateMinority, 
@@ -111,5 +111,4 @@ module.exports = {
           validDate,
           validateRate,
           validateTalk,
-          validateToken,
         };

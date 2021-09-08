@@ -81,6 +81,29 @@ validateRate,
   }
 });
 
+app.put('/talker/:id', 
+validateToken,
+validateTalk,
+validateName, 
+validateNameSize, 
+validateMinority, 
+validateage, 
+validDate,
+validateRate,
+async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  const { name, age, talk } = req.body;
+    const arrayOfTalkers = await fileReader();
+    const filterId = arrayOfTalkers.find((talker) => talker.id === +id);
+    const index = arrayOfTalkers.indexOf(filterId);
+    console.log(id);
+    const dataNew = { id: +id, name, age, talk };
+    arrayOfTalkers[index] = dataNew;
+    await fileWrite(arrayOfTalkers);
+    res.status(200).json(arrayOfTalkers[index]);
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
