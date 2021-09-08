@@ -48,11 +48,11 @@ router.post(
   validateRate,
   rescue(async (req, res) => {
     const { name, age, talk } = req.body;
-    const { watchedAt, rate } = talk;
+    // const { watchedAt, rate } = talk;
 
     const talkers = await getFile();
-    const newTalker = { name, age, talk: { watchedAt, rate } };
-    const newTalkers = talkers.push(newTalker);
+    const newTalker = { id: talkers.length + 1, name, age, talk };
+    const newTalkers = [...talkers, newTalker];
     await setFile(newTalkers);
 
     res.status(201).json(newTalker);
