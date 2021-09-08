@@ -31,7 +31,7 @@ router.get('/search', verifyLogin, async (req, res) => {
   const { q: query } = req.query;
   const palestrantes = await getPalestrantes();
   const searchPalestrante = palestrantes.filter(
-    (idP) => idP.name.toLowerCase().includes(query).toLowerCase(),
+    (idP) => idP.name.toLowerCase().includes(query.toLowerCase()),
     );
   res.status(200).json(searchPalestrante);
 });
