@@ -14,6 +14,12 @@ const getTalkers = async (pathFile) => {
   }
 };
 
+const getTalkersByName = async (pathFile, term) => {
+  const talkers = await getTalkers(pathFile);
+  const talkersFiltered = talkers.filter((talker) => talker.name.includes(term));
+  return talkersFiltered;
+};
+
 const getTalker = async (id, pathFile) => {
   try {
     const talkersFile = await fileSystem.readFile(pathFile, 'utf-8');
@@ -59,4 +65,4 @@ const deleteTalker = async (talkerId) => {
   }
 };
 
-module.exports = { getTalkers, getTalker, registerTalker, deleteTalker };
+module.exports = { getTalkers, getTalkersByName, getTalker, registerTalker, deleteTalker };
