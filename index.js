@@ -71,7 +71,7 @@ app.post('/talker', tokenValidate, nameValidate, ageValidate, talkValidate, rate
 });
 
 app.put('/talker/:id', tokenValidate, nameValidate, ageValidate, talkValidate, rateValidate,
-  watchedAtValidate,async (request, response) => {
+  watchedAtValidate, async (request, response) => {
   const { id } = request.params;
   const { name, age, talk } = request.body;
   getStuff(TALKER).then((content) => {

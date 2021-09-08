@@ -104,8 +104,7 @@ const rateValidate = (req, res, next) => {
     });
 }
     next();
-}
-
+};
 
 const watchedAtValidate = (req, res, next) => {
     const { talk } = req.body;
