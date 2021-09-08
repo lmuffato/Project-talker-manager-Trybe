@@ -20,6 +20,16 @@ const updateTalkers = async (talkers) => {
 
 const HTTP_OK_STATUS = 200;
 
+router.get('/search', checkAuth, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await getTalkers();
+  const filteredTalkers = talkers.filter(({ name }) => name.includes(q));
+  if (!q || q === '') {
+    res.status(200).json(talkers);
+  }
+  res.status(200).json(filteredTalkers);
+});
+
 router.get(
   '/:id',
   rescue(async (req, res) => {
