@@ -9,7 +9,7 @@ const checkEmail = (req, res, next) => {
   const { email } = req.body;
   const regexEmail = /[a-z0-9]+@[a-z0-9]+(\.com)$/gi;
 
-  const isEmailValid = email.match(regexEmail);
+  const isEmailValid = regexEmail.test(email);
 
   if (!email) return res.status(400).json({ message: 'O campo "email" é obrigatório' });
   if (!isEmailValid) {
