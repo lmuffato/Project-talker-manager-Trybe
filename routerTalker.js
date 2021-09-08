@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const express = require('express');
-const { verifyToken, verifyName } = require('./auth');
+const { verifyToken, verifyName, verifyAge } = require('./auth');
 
 // Agradecimento à Marcelo Maurício, turma 10 -tribo A pela ajuda no entendimento
 // da sincronicidade da requisição de dados e lógica de autenticação.
@@ -38,6 +38,7 @@ router.get('/:id', async (request, response) => {
 router.post('/',
 verifyToken,
 verifyName,
+verifyAge,
 (request, response) => {
   const { name, age, talk: { watchedAt, rate } } = request.body;
   const newTalker = { name, age, talk: { watchedAt, rate } };

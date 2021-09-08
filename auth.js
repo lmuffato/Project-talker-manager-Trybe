@@ -52,4 +52,17 @@ const verifyName = (request, response, next) => {
   next();
 };
 
-module.exports = { verifyEmail, verifyPassword, verifyToken, verifyName };
+const verifyAge = (request, response, next) => {
+  const { age } = request.body;
+
+  if (!age || age === '') {
+    return response.status(400).json({ message: 'O campo "age" é obrigatório' });
+  }
+  if (age < 18) {
+    return response.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
+  }
+
+  next();
+};
+
+module.exports = { verifyEmail, verifyPassword, verifyToken, verifyName, verifyAge };
