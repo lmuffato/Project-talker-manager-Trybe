@@ -10,7 +10,7 @@ const bodyParser = require('body-parser');
 
 const getStuff = require('./utils/read');
 
-const { HTTP_OK_STATUS, PORT, TALKER, NOT_FOUND } = require('./utils/consts');
+const { HTTP_OK_STATUS, PORT, TALKER, NOT_FOUND, TWO_HUND_ONE } = require('./utils/consts');
 
 const { generateToken,
   emailValidate,
@@ -19,7 +19,8 @@ const { generateToken,
   nameValidate,
   ageValidate,
   talkValidate,
-  watchedAtValidate } = require('./utils/middlewares');
+  watchedAtValidate,
+  rateValidate } = require('./utils/middlewares');
 
 const app = express();
 
@@ -49,8 +50,8 @@ app.post('/login', emailValidate, passwordValidate, (request, response) => {
   response.status(HTTP_OK_STATUS).json({ token });
 });
 
-app.post('/talker', tokenValidate, nameValidate, ageValidate, talkValidate, watchedAtValidate,
-  async (request, response) => {
+app.post('/talker', tokenValidate, nameValidate, ageValidate, talkValidate, rateValidate,
+  watchedAtValidate, async (request, response) => {
   const talker = request.body;
 
   await getStuff(TALKER).then((content) => {
@@ -65,12 +66,12 @@ app.post('/talker', tokenValidate, nameValidate, ageValidate, talkValidate, watc
     writeFile(TALKER, JSON.stringify(jsonData), 'utf8', (err) => {
       if (err) console.log('Error writing file:', err);
     });
-      response.status(HTTP_OK_STATUS).json(talker);
+      response.status(TWO_HUND_ONE).json(talker);
   });
 });
 
-app.put('/talker/:id', tokenValidate, nameValidate, ageValidate, talkValidate, watchedAtValidate,
-  async (request, response) => {
+app.put('/talker/:id', tokenValidate, nameValidate, ageValidate, talkValidate, rateValidate,
+  watchedAtValidate,async (request, response) => {
   const { id } = request.params;
   const { name, age, talk } = request.body;
   getStuff(TALKER).then((content) => {

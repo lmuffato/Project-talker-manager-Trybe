@@ -12,11 +12,11 @@ const generateToken = () => {
 };
 
 const tokenValidate = (req, res, next) => {
-    const { token } = req.headers;
-    if (!token) {
+    const { authorization } = req.headers;
+    if (!authorization) {
         return res.status(FOUR_HUNDRED_ONE).json({ message: 'Token não encontrado' });
     }
-    if (token.length < 16) {
+    if (authorization.length < 16) {
         return res.status(FOUR_HUNDRED_ONE).json({ message: 'Token inválido' });
     }
     next();
@@ -64,7 +64,7 @@ const nameValidate = (req, res, next) => {
         res.status(FOUR_HUNDRED).json({ message: 'O campo "name" é obrigatório' });
     } if (name.length < 3) {
         res.status(FOUR_HUNDRED).json({ 
-            message: 'O campo "name" deve ter pelo menos 3 caracteres',
+            message: 'O "name" deve ter pelo menos 3 caracteres',
         });
 }
     next();
@@ -84,21 +84,37 @@ const ageValidate = (req, res, next) => {
 
 const talkValidate = (req, res, next) => {
     const { talk } = req.body;
-    const { rate, watchedAt } = talk;
-    if (!talk || !rate || !watchedAt) {
+    if (!talk) {
+        res.status(FOUR_HUNDRED).json({
+            message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios', 
+        });
+    }
+    next();
+};
+
+const rateValidate = (req, res, next) => {
+    const { talk } = req.body;
+    const { rate } = talk;
+    if (!rate) {
         res.status(FOUR_HUNDRED).json({
             message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios', 
         });
     } if ([1, 2, 3, 4, 5].includes(rate) === false) {
         res.status(FOUR_HUNDRED).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5',
     });
-    }
+}
     next();
-};
+}
+
 
 const watchedAtValidate = (req, res, next) => {
     const { talk } = req.body;
     const { watchedAt } = talk;
+    if (!watchedAt) {
+        res.status(FOUR_HUNDRED).json({
+            message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios', 
+        });
+    }
     if (!validateDate(watchedAt)) {
         res.status(FOUR_HUNDRED).json({
             message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
@@ -116,4 +132,5 @@ module.exports = {
     ageValidate,
     talkValidate,
     watchedAtValidate,
+    rateValidate,
 };
