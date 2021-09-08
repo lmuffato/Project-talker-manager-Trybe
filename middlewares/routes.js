@@ -14,7 +14,7 @@ const {
   validateTalk,
 } = require('./validateTalker');
 
-const addTalker = async (talkers) => {
+const updateTalkers = async (talkers) => {
   await fs.writeFile('./talker.json', JSON.stringify(talkers));
 };
 
@@ -37,6 +37,26 @@ router.get(
   }),
 );
 
+router.put(
+  '/:id',
+  validateName,
+  validateAge,
+  validateTalk,
+  validateRate,
+  validateWatchedAt,
+  checkAuth,
+  async (req, res) => {
+    const { id } = req.params;
+    const { body } = req;
+    const talkers = await getTalkers();
+    const talkerIndex = talkers.findIndex((t) => t.id === Number(id));
+    talkers[talkerIndex] = { ...talkers[talkerIndex], ...body };
+
+    await fs.writeFile('./talker.json', (JSON.stringify(talkers)));
+    res.status(HTTP_OK_STATUS).json(talkers[talkerIndex]);
+  },
+);
+
 router.get('/', async (_req, res) => {
   const talkers = await getTalkers();
   res.status(HTTP_OK_STATUS).json(talkers);
@@ -56,7 +76,7 @@ router.post(
     const lastTalk = talkers[talkers.length - 1];
     const newTalk = { name, age, talk, id: lastTalk.id + 1 };
     const newTalkers = [...talkers, newTalk];
-    await addTalker(newTalkers);
+    await updateTalkers(newTalkers);
     res.status(201).json(newTalk);
   },
 );

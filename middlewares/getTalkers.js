@@ -1,11 +1,12 @@
 const fs = require('fs').promises;
 
 const getTalkers = async () => {
-  const talkers = await fs.readFile('./talker.json', 'utf8', (err, content) => {
-    if (err) return [];
-    return content;
-  });
-  return JSON.parse(talkers);
+  try {
+    const talkers = await fs.readFile('./talker.json', 'utf8');
+    return JSON.parse(talkers);
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 module.exports = getTalkers;
