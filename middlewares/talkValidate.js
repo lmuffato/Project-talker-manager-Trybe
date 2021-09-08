@@ -1,6 +1,5 @@
 const talkValidate = (req, res, next) => {
   const { talk } = req.body;
-  // console.log(talk.rate);
 
   if (!talk || talk.watchedAt === undefined || talk.rate === undefined) {
     return res.status(400).json({
