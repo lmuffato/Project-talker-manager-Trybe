@@ -13,6 +13,7 @@ const talkValidation = require('./middleware/talkValidation');
 const addTalker = require('./middleware/addTalker');
 const editTalker = require('./middleware/editTalker');
 const deleteTalker = require('./middleware/deleteTalker');
+const searchTalkerByname = require('./middleware/searchTalkerByName');
 
 const readFile = async () => {
   const data = await fs.readFile('./talker.json', 'utf-8');
@@ -35,6 +36,8 @@ app.get('/talker', async (_req, res) => {
   const data = await readFile();
   return res.status(HTTP_OK_STATUS).json(data);
 });
+
+app.get('/talker/search', tokenValidation, searchTalkerByname);
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
