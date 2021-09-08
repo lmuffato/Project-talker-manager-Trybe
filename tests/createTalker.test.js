@@ -15,13 +15,13 @@ describe('4 - Crie o endpoint POST /talker', () => {
   beforeEach(() => {
     const talkerSeed = fs.readFileSync(
       path.join(__dirname, 'seed.json'),
-      'utf8'
+      'utf8',
     );
 
     fs.writeFileSync(
       path.join(__dirname, '..', 'talker.json'),
       talkerSeed,
-      'utf8'
+      'utf8',
     );
   });
 
@@ -53,9 +53,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .expect('status', 201)
           .then((responseCreate) => {
             expect(require('../talker.json')).toEqual(
-              expect.arrayContaining(
-                [expect.objectContaining(postTalkerMock)]
-                )
+              expect.arrayContaining([expect.objectContaining(postTalkerMock)]),
             );
             const { json } = responseCreate;
             expect(json).toEqual(postTalkerMock);
@@ -124,7 +122,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O "name" deve ter pelo menos 3 caracteres'
+              'O "name" deve ter pelo menos 3 caracteres',
             );
           });
       });
@@ -191,7 +189,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'A pessoa palestrante deve ser maior de idade'
+              'A pessoa palestrante deve ser maior de idade',
             );
           });
       });
@@ -225,7 +223,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
@@ -260,7 +258,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
@@ -295,7 +293,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
+              'O campo "rate" deve ser um inteiro de 1 à 5',
             );
           });
       });
@@ -330,7 +328,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "rate" deve ser um inteiro de 1 à 5'
+              'O campo "rate" deve ser um inteiro de 1 à 5',
             );
           });
       });
@@ -365,7 +363,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios'
+              'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
             );
           });
       });
@@ -400,7 +398,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe(
-              'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"'
+              'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
             );
           });
       });
@@ -425,7 +423,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe('Token não encontrado');
-          })
+          }),
       );
   });
 
@@ -456,7 +454,7 @@ describe('4 - Crie o endpoint POST /talker', () => {
           .then((responseCreate) => {
             const { json } = responseCreate;
             expect(json.message).toBe('Token inválido');
-          })
+          }),
       );
   });
 });

@@ -1,20 +1,18 @@
-module.exports = (req, res, next) => {
-  const token = req.headers.authorization;
+const tokenValidate = (req, res, next) => {
+  const { authorization } = req.headers;
 
-  const tokenRegex = /^[a-zA-Z0-9]{12}$/;
-  const isValid = tokenRegex.test(token);
-
-  if (!token) {
+  if (!authorization) {
     return res.status(401).json({
       message: 'Token não encontrado',
     });
   }
 
-  if (!isValid) {
+  if (authorization.length < 16) {
     return res.status(401).json({
       message: 'Token inválido',
     });
   }
-
   next();
 };
+
+module.exports = tokenValidate;
