@@ -1,39 +1,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs').promises;
+// const fs = require('fs').promises;
+const talkerRouter = require('./talkerRouter');
 
 const app = express();
 app.use(bodyParser.json());
 
-const HTTP_OK_STATUS = 200;
+const OK = 200;
 const BAD_REQUEST = 400;
-const HTTP_NOT_FOUND = 404;
+// const UNAUTHORIZED = 401;
+// const NOT_FOUND = 404;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_req, res) => {
-  res.status(HTTP_OK_STATUS).send();
+  res.status(OK).send();
 });
 
-app.get('/talker', async (_req, res) => {
-  const talkers = await fs.readFile('talker.json');
-  if (!talkers.length) return res.status(HTTP_OK_STATUS).json([]);
-  
-  res.status(HTTP_OK_STATUS).json(JSON.parse(talkers));
-});
-
-app.get('/talker/:id', async (req, res) => {
-  const { id } = req.params;
-  const talkers = await fs.readFile('talker.json');
-  const [talker] = JSON.parse(talkers).filter(({ id: talkerID }) => talkerID === Number(id));
-  if (!talker) {
-  return res.status(HTTP_NOT_FOUND).json({
-  message: 'Pessoa palestrante não encontrada',
-}); 
-}
-  
-  res.status(HTTP_OK_STATUS).json(talker);
-});
+app.use('/talker', talkerRouter);
 
 app.post('/login', async (req, res) => {
   const { email, password: pass } = req.body;
@@ -53,7 +37,7 @@ app.post('/login', async (req, res) => {
   }); 
 }
   const token = '16caracteresaqui';
-  res.status(HTTP_OK_STATUS).json({ token });
+  res.status(OK).json({ token });
 });
 
 app.listen(PORT, () => {
