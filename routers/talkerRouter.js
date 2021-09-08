@@ -8,6 +8,8 @@ const writeContentFile = require('../utils/writeContentFile');
 
 const writeContentFileEdition = require('../utils/writeContentFileEdition');
 
+const writeContentFileDelete = require('../utils/writeContentFileDelete');
+
 const { 
   HTTP_OK_STATUS,
   HTTP_CREATED_STATUS,
@@ -34,9 +36,9 @@ const VALIDATIONS_POST_AND_PUT_TALKER = [
   isValidToken, isValidName, isValidAge, isValidTalkKeys, isValidWatchedAt, isValidRate,
 ];
 
-// const VALIDATIONS_DELETE = [
-//   isValidToken,
-// ];
+const VALIDATIONS_DELETE = [
+  isValidToken,
+];
 
 router.post('/', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
@@ -75,18 +77,18 @@ router.put('/:id', VALIDATIONS_POST_AND_PUT_TALKER, async (req, res) => {
   res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
 });
 
-// router.delete('/:id', VALIDATIONS_DELETE, async (req, res) => {
-//   const { id } = req.params;
+router.delete('/:id', VALIDATIONS_DELETE, async (req, res) => {
+  const { id } = req.params;
 
-//   const talkers = await readContentFile(PATH);
-//   const talkersFiltered = talkers.filter((talker) => talker.id !== +id);
+  const talkers = await readContentFile(PATH);
+  const talkersFiltered = talkers.filter((talker) => talker.id !== +id);
 
-//   if (!talkersFiltered) {
-//     return res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
-//   }
-//   await writeContentFile(PATH, talkersFiltered, id);
-//   res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
-// });
+  if (!talkersFiltered) {
+    return res.status(HTTP_NOT_FOUND_STATUS).json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  await writeContentFileDelete(PATH, talkersFiltered, id);
+  res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;

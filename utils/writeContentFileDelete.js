@@ -1,15 +1,6 @@
 const fs = require('fs').promises;
 const readContentFile = require('./readContentFile');
 
-const editionTalker = async (id, action, content, path) => {
-  const talkersArray = await readContentFile(path);
-  if (id !== '' && action === 'edition') {
-    const indexTalkerForEditing = talkersArray.findIndex((talker) => talker.id === +id);
-    talkersArray[+indexTalkerForEditing] = content;
-  }
-  return talkersArray;
-};
-
 // const deleteTalker = async (id, action, content, path) => {
 //   const talkersArray = await readContentFile(path);
 //   if (id !== '' && action === 'delete') {
@@ -19,17 +10,13 @@ const editionTalker = async (id, action, content, path) => {
 //   return talkersArray;
 // };
 
-const writeContentFile = async (path, content, id = '') => {
+const writeContentFileDelete = async (path, content, id) => {
   const talkersArray = await readContentFile(path);
 
-  if (id !== '') {
-    const indexTalkerForEditing = talkersArray.findIndex((talker) => talker.id === +id);
-    talkersArray[+indexTalkerForEditing] = content;
-  } else {
-    talkersArray.push(content);
-  }
+  const indexTalkerForDelete = talkersArray.filter((talker) => talker.id !== +id);
+
   try {
-    await fs.writeFile(path, JSON.stringify(talkersArray));
+    await fs.writeFile(path, JSON.stringify(indexTalkerForDelete));
     return content;
   } catch (err) {
     console.log(err.message);
@@ -37,4 +24,4 @@ const writeContentFile = async (path, content, id = '') => {
   }
 };
 
-module.exports = writeContentFile;
+module.exports = writeContentFileDelete;
