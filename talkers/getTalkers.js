@@ -4,12 +4,12 @@ const { StatusCodes } = require('http-status-codes');
 
 // cria endpoint /talker
 
-try {
-  module.exports = async (_request, response) => {
+module.exports = async (_req, res) => {
+    try {
     const talker = await fs.readFile('./talker.json', 'utf8');
     const result = await JSON.parse(talker);
-    response.status(StatusCodes.OK).json(result);
+    return res.status(StatusCodes.OK).json(result);
+  } catch (err) {
+    console.error(err);
+  }
   };
-} catch (err) {
-  console.error(err);
-}

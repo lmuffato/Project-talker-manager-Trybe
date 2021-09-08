@@ -2,8 +2,8 @@ const fs = require('fs').promises;
 
 const { StatusCodes } = require('http-status-codes');
 
-try {
-  module.exports = async (req, res, _next) => {
+module.exports = async (req, res, _next) => {
+  try {
     const { name, age, talk } = req.body;
     const { id } = req.params;
     const talkers = await fs.readFile('./talker.json', 'utf8');
@@ -14,7 +14,7 @@ try {
     
     await fs.writeFile('./talker.json', JSON.stringify(filtered), 'utf-8');
     return res.status(StatusCodes.OK).json(talkerNew);
-  };
-} catch (err) {
+  } catch (err) {
   console.error(err);
 }
+};

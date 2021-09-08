@@ -14,7 +14,7 @@ try {
         message: 'Pessoa palestrante não encontrada',
       });
     }
-    response.status(StatusCodes.OK).json(speaker);
+    return response.status(StatusCodes.OK).json(speaker);
   };
 } catch (err) {
   console.error(err);

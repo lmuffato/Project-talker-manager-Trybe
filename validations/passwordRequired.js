@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-function passwordRequired(req, res, next) {
+module.exports = (req, res, next) => {
   const { password } = req.body;
   if (!password || password === '') {
     return res.status(StatusCodes.BAD_REQUEST).json(
@@ -8,6 +8,4 @@ function passwordRequired(req, res, next) {
 );
   }
   next();
-}
-
-module.exports = passwordRequired;
+};

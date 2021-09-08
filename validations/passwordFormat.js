@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-function passwordFormat(req, res, next) {
+module.exports = (req, res, next) => {
   const { password } = req.body;
   const senhaValida = /^.{6,}$/g;
   if (senhaValida.test(password) === false) {
@@ -9,6 +9,4 @@ function passwordFormat(req, res, next) {
 );
   }
   next();
-}
-
-module.exports = passwordFormat;
+};

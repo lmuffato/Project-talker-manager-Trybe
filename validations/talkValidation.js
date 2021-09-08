@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-function talkValidation(req, res, next) {
+module.exports = (req, res, next) => {
   const { talk } = req.body;
   if (!talk || !talk.watchedAt || (!talk.rate && talk.rate !== 0)) {
     return res.status(StatusCodes.BAD_REQUEST).json({
@@ -8,6 +8,4 @@ function talkValidation(req, res, next) {
     });
   }
   next();
-}
-
-module.exports = talkValidation;
+};

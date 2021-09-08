@@ -1,6 +1,6 @@
 // const { StatusCodes } = require('http-status-codes');
 
-function emailRequired(req, res, next) {
+module.exports = (req, res, next) => {
   const { email } = req.body;
   if (!email || email === '') {
     return res.status(400).json(
@@ -8,6 +8,4 @@ function emailRequired(req, res, next) {
 );
   }
   next();
-}
-
-module.exports = emailRequired;
+};

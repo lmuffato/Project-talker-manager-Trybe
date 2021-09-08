@@ -1,4 +1,4 @@
-function tokenRequired(req, res, next) {
+module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   
   if (!authorization || authorization === '') {
@@ -8,6 +8,4 @@ function tokenRequired(req, res, next) {
     return res.status(401).json({ message: 'Token inválido' });
   }
   next();
-}
-
-module.exports = tokenRequired;
+};

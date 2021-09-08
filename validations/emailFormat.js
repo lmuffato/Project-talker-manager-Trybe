@@ -1,6 +1,6 @@
 const { StatusCodes } = require('http-status-codes');
 
-function emailFormat(req, res, next) {
+module.exports = (req, res, next) => {
   const { email } = req.body;
   const emailValido = /\w+@\w+.\w+/g;
   if (emailValido.test(email) === false) {
@@ -9,6 +9,4 @@ function emailFormat(req, res, next) {
 );
   }
   next();
-}
-
-module.exports = emailFormat;
+};

@@ -16,7 +16,7 @@ const deletTalker = require('../talkers/deletTalker');
 
 const tokenValidation = require('../validations/tokenValidation');
 
-const nameValidation = require('../validations/nameValidation');
+const nameValid = require('../validations/nameValidation');
 
 const ageValidation = require('../validations/ageValidation');
 
@@ -26,10 +26,10 @@ const talkValidation = require('../validations/talkValidation');
 
 const validations = [
   tokenValidation,
-  nameValidation,
   ageValidation,
   talkValidation,
   dateRate,
+  nameValid,
 ];
 
 const router = new Router();
