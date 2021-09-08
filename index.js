@@ -1,6 +1,5 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-// const fs = require('fs').promises;
 const talkerRouter = require('./talkerRouter');
 
 const app = express();
@@ -23,7 +22,6 @@ app.post('/login', async (req, res) => {
   const { email, password: pass } = req.body;
   const validator = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const isValidEmail = validator.test(email);
-  // const isPasswordGTE6 = pass.length >= 6;
   if (!email) return res.status(BAD_REQUEST).json({ message: 'O campo "email" é obrigatório' });
   if (!isValidEmail) {
     return res.status(BAD_REQUEST).json({
@@ -31,7 +29,7 @@ app.post('/login', async (req, res) => {
     }); 
 }
   if (!pass) return res.status(BAD_REQUEST).json({ message: 'O campo "password" é obrigatório' });
-  if (/* !isPasswordGTE6  */pass.length < 6) {
+  if (pass.length < 6) {
     return res.status(BAD_REQUEST).json({
     message: 'O "password" deve ter pelo menos 6 caracteres',
   }); 
