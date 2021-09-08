@@ -184,4 +184,22 @@ router.put('/:id',
     return editPerson(JSON.stringify(talkers));
 });
 
+router.delete('/:id',
+  isValidToken,
+  async (req, res) => {
+    const { id } = req.params;
+    const talkers = JSON.parse(await fs.readFile(fileTalkerJson));
+    const talkerIndex = talkers.findIndex(({ id: talkerID }) => talkerID === Number(id));
+    talkers.splice([talkerIndex], 1);
+    async function deletePerson(person) {
+      try {
+        await fs.writeFile(fileTalkerJson, person);
+        res.status(OK).json({ message: 'Pessoa palestrante deletada com sucesso' });
+      } catch (err) {
+        console.error(`Erroo aoo escrever oo arquivoo: ${err.message}`);
+      }
+    }
+    return deletePerson(JSON.stringify(talkers));
+});
+
 module.exports = router;
