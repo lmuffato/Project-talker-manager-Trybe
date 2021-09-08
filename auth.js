@@ -26,4 +26,17 @@ const verifyPassword = (request, response, next) => {
   next();
 };
 
-module.exports = { verifyEmail, verifyPassword };
+const verifyToken = (request, response, next) => {
+  const { authorization } = request.headers;
+
+  if (!authorization) {
+    return response.status(401).json({ message: 'Token não encontrado' });
+  }
+  if (authorization.length !== 16) {
+    return response.status(401).json({ message: 'Token inválido' });
+  }
+
+  next();
+};
+
+module.exports = { verifyEmail, verifyPassword, verifyToken };
