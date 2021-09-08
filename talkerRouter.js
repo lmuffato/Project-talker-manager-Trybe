@@ -150,7 +150,7 @@ router.post('/',
   async function addPerson(person) {
     try {
       await fs.writeFile(fileTalkerJson, person);
-      const response = JSON.parse(await fs.readFile(fileTalkerJson));
+      const response = await JSON.parse(await fs.readFile(fileTalkerJson));
       res.status(CREATED).json(response[response.length - 1]);
     } catch (err) {
       console.error(`Erroo aoo escrever oo arquivoo: ${err.message}`);
