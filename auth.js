@@ -7,10 +7,12 @@ const createToken = () => crypto.randomBytes(8).toString('hex');
 
 const checkEmail = (req, res, next) => {
   const { email } = req.body;
-  const validation = /^w+([.-]?w+)*@w+([.-]?w+)*(.w{2,3})+$/.test(email);
+  const regexEmail = /[a-z0-9]+@[a-z0-9]+(\.com)$/gi;
+
+  const isEmailValid = email.match(regexEmail);
 
   if (!email) return res.status(400).json({ message: 'O campo "email" é obrigatório' });
-  if (!validation) {
+  if (!isEmailValid) {
     return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
 
