@@ -37,6 +37,16 @@ router.get(
   }),
 );
 
+router.delete('/:id', checkAuth, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await getTalkers();
+  const talkerIndex = talkers.findIndex((t) => t.id === Number(id));
+
+  talkers.splice(talkerIndex, 1);
+  await fs.writeFile('./talker.json', JSON.stringify(talkers));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
 router.put(
   '/:id',
   validateName,
@@ -52,7 +62,7 @@ router.put(
     const talkerIndex = talkers.findIndex((t) => t.id === Number(id));
     talkers[talkerIndex] = { ...talkers[talkerIndex], ...body };
 
-    await fs.writeFile('./talker.json', (JSON.stringify(talkers)));
+    await fs.writeFile('./talker.json', JSON.stringify(talkers));
     res.status(HTTP_OK_STATUS).json(talkers[talkerIndex]);
   },
 );
