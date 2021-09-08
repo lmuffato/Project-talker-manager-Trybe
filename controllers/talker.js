@@ -59,4 +59,24 @@ router.post(
   }),
 );
 
+router.put(
+  '/:id', 
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateDate,
+  validateRate,
+  rescue(async (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+
+    const talkers = await getFile();
+    const talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+    talkers[talkerIndex] = { ...talkers[talkerIndex], id: parseInt(id, 10), name, age, talk };
+    await setFile(talkers);
+    res.status(200).json({ id: parseInt(id, 10), name, age, talk });
+  }),
+);
+
 module.exports = router; 
