@@ -60,7 +60,7 @@ const passwordValidate = (req, res, next) => {
 
 const nameValidate = (req, res, next) => {
     const { name } = req.body;
-    if (!name || name === '') {
+    if (!name) {
         res.status(FOUR_HUNDRED).json({ message: 'O campo "name" é obrigatório' });
     } if (name.length < 3) {
         res.status(FOUR_HUNDRED).json({ 
