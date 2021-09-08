@@ -1,6 +1,7 @@
 const fileSystem = require('fs').promises;
 
 const Talker = require('../model/Talker');
+
 const { SRC_TALKER_DATA } = require('../config/Files');
 
 const getTalkers = async (pathFile) => {
@@ -47,4 +48,15 @@ const registerTalker = async (talker) => {
   return talkerValidated;
 };
 
-module.exports = { getTalkers, getTalker, registerTalker };
+const deleteTalker = async (talkerId) => {
+  const talkers = await getTalkers(SRC_TALKER_DATA);
+  const talkersWithoutDeleteTalker = talkers.filter((talker) => talker.id !== Number(talkerId));
+  try {
+    await fileSystem.writeFile(SRC_TALKER_DATA, JSON.stringify(talkersWithoutDeleteTalker));
+  } catch (error) {
+    console.error(error);
+    throw new Error('Não foi possível ler ou acessar o arquivo de dados.');
+  }
+};
+
+module.exports = { getTalkers, getTalker, registerTalker, deleteTalker };
