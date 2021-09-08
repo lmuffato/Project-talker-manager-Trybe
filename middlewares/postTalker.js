@@ -45,7 +45,7 @@ const validateName = (req, res, next) => {
       return;
     }
   
-    if (!(typeof name === 'string' && name.length < 3)) {
+    if (!(typeof name === 'string' && name.length >= 3)) {
       return res.status(400).json({
         message: 'O "name" deve ter pelo menos 3 caracteres',
       });
@@ -64,7 +64,7 @@ const validateAge = (req, res, next) => {
       return;
     }
   
-    if (age < 18) {
+    if (age < 18 || typeof age !== 'number') {
       res.status(400).json({
         message: 'A pessoa palestrante deve ser maior de idade',
       });
