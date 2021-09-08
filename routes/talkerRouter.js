@@ -60,4 +60,31 @@ router.delete('/:id', verifiedToken, rescue(async (req, res) => {
     res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 }));
 
+router.put('/:id', 
+    verifiedToken, 
+    verifiedName, 
+    verifiedAge,
+    verifiedTalk,
+    verifiedRate,
+    verifiedDate,
+    rescue(async (req, res) => {
+    const { name, age, talk } = req.body;
+
+    const talkers = await getAllTalkers();
+
+    const talkerIndex = talkers.findIndex(
+            (talker) => talker.id === parseInt(req.params.id, 10),
+        );
+
+ //   const newTalkerAuxiliation = { id: talkers.length, name, age, talk };
+
+    talkers[talkerIndex] = { ...talkers[talkerIndex], name, age, talk };
+    
+    await writeNewTalker(talkers);
+
+    console.log(talkers[talkerIndex]);
+
+    res.status(200).json(talkers[talkerIndex]);
+}));
+
 module.exports = router;
