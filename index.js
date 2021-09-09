@@ -1,23 +1,33 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
+
 const {
+  createToken,
   readContentFile,
   writeContentFile,
-  rewriteContentFile,
+  updateContentFile,
   deleteContentFile,
-} = require('./readWriteFile');
+  searchTextContentFile,
+  searchIdContentFile,
+} = require('./functions');
+
 const {
+  validateToken,
+  validateEmail,
+  validatePassword,
   validateName,
   validateAge,
-  validateTalk, validateRate,
+  validateTalk,
+  validateRate,
   validateWatchedAt,
-} = require('./talkerValidation');
+} = require('./talkerValidations');
 
 const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
+const HTTP_NOT_FOUND_STATUS = 404;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -31,64 +41,26 @@ const talks = JSON.parse(content);
   res.status(HTTP_OK_STATUS).json(talks);
 });
 
-app.get('/talker/:id', async (req, res) => {
-  const { id } = req.params;
-  const content = await fs.readFile('./talker.json');
-const talks = JSON.parse(content);
-  const talkById = talks.find((t) => t.id === parseInt(id, 10));
-  if (!talkById) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-  res.status(HTTP_OK_STATUS).json(talkById);
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { q } = req.query;
+  const filteredTalkers = await searchTextContentFile(q);
+  res.status(HTTP_OK_STATUS).json(filteredTalkers);
 });
 
-const createToken = () => {
-  const random1 = Math.random().toString(36).substr(2, 8);
-  const random2 = Math.random().toString(36).substr(2, 8);
-  const token = `${random1}${random2}`;
-  return token;
- };
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const talkerById = await searchIdContentFile(id);
+  if (!talkerById) {
+ return res.status(HTTP_NOT_FOUND_STATUS)
+  .json({ message: 'Pessoa palestrante não encontrada' }); 
+}
+  res.status(HTTP_OK_STATUS).json(talkerById);
+});
 
-const validateEmail = (req, res, next) => { 
-  const { email } = req.body;
-  if (!email || email === '') {
-return res.status(400)
-  .json({ message: 'O campo "email" é obrigatório' }); 
-}
-  const regex = /\S+@\S+\.\S+/;
-  if (regex.test(email) === false) {
-return res.status(400)
-  .json({ message: 'O "email" deve ter o formato "email@email.com"' }); 
-}
-  next();
-};
-
-app.post('/login', validateEmail, (req, res) => {
-  const { password } = req.body;
-  
-  if (!password || password === '') {
- return res.status(400)
-   .json({ message: 'O campo "password" é obrigatório' }); 
-}
-   if (password.length < 6) {
- return res.status(400)
-   .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });   
-}
-
+app.post('/login', validateEmail, validatePassword, (req, res) => {
 const token = createToken();
 res.status(HTTP_OK_STATUS).json({ token });
 });
-
-const validateToken = (req, res, next) => {
-const { authorization } = req.headers;
-if (!authorization || authorization === '') {
- return res.status(401)
-  .json({ message: 'Token não encontrado' }); 
-}
-  if (authorization.length !== 16) {
-    return res.status(401)
-      .json({ message: 'Token inválido' }); 
-    }
-next();
-}; 
 
 app.post('/talker', validateToken, validateName, validateAge,
 validateTalk, validateRate, validateWatchedAt, async (req, res) => {
@@ -105,14 +77,14 @@ validateTalk, validateRate, validateWatchedAt, async (req, res) => {
 const { id } = req.params;
 const { name, age, talk } = req.body;
   const updatedTalker = { name, age, talk, id: parseInt(id, 10) };
-  await rewriteContentFile(updatedTalker, id);
-  res.status(200).json(updatedTalker);
+  await updateContentFile(updatedTalker, id);
+  res.status(HTTP_OK_STATUS).json(updatedTalker);
 });
 
 app.delete('/talker/:id', validateToken, async (req, res) => {
 const { id } = req.params;
   await deleteContentFile(id);
-res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 app.listen(PORT, () => {
