@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const crypto = require('crypto');
+const { runInNewContext } = require('vm');
 
 const app = express();
 app.use(bodyParser.json());
@@ -79,21 +80,22 @@ validarPassword,
   res.status(200).json({ token: generateToken() });
 });
 
-/* const resquestName = (req, res, next) => {
-  const { name } = req.body;
-  if (name === String) {
-    return res.status(200).json({ name });
+const verificarToken = (req, res, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    return res.status(401).json({ message: 'Token não encontrado' });
+  } if (authorization.length !== 16) {
+    return res.status(401).json({ message: 'Token inválido' });
   }
   next();
 };
 
 app.post('/talker',
-resquestName,
+verificarToken,
 (req, res) => {
-  const { name } = req.body;
-  res.status(200).json()
-  ) */
-  
+
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
