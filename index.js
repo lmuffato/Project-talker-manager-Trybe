@@ -1,27 +1,41 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const generateToken = require('./middlewares-auth/token');
+
+const {
+  validateEmail,
+  validatePassword,
+} = require('./middlewares-auth/login');
+
+const {
+  validaRate,
+  validaWatchedAt,
+  validaTalk,
+  validaToken,
+  validaIdade,
+  validaNome,
+} = require('./middlewares-auth/talker');
 
 const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const NOT_FOUND = 404;
-const BAD_REQUEST = 400;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
-
+// ___________________________requisito1_________________________________
 app.get('/talker', (_req, res) => {
   const talkerData = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
 
   if (talkerData.length === 0) return res.status(HTTP_OK_STATUS).json([]);
   res.status(HTTP_OK_STATUS).json(talkerData);
 });
-
+// ___________________________requisito2_________________________________
 app.get('/talker/:id', (req, res) => {
   const { id } = req.params;
 
@@ -34,48 +48,37 @@ app.get('/talker/:id', (req, res) => {
   }
   res.status(HTTP_OK_STATUS).json(dataPerson);
 });
-
-const validateEmail = (req, res, next) => {
-  const { email } = req.body;
-  const emailRegex = new RegExp(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-
-  if (!email || email === '') {
-    res.status(BAD_REQUEST)
-      .json({ message: 'O campo "email" é obrigatório' });
-  }
-
-  if (!emailRegex.test(email)) {
-    return res.status(BAD_REQUEST)
-      .json({ message: 'O "email" deve ter o formato "email@email.com"' });
-  }
-
-  next();
-};
-
-const validatePassword = (req, res, next) => {
-  const { password } = req.body;
-  const passwordRegex = new RegExp(/[\w\D]{6}/g);
-
-  if (!password || password === '') {
-    console.log(password);
-    return res.status(BAD_REQUEST)
-      .json({ message: 'O campo "password" é obrigatório' });
-  }
-
-  if (!passwordRegex.test(password)) {
-    return res.status(BAD_REQUEST)
-      .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
-  }
-
-  next();
-};
+// __________________________requisito3__________________________________
 
 app.post('/login', validateEmail, validatePassword, (_req, res) => {
-  const randomtoken = Math.random().toString(36).substr(5);
-  const token = randomtoken + randomtoken;
+  const token = generateToken();
 
   res.status(HTTP_OK_STATUS).json({ token });
 });
+
+// __________________________requisito4________________________________
+
+app.post(
+  '/talker',
+  validaToken,
+  validaNome,
+  validaIdade,
+  validaTalk,
+  validaWatchedAt,
+  validaRate,
+  (req, res) => {
+  const { name, age, talk } = req.body;
+
+  const data = fs.readFileSync('./talker.json', 'utf8');
+  const result = JSON.parse(data);
+
+  const newPerson = { id: result.length + 1, name, age, talk };
+
+  fs.writeFileSync('./talker.json', JSON.stringify([...result, newPerson]));
+
+  return res.status(201).json(newPerson);
+},
+);
 
 app.listen(PORT, () => {
   console.log('Online');
