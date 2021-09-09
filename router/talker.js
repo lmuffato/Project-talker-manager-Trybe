@@ -7,7 +7,9 @@ const {
   validarNome,
   validarIdade,
   validarTalk,
-  validarTalkRate,
+  validarTalkData,
+  validarRate,
+  tokenInvalido,
 } = require('../middlewares');
 
 const HTTP_OK_STATUS = 200;
@@ -30,20 +32,23 @@ router.get('/:id', async (req, res) => {
   return res.status(HTTP_OK_STATUS).json(talker);
 });
 
-router.post('/', validarToken,
+router.post('/', 
+  validarToken,
   validarNome,
   validarIdade,
   validarTalk,
-  validarTalkRate, async (req, res) => {
-    const { id, name, age, talk } = req.body;
-  
+  validarRate,
+  tokenInvalido,
+  validarTalkData, async (req, res) => {
+    const { name, age, talk, Authorization } = req.body;
+
     const talkers = await fs.readFile('./talker.json', 'utf-8').then((r) => JSON.parse(r));
-    console.log(talkers);
+    const talker = { id: talkers.length + 1, name, age, talk, Authorization };
   
-    talkers.push({ id, name, age, talk });
-    fs.writeFile('./talker.json', JSON.stringify(talkers));
+    talkers.push(talker);
+    await fs.writeFile('./talker.json', JSON.stringify(talkers));
   
-    res.status(201).json({ id, name, age, talk });
+    res.status(201).json(talker);
   });
 
 module.exports = router; 
