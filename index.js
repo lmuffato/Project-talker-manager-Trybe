@@ -42,8 +42,12 @@ app.post('/login', emailValidation, passwordlValidation, generateToken);
 
 // Requisito 4
 
-app.post('/talker',validateToken, talkersValidation.validateName,
-talkersValidation.validateAge,talkersValidation.validateTalk, talkersValidation.validateTalkDate,
+app.post('/talker',
+validateToken,
+talkersValidation.validateName,
+talkersValidation.validateAge,
+talkersValidation.validateTalk,
+talkersValidation.validateTalkDate,
 talkersValidation.validateTalkRate, async (req, res) => {
   const { name, age, talk } = req.body;
   const talkers = await fs.readFile('./talker.json', 'utf-8');
@@ -55,13 +59,13 @@ talkersValidation.validateTalkRate, async (req, res) => {
     age,
     talk,
   };
+
   arrTalkers.push(newTalker);
  return await fs.writeFile('./talker.json', JSON.stringify(arrTalkers)),
    res.status(201).json(newTalker);
 }
 
 )
-
 app.listen(PORT, () => {
   console.log('Online');
 });
