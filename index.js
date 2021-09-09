@@ -51,7 +51,7 @@ talkersValidation.validateTalkDate,
 talkersValidation.validateTalkRate, async (req, res) => {
   const { name, age, talk } = req.body;
   const talkers = await fs.readFile('./talker.json', 'utf-8');
-  console.log(talkers)
+  console.log(talkers);
   const arrTalkers = JSON.parse(talkers);
   const newTalker = {
     id: arrTalkers.length + 1,
@@ -62,10 +62,9 @@ talkersValidation.validateTalkRate, async (req, res) => {
 
   arrTalkers.push(newTalker);
  return await fs.writeFile('./talker.json', JSON.stringify(arrTalkers)),
-   res.status(201).json(newTalker);
-}
+ res.status(201).json(newTalker);
+});
 
-)
 app.listen(PORT, () => {
   console.log('Online');
 });
