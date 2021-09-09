@@ -6,6 +6,8 @@ const passwordlValidation = require('./Middlewares/passwordValidation');
 const generateToken = require('./Middlewares/generateToken');
 const talkersValidation = require('./Middlewares/talkersValidation');
 const validateToken = require('./Middlewares/tokenValidate');
+const createTalkers = require('./Middlewares/createTalkers');
+const talkerUpdate = require('./Middlewares/talkerUpdate');
 
 const app = express();
 app.use(bodyParser.json());
@@ -48,22 +50,17 @@ talkersValidation.validateName,
 talkersValidation.validateAge,
 talkersValidation.validateTalk,
 talkersValidation.validateTalkDate,
-talkersValidation.validateTalkRate, async (req, res) => {
-  const { name, age, talk } = req.body;
-  const talkers = await fs.readFile('./talker.json', 'utf-8');
-  console.log(talkers);
-  const arrTalkers = JSON.parse(talkers);
-  const newTalker = {
-    id: arrTalkers.length + 1,
-    name,
-    age,
-    talk,
-  };
+talkersValidation.validateTalkRate, createTalkers);
 
-  arrTalkers.push(newTalker);
-  await fs.writeFile('./talker.json', JSON.stringify(arrTalkers));
- return res.status(201).json(newTalker);
-});
+// Requisito 5
+
+app.put('/talker/:id',
+validateToken,
+talkersValidation.validateName,
+talkersValidation.validateAge,
+talkersValidation.validateTalk,
+talkersValidation.validateTalkRate,
+talkersValidation.validateTalkDate, talkerUpdate);
 
 app.listen(PORT, () => {
   console.log('Online');
