@@ -10,7 +10,7 @@ const verifyEmail = (request, response, next) => {
     return response.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
 
-  next();
+  return next();
 };
 
 const verifyPassword = (request, response, next) => {
@@ -23,7 +23,7 @@ const verifyPassword = (request, response, next) => {
     return response.status(400).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
 
-  next();
+  return next();
 };
 
 const verifyToken = (request, response, next) => {
@@ -36,11 +36,12 @@ const verifyToken = (request, response, next) => {
     return response.status(401).json({ message: 'Token inválido' });
   }
 
-  next();
+  return next();
 };
 
 const verifyName = (request, response, next) => {
   const { name } = request.body;
+  console.log(request);
 
   if (!name || name === '') {
     return response.status(400).json({ message: 'O campo "name" é obrigatório' });
@@ -49,7 +50,7 @@ const verifyName = (request, response, next) => {
     return response.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
   }
 
-  next();
+  return next();
 };
 
 const verifyAge = (request, response, next) => {
@@ -62,7 +63,49 @@ const verifyAge = (request, response, next) => {
     return response.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
   }
 
-  next();
+  return next();
 };
 
-module.exports = { verifyEmail, verifyPassword, verifyToken, verifyName, verifyAge };
+const verifyTalk = (request, response, next) => {
+  const { talk } = request.body;
+
+  if ((!talk || !talk.watchedAt) || (!talk.rate && talk.rate !== 0)) {
+    return response.status(400)
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+
+  return next();
+};
+
+const verifyWatchedAt = (request, response, next) => {
+  const { talk: { watchedAt } } = request.body;
+  const regexWatchedAt = /^(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\d\d$/;
+  const testWatchedAt = regexWatchedAt.test(watchedAt);
+
+  if (!testWatchedAt) {
+    return response.status(400)
+      .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+
+  return next();
+};
+
+const verifyRate = (request, response, next) => {
+  const { talk: { rate } } = request.body;
+
+  if (rate < 1 || rate > 5) {
+    return response.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+
+  return next();
+};
+
+module.exports = { verifyEmail,
+  verifyPassword,
+  verifyToken,
+  verifyName,
+  verifyAge,
+  verifyTalk,
+  verifyWatchedAt,
+  verifyRate,
+};
