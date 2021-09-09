@@ -1,3 +1,4 @@
+const fs = require('fs').promises;
 const express = require('express');
 const bodyParser = require('body-parser');
 const { conn, registerTalker } = require('./model');
@@ -70,4 +71,12 @@ app.post('/talker', tokenValidation, async (req, res) => {
 
   const createNewTalker = await registerTalker(req.body);
   res.status(HTTP_OK_CREATE).json(createNewTalker);
+});
+
+app.delete('/talker/:id', tokenValidation, async (req, res) => {
+  const { id } = req.params;
+  const data = await conn();
+  const doc = data.filter((talker) => talker.id !== +id);
+  await fs.writeFile('./talker.json', JSON.stringify(doc));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
