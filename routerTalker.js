@@ -72,6 +72,8 @@ async (request, response) => {
 
   const findTalker = listTalkers.findIndex((elem) => elem.id === parseInt(id, 10));
   listTalkers[findTalker] = { ...listTalkers[findTalker], ...request.body };
+  await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
+
   return response.status(HTTP_OK_STATUS).json(listTalkers[findTalker]);
 });
 
