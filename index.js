@@ -4,13 +4,13 @@ const fs = require('fs').promises;
 const emailValidation = require('./Middlewares/emailValidation');
 const passwordlValidation = require('./Middlewares/passwordValidation');
 const generateToken = require('./Middlewares/generateToken');
+const createTalkers = require('./Middlewares/createTalkers');
+const talkersValidation = require('./Middlewares/talkersValidation');
 
 const app = express();
 app.use(bodyParser.json());
-
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
-
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
@@ -39,6 +39,25 @@ app.get('/talker/:id', async (request, response) => {
 // Requisito 3
 
 app.post('/login', emailValidation, passwordlValidation, generateToken);
+
+// Requisito
+
+app.post('./talker', talkersValidation.validateName,
+talkersValidation.validateAge, talkersValidation.validateTalkDate,
+talkersValidation.validateTalkRate, talkersValidation.validateTalk, async (req, res) => {
+  const { name, age, talk } = req.body;
+  const talkers = await fs.readFile('./talker.json', 'utf-8');
+  const newTalker = {
+    id: talkers.length + 1,
+    name,
+    age,
+    talk,
+  };
+  talkers.push(newTalker);
+  await fs.writeFile('talker.json', JSON.stringify(talkers));
+  return res.status(201).json(newTalker);
+}
+)
 
 app.listen(PORT, () => {
   console.log('Online');
