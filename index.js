@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
-const { readContentFile, writeContentFile } = require('./readWriteFile');
+const { readContentFile, writeContentFile, rewriteContentFile } = require('./readWriteFile');
 const {
   validateName,
   validateAge,
@@ -94,6 +94,15 @@ validateTalk, validateRate, validateWatchedAt, async (req, res) => {
   
   res.status(201).json(newTalker);
 }); 
+
+app.put('/talker/:id', validateToken, validateName, validateAge,
+validateTalk, validateRate, validateWatchedAt, async (req, res) => {
+const { id } = req.params;
+const { name, age, talk } = req.body;
+  const updatedTalker = { name, age, talk, id: parseInt(id, 10) };
+  rewriteContentFile(updatedTalker, id);
+  res.status(200).json(updatedTalker);
+});
 
 app.listen(PORT, () => {
   console.log('Online');

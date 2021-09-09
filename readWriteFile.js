@@ -14,7 +14,15 @@ const writeContentFile = async (newTalker) => {
     await fs.writeFile(TALKER, JSON.stringify(talkerList));
 };
 
+const rewriteContentFile = async (updatedTalker, id) => {
+  const talkerList = await readContentFile();
+  const filteredTalkerList = talkerList.filter((t) => t.id !== parseInt(id, 10));
+  filteredTalkerList.push(updatedTalker);
+  await fs.writeFile(TALKER, JSON.stringify(filteredTalkerList));
+};
+
 module.exports = {
   readContentFile,
   writeContentFile,
+  rewriteContentFile,
 };
