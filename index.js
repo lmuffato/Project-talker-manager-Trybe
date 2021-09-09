@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
-const readFileAsync = require('./functions/index.js');
+const readFileAsync = require('./functions');
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
