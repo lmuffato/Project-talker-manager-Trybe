@@ -33,6 +33,19 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { name } = req.query;
+  const arrayOfTalkers = await fileReader();
+  const arrayFiltered = arrayOfTalkers.filter((r) => r.name.includes(name));
+  if (!name || name === undefined) {
+    return res.status(200).json(arrayOfTalkers);
+  }
+  if (arrayFiltered.length === 0) {
+    return res.status(200).json([]);
+  }
+  res.status(200).json(arrayFiltered);
+});
+
 app.get('/talker', async (req, res) => {
   const talkers = await fileReader();
   res.status(200).json(talkers || []);
@@ -107,7 +120,6 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   const arrayOfTalkers = await fileReader();
   const filterTalkers = arrayOfTalkers.filter((talker) => talker.id !== +id);
   await fileWrite(filterTalkers);
-  console.log(filterTalkers);
   res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
