@@ -92,16 +92,23 @@ validDate,
 validateRate,
 async (req, res) => {
   const { id } = req.params;
-  console.log(id);
-  const { name, age, talk } = req.body;
+    const { name, age, talk } = req.body;
     const arrayOfTalkers = await fileReader();
     const filterId = arrayOfTalkers.find((talker) => talker.id === +id);
     const index = arrayOfTalkers.indexOf(filterId);
-    console.log(id);
     const dataNew = { id: +id, name, age, talk };
     arrayOfTalkers[index] = dataNew;
     await fileWrite(arrayOfTalkers);
     res.status(200).json(arrayOfTalkers[index]);
+});
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const arrayOfTalkers = await fileReader();
+  const filterTalkers = arrayOfTalkers.filter((talker) => talker.id !== +id);
+  await fileWrite(filterTalkers);
+  console.log(filterTalkers);
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 app.listen(PORT, () => {
