@@ -4,8 +4,8 @@ const fs = require('fs').promises;
 const emailValidation = require('./Middlewares/emailValidation');
 const passwordlValidation = require('./Middlewares/passwordValidation');
 const generateToken = require('./Middlewares/generateToken');
-const createTalkers = require('./Middlewares/createTalkers');
 const talkersValidation = require('./Middlewares/talkersValidation');
+const validateToken = require('./Middlewares/tokenValidate');
 
 const app = express();
 app.use(bodyParser.json());
@@ -40,21 +40,23 @@ app.get('/talker/:id', async (request, response) => {
 
 app.post('/login', emailValidation, passwordlValidation, generateToken);
 
-// Requisito
+// Requisito 4
 
-app.post('./talker', talkersValidation.validateName,
-talkersValidation.validateAge, talkersValidation.validateTalkDate,
-talkersValidation.validateTalkRate, talkersValidation.validateTalk, async (req, res) => {
+app.post('/talker',validateToken, talkersValidation.validateName,
+talkersValidation.validateAge,talkersValidation.validateTalk, talkersValidation.validateTalkDate,
+talkersValidation.validateTalkRate, async (req, res) => {
   const { name, age, talk } = req.body;
   const talkers = await fs.readFile('./talker.json', 'utf-8');
+  console.log(talkers)
+  const arrTalkers = JSON.parse(talkers);
   const newTalker = {
-    id: talkers.length + 1,
+    id: arrTalkers.length + 1,
     name,
     age,
     talk,
   };
-  talkers.push(newTalker);
-  await fs.writeFile('talker.json', JSON.stringify(talkers));
+  arrTalkers.push(newTalker);
+  await fs.writeFile('./talker.json', JSON.stringify(arrTalkers));
   return res.status(201).json(newTalker);
 }
 )
