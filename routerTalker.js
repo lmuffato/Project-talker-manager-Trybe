@@ -63,6 +63,9 @@ router.put('/:id',
 verifyToken,
 verifyName,
 verifyAge,
+verifyTalk,
+verifyWatchedAt,
+verifyRate,
 async (request, response) => {
   const { id } = request.params;
   const listTalkers = await talkers();
