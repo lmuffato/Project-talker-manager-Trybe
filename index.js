@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { conn } = require('./model/conn');
+const { conn, registerTalker } = require('./model');
+const { createTalkerService, tokenValidation } = require('./services');
 
 const app = express();
 app.use(bodyParser.json());
@@ -8,6 +9,7 @@ app.use(bodyParser.json());
 const HTTP_OK_STATUS = 200;
 const HTTP_NOTFOUND_STATUS = 404;
 const HTTP_NOTFOUND = 400;
+const HTTP_OK_CREATE = 201;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -53,4 +55,19 @@ app.post('/login', (req, res) => {
     res.status(HTTP_NOTFOUND).json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
   }
   res.status(HTTP_OK_STATUS).json({ token: '7mqaVRXJSp886CGr' });
+});
+
+app.post('/talker', tokenValidation, async (req, res) => {
+  const { talk } = req.body;
+  if (!talk) {
+    res.status(HTTP_NOTFOUND)
+      .json({
+        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+    const validTalker = createTalkerService(req.body);
+  const { message } = validTalker;
+  if (message) return res.status(HTTP_NOTFOUND).json(validTalker);
+
+  const createNewTalker = await registerTalker(req.body);
+  res.status(HTTP_OK_CREATE).json(createNewTalker);
 });

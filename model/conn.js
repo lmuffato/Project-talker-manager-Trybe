@@ -6,4 +6,4 @@ const conn = async () => {
   return file;
 };
 
-module.exports = { conn };
+module.exports = conn;
