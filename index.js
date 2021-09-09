@@ -109,10 +109,21 @@ const verificarAge = (req, res, next) => {
   next();
 };
 
+const verificarWatchedAt= (req, res, next) => {
+  const { watchedAt } = req.body.talk;
+  const ModelData = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/;
+  const verificarDAta = ModelData.test(watchedAt); 
+  if (verificarDAta) {
+    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+  next();
+};
+
 app.post('/talker',
 verificarToken,
 verificarName,
 verificarAge,
+verificarWatchedAt,
 (req, res) => {
 
 });
