@@ -24,16 +24,16 @@ const HTTP_ERROR_STATUS = 404;
 
 // requisito 1
 router.get('/', async (_request, response) => {
-  const dataTalker = await talkers();
-  if (dataTalker.length === 0) return response.status(HTTP_OK_STATUS).json([]);
-  return response.status(HTTP_OK_STATUS).json(dataTalker);
+  const listTalkers = await talkers();
+  if (listTalkers.length === 0) return response.status(HTTP_OK_STATUS).json([]);
+  return response.status(HTTP_OK_STATUS).json(listTalkers);
 });
 
 //  requisito 2
 router.get('/:id', async (request, response) => {
   const { id } = request.params;
-  const dataTalker = await talkers();
-  const findTalker = dataTalker.find((elem) => elem.id === parseInt(id, 10));
+  const listTalkers = await talkers();
+  const findTalker = listTalkers.find((elem) => elem.id === parseInt(id, 10));
   if (!findTalker) {
     return response.status(HTTP_ERROR_STATUS)
       .json({ message: 'Pessoa palestrante não encontrada' });
@@ -56,6 +56,18 @@ async (request, response) => {
   listTalkers.push(newTalker);
   await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
   return response.status(201).json(newTalker);
+});
+
+// requisito 5
+router.put('/:id',
+verifyToken,
+async (request, response) => {
+  const { id } = request.params;
+  const listTalkers = await talkers();
+
+  const findTalker = listTalkers.findIndex((elem) => elem.id === parseInt(id, 10));
+  listTalkers[findTalker] = { ...listTalkers[findTalker], ...request.body };
+  return response.status(HTTP_OK_STATUS).json(listTalkers[findTalker]);
 });
 
 module.exports = router;
