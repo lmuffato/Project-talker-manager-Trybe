@@ -11,9 +11,9 @@ const filterById = (array, idRequest) => {
   } catch (error) { return ({ message: error }); }
 };
 
-const teste = filterById(myArray, 5);
+const teste = filterById(myArray, 2);
 
-console.log(!teste);
+console.log(teste);
 
 // const recipe = allRecipes.find((idRequest) => idRequest.id === parseInt(id));
 //     if (!recipe) return res.status(404).json({ message: 'Recipe not found!'});
