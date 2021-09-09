@@ -4,11 +4,11 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
-const FILE_NAME = './talker.json';
 const readFileAsync = require('./readFile');
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
+const FILE_NAME = './talker.json';
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
