@@ -61,6 +61,7 @@ async (request, response) => {
 // requisito 5
 router.put('/:id',
 verifyToken,
+verifyName,
 async (request, response) => {
   const { id } = request.params;
   const listTalkers = await talkers();

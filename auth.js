@@ -1,4 +1,4 @@
-const HTTP_ERROR_STATUS = 404;
+const HTTP_ERROR_STATUS = 400;
 
 const verifyEmail = (request, response, next) => {
   const { email } = request.body;
