@@ -31,7 +31,7 @@ const addTalker = async (req, res) => {
   parsedTalkers.push(newTalker);
   await fs.writeFile('talker.json', JSON.stringify(parsedTalkers));
   if (!newTalker) return res.status(400).json({ message: 'Palestrante não cadastrado' });
-  res.status(200).json(newTalker);
+  res.status(201).json(newTalker);
 };
 
 module.exports = { getAllTalkers, getTalkerById, addTalker };
