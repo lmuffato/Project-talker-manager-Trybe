@@ -15,26 +15,6 @@ const BAD_REQUEST = 400;
 const UNAUTHORIZED = 401;
 const NOT_FOUND = 404;
 
-router.get('/', async (_req, res) => {
-  const talkers = await fs.readFile(fileTalkerJson);
-  if (!talkers.length) return res.status(OK).json([]);
-  
-  res.status(OK).json(JSON.parse(talkers));
-});
-
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const talkers = await fs.readFile(fileTalkerJson);
-  const [talker] = JSON.parse(talkers).filter(({ id: talkerID }) => talkerID === Number(id));
-  if (!talker) {
-    return res.status(NOT_FOUND).json({
-      message: 'Pessoa palestrante não encontrada',
-    }); 
-  }
-  
-  res.status(OK).json(talker);
-});
-
 const gte = (firstValue, secondValue) => firstValue >= secondValue;
 const lt = (firstValue, secondValue) => firstValue.length < secondValue;
 
@@ -131,6 +111,41 @@ const isValidTalkDotWatchedAt = (req, res, next) => { // https://stackoverflow.c
   }
   next();
   };
+
+router.get('/', async (_req, res) => {
+  const talkers = await fs.readFile(fileTalkerJson);
+  if (!talkers.length) return res.status(OK).json([]);
+  
+  res.status(OK).json(JSON.parse(talkers));
+});
+
+router.get('/search',
+  isValidToken,
+  async (req, res) => {
+    const { query: { q: hintOfTheSpeakerSName } } = req;
+    const talkers = JSON.parse(await fs.readFile(fileTalkerJson));
+    if (!hintOfTheSpeakerSName) {
+      return res.status(OK).json(talkers);
+    }
+    const selectedTalkers = talkers.filter(({ name }) => name.includes(hintOfTheSpeakerSName));
+    if (!selectedTalkers) {
+      return res.status(OK).json([]);
+    }
+    return res.status(OK).json(selectedTalkers);
+});
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  const talkers = await fs.readFile(fileTalkerJson);
+  const [talker] = JSON.parse(talkers).filter(({ id: talkerID }) => talkerID === Number(id));
+  if (!talker) {
+    return res.status(NOT_FOUND).json({
+      message: 'Pessoa palestrante não encontrada',
+    }); 
+  }
+  
+  res.status(OK).json(talker);
+});
 
 router.post('/',
   isValidToken,
