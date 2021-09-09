@@ -61,9 +61,8 @@ talkersValidation.validateTalkRate, async (req, res) => {
   };
 
   arrTalkers.push(newTalker);
- return await fs.writeFile('./talker.json',
- JSON.stringify(arrTalkers)),
- res.status(201).json(newTalker);
+  await fs.writeFile('./talker.json', JSON.stringify(arrTalkers));
+ return res.status(201).json(newTalker);
 });
 
 app.listen(PORT, () => {
