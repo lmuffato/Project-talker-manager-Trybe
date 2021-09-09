@@ -1,8 +1,10 @@
 const validateToken = (req, res, next) => {
-  const { authToken } = req.headers;
+  const { authToken: authorization } = req.headers;
 
-  if (!authToken) return res.status(401).json({ message: 'Token não encontrado' });
-  if (authToken !== '7mqaVRXJSp886CGr') return res.status(401).json({ message: 'Token inválido' });
+  if (!authorization) return res.status(401).json({ message: 'Token não encontrado' });
+  if (authorization !== '7mqaVRXJSp886CGr') {
+    return res.status(401).json({ message: 'Token inválido' });
+  }
 
   next();
 };

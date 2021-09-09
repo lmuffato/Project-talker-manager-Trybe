@@ -30,7 +30,7 @@ router.get('/', rescue(async (_req, res) => {
 }));
 
 router.get('/search', validateToken, rescue(async (req, res) => {
-  const { q: query } = req.query;
+  const { query } = req.query;
 
   const talkers = await getFile();
   if (!query || query === '') return res.status(200).json(talkers);
@@ -60,8 +60,6 @@ router.post(
   validateRate,
   rescue(async (req, res) => {
     const { name, age, talk } = req.body;
-    // const { watchedAt, rate } = talk;
-
     const talkers = await getFile();
     const newTalker = { id: talkers.length + 1, name, age, talk };
     const newTalkers = [...talkers, newTalker];
