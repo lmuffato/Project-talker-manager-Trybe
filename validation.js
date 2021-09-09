@@ -33,14 +33,14 @@ const validatePassword = (req, res, next) => {
 };
 
 const validateToken = (req, res, next) => {
-  const { token } = req.headers;
+  const { authorization } = req.headers;
   
-  if (!token) {
-    return res.status(401).json({ message: 'Token não encontrado' });
+  if (!authorization) {
+    return res.status().json({ message: 'Token não encontrado' });
   }
 
-  if (token.length !== 16) {
-    res.status(400).json({ message: 'Token inválido' });
+  if (authorization.length !== 16) {
+    return res.status(400).json({ message: 'Token inválido' });
   }
 
   next();
@@ -50,11 +50,11 @@ const validateName = (req, res, next) => {
   const { name } = req.body;
 
   if (!name || name === '') {
-    res.status(400).json({ message: 'O campo name é obrigatório' });
+    return res.status(400).json({ message: 'O campo "name" é obrigatório' });
   }
 
   if (name.length < 3) {
-    res.status(400).json({ message: 'O name deve ter pelo menos 3 caracteres' });
+    return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
   }
   next();
 };
@@ -63,21 +63,27 @@ const validateAge = (req, res, next) => {
   const { age } = req.body;
 
   if (!age || age === '') {
-    res.status(400).json({ message: 'O campo age é obrigatório' });
+    return res.status(400).json({ message: 'O campo "age" é obrigatório' });
   }
 
   if (age < 18) {
-    res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
+    return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
   }
   next();
 };
 
-const validateData = (req, res, next) => {
+const validateDate = (req, res, next) => {
   const { talk } = req.body;
-  const { date } = talk;
+  const { watchedAt } = talk;
 
-  if (date) {
-    res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
+  function DateIsValid(date) {
+    return /^\d{2}\/\d{2}\/\d{4}$/.test(date);
+  }
+  
+  const valid = DateIsValid(watchedAt); // retorna true or false
+
+  if (!valid) {
+    return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
   }
 
   next();
@@ -95,10 +101,13 @@ const validateRate = (req, res, next) => {
 
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
-  const { rate, date } = talk;
-
-  if (!talk && (rate === 0 || date === '')) {
-    res.status(400).json({ message: 'O campo age é obrigatório' });
+  // uso o talk.rate e talk.watchedAt pois estou validadno o talk e se ele não existir nao c
+  
+  if (!talk || talk.rate === 0 || talk.watchedAt === '') {
+    return res.status(400)
+      .json(
+        { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
+      );   
   }
   next();
 };
@@ -109,7 +118,7 @@ module.exports = {
   validateToken, 
   validateName, 
   validateAge, 
-  validateData, 
+  validateDate, 
   validateRate, 
   validateTalk,
 };
