@@ -7,6 +7,9 @@ const { verifyToken, verifyName, verifyAge,
 // Agradecimento à Marcelo Maurício, turma 10 -tribo A pela ajuda no entendimento
 // da sincronicidade da requisição de dados e lógica de autenticação.
 
+// Agradecimento à PedroGordo - turma 09, Nonato - turma 07, Johnatas - instrução Trybe (turma 11)
+// pelo suporte nos pontos talk, e resposta do resquisito 4
+
 const talker = './talker.json';
 
 const talkers = async () => {
@@ -46,16 +49,13 @@ verifyAge,
 verifyTalk,
 verifyWatchedAt,
 verifyRate,
-(request, response) => {
-  const { name, age, talk: { watchedAt, rate } } = request.body;
-  const newTalker = { name, age, talk: { watchedAt, rate } };
-  /* const listTalkers = await talkers();
+async (request, response) => {
+  const listTalkers = await talkers();
+  const newTalker = { id: listTalkers.length + 1, ...request.body };
   
   listTalkers.push(newTalker);
-  await fs.writeFile('./talker.json', JSON.stringify(listTalkers)); */
-  return response.status(201).json({
-    newTalker,
-  });
+  await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
+  return response.status(201).json(newTalker);
 });
 
 module.exports = router;
