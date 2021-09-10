@@ -33,7 +33,7 @@ router.put(
   rescue(async (req, res) => {
     const { id } = req.params;
     const { name, age, talk } = req.body;
-    
+
     const tlkData = await talkerMiddle.lerArquivo();
     const findTalkrs = tlkData.findIndex((tlk) => tlk.id === parseInt(id, 10));
     tlkData[findTalkrs] = {
@@ -45,6 +45,21 @@ router.put(
     };
     await talkerMiddle.escreverArquivo(tlkData);
     res.status(200).json({ id: parseInt(id, 10), name, age, talk });
+  }),
+);
+
+router.delete(
+  '/talker/:id',
+  validation.validationToken,
+  rescue(async (req, res) => {
+    const { id } = req.params;
+
+    const tlkData = await talkerMiddle.lerArquivo();
+    const findTalkrs = tlkData.findIndex((tlk) => tlk.id === parseInt(id, 10));
+    tlkData.splice(findTalkrs, 1);
+    await talkerMiddle.escreverArquivo(tlkData);
+
+    res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
   }),
 );
 
