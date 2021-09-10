@@ -9,15 +9,15 @@ const { isTokenValid, tokenExists } = require('../middlewares/tokenValidation');
 
 const router = express.Router();
 
-const talkers = () => readFile('talker.json');
+const getCurrentTalkers = () => readFile('talker.json');
 
 router.route('/')
   .get((_req, res) => {
-    const hasTalkers = talkers() || talkers.length > 0;
+    const hasTalkers = getCurrentTalkers() || getCurrentTalkers.length > 0;
 
       if (!hasTalkers) return res.status(status.ok).json([]);
 
-      res.status(status.ok).json(talkers());
+      res.status(status.ok).json(getCurrentTalkers());
     })
    .post(
       isTokenValid, 
@@ -25,7 +25,7 @@ router.route('/')
       talkerValidation, 
       (req, res) => {
         const { name, age, talk } = req.body;
-        const newTalkers = talkers();
+        const newTalkers = getCurrentTalkers();
 
         const id = newTalkers.length + 1;
         const talker = { id, name, age, talk };
@@ -41,7 +41,7 @@ router.route('/')
 router.route('/:id')
   .get((req, res) => {
   const { id } = req.params;
-  const foundTalker = talkers().find((t) => t.id === parseInt(id, 10));
+  const foundTalker = getCurrentTalkers().find((t) => t.id === parseInt(id, 10));
 
   if (!foundTalker) {
     return res
@@ -58,7 +58,7 @@ router.route('/:id')
     (req, res) => {
       const { name, age, talk } = req.body;
       const { id } = req.params;
-      const newTalkers = talkers();
+      const newTalkers = getCurrentTalkers();
       const foundedTalkerIndex = newTalkers.findIndex((t) => t.id === parseInt(id, 10));
       
       if (!foundedTalkerIndex) {
@@ -74,6 +74,21 @@ router.route('/:id')
 
       writeFile('talker.json', newTalkers);
       res.status(status.ok).json(newTalkers[foundedTalkerIndex]);
+    },
+  )
+  .delete(
+    isTokenValid,
+    tokenExists,
+    (req, res) => {
+      const { id } = req.params;
+      const newTalkers = getCurrentTalkers();
+
+      const talkerIndex = newTalkers.findIndex((t) => t.id === parseInt(id, 10));
+      
+      newTalkers.splice(talkerIndex, 1);
+      writeFile('talker.json', newTalkers);
+
+      res.status(status.ok).json({ message: 'Pessoa palestrante deletada com sucesso' });
     },
   );
 
