@@ -22,7 +22,6 @@ const validatePassword = (req, res, next) => {
   const passwordRegex = new RegExp(/[\w\D]{6}/g);
 
   if (!password || password === '') {
-    console.log(password);
     return res.status(BAD_REQUEST)
       .json({ message: 'O campo "password" é obrigatório' });
   }

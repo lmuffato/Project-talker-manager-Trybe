@@ -17,6 +17,10 @@ const {
   validaNome,
 } = require('./middlewares-auth/talker');
 
+const managerTalkData = require('./dataManager');
+
+const DOC_DATA = './talker.json';
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -30,16 +34,36 @@ app.get('/', (_request, response) => {
 });
 // ___________________________requisito1_________________________________
 app.get('/talker', (_req, res) => {
-  const talkerData = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
+  const talkerData = JSON.parse(fs.readFileSync(DOC_DATA, 'utf8'));
 
   if (talkerData.length === 0) return res.status(HTTP_OK_STATUS).json([]);
   res.status(HTTP_OK_STATUS).json(talkerData);
 });
+
+// __________________________requisito07_________________________________
+app.get('/talker/search', validaToken, (req, res) => {
+  const { q } = req.query;
+
+  const results = managerTalkData();
+
+  const result = results.filter((person) => person.name.includes(q));
+
+  if (q === '' || !q) {
+    return res.status(HTTP_OK_STATUS).json(results);
+  }
+
+  if (result === []) {
+    return res.status(HTTP_OK_STATUS).json([]);
+  }
+
+  return res.status(HTTP_OK_STATUS).json(result);
+});
+
 // ___________________________requisito2_________________________________
 app.get('/talker/:id', (req, res) => {
   const { id } = req.params;
 
-  const talkerData = JSON.parse(fs.readFileSync('./talker.json', 'utf8'));
+  const talkerData = managerTalkData();
   const dataPerson = talkerData.find((person) => person.id === parseInt(id, 10));
 
   if (dataPerson === undefined) {
@@ -69,16 +93,54 @@ app.post(
   (req, res) => {
   const { name, age, talk } = req.body;
 
-  const data = fs.readFileSync('./talker.json', 'utf8');
-  const result = JSON.parse(data);
+  const result = managerTalkData();
 
   const newPerson = { id: result.length + 1, name, age, talk };
 
-  fs.writeFileSync('./talker.json', JSON.stringify([...result, newPerson]));
+  fs.writeFileSync(DOC_DATA, JSON.stringify([...result, newPerson]));
 
   return res.status(201).json(newPerson);
 },
 );
+
+// __________________________requisito05______________________________
+app.put(
+  '/talker/:id',
+  validaToken,
+  validaNome,
+  validaIdade,
+  validaTalk,
+  validaWatchedAt,
+  validaRate,
+  (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+
+    const results = managerTalkData();
+
+    const personId = results.findIndex((r) => r.id === parseInt(id, 10));
+    results[personId] = { ...results[personId], name, age, talk };
+
+    fs.writeFileSync(DOC_DATA, JSON.stringify(results));
+
+    return res.status(HTTP_OK_STATUS).json(results[personId]);
+  },
+);
+
+// __________________________requisito06_______________________________
+app.delete('/talker/:id', validaToken, (req, res) => {
+  const { id } = req.params;
+
+  const results = managerTalkData();
+
+  const personId = results.findIndex((r) => r.id === parseInt(id, 10));
+
+  results.splice(personId, 1);
+
+  fs.writeFileSync(DOC_DATA, JSON.stringify(results));
+
+  res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
 
 app.listen(PORT, () => {
   console.log('Online');
