@@ -13,7 +13,9 @@ const { rateValidation, watValidation } = require('./talkValidation');
 
 const validations = [nameValidation, ageValidation, tokenValidation, rateValidation, watValidation];
 
-router.get('/', getTalkers, getTalkersId);
+router.get('/', getTalkers);
+router.get('/:id', getTalkersId);
+
 router.post('/', validations, async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
   const talkers = getTalkers();
@@ -31,4 +33,7 @@ router.post('/', validations, async (req, res) => {
   return res.status(201).json(newTalker);
 });
 
-module.exports = router;
+module.exports = {
+  getTalkers,
+  getTalkersId,
+};
