@@ -8,6 +8,7 @@ validateAge,
 validateTalk,
 validateDateRate,
 } = require('./postTalker');
+const { putTalker } = require('./putTalker');
 
 module.exports = {
     getTalkers,
@@ -22,4 +23,5 @@ module.exports = {
     validateAge,
     validateTalk,
     validateDateRate,
+    putTalker,
 };

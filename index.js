@@ -13,6 +13,7 @@ const {
   validateAge,
   validateTalk,
   validateDateRate,
+  putTalker,
 } = require('./middlewares');
 
 const app = express();
@@ -27,10 +28,20 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', getTalkers);
+
 app.get('/talker/:id', talkerId);
+
 app.post('/login', generateToken, validateEmail, validatePassword, login);
 app.post('/talker',
 tokenVerify, validateName, validateAge, validateTalk, validateDateRate, postTalker);
+
+app.put('/talker/:id',
+tokenVerify,
+validateName,
+validateAge,
+validateTalk,
+validateDateRate,
+putTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
