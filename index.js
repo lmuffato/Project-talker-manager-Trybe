@@ -59,8 +59,8 @@ validateToken,
 talkersValidation.validateName,
 talkersValidation.validateAge,
 talkersValidation.validateTalk,
-talkersValidation.validateTalkRate,
-talkersValidation.validateTalkDate, talkerUpdate);
+talkersValidation.validateTalkDate,
+talkersValidation.validateTalkRate, talkerUpdate);
 
 app.listen(PORT, () => {
   console.log('Online');
