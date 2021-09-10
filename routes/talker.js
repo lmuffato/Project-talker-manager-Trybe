@@ -1,9 +1,10 @@
-// const fs = require('fs').promises;
+const { Router } = require('express');
+const getTalker = require('../middleware/getTalker');
+const getTlakerById = require('../middleware/getTalkerById');
 
-// app.get('/talker', async (_req, res) => {
-//     const talker = await fs.readFile('./talker.json', 'utf8');
-//     const response = await JSON.parse(talker);
-//     res.status(200).json(response);
-// });
+const router = Router();
 
-// export module talker;
+router.get('/', getTalker);
+router.get('/:id', getTlakerById);
+
+module.exports = router;
