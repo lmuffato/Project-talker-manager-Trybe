@@ -77,4 +77,19 @@ async (request, response) => {
   return response.status(HTTP_OK_STATUS).json(listTalkers[findTalker]);
 });
 
+// requisito 6
+router.delete('/:id',
+verifyToken,
+async (request, response) => {
+  const { id } = request.params;
+  const listTalkers = await talkers();
+
+  const findTalker = listTalkers.findIndex((elem) => elem.id === parseInt(id, 10));
+  listTalkers.splice(findTalker, 1);
+  await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
+
+  return response.status(HTTP_OK_STATUS)
+  .json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
 module.exports = router;
