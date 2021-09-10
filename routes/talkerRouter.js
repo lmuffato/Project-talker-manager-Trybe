@@ -17,6 +17,19 @@ router.get('/', rescue(async (req, res) => {
     res.status(200).json(talkers);
 }));
 
+router.get('/search', verifiedToken, rescue(async (req, res) => {
+    const { q } = req.params;
+    const talkers = await getAllTalkers();
+
+    if (!q) return res.status(200).json(talkers);
+
+    const talker = talkers.filter((talk) => talk.name.include(q));
+
+    res.status(200).json(talker);
+
+    console.log(talker);
+}));
+
 router.get('/:id', rescue(async (req, res) => {
     const talkers = await getAllTalkers();
 
