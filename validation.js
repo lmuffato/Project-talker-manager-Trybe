@@ -98,7 +98,7 @@ const validateDate = (req, res, next) => {
 const validateRate = (req, res, next) => {
   const { talk } = req.body;
   const { rate } = talk;
-  
+
   if (rate < 1 || rate > 5) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
@@ -116,7 +116,7 @@ const validateTalk = (req, res, next) => {
   const { talk } = req.body;
   // uso o talk.rate e talk.watchedAt pois estou validadno o talk e se ele não existir nao c
   
-  if (!talk || talk.rate === 0 || talk.watchedAt === '') {
+  if (!talk || talk.rate === undefined || talk.watchedAt === '') {
     return res.status(400)
       .json(
         { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },

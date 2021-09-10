@@ -874,7 +874,7 @@ describe('5 - Crie o endpoint PUT /talker/:id', () => {
               rate: 4,
             },
           })
-          .expect('status', )
+          .expect('status', 401)
           .then((responseUpdate) => {
             const { json } = responseUpdate;
             expect(json.message).toBe('Token não encontrado');
