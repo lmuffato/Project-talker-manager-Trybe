@@ -40,20 +40,20 @@ app.get('/talker', async (_req, res) => {
 });
 
 // requisito 7
-app.get('/talker/search', validateToken, async (req, res) => {
-  const { q } = req.query;
+// app.get('/talker/search', validateToken, async (req, res) => {
+//   const { q } = req.query;
   
-  const data = await fs.readFile(FILE, 'utf8');
-  const talkerdata = JSON.parse(data);
+//   const data = await fs.readFile(FILE, 'utf8');
+//   const talkerdata = JSON.parse(data);
 
-  const filterTalkers = talkerdata.filter((item) => item.name.includes(q));
+//   const filterTalkers = talkerdata.filter((item) => item.name.includes(q));
 
-  if (!q || q === '') return res.status().json(talkerdata);
+//   if (!q || q === '') return res.status().json(talkerdata);
 
-  if (!filterTalkers) return res.status().json([]);
+//   if (!filterTalkers) return res.status().json([]);
 
-  res.status(HTTP_OK_STATUS).json(filterTalkers);
-});
+//   res.status(HTTP_OK_STATUS).json(filterTalkers);
+// });
 
 // requisito 2
 app.get('/talker/:id', async (req, res) => {
@@ -72,36 +72,38 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 // requisito 5
-app.put('/talker/:id', validateToken, validateName, validateAge, 
-validateTalk, validateDate, validateRate, async (req, res) => {
-  const { id } = req.params;
-  const { name, age, talk } = req.body;
+// app.put('/talker/:id', validateToken, validateName, validateAge, 
+// validateTalk, validateDate, validateRate, async (req, res) => {
+//   const { id } = req.params;
+//   const { name, age, talk } = req.body;
   
-  const data = await fs.readFile(FILE, 'utf8');
-  const talkerFile = JSON.parse(data);
+//   const data = await fs.readFile(FILE, 'utf8');
+//   const talkerFile = JSON.parse(data);
 
-  const talkerFilter = talkerFile.filter((item) => item.id !== Number(id)); // filtro o arquivos com com todos os objetos menos com o do id do params
+//   // const talkerFilter = talkerFile.filter((item) => item.id !== Number(id)); // filtro o arquivos com com todos os objetos menos com o do id do params
+//   // talkerFilter.push({ id, name, age, talk }); // adiciono um novo objeto com o id que foi indicado no params
 
-  talkerFilter.push({ id, name, age, talk }); // adiciono um novo objeto com o id que foi indicado no params
+//   const index = talkerFile.findIndex((item) => item.id === Number(id));
+//   talkerFile[index] = { id: Number(id), name, age, talk };
 
-  await fs.writeFile(FILE, talkerFilter);
+//   await fs.writeFile(FILE, JSON.stringify(talkerFile));
 
-  return res.status(HTTP_OK_STATUS).json({ id, name, age, talk });
-});
+//   return res.status(HTTP_OK_STATUS).json({ id, name, age, talk });
+// });
 
 // requisito 6
-app.delete('/talker/:id', validateToken, async (req, res) => {
-  const { id } = req.params;
+// app.delete('/talker/:id', validateToken, async (req, res) => {
+//   const { id } = req.params;
   
-  const data = await fs.readFile(FILE, 'utf8');
-  const talkerFile = JSON.parse(data);
+//   const data = await fs.readFile(FILE, 'utf8');
+//   const talkerFile = JSON.parse(data);
 
-  const talkerFilter = talkerFile.filter((item) => item.id !== Number(id)); // filtro o arquivos com com todos os objetos menos com o do id do params
+//   const talkerFilter = talkerFile.filter((item) => item.id !== Number(id)); // filtro o arquivos com com todos os objetos menos com o do id do params
 
-  await fs.writeFile(FILE, JSON.stringify(talkerFilter));
+//   await fs.writeFile(FILE, JSON.stringify(talkerFilter));
 
-  return res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
-});
+//   return res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
+// });
 
 // requisito 3
 app.post('/login', validateEmail, validatePassword, (_req, res) => {
