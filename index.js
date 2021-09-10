@@ -155,6 +155,22 @@ async (req, res) => {
   return res.status(201).json(creatObj);
 });
 
+app.put('/talker/:id', 
+verificarToken,
+verificarName,
+verificarAge,
+verificaTalkFull,
+verificarWatchedAt,
+verificarRate,
+async (req, res) => {
+  const { id } = req.params;
+  const respostaTalker = await talker();
+  const filtroTalker = respostaTalker.findIndex((e) => e.id === +(id));
+  respostaTalker[filtroTalker] = { ...respostaTalker[filtroTalker], ...req.body };
+  await fs.writeFile('./talker.json', JSON.stringify(respostaTalker));
+  return res.status(200).json(respostaTalker[filtroTalker]);
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
