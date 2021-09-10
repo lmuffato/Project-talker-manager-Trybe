@@ -171,6 +171,22 @@ async (req, res) => {
   return res.status(200).json(respostaTalker[filtroTalker]);
 });
 
+app.delete('/talker/:id', 
+verificarToken,
+async (req, res) => {
+  const { id } = req.params;
+  const respostaTalker = await talker();
+  const filtroTalker = respostaTalker.findIndex((e) => e.id === +(id));
+  respostaTalker.splice(filtroTalker, 1);
+  await fs.writeFile('./talker.json', JSON.stringify(respostaTalker));
+  return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
+/* app.get('/talker/search?q=searchTerm',
+(req, res) => {
+
+}); */
+
 app.listen(PORT, () => {
   console.log('Online');
 });
