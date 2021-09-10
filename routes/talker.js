@@ -38,6 +38,17 @@ router.route('/')
     },
    );
 
+router.get('/search',
+  isTokenValid,
+  tokenExists,
+  (req, res) => {
+  const { q } = req.query;
+  const currentTalkers = getCurrentTalkers();
+  const foundedTalkers = currentTalkers.filter(({ name }) => name.includes(q));
+
+  res.status(status.ok).json(foundedTalkers);
+});
+
 router.route('/:id')
   .get((req, res) => {
   const { id } = req.params;
