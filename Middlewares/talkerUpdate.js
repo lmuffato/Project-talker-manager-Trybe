@@ -20,3 +20,5 @@ async function talkerUpdate(req, res) {
 }
 
 module.exports = talkerUpdate;
+
+// Requisito feito com auxílio do colega Adelino Junior
