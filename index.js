@@ -13,6 +13,32 @@ const HTTP_OK_STATUS = 200;
 const PORT = '3000';
 const FILE = './talker.json';
 
+// requisito 4
+app.post('/talker', validateToken, validateName, validateAge, 
+validateTalk, validateDate, validateRate, async (req, res) => {
+  const { name, age, talk } = req.body;
+  
+  const data = await fs.readFile(FILE, 'utf8');
+  const talkerData = JSON.parse(data);
+  
+  const id = talkerData.length + 1; // adiciono o id
+
+  talkerData.push({ id, name, age, talk });
+
+  await fs.writeFile(FILE, JSON.stringify(talkerData));
+  // leio o arquivo talker.json, transformo em json e adiciono um novo objeto, depois pego esse arquivo atualizado e altero no talker.jdon com o writeFile
+
+  return res.status(201).json({ id, name, age, talk });
+});
+
+// requisito 1
+app.get('/talker', async (_req, res) => {
+  const data = await fs.readFile(FILE, 'utf8');
+  const talker = JSON.parse(data); // o readFile não sabe qual tipo de arquivo está lendo então preciso transformar esse dado em json
+
+  return res.status(HTTP_OK_STATUS).json(talker);
+});
+
 // requisito 7
 app.get('/talker/search', validateToken, async (req, res) => {
   const { q } = req.query;
@@ -29,14 +55,6 @@ app.get('/talker/search', validateToken, async (req, res) => {
   res.status(HTTP_OK_STATUS).json(filterTalkers);
 });
 
-// requisito 1
-app.get('/talker', async (_req, res) => {
-  const data = await fs.readFile(FILE, 'utf8');
-  const talker = JSON.parse(data); // o readFile não sabe qual tipo de arquivo está lendo então preciso transformar esse dado em json
-
-  return res.status(HTTP_OK_STATUS).json(talker);
-});
-
 // requisito 2
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
@@ -51,33 +69,6 @@ app.get('/talker/:id', async (req, res) => {
   }
 
   return res.status(HTTP_OK_STATUS).json(talkerId);
-});
-
-// requisito 3
-app.post('/login', validateEmail, validatePassword, (_req, res) => {
-  // const tokenNumber = crypto.randomBytes(16).toString('hex'); 
-  // crio um numero aleatorio de 16 caracteres, tive ajuda do Pedro Ramos durante o plantão
-  // console.log(tokenNumber);
-
-  res.status(HTTP_OK_STATUS).json({ token: '7mqaVRXJSp886CGr' });
-});
-
-// requisito 4
-app.post('/talker', validateToken, validateName, validateAge, 
-validateTalk, validateDate, validateRate, async (req, res) => {
-  const { name, age, talk } = req.body;
-  
-  const data = await fs.readFile(FILE, 'utf8');
-  const talkerData = JSON.parse(data);
-  
-  const id = talkerData.length + 1; // adiciono o id
-
-  talkerData.push({ id, name, age, talk });
-
-  await fs.writeFile(FILE, talkerData);
-  // leio o arquivo talker.json, transformo em json e adiciono um novo objeto, depois pego esse arquivo atualizado e altero no talker.jdon com o writeFile
-
-  return res.status(201).json({ id, name, age, talk });
 });
 
 // requisito 5
@@ -110,6 +101,15 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
   await fs.writeFile(FILE, talkerFilter);
 
   return res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
+
+// requisito 3
+app.post('/login', validateEmail, validatePassword, (_req, res) => {
+  // const tokenNumber = crypto.randomBytes(16).toString('hex'); 
+  // crio um numero aleatorio de 16 caracteres, tive ajuda do Pedro Ramos durante o plantão
+  // console.log(tokenNumber);
+
+  res.status(HTTP_OK_STATUS).json({ token: '7mqaVRXJSp886CGr' });
 });
 
 // não remova esse endpoint, e para o avaliador funcionar

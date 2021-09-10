@@ -36,11 +36,11 @@ const validateToken = (req, res, next) => {
   const { authorization } = req.headers;
   
   if (!authorization) {
-    return res.status().json({ message: 'Token não encontrado' });
+    return res.status(401).json({ message: 'Token não encontrado' });
   }
 
   if (authorization.length !== 16) {
-    return res.status(400).json({ message: 'Token inválido' });
+    return res.status(401).json({ message: 'Token inválido' });
   }
 
   next();
@@ -72,18 +72,24 @@ const validateAge = (req, res, next) => {
   next();
 };
 
+function DateIsValid(date) {
+  return /^\d{2}\/\d{2}\/\d{4}$/.test(date);
+}
+
 const validateDate = (req, res, next) => {
   const { talk } = req.body;
   const { watchedAt } = talk;
-
-  function DateIsValid(date) {
-    return /^\d{2}\/\d{2}\/\d{4}$/.test(date);
-  }
   
   const valid = DateIsValid(watchedAt); // retorna true or false
 
+  if (!watchedAt || watchedAt === undefined) {
+    return res.status(400).json(
+      { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
+    );
+  }
+
   if (!valid) {
-    return res.status(400).json({ message: 'A pessoa palestrante deve ser maior de idade' });
+    return res.status(400).json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
 
   next();
@@ -92,10 +98,17 @@ const validateDate = (req, res, next) => {
 const validateRate = (req, res, next) => {
   const { talk } = req.body;
   const { rate } = talk;
-
+  
   if (rate < 1 || rate > 5) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
+
+  if (!rate || rate === undefined) {
+    return res.status(400).json(
+      { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
+    );
+  }
+
   next();
 };
 
