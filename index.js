@@ -98,7 +98,7 @@ app.delete('/talker/:id', validateToken, async (req, res) => {
 
   const talkerFilter = talkerFile.filter((item) => item.id !== Number(id)); // filtro o arquivos com com todos os objetos menos com o do id do params
 
-  await fs.writeFile(FILE, talkerFilter);
+  await fs.writeFile(FILE, JSON.stringify(talkerFilter));
 
   return res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
