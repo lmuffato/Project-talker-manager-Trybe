@@ -31,7 +31,7 @@ const ageValidation = (age) => {
 };
 
 const rateValidation = (rate) => {
-  if (rate >= 1 && rate <= 5 && rate > 1) return true;
+  if (rate > 0 && rate <= 5) return true;
   return false;
 };
 

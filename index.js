@@ -100,13 +100,15 @@ app.put('/talker/:id', tokenValidation, async (req, res) => {
   await fs.writeFile('./talker.json', JSON.stringify(doc));
   if (!talk) {
     return res.status(HTTP_NOTFOUND)
-      .json({
-        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+    .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
+  }
+  if (talk.rate === 0) {
+    return res.status(HTTP_NOTFOUND)
+    .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   const validTalker = createTalkerService(req.body);
   const { message } = validTalker;
   if (message) return res.status(HTTP_NOTFOUND).json(validTalker);
-
   const createNewTalker = await registerTalker(req.body);
   return res.status(HTTP_OK_STATUS).json(createNewTalker);
 });
