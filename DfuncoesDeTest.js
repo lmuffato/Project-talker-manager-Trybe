@@ -1,3 +1,4 @@
+/*
 const crypto = require('crypto');
 
 const myArray = [
@@ -21,40 +22,6 @@ const token = crypto.randomBytes(16).toString('hex');
 
 console.log(token);
 
-const login = { email: 'email@email.com', password: '123456' };
-const { email, password } = login;
-
- const validateLogin = (email, password) => {
-  if (!email) { return response.status(404)
-  .json({ message: 'O campo "password" é obrigatório' });
-}
-
-
-  const regex = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
-  const validEmail = regex.test(email);
-  return validEmail;
- };
-
-//  console.log(validateLogin(email, password));
-
-console.log(password.length);
-
-
-
-const validadeEmail = () => {
-  if (!email || email === '' || email === null) {
-    return response.status(404)
-    .json({ message: 'O campo "email" é obrigatório' });
-  };
-}
-
-
-if (!password || password === '' || password === null) {
-  return response.status(404)
-  .json({ message: 'message": "O campo \"password\" é obrigatório' });
-};
-
-const validPassword = (password) => {
-  if (password.length >= 6) { return true; }
-  return false;
-};
+// const login = { email: 'email@email.com', password: '123456' };
+// console.log(login);
+*/
