@@ -8,6 +8,22 @@ const auth = require('./controllers/auth');
 const validation = require('./controllers/validation');
 
 router.get('/talker', talkerMiddle.talkerRoute);
+router.get(
+  '/talker/search',
+  validation.validationToken,
+  rescue(async (req, res) => {
+    const { q } = req.query;
+    const tlkData = await talkerMiddle.lerArquivo();
+
+    if (!q || q === '' || q === undefined) return res.status(200).json(tlkData);
+
+    const tklFilter = tlkData.filter((tlk) => tlk.name.includes(q));
+    
+    if (!tklFilter) return res.status(200).json([]);
+
+    res.status(200).json(tklFilter);
+  }),
+  );
 router.get('/talker/:id', talkerMiddle.searchID);
 router.post('/login', auth.validateEmail, auth.validatePWD, auth.validateToken);
 router.post(
@@ -59,7 +75,9 @@ router.delete(
     tlkData.splice(findTalkrs, 1);
     await talkerMiddle.escreverArquivo(tlkData);
 
-    res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+    res
+      .status(200)
+      .json({ message: 'Pessoa palestrante deletada com sucesso' });
   }),
 );
 
