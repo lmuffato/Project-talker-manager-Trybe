@@ -6,6 +6,10 @@ const lerArquivo = async () => {
   return JSON.parse(file);
 };
 
+const escreverArquivo = async (talk) => {
+  await fs.writeFile('./talker.json', JSON.stringify(talk));
+};
+
 const talkerRoute = rescue(async (req, res) => {
   const talkers = await lerArquivo();
   if (!talkers) {
@@ -24,4 +28,4 @@ const searchID = rescue(async (req, res) => {
   return res.status(200).json(findId);
 });
 
-module.exports = { talkerRoute, searchID };
+module.exports = { talkerRoute, searchID, lerArquivo, escreverArquivo };
