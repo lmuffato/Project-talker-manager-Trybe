@@ -3,12 +3,6 @@ const bodyParser = require('body-parser'); // Converter o body da requisição e
 const crypto = require('crypto'); // Pacote node de criptografia, usado para gerar tokens de sessão 
 const { getTalkers } = require('./functions/getTalkers');
 const { filterById } = require('./functions/filterById');
-const {
-  emptyEmail,
-  emptyPassword,
-  validEmail,
-  validPassword, 
-} = require('./functions/validateLogin.js');
 
 const app = express();
 app.use(bodyParser.json());
@@ -49,21 +43,15 @@ app.get('/talker/:id', async (request, response) => {
 */
 
 // POST - Rota para validar um login e gerar um token;
-app.post('/login', async (request, response) => {
-  const { email, password } = request.body;
-  if (emptyEmail(email)) { // Se o campo email estiver vazio retorna true
-    return response.status(404)
-  .json({ message: 'O campo "email" é obrigatório' });
-  }
-  if (emptyPassword(password)) { // Se o campo password estiver vazio retorna true
-    return response.status(404)
-  .json({ message: 'O campo "password" é obrigatório' });
-  }
-  if (validEmail(email) && validPassword(password)) { // A função de validação retorna true se o campo for válido;
-    const token = crypto.randomBytes(8).toString('hex'); // gera um token de 6 caracteres
-    return response.status(200).json({ token: `${token}` });
-  }
+const { emailValidation } = require('./middlewares/emailValidation');
+const { passwordValidation } = require('./middlewares/passwordValidation');
+
+app.post('/login', emailValidation, passwordValidation, async (request, response) => {
+  const token = await crypto.randomBytes(8).toString('hex'); // gera um token de 6 caracteres
+  return response.status(200).json({ token: `${token}` });
 });
+
+// app.post('/login', emailValidation);
 /*
 http POST :3000/login email='email@email.com' password='123456789' // (ok) retorna o token 
 http POST :3000/login email='' password='123456789' // (error) retorna { message: 'O campo "email" é obrigatório' }
@@ -71,6 +59,4 @@ http POST :3000/login email='email@email.com' password='' // (error) retorna { m
 http POST :3000/login email='' password='' // (error) retorna { message: 'O campo "email" é obrigatório' }
 */
 
-app.listen(PORT, () => {
-  console.log('Online');
-});
+app.listen(PORT, () => { console.log('Online'); });
