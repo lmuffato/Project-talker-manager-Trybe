@@ -20,7 +20,6 @@ router.get(
     const tklFilter = tlkData.filter((tlk) => tlk.name.includes(q));
     
     if (!tklFilter) return res.status(200).json([]);
-
     res.status(200).json(tklFilter);
   }),
   );
