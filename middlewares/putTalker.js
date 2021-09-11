@@ -3,6 +3,7 @@ const { writeTalker } = require('../functions/writeTalker');
 
 // Middleware para editar as informações de um talker
 const updateTalker = async (request, response) => {
+  try {
     const { name, age, talk } = await request.body; // Carrega os dados da requisição
     const idToUpdate = request.params.id; // id da URL
     const talkersDatabase = await getTalkers(); // Carrega a base de dados atual
@@ -16,6 +17,7 @@ const updateTalker = async (request, response) => {
     const newDatabase = JSON.stringify(talkersDatabase); // Converte em json
     await writeTalker(newDatabase); // Grava os dados no arquivo
     return response.status(200).json(talkersDatabase[index]).end(); // Envia a confirmação
+  } catch (error) { return response.status(404).json({ message: error.message }); }
 };
 
 module.exports = { updateTalker };
