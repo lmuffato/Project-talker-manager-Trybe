@@ -23,19 +23,6 @@ app.get('/talker', async (_req, res) => {
     return res.status(HTTP_OK_STATUS).json(respostaTalker);
 });
 
-// Req 2 
-app.get('/talker/:id', async (req, res) => {
-  const { id } = req.params;
-  const respostaTalker = await talker(); 
-  const findTalker = respostaTalker.find((talk) => talk.id === +(id));
-  if (!findTalker) {
-    return res.status(404).json({
-      message: 'Pessoa palestrante não encontrada',
-    });
-  }
-  return res.status(HTTP_OK_STATUS).json(findTalker);
-});
-
 // req 3
 function generateToken() {
   return crypto.randomBytes(8).toString('hex');
@@ -137,22 +124,18 @@ const verificaTalkFull = (req, res, next) => {
   next();
 };
 
-app.post('/talker',
+app.get('/talker/search',
 verificarToken,
-verificarName,
-verificarAge,
-verificaTalkFull,
-verificarWatchedAt,
-verificarRate,
 async (req, res) => {
-  const respostaTalker = await talker(); 
-  const creatObj = {
-    id: respostaTalker.length + 1,
-    ...req.body,
-  };
-  respostaTalker.push(creatObj);
-  await fs.writeFile('./talker.json', JSON.stringify(respostaTalker));
-  return res.status(201).json(creatObj);
+  const { q } = req.query;
+  const respostaTalker = await talker();
+  const filtered = respostaTalker.filter((e) => e.name.includes(q));
+  if (!q || q.length === 0) {
+    return res.status(200).json(respostaTalker);
+  } if (filtered.length === 0) {
+    return res.status(200).json([]);
+  }
+   return res.status(200).send(filtered);
 });
 
 app.put('/talker/:id', 
@@ -182,10 +165,35 @@ async (req, res) => {
   return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
-/* app.get('/talker/search?q=searchTerm',
-(req, res) => {
+app.get('/talker/:id', async (req, res) => {
+  const { id } = req.params;
+  const respostaTalker = await talker(); 
+  const findTalker = respostaTalker.find((talk) => talk.id === +(id));
+  if (!findTalker) {
+    return res.status(404).json({
+      message: 'Pessoa palestrante não encontrada',
+    });
+  }
+  return res.status(HTTP_OK_STATUS).json(findTalker);
+});
 
-}); */
+app.post('/talker',
+verificarToken,
+verificarName,
+verificarAge,
+verificaTalkFull,
+verificarWatchedAt,
+verificarRate,
+async (req, res) => {
+  const respostaTalker = await talker(); 
+  const creatObj = {
+    id: respostaTalker.length + 1,
+    ...req.body,
+  };
+  respostaTalker.push(creatObj);
+  await fs.writeFile('./talker.json', JSON.stringify(respostaTalker));
+  return res.status(201).json(creatObj);
+});
 
 app.listen(PORT, () => {
   console.log('Online');
