@@ -32,7 +32,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/search',
+app.get('/talker/search',
 tokenValidation,
 // searchTalker,
   async (request, response) => {
