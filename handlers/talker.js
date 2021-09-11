@@ -61,6 +61,16 @@ const changeTalker = async (req, res) => {
   return res.status(200).json(talkers[talkerIndex]);
 };
 
+const deleteTalker = (req, res) => {
+  const { id } = req.params;
+  const talkers = readTalkers();
+  const talkerIndex = talkers.findIndex((t) => t.id === parseInt(id, 10));
+
+  talkers.splice(talkerIndex, 1);
+  fs.writeFileSync('talker.json', JSON.stringify(talkers));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+};
+
 const nameValidation = (req, res, next) => {
   const { name } = req.body;
 
@@ -146,6 +156,7 @@ module.exports = {
   getTalkers,
   getTalkersId,
   changeTalker,
+  deleteTalker,
   readTalkers,
   writeTalkers,
   addNewTalker,

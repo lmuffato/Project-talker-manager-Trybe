@@ -28,6 +28,12 @@ router.put(
   talkerHandlers.changeTalker,
 );
 
+router.delete(
+  '/talker/:id',
+  authHandlers.validateToken,
+  talkerHandlers.deleteTalker,
+);
+
 router.post(
   '/talker',
   authHandlers.validateToken,
