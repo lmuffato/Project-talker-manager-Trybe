@@ -1,14 +1,14 @@
 const { getTalkers } = require('../functions/getTalkers');
 const { writeTalker } = require('../functions/writeTalker');
 
-// Middleware para inclusão de um novo talker
+// Middleware para editar as informações de um talker
 const updateTalker = async (request, response) => {
     const dataToUpdate = request.body; // Carrega os dados da requisição
     delete dataToUpdate.id; // A paga a propriedade id, caso ela venha na requisição
-    const { id } = request.params; // id da URL
+    const idToUpdate = request.params.id; // id da URL
     const talkersDatabase = await getTalkers(); // Carrega a base de dados atual
 
-    const index = talkersDatabase.findIndex((talker) => talker.id === parseInt(id, 10)); // Descobre o indice do talker baseado no valor da chave id
+    const index = talkersDatabase.findIndex((talker) => talker.id === parseInt(idToUpdate, 10)); // Descobre o indice do talker baseado no valor da chave id
     const propertiesToUpdate = Object.keys(dataToUpdate); // array com as chaves que serão alteradas
 
     propertiesToUpdate.forEach((key) => { // altera as propriedades

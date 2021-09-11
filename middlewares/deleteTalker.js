@@ -1,23 +1,17 @@
 const { getTalkers } = require('../functions/getTalkers');
 const { writeTalker } = require('../functions/writeTalker');
 
-// Middleware para inclusão de um novo talker
+// Middleware para deletar um novo talker
 const deleteTalker = async (request, response) => {
-    const dataToUpdate = request.body; // Carrega os dados da requisição
-    delete dataToUpdate.id; // A paga a propriedade id, caso ela venha na requisição
-    const { id } = request.params; // id da URL
-    const talkersDatabase = await getTalkers(); // Carrega a base de dados atual
-
-    const index = talkersDatabase.findIndex((talker) => talker.id === parseInt(id, 10)); // Descobre o indice do talker baseado no valor da chave id
-    const propertiesToUpdate = Object.keys(dataToUpdate); // array com as chaves que serão alteradas
-
-    propertiesToUpdate.forEach((key) => { // altera as propriedades
-      talkersDatabase[index][key] = dataToUpdate[key];
-    });
+    const idToRemove = request.params.id; // id da URL
+    
+    let talkersDatabase = await getTalkers(); // Carrega a base de dados atual
+    talkersDatabase = talkersDatabase.filter((talker) => talker.id !== parseInt(idToRemove, 10));
 
     const newDatabase = JSON.stringify(talkersDatabase); // Converte em json
     await writeTalker(newDatabase); // Grava os dados no arquivo
-    return response.status(200).json(talkersDatabase[index]).end(); // Envia a confirmação
+    return response.status(200)
+      .json({ message: 'Pessoa palestrante deletada com sucesso' }).end(); // Envia a confirmação
 };
 
 module.exports = { deleteTalker };
