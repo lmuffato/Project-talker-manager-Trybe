@@ -14,8 +14,8 @@ const { tokenValidation } = require('./middlewares/validations/tokenValidation')
 const { nameValidation } = require('./middlewares/validations/nameValidation');
 const { ageValidation } = require('./middlewares/validations/ageValidation');
 const { talkValidation } = require('./middlewares/validations/talkValidation');
-const { watchedAtValidation } = require('./middlewares/validations/watchedAtValidation');
-const { rateValidation } = require('./middlewares/validations/rateValidation');
+// const { watchedAtValidation } = require('./middlewares/validations/watchedAtValidation');
+// const { rateValidation } = require('./middlewares/validations/rateValidation');
 
 // Middlewares de CRUD
 const { registerTalker } = require('./middlewares/postTalker');
@@ -79,8 +79,8 @@ tokenValidation,
 nameValidation,
 ageValidation,
 talkValidation,
-watchedAtValidation,
-rateValidation,
+// watchedAtValidation,
+// rateValidation,
 registerTalker,
 async () => {});
 /* REQUISIÇÃO
