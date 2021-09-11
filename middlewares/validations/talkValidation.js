@@ -30,16 +30,3 @@ const talkValidation = (request, response, next) => {
 };
 
 module.exports = { talkValidation };
-
-/*
-  const talkValidation = (request, response, next) => {
-    const { talk } = request.body;
-    try {
-      if (emptyTalk(talk)) {
-        throw new Error('O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios');
-      }
-    } catch (error) {
-      return response.status(400).json({ message: error.message });
-    }
-    next();
-  }; */

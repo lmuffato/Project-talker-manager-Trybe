@@ -32,26 +32,16 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-// app.get('/talker/search',
-// tokenValidation,
-// searchTalker,
-// async () => { });
-
 app.get('/talker/search',
 tokenValidation,
 searchTalker,
-  async () => {
-  // try {
-  //   const { q } = request.query;
-  //   const talkers = await getTalkers();
-  //   const filtredTalkers = talkers.filter(
-  //     (talker) => talker.name.toLowerCase().includes(q.toLowerCase()),
-  //   );
-  //   return response.status(200).json(filtredTalkers);
-  // } catch (error) {
-  //   return response.status(400).json({ message: error.message });
-  // }
-});
+  async () => {});
+  /* REQUISIÇÃO
+http GET :3000/search?q=Al authorization:"375c3a2e0051b630"         // (ok)
+http GET :3000/search?q=Da authorization:"375c3a2e0051b630"         // (ok)
+http GET :3000/search?q=M authorization:"375c3a2e0051b630"         // (ok)
+// http://localhost:3000/search?q=Al
+*/
 
 // GET - Rota para acessar o conteúdo de talkers.json filtrando por id
 app.get('/talker/:id', async (request, response) => {
@@ -136,18 +126,6 @@ http POST :3000/login email='email@email.com' password='123456789'              
 http POST :3000/login email='' password='123456789'                                  // (error)
 http POST :3000/login email='email@email.com' password=''                            // (error)
 http POST :3000/login email='' password=''                                           // (error)
-*/
-
-// GET - Rota para encontrar termos por search
-// app.get('/search',
-// tokenValidation,
-// searchTalker,
-// async () => { });
-/* REQUISIÇÃO
-http GET :3000/search?q=Al authorization:"375c3a2e0051b630"         // (ok)
-http GET :3000/search?q=Da authorization:"375c3a2e0051b630"         // (ok)
-http GET :3000/search?q=M authorization:"375c3a2e0051b630"         // (ok)
-// http://localhost:3000/search?q=Al
 */
 
 app.listen(PORT, () => { console.log('Online'); });
