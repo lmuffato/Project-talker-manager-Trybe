@@ -34,8 +34,8 @@ app.get('/talker', async (_request, response) => {
   return response.status(200).json(talkers);
 }); 
 /* REQUISIÇÃO
-// http GET :3000/talker // HTTPIE;
-// http://localhost:3000/talker //(navegador);
+// http GET :3000/talker           // HTTPIE;   (ok)
+// http://localhost:3000/talker    // navegador (ok);
 */
 
 // GET - Rota para acessar o conteúdo de talkers.json filtrando por id
@@ -61,11 +61,11 @@ app.post('/login', emailValidation, passwordValidation, async (request, response
   return response.status(200).json({ token: `${token}` });
 });
 /* REQUISIÇÃO
-echo '{"email":"email@email.com", "password":"123456789" }' | http POST :3000/login
-http POST :3000/login email='email@email.com' password='123456789' // (ok) retorna o token 
-http POST :3000/login email='' password='123456789' // (error) retorna { message: 'O campo "email" é obrigatório' }
-http POST :3000/login email='email@email.com' password='' // (error) retorna { message: 'O campo "password" é obrigatório' }
-http POST :3000/login email='' password='' // (error) retorna { message: 'O campo "email" é obrigatório' }
+echo '{"email":"email@email.com", "password":"123456789" }' | http POST :3000/login  // (ok) retorna o token 
+http POST :3000/login email='email@email.com' password='123456789'                   // (ok) retorna o token 
+http POST :3000/login email='' password='123456789'                                  // (error)
+http POST :3000/login email='email@email.com' password=''                            // (error)
+http POST :3000/login email='' password=''                                           // (error)
 */
 
 // Rota para cadastrar palestrante
@@ -79,8 +79,7 @@ registerTalker,
 async () => {});
 
 /* REQUISIÇÃO
-Requisição complexa - objeto de vários níveis no body e headers
-echo '{"id": 1, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }' | http POST :3000/talker authorization:"375c3a2e0051b630"
+Requisição complexa no httpie - objeto de vários níveis no body e headers
 echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }' | http POST :3000/talker authorization:"375c3a2e0051b630"
 */
 

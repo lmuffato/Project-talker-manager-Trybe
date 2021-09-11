@@ -3,7 +3,7 @@ const fs = require('fs').promises;
 // Não deve especificar o caminho do arquivo no fs.readFile.
 const TALKERS_FILE = 'talker.json';
 
-// Ler o conteúdo do arquvi
+// Ler o conteúdo do arquivo
 const getTalkers = async () => {
   try {
     const talkers = await fs.readFile(TALKERS_FILE, 'utf-8');

@@ -12,7 +12,7 @@ const rateValidation = (request, response, next) => {
   const { talk: { rate } } = request.body;
   try {
     if (emptyRate(rate)) {
-      throw new Error('O campo "talk" é obrigatório e "rate" e "rate" não podem ser vazios');
+      throw new Error('O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios');
     }
     if (!validRate(rate)) {
       throw new Error('O campo "rate" deve ser um inteiro de 1 à 5');
