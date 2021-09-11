@@ -1,7 +1,7 @@
 const rescue = require('express-rescue');
 const fs = require('fs');
 
-const readTalkers = async () => {
+const readTalkers = () => {
   const data = fs.readFileSync('./talker.json', 'utf-8');
   return JSON.parse(data);
 };
@@ -43,6 +43,22 @@ const addNewTalker = async (req, res) => {
   talkers.push(newTalker);
   fs.writeFileSync('talker.json', JSON.stringify(talkers));
   return res.status(201).json(newTalker);
+};
+
+const changeTalker = async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkers = readTalkers();
+  const talkerIndex = talkers.findIndex((t) => t.id === parseInt(id, 10));
+
+  talkers[talkerIndex] = { ...talkers[talkerIndex],
+    id: parseInt(id, 10),
+    name,
+    age,
+    talk,
+  };
+  fs.writeFileSync('talker.json', JSON.stringify(talkers));
+  return res.status(200).json(talkers[talkerIndex]);
 };
 
 const nameValidation = (req, res, next) => {
@@ -129,6 +145,7 @@ const rateValidation = (req, res, next) => {
 module.exports = {
   getTalkers,
   getTalkersId,
+  changeTalker,
   readTalkers,
   writeTalkers,
   addNewTalker,

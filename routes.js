@@ -17,6 +17,17 @@ router.post(
   loginHandlers.tokenauthenticated,
 );
 
+router.put(
+  '/talker/:id',
+  authHandlers.validateToken,
+  talkerHandlers.nameValidation,
+  talkerHandlers.ageValidation,
+  talkerHandlers.talkValidation,
+  talkerHandlers.rateValidation,
+  talkerHandlers.watValidation,
+  talkerHandlers.changeTalker,
+);
+
 router.post(
   '/talker',
   authHandlers.validateToken,
