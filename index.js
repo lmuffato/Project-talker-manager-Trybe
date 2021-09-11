@@ -72,7 +72,7 @@ http POST :3000/login email='email@email.com' password=''                       
 http POST :3000/login email='' password=''                                           // (error)
 */
 
-// POST - Rota para cadastrar palestrante
+// POST - Rota para cadastrar novos talkers
 app.post('/talker',
 tokenValidation,
 nameValidation,
@@ -87,7 +87,7 @@ Requisição complexa no httpie - objeto de vários níveis no body e headers
 echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }' | http POST :3000/talker authorization:"375c3a2e0051b630"
 */
 
-// PUT - Rota para alterar palestrantes
+// PUT - Rota para alterar os talkers
 app.put('/talker/:id',
 tokenValidation,
 nameValidation,
@@ -101,7 +101,20 @@ async () => {
 });
 /* REQUISIÇÃO
 Requisição complexa no httpie - objeto de vários níveis no body e headers
-echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/5 authorization:"375c3a2e0051b630"
+echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/5 authorization:"375c3a2e0051b630"         // (ok)
+echo '{id: 5, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/5 authorization:"375c3a2e0051b630"  // (ok)
+*/
+
+// DELETE - Rota para delete os talkers
+app.delete('/talker/:id',
+tokenValidation,
+async () => {
+
+});
+/* REQUISIÇÃO
+Requisição complexa no httpie - objeto de vários níveis no body e headers
+echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http DELETE :3000/talker/5 authorization:"375c3a2e0051b630"         // (ok)
+echo '{id: 5, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http DELETE :3000/talker/5 authorization:"375c3a2e0051b630"  // (ok)
 */
 
 app.listen(PORT, () => { console.log('Online'); });

@@ -5,7 +5,7 @@ const emptyRate = (rate) => {
 };
 
 // Verifica se a data enviada está no formato dd/mm/aaaa.
-const validRate = (rate) => ((Number.isInteger(rate) && rate <= 5 && rate >= 0));
+const validRate = (rate) => ((Number.isInteger(rate) && rate >= 1 && rate <= 5));
 
 // Middleware para validação da data
 const rateValidation = (request, response, next) => {
