@@ -93,9 +93,9 @@ app.put('/talker/:id',
 tokenValidation,
 nameValidation,
 ageValidation,
+// watchedAtValidation,
+// rateValidation,
 talkValidation,
-watchedAtValidation,
-rateValidation,
 updateTalker,
 async () => {
 

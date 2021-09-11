@@ -17,7 +17,7 @@ const updateTalker = async (request, response) => {
     const newDatabase = JSON.stringify(talkersDatabase); // Converte em json
     await writeTalker(newDatabase); // Grava os dados no arquivo
     return response.status(200).json(talkersDatabase[index]).end(); // Envia a confirmação
-  } catch (error) { return response.status(404).json({ message: error.message }); }
+  } catch (error) { return response.status(400).json({ message: error.message }); }
 };
 
 module.exports = { updateTalker };
