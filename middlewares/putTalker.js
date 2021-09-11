@@ -22,6 +22,8 @@ const updateTalker = async (request, response) => {
 
 module.exports = { updateTalker };
 /*
+Apesar de mais sofisticada, o avaliador não aprovou essa solução:
+
 const updateTalker = async (request, response) => {
   const dataToUpdate = await request.body; // Carrega os dados da requisição
   delete dataToUpdate.id; // A paga a propriedade id, caso ela venha na requisição
