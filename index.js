@@ -7,16 +7,19 @@ const crypto = require('crypto'); // Pacote node de criptografia, usado para ger
 const { getTalkers } = require('./functions/getTalkers');
 const { filterById } = require('./functions/filterById');
 
-// Middlewares
-const { emailValidation } = require('./middlewares/emailValidation');
-const { passwordValidation } = require('./middlewares/passwordValidation');
-const { tokenValidation } = require('./middlewares/tokenValidation');
-const { nameValidation } = require('./middlewares/nameValidation');
-const { ageValidation } = require('./middlewares/ageValidation');
-const { talkValidation } = require('./middlewares/talkValidation');
-const { watchedAtValidation } = require('./middlewares/watchedAtValidation');
-const { rateValidation } = require('./middlewares/rateValidation');
-const { registerTalker } = require('./middlewares/registerTalker');
+// Middlewares de validação
+const { emailValidation } = require('./middlewares/validations/emailValidation');
+const { passwordValidation } = require('./middlewares/validations/passwordValidation');
+const { tokenValidation } = require('./middlewares/validations/tokenValidation');
+const { nameValidation } = require('./middlewares/validations/nameValidation');
+const { ageValidation } = require('./middlewares/validations/ageValidation');
+const { talkValidation } = require('./middlewares/validations/talkValidation');
+const { watchedAtValidation } = require('./middlewares/validations/watchedAtValidation');
+const { rateValidation } = require('./middlewares/validations/rateValidation');
+
+// Middlewares de CRUD
+const { registerTalker } = require('./middlewares/postTalker');
+const { updateTalker } = require('./middlewares/putTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -42,9 +45,9 @@ app.get('/talker', async (_request, response) => {
 // GET - Rota para acessar o conteúdo de talkers.json filtrando por id
 app.get('/talker/:id', async (request, response) => {
   const { id } = request.params;
-  const talkers = await getTalkers();
-  const talker = await filterById(talkers, id);
-  if (!talker || talker.length === 0) {
+  const talkers = await getTalkers(); // Carrega todos os talkers da database
+  const talker = await filterById(talkers, id); // Filtra o talker pelo id
+  if (!talker || talker.length === 0) { // Se a database 'talker' for um array vazio
     return response.status(404)
       .json({ message: 'Pessoa palestrante não encontrada' });
   }
@@ -69,7 +72,7 @@ http POST :3000/login email='email@email.com' password=''                       
 http POST :3000/login email='' password=''                                           // (error)
 */
 
-// Rota para cadastrar palestrante
+// POST - Rota para cadastrar palestrante
 app.post('/talker',
 tokenValidation,
 nameValidation,
@@ -79,10 +82,26 @@ watchedAtValidation,
 rateValidation,
 registerTalker,
 async () => {});
-
 /* REQUISIÇÃO
 Requisição complexa no httpie - objeto de vários níveis no body e headers
 echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }' | http POST :3000/talker authorization:"375c3a2e0051b630"
+*/
+
+// PUT - Rota para alterar palestrantes
+app.put('/talker/:id',
+tokenValidation,
+nameValidation,
+ageValidation,
+talkValidation,
+watchedAtValidation,
+rateValidation,
+updateTalker,
+async () => {
+
+});
+/* REQUISIÇÃO
+Requisição complexa no httpie - objeto de vários níveis no body e headers
+echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/5 authorization:"375c3a2e0051b630"
 */
 
 app.listen(PORT, () => { console.log('Online'); });
