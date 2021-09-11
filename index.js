@@ -19,7 +19,7 @@ const { talkValidation } = require('./middlewares/validations/talkValidation');
 const { registerTalker } = require('./middlewares/postTalker');
 const { updateTalker } = require('./middlewares/putTalker');
 const { deleteTalker } = require('./middlewares/deleteTalker');
-const { searchTalker } = require('./middlewares/searchTalker');
+// const { searchTalker } = require('./middlewares/searchTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -121,15 +121,31 @@ http DELETE :3000/talker/4 authorization:"375c3a2e0051b630"         // (ok)
 */
 
 // GET - Rota para encontrar termos por search
-app.get('/search',
-tokenValidation,
-searchTalker,
-async () => { });
+// app.get('/search',
+// tokenValidation,
+// searchTalker,
+// async () => { });
 /* REQUISIÇÃO
 http GET :3000/search?q=Al authorization:"375c3a2e0051b630"         // (ok)
 http GET :3000/search?q=Da authorization:"375c3a2e0051b630"         // (ok)
 http GET :3000/search?q=M authorization:"375c3a2e0051b630"         // (ok)
 // http://localhost:3000/search?q=Al
 */
+
+app.get('/search',
+tokenValidation,
+// searchTalker,
+  async (request, response) => {
+  try {
+    const { q } = request.query;
+    const talkers = await getTalkers();
+    const filtredTalkers = talkers.filter(
+      (talker) => talker.name.toLowerCase().includes(q.toLowerCase()),
+    );
+    return response.status(200).json(filtredTalkers);
+  } catch (error) {
+    return response.status(400).json({ message: error.message });
+  }
+});
 
 app.listen(PORT, () => { console.log('Online'); });
