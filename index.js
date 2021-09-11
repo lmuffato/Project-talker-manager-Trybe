@@ -1,6 +1,9 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { HTTP_OK_STATUS } = require('./utils/serverStatus');
+const { 
+  HTTP_OK_STATUS,
+  HTTP_SERVER_ERROR,
+ } = require('./utils/serverStatus');
 
 const talkerRouter = require('./routes/talker');
 
@@ -15,6 +18,10 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/talker', talkerRouter);
+
+app.use((err, _req, res, _next) => {
+  res.status(HTTP_SERVER_ERROR).json({ error: `Error: ${err.message}` });
+});
 
 app.listen(PORT, () => {
   console.log('Online');
