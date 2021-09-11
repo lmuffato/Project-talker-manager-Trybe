@@ -14,4 +14,4 @@ const getTalkers = async () => {
   }
 };
 
-module.exports = { getTalkers };
+module.exports = { getTalkers, TALKERS_FILE };
