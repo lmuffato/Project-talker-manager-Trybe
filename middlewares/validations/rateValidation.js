@@ -1,6 +1,7 @@
 // Verifica se o campo 'date' foi enviado vazio
 const emptyRate = (rate) => {
-  if (!rate || rate === '' || rate === null) { return true; }
+  if (rate !== 0 && !rate) { return true; }
+
   return false;
 };
 

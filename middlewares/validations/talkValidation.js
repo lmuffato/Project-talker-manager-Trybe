@@ -1,6 +1,6 @@
 // Verifica se o campo 'date' foi enviado vazio
 const emptyTalk = (talk) => {
-if (!talk || talk === '' || !talk.rate || !talk.watchedAt) { return true; }
+if (!talk || (talk.rate !== 0 && !talk.rate) || !talk.watchedAt) { return true; }
 };
 
 const validWatchedAt = (watchedAt) => {
@@ -8,7 +8,7 @@ const validWatchedAt = (watchedAt) => {
   return dateRegex.test(watchedAt);
 };
 
-const validRate = (rate) => (typeof rate === 'number' && rate > 0 && rate < 6);
+const validRate = (rate) => (rate <= 5 && rate > 0);
 
 // Middleware para validação do objeto talk
 const talkValidation = (request, response, next) => {
