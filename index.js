@@ -13,6 +13,7 @@ const { passwordValidation } = require('./middlewares/passwordValidation');
 const { tokenValidation } = require('./middlewares/tokenValidation');
 const { nameValidation } = require('./middlewares/nameValidation');
 const { ageValidation } = require('./middlewares/ageValidation');
+const { talkValidation } = require('./middlewares/talkValidation');
 const { watchedAtValidation } = require('./middlewares/watchedAtValidation');
 const { rateValidation } = require('./middlewares/rateValidation');
 const { registerTalker } = require('./middlewares/registerTalker');
@@ -73,6 +74,7 @@ app.post('/talker',
 tokenValidation,
 nameValidation,
 ageValidation,
+talkValidation,
 watchedAtValidation,
 rateValidation,
 registerTalker,
