@@ -2,27 +2,30 @@ const express = require('express');
 
 const router = express.Router();
 
-const { getTalkers, getTalkersId } = require('./middlewares/getTalkers');
-const {
-  loginEmail,
-  loginPassword,
-  tokenauthenticated,
-} = require('./middlewares/authenticated');
-const authorization = require('./middlewares/authorization');
-// const { tokenValidation } = require('./middlewares/tokenValidation');
+const talkerHandlers = require('./handlers/talker');
+const loginHandlers = require('./handlers/login');
+const authHandlers = require('./handlers/auth');
 
-router.get('/talker', getTalkers);
-router.get('/talker/:id', getTalkersId);
-router.post('/login', loginEmail, loginPassword, tokenauthenticated);
+router.get('/talker', talkerHandlers.getTalkers);
+
+router.get('/talker/:id', talkerHandlers.getTalkersId);
+
+router.post(
+  '/login',
+  loginHandlers.loginEmail,
+  loginHandlers.loginPassword,
+  loginHandlers.tokenauthenticated,
+);
 
 router.post(
   '/talker',
-  authorization.tokenValidation,
-  authorization.nameValidation,
-  authorization.ageValidation,
-  authorization.rateValidation,
-  authorization.watValidation,
-  authorization.addNewTalke,
+  authHandlers.validateToken,
+  talkerHandlers.nameValidation,
+  talkerHandlers.ageValidation,
+  talkerHandlers.talkValidation,
+  talkerHandlers.rateValidation,
+  talkerHandlers.watValidation,
+  talkerHandlers.addNewTalker,
 );
 
 module.exports = router;

@@ -34,5 +34,3 @@ const tokenauthenticated = (req, res) =>
   res.status(200).json({ token: '7mqaVRXJSp886CGr' });
 
 module.exports = { loginEmail, loginPassword, tokenauthenticated };
-
-// regex = /\S+@\S+\.\S+/; if (!regex.test(String(email).toLowerCase()));
