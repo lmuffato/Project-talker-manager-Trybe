@@ -50,13 +50,13 @@ http POST :3000/login email='' password='' // (error) retorna { message: 'O camp
 */
 
 // const obj2 = '{"id": 1, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }';
-const obj2 = '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }';
-const idObj = { id: 1 };
-const obj3 = JSON.parse(obj2);
+// const obj2 = '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }';
+// const idObj = { id: 1 };
+// const obj3 = JSON.parse(obj2);
 // console.log(JSON.parse(obj));
 
 // const obj['foo-bar'] = 1;
 
-const returnedTarget = Object.assign(idObj, obj3);
+// const returnedTarget = Object.assign(idObj, obj3);
 
-console.log(returnedTarget);
+// console.log(returnedTarget);

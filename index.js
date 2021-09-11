@@ -1,9 +1,13 @@
+// Packages
 const express = require('express'); // Construção de aplicações
 const bodyParser = require('body-parser'); // Converter o body da requisição em .json()
 const crypto = require('crypto'); // Pacote node de criptografia, usado para gerar tokens de sessão 
+
+// Functions
 const { getTalkers } = require('./functions/getTalkers');
-const { registerTalker } = require('./functions/writeTalker');
 const { filterById } = require('./functions/filterById');
+
+// Middlewares
 const { emailValidation } = require('./middlewares/emailValidation');
 const { passwordValidation } = require('./middlewares/passwordValidation');
 const { tokenValidation } = require('./middlewares/tokenValidation');
@@ -11,6 +15,7 @@ const { nameValidation } = require('./middlewares/nameValidation');
 const { ageValidation } = require('./middlewares/ageValidation');
 const { watchedAtValidation } = require('./middlewares/watchedAtValidation');
 const { rateValidation } = require('./middlewares/rateValidation');
+const { registerTalker } = require('./middlewares/registerTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -71,16 +76,12 @@ ageValidation,
 watchedAtValidation,
 rateValidation,
 registerTalker,
-async (request, response) => {
-// const { name, age, talk: { watchedAt, rate } } = request.body;
-// const { authorization } = request.headers;
-// const talkers = await registerTalker();
-// return response.status(201).json(talkers);
-});
+async () => {});
 
 /* REQUISIÇÃO
 Requisição complexa - objeto de vários níveis no body e headers
 echo '{"id": 1, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }' | http POST :3000/talker authorization:"375c3a2e0051b630"
+echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 5 } }' | http POST :3000/talker authorization:"375c3a2e0051b630"
 */
 
 app.listen(PORT, () => { console.log('Online'); });
