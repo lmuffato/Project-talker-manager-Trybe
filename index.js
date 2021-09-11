@@ -6,6 +6,7 @@ const {
  } = require('./utils/serverStatus');
 
 const talkerRouter = require('./routes/talker');
+const loginRouter = require('./routes/login');
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,6 +19,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use('/talker', talkerRouter);
+app.use('/login', loginRouter);
 
 app.use((err, _req, res, _next) => {
   res.status(HTTP_SERVER_ERROR).json({ error: `Error: ${err.message}` });
