@@ -7,7 +7,7 @@ const searchTalker = async (request, response) => {
   const { q } = await request.query; // Parâmetro da query
   const filtredTalkers = await talkersDatabase.filter((talker) => talker.name.toLowerCase()
     .includes(q.toLowerCase()));
-  return response.status(200).json(filtredTalkers).end(); // Envia a confirmação
+  return response.status(200).json(filtredTalkers); // Envia a confirmação
   } catch (error) {
     return response.status(400).json({ message: error.message });
   }
