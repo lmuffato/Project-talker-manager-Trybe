@@ -19,7 +19,7 @@ const { talkValidation } = require('./middlewares/validations/talkValidation');
 const { registerTalker } = require('./middlewares/postTalker');
 const { updateTalker } = require('./middlewares/putTalker');
 const { deleteTalker } = require('./middlewares/deleteTalker');
-// const { searchTalker } = require('./middlewares/searchTalker');
+const { searchTalker } = require('./middlewares/searchTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -39,18 +39,18 @@ app.get('/', (_request, response) => {
 
 app.get('/talker/search',
 tokenValidation,
-// searchTalker,
-  async (request, response) => {
-  try {
-    const { q } = request.query;
-    const talkers = await getTalkers();
-    const filtredTalkers = talkers.filter(
-      (talker) => talker.name.toLowerCase().includes(q.toLowerCase()),
-    );
-    return response.status(200).json(filtredTalkers);
-  } catch (error) {
-    return response.status(400).json({ message: error.message });
-  }
+searchTalker,
+  async () => {
+  // try {
+  //   const { q } = request.query;
+  //   const talkers = await getTalkers();
+  //   const filtredTalkers = talkers.filter(
+  //     (talker) => talker.name.toLowerCase().includes(q.toLowerCase()),
+  //   );
+  //   return response.status(200).json(filtredTalkers);
+  // } catch (error) {
+  //   return response.status(400).json({ message: error.message });
+  // }
 });
 
 // GET - Rota para acessar o conteúdo de talkers.json filtrando por id
