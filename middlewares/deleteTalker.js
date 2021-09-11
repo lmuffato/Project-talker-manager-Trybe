@@ -3,7 +3,7 @@ const { writeTalker } = require('../functions/writeTalker');
 
 // Middleware para deletar um novo talker
 const deleteTalker = async (request, response) => {
-    const idToRemove = request.params.id; // id da URL
+    const idToRemove = await request.params.id; // id da URL
     
     let talkersDatabase = await getTalkers(); // Carrega a base de dados atual
     talkersDatabase = talkersDatabase.filter((talker) => talker.id !== parseInt(idToRemove, 10));
