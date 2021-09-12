@@ -44,23 +44,6 @@ http GET :3000/search?q=M authorization:"375c3a2e0051b630"         // (ok)
 // http://localhost:3000/search?q=Al
 */
 
-// GET - Rota para acessar o conteúdo de talkers.json filtrando por id
-app.get('/talker/:id', async (request, response) => {
-  const { id } = request.params;
-  const talkers = await getTalkers(); // Carrega todos os talkers da database
-  const talker = await filterById(talkers, id); // Filtra o talker pelo id
-  if (!talker || talker.length === 0) { // Se a database 'talker' for um array vazio
-    return response.status(404)
-      .json({ message: 'Pessoa palestrante não encontrada' });
-  }
-  return response.status(200).json(talker);
-}); 
-/* REQUISIÇÃO
-// http GET :3000/talker/1          // HTTPIE (ok);
-// http://localhost:3000/talker/1   // navegador (ok);
-// http GET :3000/talker/5          // HTTPIE (mensagem de erro);
-*/
-
 // PUT - Rota para alterar os talkers
 app.put('/talker/:id',
 tokenValidation,
@@ -76,6 +59,23 @@ echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019"
 echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 0 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"         // (ok)
 echo '{id: 5, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"  // (ok)
 echo '{id: 5, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"  // (error)
+*/
+
+// GET - Rota para acessar o conteúdo de talkers.json filtrando por id
+app.get('/talker/:id', async (request, response) => {
+  const { id } = request.params;
+  const talkers = await getTalkers(); // Carrega todos os talkers da database
+  const talker = await filterById(talkers, id); // Filtra o talker pelo id
+  if (!talker || talker.length === 0) { // Se a database 'talker' for um array vazio
+    return response.status(404)
+      .json({ message: 'Pessoa palestrante não encontrada' });
+  }
+  return response.status(200).json(talker);
+}); 
+/* REQUISIÇÃO
+// http GET :3000/talker/1          // HTTPIE (ok);
+// http://localhost:3000/talker/1   // navegador (ok);
+// http GET :3000/talker/5          // HTTPIE (mensagem de erro);
 */
 
 // DELETE - Rota para delete os talkers
