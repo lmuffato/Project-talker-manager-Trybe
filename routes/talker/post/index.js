@@ -1,8 +1,12 @@
 const router = require('express').Router();
-const { isTokenValid } = require('../../../utils/validations');
 const { HTTP_OK_STATUS } = require('../../../utils/serverStatus');
+const { 
+  isTokenValid,
+  isNameValid,
+  isAgeValid,
+} = require('../../../utils/validations');
 
-router.use(isTokenValid);
+router.use(isTokenValid, isNameValid, isAgeValid);
 
 router.post('/', (_req, res) => {
   res.status(HTTP_OK_STATUS).json({
