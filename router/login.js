@@ -1,11 +1,12 @@
 const { Router } = require('express');
-const { gerarToken, validarEmail, validarPassword } = require('../middlewares');
-
-const HTTP_OK_STATUS = 200;
+const { randomToken, validarEmail, validarPassword } = require('../middlewares');
 
 const router = Router();
 
-router.post('/', validarPassword, validarEmail, (_req, res) => res.status(HTTP_OK_STATUS)
-  .json({ token: gerarToken() }));
+router.post('/', validarEmail, validarPassword, (_req, res) => {
+  const token = randomToken(16);
 
-module.exports = router;
+  res.status(200).json({ token });
+});
+
+module.exports = router; 
