@@ -12,6 +12,7 @@ const {
 } = require('../middlewares');
 
 const PALESTRANTE_NAO_ENCONTRADO = 'Pessoa palestrante não encontrada';
+const PALESTRANTE_DELETADO = 'Pessoa palestrante deletada com sucesso';
 const talkerJSON = './talker.json';
 const HTTP_OK_STATUS = 200;
 
@@ -69,6 +70,14 @@ async (req, res) => {
   });
   await fs.writeFile(talkerJSON, JSON.stringify(alterarTalk));
   res.status(HTTP_OK_STATUS).json(putTalk);
+});
+
+router.delete('/:id', validarToken, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await fs.readFile(talkerJSON, 'utf-8').then((r) => JSON.parse(r));
+  const filtrarTalkerPorId = talkers.filter((talk) => talk.id !== Number(id));
+  await fs.writeFile(talkerJSON, JSON.stringify(filtrarTalkerPorId));
+  res.status(200).json({ message: PALESTRANTE_DELETADO });
 });
 
 module.exports = router;
