@@ -27,6 +27,24 @@ app.get('/talker', async (_request, response) => {
   response.status(200).json(resul);
 });
 
+// Requisito 7
+
+app.get('/talker/search', validateToken, async (req, res) => {
+  const { searchTerm } = req.query;
+  const talkers = await fs.readFile('talker.json');
+  const ArrTalkers = JSON.parse(talkers);
+
+  if (searchTerm === '' || !searchTerm) {
+    return res.status(200).json(ArrTalkers);
+  }
+  const results = ArrTalkers.filter((item) => item.name.includes(searchTerm));
+
+  if (!results) {
+    return res.status(200).json([]);
+  }
+  return res.status(200).json(results);
+});
+
 // Requisito 2
 
 app.get('/talker/:id', async (request, response) => {
@@ -63,8 +81,13 @@ talkersValidation.validateTalk,
 talkersValidation.validateTalkDate,
 talkersValidation.validateTalkRate, talkerUpdate);
 
+// Requisito 6
+
 app.delete('/talker/:id', validateToken, deleteTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
 });
+
+// Para o requisito 7, usei como ref o repositório abaixo. 
+// https://github.com/tryber/sd-010-b-project-talker-manager/pull/69/commits/2f914ababf97c477a7d3ba5c0797748d80c335d2# 
