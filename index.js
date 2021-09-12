@@ -44,23 +44,6 @@ http GET :3000/search?q=M authorization:"375c3a2e0051b630"         // (ok)
 // http://localhost:3000/search?q=Al
 */
 
-// PUT - Rota para alterar os talkers
-app.put('/talker/:id',
-tokenValidation,
-nameValidation,
-ageValidation,
-talkValidation,
-updateTalker,
-async () => { });
-/* REQUISIÇÃO
-Requisição complexa no httpie - objeto de vários níveis no body e headers
-echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"         // (ok)
-echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 7 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"         // (ok)
-echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 0 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"         // (ok)
-echo '{id: 5, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"  // (ok)
-echo '{id: 5, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"  // (error)
-*/
-
 // GET - Rota para acessar o conteúdo de talkers.json filtrando por id
 app.get('/talker/:id', async (request, response) => {
   const { id } = request.params;
@@ -76,6 +59,23 @@ app.get('/talker/:id', async (request, response) => {
 // http GET :3000/talker/1          // HTTPIE (ok);
 // http://localhost:3000/talker/1   // navegador (ok);
 // http GET :3000/talker/5          // HTTPIE (mensagem de erro);
+*/
+
+// PUT - Rota para alterar os talkers
+app.put('/talker/:id',
+tokenValidation,
+nameValidation,
+ageValidation,
+talkValidation,
+updateTalker,
+async () => { });
+/* REQUISIÇÃO
+Requisição complexa no httpie - objeto de vários níveis no body e headers
+echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"         // (ok)
+echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 7 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"         // (ok)
+echo '{"name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 0 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"         // (ok)
+echo '{id: 5, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"  // (ok)
+echo '{id: 5, "name": "Danielle Santos", "age": 56, "talk": { "watchedAt": "22/10/2019", "rate": 4 } }' | http PUT :3000/talker/4 authorization:"375c3a2e0051b630"  // (error)
 */
 
 // DELETE - Rota para delete os talkers
