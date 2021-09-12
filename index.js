@@ -1,15 +1,15 @@
 // Packages
 const express = require('express'); // Construção de aplicações
 const bodyParser = require('body-parser'); // Converter o body da requisição em .json()
-const crypto = require('crypto'); // Pacote node de criptografia, usado para gerar tokens de sessão 
+// const crypto = require('crypto'); // Pacote node de criptografia, usado para gerar tokens de sessão 
 
 // Functions
 const { getTalkers } = require('./functions/getTalkers');
 const { filterById } = require('./functions/filterById');
 
 // Middlewares de validação
-const { emailValidation } = require('./middlewares/validations/emailValidation');
-const { passwordValidation } = require('./middlewares/validations/passwordValidation');
+// const { emailValidation } = require('./middlewares/validations/emailValidation');
+// const { passwordValidation } = require('./middlewares/validations/passwordValidation');
 const { tokenValidation } = require('./middlewares/validations/tokenValidation');
 const { nameValidation } = require('./middlewares/validations/nameValidation');
 const { ageValidation } = require('./middlewares/validations/ageValidation');
@@ -20,6 +20,9 @@ const { registerTalker } = require('./middlewares/postTalker');
 const { updateTalker } = require('./middlewares/putTalker');
 const { deleteTalker } = require('./middlewares/deleteTalker');
 const { searchTalker } = require('./middlewares/searchTalker');
+
+// Rotas contidas no router
+const myRouter = require('./routes/router'); // Arquivo com as rotas
 
 const app = express();
 app.use(bodyParser.json());
@@ -116,10 +119,7 @@ app.get('/talker', async (_request, response) => {
 */
 
 // POST - Rota para validar um login e gerar um token;
-app.post('/login', emailValidation, passwordValidation, async (request, response) => {
-  const token = await crypto.randomBytes(8).toString('hex'); // gera um token de 6 caracteres
-  return response.status(200).json({ token: `${token}` });
-});
+app.use('/login', myRouter); // A partir dessa linha, todas as rotas iniciadas por '/login' serão tratadas no router
 /* REQUISIÇÃO
 echo '{"email":"email@email.com", "password":"123456789" }' | http POST :3000/login  // (ok) retorna o token 
 http POST :3000/login email='email@email.com' password='123456789'                   // (ok) retorna o token 
