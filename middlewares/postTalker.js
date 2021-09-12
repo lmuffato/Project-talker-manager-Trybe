@@ -58,19 +58,17 @@ const validateAge = (req, res, next) => {
     const { age } = req.body;
   
     if (!age) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'O campo "age" é obrigatório',
       });
-      return;
     }
   
     if (age < 18 || typeof age !== 'number') {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'A pessoa palestrante deve ser maior de idade',
       });
-      return;
     }
-  
+
     return next();
   };
 
@@ -91,10 +89,9 @@ const validateAge = (req, res, next) => {
     const regEx = /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/;
   
     if (!regEx.test(talk.watchedAt)) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
       });
-      return;
     }
   
     if (talk.rate < 1 || talk.rate > 5) {

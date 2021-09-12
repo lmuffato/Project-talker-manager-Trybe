@@ -14,6 +14,8 @@ const {
   validateTalk,
   validateDateRate,
   putTalker,
+  deleteTalker,
+  getSearch,
 } = require('./middlewares');
 
 const app = express();
@@ -42,6 +44,10 @@ validateAge,
 validateTalk,
 validateDateRate,
 putTalker);
+
+app.delete('/talker/:id', tokenVerify, deleteTalker);
+
+app.get('/talker/search', tokenVerify, getSearch, getTalkers);
 
 app.listen(PORT, () => {
   console.log('Online');

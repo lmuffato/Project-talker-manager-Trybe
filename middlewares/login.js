@@ -1,6 +1,6 @@
 const login = (req, res) => {
     const { token } = req.headers;
-    res.status(200).json({ token });
+    return res.status(200).json({ token });
 };
 
 const generateToken = (req, _res, next) => {

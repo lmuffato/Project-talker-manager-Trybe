@@ -9,6 +9,8 @@ validateTalk,
 validateDateRate,
 } = require('./postTalker');
 const { putTalker } = require('./putTalker');
+const deleteTalker = require('./deleteTalker');
+const getSearch = require('./getSearch');
 
 module.exports = {
     getTalkers,
@@ -24,4 +26,6 @@ module.exports = {
     validateTalk,
     validateDateRate,
     putTalker,
+    deleteTalker,
+    getSearch,
 };
