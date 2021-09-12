@@ -10,6 +10,12 @@ router.get('/talker', talkerHandlers.getTalkers);
 
 router.get('/talker/:id', talkerHandlers.getTalkersId);
 
+router.get(
+  '/search',
+  authHandlers.validateToken,
+  talkerHandlers.queryTalker,
+);
+
 router.post(
   '/login',
   loginHandlers.loginEmail,

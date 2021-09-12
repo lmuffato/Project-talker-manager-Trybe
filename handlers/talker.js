@@ -6,6 +6,18 @@ const readTalkers = () => {
   return JSON.parse(data);
 };
 
+const queryTalker = (req, res) => {
+  const { q } = req.query;
+
+  const talkers = readTalkers();
+
+  if (q === '' || !q) return res.status(200).json(talkers);
+
+  const filterTalker = talkers.filter((talker) => talker.name.includes(q));
+
+  return res.status(200).json(filterTalker);
+};
+
 const getTalkers = rescue(async (_req, res) => {
   const data = readTalkers();
   res.status(200).json(data);
@@ -155,6 +167,7 @@ const rateValidation = (req, res, next) => {
 module.exports = {
   getTalkers,
   getTalkersId,
+  queryTalker,
   changeTalker,
   deleteTalker,
   readTalkers,
