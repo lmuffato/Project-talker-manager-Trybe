@@ -18,8 +18,8 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.use('/talker', talkerRouter);
 app.use('/login', loginRouter);
+app.use('/talker', talkerRouter);
 
 app.use((err, _req, res, _next) => {
   res.status(HTTP_SERVER_ERROR).json({ error: `Error: ${err.message}` });

@@ -1,4 +1,7 @@
-const { HTTP_BAD_REQUEST } = require('./serverStatus');
+const { 
+  HTTP_BAD_REQUEST,
+  HTTP_UNAUTHORIZED,
+} = require('./serverStatus');
 
 function isEmailValid(req, res, next) {
   const { email } = req.body;
@@ -38,7 +41,26 @@ function isPasswordValid(req, res, next) {
   next();
 }
 
+function isTokenValid(req, res, next) {
+  const { token } = req.headers;
+
+  if (!token) {
+    return res.status(HTTP_UNAUTHORIZED).json({
+      message: 'Token não encontrado',
+    });
+  }
+
+  if (token !== '7mqaVRXJSp886CGr') {
+    return res.status(HTTP_UNAUTHORIZED).json({
+      message: 'Token inválido',
+    });
+  }
+
+  next();
+}
+
 module.exports = {
   isEmailValid,
   isPasswordValid,
+  isTokenValid,
 };
