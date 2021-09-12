@@ -8,8 +8,6 @@ const { getTalkers } = require('./functions/getTalkers');
 const { filterById } = require('./functions/filterById');
 
 // Middlewares de validação
-// const { emailValidation } = require('./middlewares/validations/emailValidation');
-// const { passwordValidation } = require('./middlewares/validations/passwordValidation');
 const { tokenValidation } = require('./middlewares/validations/tokenValidation');
 const { nameValidation } = require('./middlewares/validations/nameValidation');
 const { ageValidation } = require('./middlewares/validations/ageValidation');
@@ -68,8 +66,6 @@ app.put('/talker/:id',
 tokenValidation,
 nameValidation,
 ageValidation,
-// watchedAtValidation,
-// rateValidation,
 talkValidation,
 updateTalker,
 async () => { });
@@ -98,8 +94,6 @@ tokenValidation,
 nameValidation,
 ageValidation,
 talkValidation,
-// watchedAtValidation,
-// rateValidation,
 registerTalker,
 async () => {});
 /* REQUISIÇÃO
