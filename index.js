@@ -22,7 +22,7 @@ const { deleteTalker } = require('./middlewares/deleteTalker');
 const { searchTalker } = require('./middlewares/searchTalker');
 
 // Rotas contidas no router
-const myRouter = require('./routes/router'); // Arquivo com as rotas
+const loginRouter = require('./routes/loginRouter'); // Arquivo com as rotas
 
 const app = express();
 app.use(bodyParser.json());
@@ -119,7 +119,7 @@ app.get('/talker', async (_request, response) => {
 */
 
 // POST - Rota para validar um login e gerar um token;
-app.use('/login', myRouter); // A partir dessa linha, todas as rotas iniciadas por '/login' serão tratadas no router
+app.use('/login', loginRouter); // A partir dessa linha, todas as rotas iniciadas por '/login' serão tratadas no router
 /* REQUISIÇÃO
 echo '{"email":"email@email.com", "password":"123456789" }' | http POST :3000/login  // (ok) retorna o token 
 http POST :3000/login email='email@email.com' password='123456789'                   // (ok) retorna o token 
