@@ -11,9 +11,9 @@ const postTalker = async (req, res) => {
         };
         talkers.push(addTalker);
         await fs.promises.writeFile('./talker.json', JSON.stringify(talkers));
-        res.status(201).JSON(addTalker);
+        return res.status(201).JSON(addTalker);
     } catch (error) {
-        console.error(error.message);
+       return console.error(error.message);
     }
 };
 
@@ -39,10 +39,9 @@ const validateName = (req, res, next) => {
     const { name } = req.body;
   
     if (!name) {
-      res.status(400).json({
+      return res.status(400).json({
         message: 'O campo "name" é obrigatório',
       });
-      return;
     }
   
     if (!(typeof name === 'string' && name.length >= 3)) {
@@ -63,7 +62,7 @@ const validateAge = (req, res, next) => {
       });
     }
   
-    if (age < 18 || typeof age !== 'number') {
+    if (typeof age !== 'number' || age < 18) {
       return res.status(400).json({
         message: 'A pessoa palestrante deve ser maior de idade',
       });
@@ -94,7 +93,7 @@ const validateAge = (req, res, next) => {
       });
     }
   
-    if (talk.rate < 1 || talk.rate > 5) {
+    if (Number.isInteger(talk.rate) && talk.rate < 1 && talk.rate > 5) {
       return res.status(400).json({
         message: 'O campo "rate" deve ser um inteiro de 1 à 5',
       });

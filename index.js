@@ -29,11 +29,14 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+app.get('/talker/search', tokenVerify, getSearch, getTalkers);
+
 app.get('/talker', getTalkers);
 
 app.get('/talker/:id', talkerId);
 
 app.post('/login', generateToken, validateEmail, validatePassword, login);
+
 app.post('/talker',
 tokenVerify, validateName, validateAge, validateTalk, validateDateRate, postTalker);
 
@@ -46,8 +49,6 @@ validateDateRate,
 putTalker);
 
 app.delete('/talker/:id', tokenVerify, deleteTalker);
-
-app.get('/talker/search', tokenVerify, getSearch, getTalkers);
 
 app.listen(PORT, () => {
   console.log('Online');
