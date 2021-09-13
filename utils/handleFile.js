@@ -37,8 +37,19 @@ function updateTalker(bodyTalker) {
   fs.writeFileSync(talker, JSON.stringify(dataUpdated));
 }
 
+function deleteTalker(talkerId) {
+  const data = readFile();
+  const newData = data.filter(({ id }) => id !== talkerId);
+
+  console.log(data);
+  console.log(newData);
+
+  fs.writeFileSync(talker, JSON.stringify(newData));
+}
+
 module.exports = {
   readFile,
   addTalker,
   updateTalker,
+  deleteTalker,
 };
