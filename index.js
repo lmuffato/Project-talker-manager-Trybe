@@ -22,7 +22,7 @@ app.use('/login', loginRouter);
 app.use('/talker', talkerRouter);
 
 app.use((err, _req, res, _next) => {
-  res.status(HTTP_SERVER_ERROR).json({ error: `Error: ${err.message}` });
+  res.status(HTTP_SERVER_ERROR).json({ error: `${err.message}` });
 });
 
 app.listen(PORT, () => {
