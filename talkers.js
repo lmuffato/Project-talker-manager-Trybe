@@ -68,4 +68,19 @@ const editTalker = async (req, res) => {
       res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
      };
 
-module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker };
+     const getSearch = async (req, res) => {
+        const { q } = req.query;
+        const talkers = await fs.readFile(dataFile);
+        const parsedTalkers = JSON.parse(talkers);
+        
+        if (!q || q === '') return res.status(201).json(parsedTalkers);
+        const filteredTalkers = parsedTalkers.filter((talk) => talk.name.includes(q));
+        if (!filteredTalkers) return res.status(201).json([]);
+        if (!filteredTalkers) { 
+          return res.status(400)
+          .json({ message: 'Pessoa palestrante não encontrada' });
+        }
+        res.status(200).json(filteredTalkers);  
+    };
+
+module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker, getSearch };

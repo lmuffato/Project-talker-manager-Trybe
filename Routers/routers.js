@@ -1,13 +1,16 @@
 const { Router } = require('express');
 
 const {
-  getAllTalkers, getTalkerById, addTalker, editTalker, deleteTalker } = require('../talkers');
+  getAllTalkers, getTalkerById, addTalker,
+  editTalker, deleteTalker, getSearch } = require('../talkers');
 
 const Validator = require('../Services/validations');
 
 const router = Router();
 
 router.get('/', getAllTalkers);
+
+router.get('/search', Validator.validToken, getSearch);
 
 router.get('/:id', getTalkerById);
 
