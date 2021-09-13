@@ -25,6 +25,19 @@ router.get('/', async (_req, res) => {
   }
 });
 
+router.get('/search', validarToken, async (req, res) => {
+  const { q } = req.query;
+  const talkers = await fs.readFile(talkerJSON, 'utf-8').then((r) => JSON.parse(r));
+  if (!q || q === '') return res.status(HTTP_OK_STATUS).json(talkers);
+  const filterQuery = talkers
+    .filter(({ id, name, age, talk: { watchedAt, rate } }) => name.includes(q)
+      || watchedAt.includes(q)
+      || rate === Number(q)
+      || age === Number(q)
+      || id === Number(q));
+  res.status(HTTP_OK_STATUS).json(filterQuery);
+});
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   const request = await fs.readFile(talkerJSON, 'utf-8').then((r) => JSON.parse(r));
@@ -77,7 +90,7 @@ router.delete('/:id', validarToken, async (req, res) => {
   const talkers = await fs.readFile(talkerJSON, 'utf-8').then((r) => JSON.parse(r));
   const filtrarTalkerPorId = talkers.filter((talk) => talk.id !== Number(id));
   await fs.writeFile(talkerJSON, JSON.stringify(filtrarTalkerPorId));
-  res.status(200).json({ message: PALESTRANTE_DELETADO });
+  res.status(HTTP_OK_STATUS).json({ message: PALESTRANTE_DELETADO });
 });
 
 module.exports = router;
