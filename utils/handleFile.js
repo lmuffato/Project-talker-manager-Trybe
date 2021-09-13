@@ -8,4 +8,11 @@ function readFile() {
   return JSON.parse(data);
 }
 
-module.exports = readFile;
+function createFile(data) {
+  fs.writeFileSync(talker, JSON.stringify(data));
+}
+
+module.exports = {
+  readFile,
+  createFile,
+};
