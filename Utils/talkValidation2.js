@@ -1,5 +1,4 @@
 module.exports = (req, res, next) => { 
-
 const { talk } = req.body;
 
 if (!talk || !talk.watchedAt || (!talk.rate && talk.rate !== 0)) {
