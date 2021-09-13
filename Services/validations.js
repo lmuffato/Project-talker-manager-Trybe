@@ -63,12 +63,12 @@ const validTalkKeys = (req, res, next) => {
   next();
 };
 
-const talkerValidator = [
+/* const talkerValidator = [
   validToken,
   validName,
   validAge,
   validTalk,
   validTalkKeys,
-];
+]; */
 
-module.exports = { talkerValidator };
+module.exports = { validToken, validName, validAge, validTalk, validTalkKeys };
