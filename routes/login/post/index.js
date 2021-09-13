@@ -4,13 +4,9 @@ const { HTTP_OK_STATUS } = require('../../../utils/serverStatus');
 
 router.use(isEmailValid, isPasswordValid);
 
-router.post('/', (_req, res) => {
-  const token = '7mqaVRXJSp886CGr';
-
-  res.set('token', token);
-  
+router.post('/', (_req, res) => {  
   res.status(HTTP_OK_STATUS).json({
-    token,
+    token: '7mqaVRXJSp886CGr',
   });
 });
 
