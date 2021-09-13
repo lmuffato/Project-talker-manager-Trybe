@@ -1,9 +1,7 @@
 const router = require('express').Router();
-const readFile = require('../../../utils/readFile');
-const { 
-  HTTP_OK_STATUS,
-  HTTP_NOT_FOUND,
- } = require('../../../utils/serverStatus');
+const { readFile } = require('../../../utils/handleFile');
+const { isIdValid } = require('../../../utils/validations');
+const { HTTP_OK_STATUS } = require('../../../utils/serverStatus');
 
 router.get('/', (_req, res, next) => {
   try {
@@ -17,18 +15,9 @@ router.get('/', (_req, res, next) => {
   }
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', isIdValid, (req, res, next) => {
   try {
-    const { id } = req.params;
-    const data = readFile();
-    const talker = data.find((dataTalker) => parseInt(id, 10) === dataTalker.id);
-
-    if (!talker) {
-      return res.status(HTTP_NOT_FOUND).json({ 
-        message: 'Pessoa palestrante não encontrada',
-      });
-    }
-
+    const { talker } = req;
     res.status(HTTP_OK_STATUS).json(talker);
   } catch (err) {
     next(err);

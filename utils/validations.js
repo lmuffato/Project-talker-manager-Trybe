@@ -1,6 +1,8 @@
+const { readFile } = require('./handleFile');
 const { 
   HTTP_BAD_REQUEST,
   HTTP_UNAUTHORIZED,
+  HTTP_NOT_FOUND,
 } = require('./serverStatus');
 
 function isEmailValid(req, res, next) {
@@ -41,16 +43,37 @@ function isPasswordValid(req, res, next) {
   next();
 }
 
-function isTokenValid(req, res, next) {
-  const { token } = req.headers;
+function isIdValid(req, res, next) {
+  try {
+    const { id } = req.params;
+    const data = readFile();
+    const talker = data.find((dataTalker) => parseInt(id, 10) === dataTalker.id);
 
-  if (!token) {
+    if (!talker) {
+      return res.status(HTTP_NOT_FOUND).json({ 
+        message: 'Pessoa palestrante não encontrada',
+      });
+    }
+
+    req.data = data;
+    req.talker = talker;
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+function isTokenValid(req, res, next) {
+  const { authorization } = req.headers;
+
+  if (!authorization) {
     return res.status(HTTP_UNAUTHORIZED).json({
       message: 'Token não encontrado',
     });
   }
 
-  if (token !== '7mqaVRXJSp886CGr') {
+  if (authorization !== '7mqaVRXJSp886CGr') {
     return res.status(HTTP_UNAUTHORIZED).json({
       message: 'Token inválido',
     });
@@ -95,10 +118,56 @@ function isAgeValid(req, res, next) {
   next();
 }
 
+function isTalkValid(req, res, next) {
+  const { talk } = req.body;
+
+  if (!talk || !talk.watchedAt || !talk.rate) {
+    return res.status(HTTP_BAD_REQUEST).json({
+      message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    });
+  }
+
+  next();
+}
+
+function isTalkDateValid(req, res, next) {
+  const { talk } = req.body;
+  const { watchedAt } = talk || { watchedAt: undefined };
+  const dateRegex = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/i;
+  const isValid = dateRegex.test(watchedAt);
+
+  if (!isValid && watchedAt !== undefined) {
+    return res.status(HTTP_BAD_REQUEST).json({
+      message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
+    });
+  }
+  
+  next();
+}
+
+function isTalkRateValid(req, res, next) {
+  const { talk } = req.body;
+  const { rate } = talk || { rate: undefined };
+  const rateRegex = /^[1-5]$/i;
+  const isValid = rateRegex.test(rate);
+
+  if (!isValid && rate !== undefined) {
+    return res.status(HTTP_BAD_REQUEST).json({
+      message: 'O campo "rate" deve ser um inteiro de 1 à 5',
+    });
+  }
+
+  next();
+}
+
 module.exports = {
   isEmailValid,
   isPasswordValid,
+  isIdValid,
   isTokenValid,
   isNameValid,
   isAgeValid,
+  isTalkValid,
+  isTalkDateValid,
+  isTalkRateValid,
 };
