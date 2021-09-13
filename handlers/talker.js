@@ -6,7 +6,7 @@ const readTalkers = () => {
   return JSON.parse(data);
 };
 
-const queryTalker = (req, res) => {
+const queryTalker = rescue(async (req, res) => {
   const { q } = req.query;
 
   const talkers = readTalkers();
@@ -16,7 +16,7 @@ const queryTalker = (req, res) => {
   const filterTalker = talkers.filter((talker) => talker.name.includes(q));
 
   return res.status(200).json(filterTalker);
-};
+});
 
 const getTalkers = rescue(async (_req, res) => {
   const data = readTalkers();
@@ -165,9 +165,9 @@ const rateValidation = (req, res, next) => {
 };
 
 module.exports = {
+  queryTalker,
   getTalkers,
   getTalkersId,
-  queryTalker,
   changeTalker,
   deleteTalker,
   readTalkers,

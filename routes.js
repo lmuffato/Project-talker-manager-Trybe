@@ -8,13 +8,13 @@ const authHandlers = require('./handlers/auth');
 
 router.get('/talker', talkerHandlers.getTalkers);
 
-router.get('/talker/:id', talkerHandlers.getTalkersId);
-
 router.get(
-  '/search',
+  '/talker/search',
   authHandlers.validateToken,
   talkerHandlers.queryTalker,
 );
+
+router.get('/talker/:id', talkerHandlers.getTalkersId);
 
 router.post(
   '/login',
