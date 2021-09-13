@@ -9,5 +9,4 @@ function tokenGeneration(length) {
     }
     return result;
 }
-console.log(tokenGeneration(16));
 module.exports = tokenGeneration;
