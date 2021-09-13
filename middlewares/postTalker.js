@@ -1,8 +1,7 @@
 const fs = require('fs');
 
-const postTalker = async (req, res) => {
-    try {
-        const talkers = JSON.parse(await fs.promises.readFile('./talker.json', 'utf-8'));
+const postTalker = (req, res) => {
+        const talkers = JSON.parse(fs.readFileSync('./talker.json', 'utf-8'));
         const addTalker = {
         name: req.body.name,
         age: req.body.age,
@@ -10,11 +9,8 @@ const postTalker = async (req, res) => {
         talk: req.body.talk,
         };
         talkers.push(addTalker);
-        await fs.promises.writeFile('./talker.json', JSON.stringify(talkers));
-        return res.status(201).JSON(addTalker);
-    } catch (error) {
-       return console.error(error.message);
-    }
+         fs.writeFileSync('./talker.json', JSON.stringify(talkers));
+        return res.status(201).json(addTalker);
 };
 
 const tokenVerify = (req, res, next) => {
@@ -93,13 +89,12 @@ const validateAge = (req, res, next) => {
       });
     }
   
-    if (Number.isInteger(talk.rate) && talk.rate < 1 && talk.rate > 5) {
+    if (!(Number.isInteger(talk.rate) && talk.rate >= 1 && talk.rate <= 5)) {
       return res.status(400).json({
-        message: 'O campo "rate" deve ser um inteiro de 1 à 5',
-      });
+        message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
     }
   
-    return next();
+    next();
   };
 
 module.exports = {
