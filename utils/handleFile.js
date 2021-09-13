@@ -24,7 +24,21 @@ function addTalker(bodyTalker) {
   return newId;
 }
 
+function updateTalker(bodyTalker) {
+  const data = readFile();
+  const dataUpdated = data.map((talkerObj) => {
+    if (talkerObj.id === bodyTalker.id) {
+      return bodyTalker;
+    }
+
+    return talkerObj;
+  });
+
+  fs.writeFileSync(talker, JSON.stringify(dataUpdated));
+}
+
 module.exports = {
   readFile,
   addTalker,
+  updateTalker,
 };
