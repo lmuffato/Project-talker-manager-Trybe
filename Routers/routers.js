@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const {
-  getAllTalkers, getTalkerById, addTalker } = require('../talkers');
+  getAllTalkers, getTalkerById, addTalker, editTalker } = require('../talkers');
 
 const { talkerValidator } = require('../Services/validations');
 
@@ -12,5 +12,7 @@ router.get('/', getAllTalkers);
 router.get('/:id', getTalkerById);
 
 router.post('/', talkerValidator, addTalker);
+
+router.put('/:id', talkerValidator, editTalker);
 
 module.exports = router;

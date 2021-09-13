@@ -34,4 +34,25 @@ const addTalker = async (req, res) => {
   res.status(201).json(newTalker);
 };
 
-module.exports = { getAllTalkers, getTalkerById, addTalker };
+const editTalker = async (req, res) => {
+   const { id } = req.params;
+    const { name, age, talk } = req.body;
+    const editingTalker = {
+      id: Number(id),
+      name,
+      age,
+      talk,
+    };
+
+  const talkers = await fs.readFile('./talker.json');
+  const parsedTalkers = JSON.parse(talkers);
+
+  const preEditedTalkers = parsedTalkers.filter((t) => Number(t.id) !== Number(id));
+  preEditedTalkers.push(editingTalker);
+  await fs.writeFile('talker.json', JSON.stringify(preEditedTalkers));
+  if (!editingTalker) return res.status(400)
+    .json({ message: 'Palestrante não atualizado' });
+    res.status(200).json(editingTalker); 
+  };
+
+module.exports = { getAllTalkers, getTalkerById, addTalker, editTalker };
