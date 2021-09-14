@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { querySearch, queryId, fullQuery, queryPush } = require('./controller/controller');
+const { querySearch, queryId, fullQuery, queryPush, queryChange, queryDelete } = require('./controller/controller');
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,6 +17,8 @@ app.get('/talker', fullQuery);
 app.get('/talker/search', querySearch);
 app.get('/talker/:id', queryId);
 app.post('/talker', queryPush);
+app.put('/talker/:id', queryChange);
+app.delete('/talker/:id', queryDelete);
 
 app.listen(PORT, () => {
   console.log('Online');
