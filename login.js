@@ -6,7 +6,6 @@ const router = express.Router();
 
 function validateEmailLogin(em) {
   const regEmail = /\S+@\S+\.\S+/;
-  console.log(regEmail.test(regEmail));
   if (!em) {
     throw new Error('O campo "email" é obrigatório');
   }
