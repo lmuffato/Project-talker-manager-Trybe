@@ -19,7 +19,7 @@ async function querySearch(req, res) {
 }
 
 async function queryPush(req, res) {
-  const { name, age, talk } = req.body;
+  const { id, name, age, talk } = req.body;
   talkersList.push({ id, name, age, talk });
   res.status(HTTP_OK_CREATED).json(req.body);
 }
