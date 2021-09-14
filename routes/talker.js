@@ -7,6 +7,7 @@ const ageValidation = require('../Utils/ageValidation');
 const talkValidation = require('../Utils/talkValidation');
 const talkValidation2 = require('../Utils/talkValidation2');
 const tokenValidation = require('../middleware/tokenValidation');
+const deleteTalker = require('../middleware/deleteTalker');
 
 const router = Router();
 
@@ -21,5 +22,6 @@ talkValidation2,
 talkValidation, 
 addTalker,
 );
+router.delete('/:id', tokenValidation, deleteTalker);
 
 module.exports = router;
