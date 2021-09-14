@@ -1,6 +1,6 @@
 // https://qastack.com.br/programming/1349404/generate-random-string-characters-in-javascript
 
-function tokenGeneration(length) {
+module.exports = (length) => {
     let result = '';
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
@@ -8,5 +8,4 @@ function tokenGeneration(length) {
        result += characters.charAt(Math.floor(Math.random() * charactersLength));
     }
     return result;
-}
-module.exports = tokenGeneration;
+};

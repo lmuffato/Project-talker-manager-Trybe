@@ -12,5 +12,4 @@ router.post('/', ...valid, (_res, res) => {
     const token = tokenGeneration(16);
     return res.status(200).json({ token });
 });
-
 module.exports = router;

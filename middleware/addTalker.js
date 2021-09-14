@@ -7,5 +7,5 @@ module.exports = async (req, res) => {
     const newTalker = { name, age, talk, id: response.length + 1 };
     response.push(newTalker);
     await fs.writeFile('talker.json', JSON.stringify(response));
-    res.status(201).json(response);
+    res.status(201).json(newTalker);
 };
