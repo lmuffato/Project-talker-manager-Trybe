@@ -37,15 +37,15 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-  const { email, password } = req.query;
+  const { email, password } = req.body;
   const token = crypto.randomKey(16);
-  const validateEmail = myModule.validateEmail(email);
-  const validatePassword = myModule.validatePassword(password);
-  if (validateEmail) {
-    return res.status(400).json(validateEmail);
+  const emailMessage = myModule.validateEmail(email);
+  const passwordMessage = myModule.validatePassword(password);
+  if (emailMessage) {
+    return res.status(400).json(emailMessage);
   } 
-  if (validatePassword) {
-    return res.status(400).json(validatePassword);
+  if (passwordMessage) {
+    return res.status(400).json(passwordMessage);
   }
   
   res.status(HTTP_OK_STATUS).json({ token });
