@@ -48,7 +48,7 @@ app.post('/login', (req, res) => {
     return res.status(400).json(validatePassword);
   }
   
-  res.status(HTTP_OK_STATUS).json({ token, email, password });
+  res.status(HTTP_OK_STATUS).json({ token });
 });
 
 app.listen(PORT, () => {
