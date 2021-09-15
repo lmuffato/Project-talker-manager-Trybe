@@ -10,4 +10,4 @@ module.exports = async (req, resp) => {
     resp
       .status(404)
       .json({ message: 'Pessoa palestrante não encontrada' });
-    };
+    }; 
