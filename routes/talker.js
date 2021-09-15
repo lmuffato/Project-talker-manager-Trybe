@@ -9,9 +9,11 @@ const talkValidation2 = require('../Utils/talkValidation2');
 const tokenValidation = require('../middleware/tokenValidation');
 const deleteTalker = require('../middleware/deleteTalker');
 const editTalker = require('../middleware/editTalker');
+const searchTalker = require('../middleware/searchTalker');
 
 const router = Router();
 
+router.get('/search', tokenValidation, searchTalker);
 router.get('/', getTalker);
 router.get('/:id', getTlakerById);
 router.post(
