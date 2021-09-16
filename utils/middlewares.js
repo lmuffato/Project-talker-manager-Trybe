@@ -1,4 +1,4 @@
-const { NOT_FOUND, FOUR_HUNDRED, FOUR_HUNDRED_ONE } = require('./consts');
+const { FOUR_HUNDRED, FOUR_HUNDRED_ONE } = require('./consts');
 
 const generateToken = () => {
     const a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
@@ -23,7 +23,7 @@ const tokenValidate = (req, res, next) => {
 };
 
 function validateEmail(email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re = /^[a-z0-9.]+@[a-z0-9]+\.[a-z]+\.([a-z]+)?$/i;
     return re.test(String(email).toLowerCase());
 }
 
