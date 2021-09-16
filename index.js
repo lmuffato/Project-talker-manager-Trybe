@@ -8,6 +8,10 @@ const writeFile = util.promisify(fs.writeFile);
 
 const bodyParser = require('body-parser');
 
+// const { parse } = require('path');
+// const { error } = require('console');
+// const { response } = require('express');
+// const { throws } = require('assert');
 const getStuff = require('./utils/read');
 
 const { HTTP_OK_STATUS, PORT, TALKER, NOT_FOUND, TWO_HUND_ONE } = require('./utils/consts');
@@ -25,6 +29,8 @@ const { generateToken,
 const app = express();
 
 app.use(bodyParser.json());
+
+// const routes = require('./routes')(app, fs);
 
 app.get('/talker', (_request, response) => {
   getStuff(TALKER).then((content) => {
@@ -75,10 +81,10 @@ app.put('/talker/:id', tokenValidate, nameValidate, ageValidate, talkValidate, r
   const { id } = request.params;
   const { name, age, talk } = request.body;
   getStuff(TALKER).then((content) => {
-    const jsonData = JSON.parse(content);
+    let jsonData = JSON.parse(content);
     let updateTalker = jsonData.find((t) => t.id === parseInt(id, 10));
-    updateTalker = { id: parseInt(id, 10), name, age, talk };
-    Object.assign(jsonData, jsonData.map((el) => (el.id === updateTalker.id ? updateTalker : el)));
+    updateTalker = { id: parseInt(id, 10), name: name, age: age, talk: talk, }
+    Object.assign(jsonData, jsonData.map(el => el.id === updateTalker.id ? updateTalker : el));
     writeFile(TALKER, JSON.stringify(jsonData), 'utf8', (err) => {
       if (err) console.log('Error writing file:', err);
     });
@@ -86,17 +92,6 @@ app.put('/talker/:id', tokenValidate, nameValidate, ageValidate, talkValidate, r
   });
 });
 
-app.delete('/talker/:id', tokenValidate, async (request, response) => {
-  const { id } = request.params;
-  getStuff(TALKER).then((content) => {
-    let jsonData = JSON.parse(content);
-    jsonData = jsonData.filter((obj) => obj.id !== parseInt(id, 10));
-    writeFile(TALKER, JSON.stringify(jsonData), 'utf8', (err) => {
-      if (err) console.log('Error writing file:', err);
-    });
-    response.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
-  });
-});
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
