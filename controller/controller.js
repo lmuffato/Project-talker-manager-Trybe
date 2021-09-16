@@ -1,21 +1,21 @@
 const HTTP_OK_STATUS = 200;
+const fs = require('fs');
 const talkersList = require('../talker.json');
+
+const TALKERFILE = '../talker.json';
 
 async function fullQuery(_req, res) {
 res.status(HTTP_OK_STATUS).json(talkersList);  
 }
 
-async function queryId(req, res) {
-  const { id } = req.params;
-  const talkerFind = talkersList.find((talker) => talker.id === +id);
-  if (!talkerFind) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-   res.status(HTTP_OK_STATUS).json(talkerFind);
-  }
-
-async function querySearch(req, res) {
-  const { q } = req.query;
-  const filteredTalker = talkersList.filter((talker) => talker.name.includes(q));
-   res.status(HTTP_OK_STATUS).json(filteredTalker);
+async function querySearch(_req, res) {
+  fs.readFile(TALKERFILE, (error, data) => {
+    if (error) {
+      return res.status(HTTP_OK_STATUS).json([]);
+    }
+    const talker = JSON.parse(data);
+  return res.status(HTTP_OK_STATUS).json(talker);
+  });
 }
 
 async function queryPush(req, res) {
@@ -40,7 +40,7 @@ async function queryChange(req, res) {
 async function queryDelete(req, res) {
   const { id } = req.params;
   const index = talkersList.findIndex((talker) => talker.id === +id);
-  if (index === -1) return res.status(404).json({ message: 'id not found' });
+  if (index === -1) return res.status(404).json({ message: "'id not found'" });
   talkersList.splice(index, 1);
   res.status(HTTP_OK_STATUS).end();
 }
