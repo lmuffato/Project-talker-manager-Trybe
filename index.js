@@ -20,3 +20,5 @@ app.get('/', (_request, response) => {
 app.listen(PORT, () => {
   console.log('Online');
 });
+// projeto feito com a contribuição dos meus colegas de turma, Nilson Ribeiro e Adelino Junior.
+// Referencia : https://github.com/AdelinoJnr
