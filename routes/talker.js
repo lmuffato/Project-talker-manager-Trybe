@@ -40,13 +40,16 @@ router.post('/', validation, async (req, res) => {
   return res.status(HTTP_CREATED).json(newTalker).end();
 });
 
-async function queryDelete(req, res) {
+router.delete('/:id', tokenVerifier, async (req, res) => {
   const { id } = req.params;
-  const index = talkersList.findIndex((talker) => talker.id === +id);
-  if (index === -1) return res.status(404).json({ message: "'id not found'" });
-  talkersList.splice(index, 1);
-  res.status(HTTP_OK_STATUS).end();
-}
+  const talkerInfo = await talkers();
+  const index = talkerInfo.findIndex((talker) => talker.id === +id);
+  if (index === -1) return res.status(HTTP_NOT_FOUND).json({ message: '\'id not found\'' });
+  talkerInfo.splice(index, 1);
+  await fs.writeFile(TALKERFILE, 
+    JSON.stringify(talkerInfo), (error) => { if (error) throw error; });
+  return res.status(HTTP_OK_STATUS).end();
+});
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
