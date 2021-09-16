@@ -17,6 +17,15 @@ const talkers = async () => {
   const talkersInfo = await JSON.parse(info);
   return talkersInfo;
 };
+router.get('/search', tokenVerifier, async (req, res) => {
+  const { q } = req.query;
+  const talkerInfo = await talkers();
+  if (!q || q === '') {
+    return res.status(HTTP_OK_STATUS).json(talkerInfo);
+  }
+  const arr = talkerInfo.filter((item) => item.name.includes(q));
+  return res.status(HTTP_OK_STATUS).json(arr);
+});
 
 router.get('/', async (_req, res) => {
   const talkerInfo = await talkers();
