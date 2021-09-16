@@ -37,20 +37,10 @@ async function queryChange(req, res) {
   res.status(HTTP_OK_STATUS).end();
 }
 
-async function queryDelete(req, res) {
-  const { id } = req.params;
-  const index = talkersList.findIndex((talker) => talker.id === +id);
-  if (index === -1) return res.status(404).json({ message: "'id not found'" });
-  talkersList.splice(index, 1);
-  res.status(HTTP_OK_STATUS).end();
-}
-
 module.exports = {
   querySearch,
-  queryId,
   fullQuery,
   queryPush,
   queryChange,
-  queryDelete,
   loginValidation,
 };

@@ -40,6 +40,16 @@ router.post('/', validation, async (req, res) => {
   return res.status(HTTP_CREATED).json(newTalker).end();
 });
 
+router.
+
+async function queryDelete(req, res) {
+  const { id } = req.params;
+  const index = talkersList.findIndex((talker) => talker.id === +id);
+  if (index === -1) return res.status(404).json({ message: "'id not found'" });
+  talkersList.splice(index, 1);
+  res.status(HTTP_OK_STATUS).end();
+}
+
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
   const talkerInfo = await talkers();
