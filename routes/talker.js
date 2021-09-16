@@ -40,8 +40,6 @@ router.post('/', validation, async (req, res) => {
   return res.status(HTTP_CREATED).json(newTalker).end();
 });
 
-router.
-
 async function queryDelete(req, res) {
   const { id } = req.params;
   const index = talkersList.findIndex((talker) => talker.id === +id);
