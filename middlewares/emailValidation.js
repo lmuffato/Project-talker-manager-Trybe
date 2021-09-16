@@ -6,7 +6,7 @@
   if (!email) {
     return res.status(HTTP_BAD_REQUEST).json({ message: 'O campo "email" é obrigatório' });
   }
-  if (emailRegex.test(email)) {
+  if (!emailRegex.test(email)) {
     return res.status(HTTP_BAD_REQUEST)
     .json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
