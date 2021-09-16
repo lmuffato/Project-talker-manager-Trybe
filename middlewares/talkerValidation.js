@@ -45,7 +45,7 @@ const ageVerifier = (req, res, next) => {
     });
   }
 
-  if (age.length < 3) {
+  if (age < 18) {
     return res.status(HTTP_BAD_REQUEST).json({
       message: 'A pessoa palestrante deve ser maior de idade',
     });
