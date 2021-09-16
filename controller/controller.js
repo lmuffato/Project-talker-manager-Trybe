@@ -28,19 +28,9 @@ async function loginValidation(req, res) {
  res.status(HTTP_OK_STATUS).json({ token: '7mqaVRXJSp886CGr' });
 }
 
-async function queryChange(req, res) {
-  const { id } = req.params;
-  const { name, age, talk } = req.body;
-  const index = talkersList.findIndex((talker) => talker.id === +id);
-  if (index === -1) return res.status(404).json({ message: 'id not found' });
-  talkersList[index] = { id, name, age, talk };
-  res.status(HTTP_OK_STATUS).end();
-}
-
 module.exports = {
   querySearch,
   fullQuery,
   queryPush,
-  queryChange,
   loginValidation,
 };

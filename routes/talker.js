@@ -40,6 +40,20 @@ router.post('/', validation, async (req, res) => {
   return res.status(HTTP_CREATED).json(newTalker).end();
 });
 
+router.put('/:id', validation, async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talkerInfo = await talkers();
+  const index = talkerInfo.findIndex((talker) => talker.id === +id);
+  if (index === -1) return res.status(HTTP_NOT_FOUND).json({ message: 'id not found' });
+  talkerInfo[index] = { ...talkerInfo[index], name, age, talk };
+  const newTalker = talkerInfo.filter((q) => q.id !== parseInt(id, 8));
+  newTalker.push(talkerInfo[index]);
+  await fs.writeFile(TALKERFILE, 
+    JSON.stringify(talkerInfo), (error) => { if (error) throw error; });
+  res.status(HTTP_OK_STATUS).json(talkerInfo[index]);
+});
+
 router.delete('/:id', tokenVerifier, async (req, res) => {
   const { id } = req.params;
   const talkerInfo = await talkers();
@@ -48,7 +62,7 @@ router.delete('/:id', tokenVerifier, async (req, res) => {
   talkerInfo.splice(index, 1);
   await fs.writeFile(TALKERFILE, 
     JSON.stringify(talkerInfo), (error) => { if (error) throw error; });
-  return res.status(HTTP_OK_STATUS).end();
+  return res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 router.get('/:id', async (req, res) => {
