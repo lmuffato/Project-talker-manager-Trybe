@@ -4,6 +4,7 @@ const fs = require('fs').promises;
 const randomToken = require('random-token');
 const http = require('./helper/httpStatus');
 const login = require('./middlewares/validateLogin');
+const tokenAuth = require('./middlewares/validateToken');
 const talkerAuth = require('./middlewares/validateTalker');
 
 const app = express();
@@ -13,9 +14,12 @@ const { validateAge,
   validateName,
   validateRate,
   validateTalk,
-  validateToken,
   validateWatchedAt,
 } = talkerAuth;
+const { 
+  validateToken,
+} = tokenAuth;
+
 const PORT = '3000';
 
 // Special Thanks to Adelino Junior T10-A, who helped me to solve the problem with the GET '/talker' endpoint and its logics
