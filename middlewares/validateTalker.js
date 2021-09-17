@@ -34,7 +34,6 @@ const validateAge = (req, res, next) => {
 
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
-
   if (!talk) {
     return res.status(http.BAD_REQUEST)
       .json({
@@ -42,7 +41,7 @@ const validateTalk = (req, res, next) => {
       });
   }
 
-  if (!talk.watchedAt || !talk.rate) {
+  if (!talk.watchedAt || talk.rate === undefined || talk.rate === '') {
     return res.status(http.BAD_REQUEST)
       .json({
         message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
