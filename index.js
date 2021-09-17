@@ -72,9 +72,30 @@ async (req, res) => {
   const id = talkers.length + 1;
 
   talkers.push({ name, age, id, talk });
-  console.log(talkers);
   fs.writeFile('./talker.json', JSON.stringify(talkers));
   res.status(http.CREATED).json({ name, age, id, talk });
+});
+
+app.put('/talker/:id',
+validateToken,
+validateName,
+validateAge,
+validateTalk,
+validateWatchedAt,
+validateRate,
+async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const intId = parseInt(id, 10);
+  const talkers = await readFile();
+  const index = id - 1;
+
+  talkers[index].name = name;
+  talkers[index].age = age;
+  talkers[index].talk = talk;
+  
+  fs.writeFile('./talker.json', JSON.stringify(talkers));
+  res.status(http.OK_STATUS).json({ name, age, id: intId, talk });
 });
 
 app.listen(PORT, () => {
