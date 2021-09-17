@@ -10,8 +10,8 @@ async function takers() {
   return dataTalker;
 }
 
-async function saveTalker(talker) {
- await fs.writeFile(talkerArq, JSON.stringify(talker, null, '\t'));
+async function saveTalker(talkers) {
+ await fs.writeFile(talkerArq, JSON.stringify(talkers, null, '\t'));
 }
 
 function validateTokenTalker(req, res, next) {
@@ -51,16 +51,21 @@ const validateAgeTalker = (req, res, next) => {
 
 const validateTalker = (req, res, next) => {
   const { talk } = req.body;
-  const { talk: { watchedAt, rate } } = req.body;
-  if (talk === {} || !talk || !watchedAt || !rate) {
-    return (res
-      .status(400)
-        .json(
-          { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
-        )
+  if (!talk || talk === {}) {
+    return (res.status(400)
+      .json(
+        { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
+      )
     );
   }
-
+  const { talk: { watchedAt, rate } } = req.body;
+  if (!watchedAt || !rate) {
+    return (res.status(400)
+      .json(
+        { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
+      )
+    );
+  }
   next();
 };
 
@@ -77,7 +82,7 @@ const validateWatchedAtTalker = (req, res, next) => {
 
 const validateRateTalker = (req, res, next) => {
   const { talk: { rate } } = req.body;
-  
+
   if (rate < 1 || rate > 5 || !Number.isInteger(rate)) {
     return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
@@ -96,7 +101,7 @@ router.post('/',
   const { name, age, talk: { watchedAt, rate } } = req.body;
   const arrayTalkers = await takers();
   const id = arrayTalkers.length + 1;
-  arrayTalkers.push({ name, age, talk: { watchedAt, rate } });
+  arrayTalkers.push({ id, name, age, talk: { watchedAt, rate } });
   saveTalker(arrayTalkers);
   res.status(201).json({ id, name, age, talk: { watchedAt, rate } });
 });
