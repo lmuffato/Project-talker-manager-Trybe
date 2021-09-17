@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const login = require('./login');
+const addTalker = require('./addTalker');
 
 const talker = './talker.json';
 
@@ -30,6 +31,8 @@ app.get('/talker/:id', async (req, res) => {
 });
 
 app.use('/login', login);
+
+app.use('/talker', addTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
