@@ -16,6 +16,19 @@ talkers.get('', async (_req, res) => {
   res.status(HTTP_OK_STATUS).send(data);
 });
 
+talkers.get('/search', middleware[0], async (req, res) => {
+  const data = await myModule.readFileAsync(FILE_NAME);
+  const { q } = req.query;
+  const queryResult = data.filter((talker) => talker.name.includes(q));
+  if (!q || q === '') {
+    return res.status(200).json(data);
+  }
+  if (!queryResult) {
+    return res.status(200).json([]);
+  }
+  res.status(200).json(queryResult);
+});
+
 talkers.get('/:id', async (req, res) => {
   const data = await myModule.readFileAsync(FILE_NAME);
   const talkersId = await Number(req.params.id);
