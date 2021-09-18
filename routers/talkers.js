@@ -38,9 +38,22 @@ talkers.post('', ...middleware, async (req, res) => {
     talk,
   };
   data.push(newTalk);
-  console.log(data);
   await myModule.writeFileAsync(FILE_NAME, JSON.stringify(data));
   res.status(201).json(newTalk); 
+});
+
+talkers.put('/:id', ...middleware, async (req, res) => {
+  const data = await myModule.readFileAsync(FILE_NAME);
+  const talkersId = Number(req.params.id);
+  const { name, age, talk } = req.body;
+  const getTalkerIndex = data.findIndex((talker) => talker.id === talkersId);
+
+  if (getTalkerIndex === -1) {
+    return res.status(404).jason({ message: 'Pessoa palestrante não encontrada' });
+  }
+  data[getTalkerIndex] = { ...data[getTalkerIndex], name, age, talk };
+  await myModule.writeFileAsync(FILE_NAME, JSON.stringify(data));
+  res.status(200).send(getTalkerIndex);
 });
 
 module.exports = talkers;
