@@ -28,6 +28,8 @@ app.get('/talker', async (_req, res) => {
   res.status(HTTP_OK_STATUS).json(dataTalker);
 });
 
+app.use('/talker/search', searchTalker);
+
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
   const dataTalker = JSON.parse(await fs.readFile(talker, 'utf8'));
@@ -43,8 +45,6 @@ app.use('/talker', addTalker);
 app.use('/talker', editTalker);
 
 app.use('/talker', deleteTalker);
-
-app.use('/talker/search', searchTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
