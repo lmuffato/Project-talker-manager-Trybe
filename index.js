@@ -1,3 +1,6 @@
+// Parte desse projeto foi feito com ajuda do curso de introdução a node.js com express,
+// oferecido pela plataforma Digital Innovarion One.
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const fs = require('fs').promises;
