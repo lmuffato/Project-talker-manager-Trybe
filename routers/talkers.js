@@ -1,10 +1,12 @@
 const express = require('express');
 const myModule = require('../modules');
+const middleware = require('../middlewares');
 
-const talkers = express.Router();
 const HTTP_OK_STATUS = 200;
 const HTTP_BAD_REQUEST = 404;
 const FILE_NAME = './talker.json';
+
+const talkers = express.Router();
 
 talkers.get('', async (_req, res) => {
   const data = await myModule.readFileAsync(FILE_NAME);
@@ -26,20 +28,19 @@ talkers.get('/:id', async (req, res) => {
   res.status(HTTP_OK_STATUS).send(getTalker);
 });
 
-talkers.post('', async (req, res) => {
+talkers.post('', ...middleware, async (req, res) => {
   const { name, age, talk } = req.body;
   const data = await myModule.readFileAsync(FILE_NAME);
   const newTalk = {
+    id: data.length + 1,
     name,
     age,
-    talk: {
-      wathedAt: talk.watchedAt,
-      rate: talk.rate,
-    },
+    talk,
   };
-  await data.push(newTalk);
-  const result = await myModule.writeFileAsync(FILE_NAME, JSON.stringify(data));
-  res.status(201).json(result); 
+  data.push(newTalk);
+  console.log(data);
+  await myModule.writeFileAsync(FILE_NAME, JSON.stringify(data));
+  res.status(201).json(newTalk); 
 });
 
 module.exports = talkers;
