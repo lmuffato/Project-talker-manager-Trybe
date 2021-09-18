@@ -48,9 +48,9 @@ app.post('/talker',
 authToken,
 nameValidation,
 ageValidation,
-watchedAtValidation,
-rateValidation,
 talkValidation,
+rateValidation,
+watchedAtValidation,
 createTalker);
 
 app.put('/talker/:id', 
