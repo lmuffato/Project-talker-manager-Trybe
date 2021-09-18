@@ -13,7 +13,7 @@ app.get('/', (_request, response) => {
 });
 
 app.use(bodyParser.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(bodyParser.urlencoded());
 
 app.use('/talker', talkers);
 app.use('/login', login);
