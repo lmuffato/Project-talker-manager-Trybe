@@ -13,6 +13,7 @@ const talkValidation = require('./middleware/talkValidation');
 const createTalker = require('./middleware/createTalker');
 const updateTalker = require('./middleware/updateTalker');
 const deleteTalker = require('./middleware/deleteTalker');
+const searchTalker = require('./middleware/searchTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -31,6 +32,8 @@ app.get('/talker', async (_req, res) => {
 
   res.status(HTTP_OK_STATUS).json(fetchData);
 });
+
+app.get('/talker/search', authToken, searchTalker);
 
 app.get('/talker/:id', async (req, res) => {
   const { id } = req.params;
