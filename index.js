@@ -29,7 +29,7 @@ const readFile = async () => {
   return JSON.parse(talkers);
 };
 
-const writeFile = (content) => fs.writeFile('./talker.json', JSON.stringify(content));
+  const writeFile = (content) => fs.writeFile('./talker.json', JSON.stringify(content));
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -98,6 +98,17 @@ async (req, res) => {
   
   writeFile(talkers);
   res.status(http.OK_STATUS).json({ name, age, id: intId, talk });
+});
+
+app.delete('/talker/:id',
+validateToken,
+async (req, res) => {
+  const { id } = req.params;
+  const talkers = await readFile();
+  const filteredTalkers = talkers.find((t) => t.id !== parseInt(id, 10));
+  
+  writeFile(filteredTalkers);
+  res.status(http.OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 app.listen(PORT, () => {
