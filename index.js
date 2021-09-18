@@ -11,6 +11,7 @@ const watchedAtValidation = require('./middleware/watchedAtValidation');
 const rateValidation = require('./middleware/rateValidation');
 const talkValidation = require('./middleware/talkValidation');
 const createTalker = require('./middleware/createTalker');
+const updateTalker = require('./middleware/updateTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -51,6 +52,15 @@ watchedAtValidation,
 rateValidation,
 talkValidation,
 createTalker);
+
+app.put('/talker/:id', 
+authToken,
+nameValidation,
+ageValidation,
+talkValidation, 
+watchedAtValidation,
+rateValidation,
+updateTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
