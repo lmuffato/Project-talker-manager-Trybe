@@ -29,7 +29,7 @@ const readFile = async () => {
   return JSON.parse(talkers);
 };
 
-  const writeFile = (content) => fs.writeFile('./talker.json', JSON.stringify(content));
+const writeFile = (content) => fs.writeFile('./talker.json', JSON.stringify(content));
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
@@ -61,8 +61,9 @@ app.post('/login', login.validateEmail, login.validatePassword, async (req, res)
   res.status(http.OK_STATUS).json({ token });
 });
 
+app.use(validateToken);
+
 app.post('/talker',
-validateToken,
 validateName,
 validateAge,
 validateTalk,
@@ -79,7 +80,6 @@ async (req, res) => {
 });
 
 app.put('/talker/:id',
-validateToken,
 validateName,
 validateAge,
 validateTalk,
@@ -101,7 +101,6 @@ async (req, res) => {
 });
 
 app.delete('/talker/:id',
-validateToken,
 async (req, res) => {
   const { id } = req.params;
   const talkers = await readFile();
