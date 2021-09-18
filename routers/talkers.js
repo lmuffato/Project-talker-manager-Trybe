@@ -57,7 +57,22 @@ talkers.put('/:id', ...middleware, async (req, res) => {
   
   await myModule.writeFileAsync(FILE_NAME, JSON.stringify(data));
 
-  res.status(200).json(editTalker);
+  return res.status(200).json(editTalker);
+});
+
+talkers.delete('/:id', middleware[0], async (req, res) => {
+  const data = await myModule.readFileAsync(FILE_NAME);
+  const { id } = req.params;
+  const talkerIndex = data.findIndex((talker) => talker.id === Number(id));
+  if (talkerIndex === -1) {
+    return res.status(404).send();
+  }
+  
+  data.splice(talkerIndex, 1);
+  
+  await myModule.writeFileAsync(FILE_NAME, JSON.stringify(data));
+
+  return res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 module.exports = talkers;
