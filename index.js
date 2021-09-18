@@ -4,6 +4,7 @@ const fs = require('fs').promises;
 const login = require('./login');
 const addTalker = require('./addTalker');
 const editTalker = require('./editTalker');
+const deleteTalker = require('./deleteTalker');
 
 const talker = './talker.json';
 
@@ -36,6 +37,8 @@ app.use('/login', login);
 app.use('/talker', addTalker);
 
 app.use('/talker', editTalker);
+
+app.use('/talker', deleteTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
