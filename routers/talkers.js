@@ -19,7 +19,7 @@ talkers.get('', async (_req, res) => {
 talkers.get('/:id', async (req, res) => {
   const data = await myModule.readFileAsync(FILE_NAME);
   const talkersId = await Number(req.params.id);
-  const getTalker = await JSON.parse(data).find((talker) => talker.id === talkersId);
+  const getTalker = await data.find((talker) => talker.id === talkersId);
 
   if (!getTalker) {
     return res.status(HTTP_BAD_REQUEST).json({ message: 'Pessoa palestrante não encontrada' });
