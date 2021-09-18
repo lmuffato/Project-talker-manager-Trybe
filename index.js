@@ -8,6 +8,7 @@ const login = require('./login');
 const addTalker = require('./addTalker');
 const editTalker = require('./editTalker');
 const deleteTalker = require('./deleteTalker');
+const searchTalker = require('./searchTalker');
 
 const talker = './talker.json';
 
@@ -42,6 +43,8 @@ app.use('/talker', addTalker);
 app.use('/talker', editTalker);
 
 app.use('/talker', deleteTalker);
+
+app.use('/talker/search', searchTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
