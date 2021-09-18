@@ -29,6 +29,8 @@ const readFile = async () => {
   return JSON.parse(talkers);
 };
 
+const writeFile = (content) => fs.writeFile('./talker.json', JSON.stringify(content));
+
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
   response.status(http.OK_STATUS).send();
@@ -72,7 +74,7 @@ async (req, res) => {
   const id = talkers.length + 1;
 
   talkers.push({ name, age, id, talk });
-  fs.writeFile('./talker.json', JSON.stringify(talkers));
+  writeFile(talkers);
   res.status(http.CREATED).json({ name, age, id, talk });
 });
 
@@ -94,7 +96,7 @@ async (req, res) => {
   talkers[index].age = age;
   talkers[index].talk = talk;
   
-  fs.writeFile('./talker.json', JSON.stringify(talkers));
+  writeFile(talkers);
   res.status(http.OK_STATUS).json({ name, age, id: intId, talk });
 });
 
