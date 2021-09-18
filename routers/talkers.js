@@ -44,16 +44,20 @@ talkers.post('', ...middleware, async (req, res) => {
 
 talkers.put('/:id', ...middleware, async (req, res) => {
   const data = await myModule.readFileAsync(FILE_NAME);
-  const talkersId = Number(req.params.id);
+  const { id } = req.params;
   const { name, age, talk } = req.body;
-  const getTalkerIndex = data.findIndex((talker) => talker.id === talkersId);
+  const talkerIndex = data.findIndex((talker) => talker.id === Number(id));
+  const editTalker = { id: Number(id), name, age, talk };
 
-  if (getTalkerIndex === -1) {
-    return res.status(404).jason({ message: 'Pessoa palestrante não encontrada' });
+  if (talkerIndex === -1) {
+    return res.status(404).send();
   }
-  data[getTalkerIndex] = { ...data[getTalkerIndex], name, age, talk };
+
+  data[talkerIndex] = editTalker;
+  
   await myModule.writeFileAsync(FILE_NAME, JSON.stringify(data));
-  res.status(200).send(getTalkerIndex);
+
+  res.status(200).json(editTalker);
 });
 
 module.exports = talkers;
