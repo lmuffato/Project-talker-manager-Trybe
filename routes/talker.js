@@ -23,6 +23,18 @@ async function createTalker(talker) {
   return newTalkerData;
 }
 
+async function editTalker(id, newData) {
+  const talkers = await getAllTalkers();
+  const newList = talkers.map((talkerData) => {
+    if (talkerData.id === id) {
+      return { id, ...newData };
+    }
+    return talkerData;
+  });
+  await fs.writeFile('talker.json', JSON.stringify(newList), 'utf8');
+  return { id, ...newData };
+}
+
 talkerRouter.get('/', async (_request, response) => {
   const data = await getAllTalkers();
   response.status(HTTP_OK_STATUS).send(data);
@@ -44,6 +56,15 @@ talkerRouter.post('/', authMiddlware, async (_request, response) => {
   }
   const talker = await createTalker(_request.body);
   response.status(HTTP_CREATED_STATUS).json(talker);
+});
+
+talkerRouter.put('/:id', authMiddlware, async (_request, response) => {
+  const validationError = validate(_request.body);
+  if (validationError) {
+    return response.status(BAD_REQUEST_STATUS).json(validationError);
+  }
+  const talker = await editTalker(Number(_request.params.id), _request.body);
+  response.status(HTTP_OK_STATUS).json(talker);
 });
 
 module.exports = talkerRouter;
