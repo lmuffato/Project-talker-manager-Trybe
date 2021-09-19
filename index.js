@@ -13,7 +13,6 @@ app.get('/', (_request, response) => {
 });
 
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded());
 
 app.use('/talker', talkers);
 app.use('/login', login);
