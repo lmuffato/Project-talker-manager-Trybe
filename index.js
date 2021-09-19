@@ -15,9 +15,13 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', async (_req, res) => {
   const content = await fs.readFile('./talker.json', 'utf-8');
-  res.status(HTTP_OK_STATUS).send(content);
+  return res.status(HTTP_OK_STATUS).json(JSON.parse(content));
 });
 
 app.listen(PORT, () => {
   console.log('Online');
 });
+
+/* Referências:
+  Como converter uma string em json: https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+*/
