@@ -57,15 +57,27 @@ watchedAtValid, async (req, res) => {
         const jsonData = JSON.parse(data);
         let updateTalker = jsonData.find((t) => t.id === parseInt(id, 10));
     updateTalker = { id: parseInt(id, 10), name, age, talk };
-    jsonData.forEach((element, index) => {
-        if (element.id === updateTalker.id) {
+    jsonData.forEach((el, index) => {
+        if (el.id === updateTalker.id) {
             jsonData[index] = updateTalker;
         }
     });
-    writeFile(TALKER, JSON.stringify(jsonData), 'utf8', (err) => {
+    writeFile(TALKER, JSON.stringify(jsonData), UTF, (err) => {
       if (err) console.log('Error writing file:', err);
     });
     res.status(TWO_HUND).json(updateTalker);
+    });
+});
+
+router.delete('/:id', tokenValid, async (req, res) => {
+    const { id } = req.params;
+    readFile(TALKER, UTF).then((data) => {
+        const jsonData = JSON.parse(data);
+    const update = jsonData.filter((el) => el.id !== parseInt(id, 10));
+    writeFile(TALKER, JSON.stringify(update), UTF, (err) => {
+        if (err) console.log('Error writing file:', err);
+    });
+    res.status(TWO_HUND).json({ message: 'Pessoa palestrante deletada com sucesso' });
     });
 });
 
