@@ -49,4 +49,24 @@ router.post('/', tokenValid, nameValid, ageValid, talkValid, rateValid,
     });
 });
 
+router.put('/:id', tokenValid, nameValid, ageValid, talkValid, rateValid,
+watchedAtValid, async (req, res) => {
+    const { id } = req.params;
+    const { name, age, talk } = req.body;
+    readFile(TALKER, UTF).then((data) => {
+        const jsonData = JSON.parse(data);
+        let updateTalker = jsonData.find((t) => t.id === parseInt(id, 10));
+    updateTalker = { id: parseInt(id, 10), name, age, talk };
+    jsonData.forEach((element, index) => {
+        if (element.id === updateTalker.id) {
+            jsonData[index] = updateTalker;
+        }
+    });
+    writeFile(TALKER, JSON.stringify(jsonData), 'utf8', (err) => {
+      if (err) console.log('Error writing file:', err);
+    });
+    res.status(TWO_HUND).json(updateTalker);
+    });
+});
+
 module.exports = router;
