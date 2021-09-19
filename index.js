@@ -1,10 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fs = require('fs').promises;
 const auth = require('./auth');
-
-const getData = async () => fs.readFile('./talker.json', 'utf-8')
-  .then((data) => JSON.parse(data));
+const talkerRouter = require('./talkerRouter');
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,20 +14,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', async (_req, res) => {
-  const result = await getData();
-  res.status(200).json(result);
-});
-
-app.get('/talker/:id', async (req, res) => {
-  const { id } = req.params;
-  const allTalkers = await getData();
-  const result = allTalkers.find((talker) => talker.id === +id);
-
-  if (!result) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-
-  res.status(200).json(result);
-});
+app.use('/talker', talkerRouter);
 
 app.use('/login', auth);
 
