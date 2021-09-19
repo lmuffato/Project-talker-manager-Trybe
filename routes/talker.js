@@ -1,45 +1,13 @@
 const express = require('express');
-const fs = require('fs').promises;
 const validate = require('../validation/talkerValidation');
 const authMiddlware = require('../middlewares/auth');
+const { getAllTalkers, createTalker, editTalker, deleteTalker } = require('../services');
 
 const talkerRouter = express.Router();
 const HTTP_OK_STATUS = 200;
 const HTTP_CREATED_STATUS = 201;
 const BAD_REQUEST_STATUS = 400;
 const NOT_FOUND_STATUS = 404;
-
-async function getAllTalkers() {
-  const data = await fs.readFile('talker.json');
-  return JSON.parse(data);
-}
-
-async function createTalker(talker) {
-  const data = await getAllTalkers();
-  const { id } = data[data.length - 1];
-  const newTalkerData = { id: id + 1, ...talker };
-  data.push(newTalkerData);
-  await fs.writeFile('talker.json', JSON.stringify(data), 'utf8');
-  return newTalkerData;
-}
-
-async function editTalker(id, newData) {
-  const talkers = await getAllTalkers();
-  const newList = talkers.map((talkerData) => {
-    if (talkerData.id === id) {
-      return { id, ...newData };
-    }
-    return talkerData;
-  });
-  await fs.writeFile('talker.json', JSON.stringify(newList), 'utf8');
-  return { id, ...newData };
-}
-
-async function deleteTalker(id) {
-  const talkers = await getAllTalkers();
-  const newTalkers = talkers.filter((talkerData) => talkerData.id !== id);
-  await fs.writeFile('talker.json', JSON.stringify(newTalkers), 'utf8');
-}
 
 talkerRouter.get('/', async (_request, response) => {
   const data = await getAllTalkers();
