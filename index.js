@@ -22,7 +22,7 @@ app.get('/talker', async (_req, res) => {
 });
 
 app.get('/talker/:id', (_req, res) => {
-  const data = JSON.parse(fs.readFileSync('talker.json', 'utf-8'));
+  const data = JSON.parse(fs.readFile('talker.json', 'utf-8'));
   const { id } = _req.params;
   const idTalker = data.find((talker) => talker.id === Number(id));
   const errorMessage = {
