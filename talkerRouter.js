@@ -100,6 +100,7 @@ talkerRouter.get('/:id', async (req, res) => {
 });
 
 talkerRouter.post('/',
+  validateToken,
   validateName,
   validateAge,
   validateTalk,
