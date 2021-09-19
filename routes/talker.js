@@ -35,6 +35,12 @@ async function editTalker(id, newData) {
   return { id, ...newData };
 }
 
+async function deleteTalker(id) {
+  const talkers = await getAllTalkers();
+  const newTalkers = talkers.filter((talkerData) => talkerData.id !== id);
+  await fs.writeFile('talker.json', JSON.stringify(newTalkers), 'utf8');
+}
+
 talkerRouter.get('/', async (_request, response) => {
   const data = await getAllTalkers();
   response.status(HTTP_OK_STATUS).send(data);
@@ -65,6 +71,11 @@ talkerRouter.put('/:id', authMiddlware, async (_request, response) => {
   }
   const talker = await editTalker(Number(_request.params.id), _request.body);
   response.status(HTTP_OK_STATUS).json(talker);
+});
+
+talkerRouter.delete('/:id', authMiddlware, async (_request, response) => {
+  await deleteTalker(Number(_request.params.id));
+  response.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 module.exports = talkerRouter;
