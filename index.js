@@ -12,7 +12,7 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-const { emailValid, passValid, generateToken } = require('./validations');
+const { emailValid, passValid, generateToken } = require('./validations/loginValid');
 
 const talkerRouter = require('./talkerRouter');
 

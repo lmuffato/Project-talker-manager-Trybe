@@ -1,4 +1,4 @@
-const { FOUR_HUNDRED } = require('./consts');
+const { FOUR_HUNDRED } = require('../consts');
 
 const generateToken = () => {
     const a = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890'.split('');
