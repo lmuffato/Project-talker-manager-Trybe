@@ -12,9 +12,16 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
+const { emailValid, passValid, generateToken } = require('./validations');
+
 const talkerRouter = require('./talkerRouter');
 
 app.use('/talker', talkerRouter);
+
+app.post('/login', emailValid, passValid, async (req, res) => {
+  const token = generateToken();
+  res.status(HTTP_OK_STATUS).json({ token });
+});
 
 app.listen(PORT, () => {
   console.log('Online');
