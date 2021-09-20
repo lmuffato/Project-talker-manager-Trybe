@@ -4,7 +4,9 @@ const moment = require('moment');
 
 const talkerRouter = express.Router();
 
-const getData = async () => fs.readFile('./talker.json', 'utf-8')
+const talkersFile = './talker.json';
+
+const getData = async () => fs.readFile(talkersFile, 'utf-8')
   .then((data) => JSON.parse(data));
 
 const validateToken = (req, res, next) => {
@@ -42,7 +44,7 @@ const validateAge = (req, res, next) => {
   next();
 };
 
-const ValidateDate = (req, res, next) => {
+const validateDate = (req, res, next) => {
   const { talk } = req.body;
 
   if (!moment(talk.watchedAt, 'DD/MM/YYYY', true).isValid()) {
@@ -75,7 +77,7 @@ const validateRate = (req, res, next) => {
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
 
-  if (!talk || !talk.watchedAt || !talk.rate) {
+  if (!talk || !talk.watchedAt || !Number.isInteger(talk.rate)) {
     return res.status(400).json({
       message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     });
@@ -87,6 +89,17 @@ const validateTalk = (req, res, next) => {
 talkerRouter.get('/', async (_req, res) => {
   const result = await getData();
   res.status(200).json(result);
+});
+
+talkerRouter.get('/search', validateToken, async (req, res) => {
+  const { q: term } = req.query;
+  const talkers = await getData();
+
+  if (!term || term === '') res.status(200).json(talkers);
+
+  const results = talkers.filter((talker) => talker.name.includes(term));
+
+  res.status(200).json(results);
 });
 
 talkerRouter.get('/:id', async (req, res) => {
@@ -104,12 +117,11 @@ talkerRouter.post('/',
   validateName,
   validateAge,
   validateTalk,
-  ValidateDate,
+  validateDate,
   validateRate,
   async (req, res) => {
     const { name, age, talk } = req.body;
-    const data = await fs.readFile('./talker.json', 'utf-8');
-    const talkers = await JSON.parse(data);
+    const talkers = await getData();
     const newTalker = {
       id: talkers.length + 1,
       name,
@@ -117,9 +129,40 @@ talkerRouter.post('/',
       talk,
     };
     talkers.push(newTalker);
-    await fs.writeFile('./talker.json', JSON.stringify(talkers));
+    await fs.writeFile(talkersFile, JSON.stringify(talkers));
   
-    return res.status(201).json(newTalker);
+    res.status(201).json(newTalker);
   });
+
+talkerRouter.put('/:id',
+validateToken,
+validateName,
+validateAge,
+validateTalk,
+validateDate,
+validateRate,
+async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const intId = parseInt(id, 10);
+  const talkers = await getData();
+  const index = id - 1;
+
+  talkers[index].name = name;
+  talkers[index].age = age;
+  talkers[index].talk = talk;
+  
+  await fs.writeFile(talkersFile, JSON.stringify(talkers));
+  res.status(200).json({ name, age, id: intId, talk });
+});
+
+talkerRouter.delete('/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await getData();
+  const filteredTalkers = talkers.find((talker) => talker.id !== parseInt(id, 10));
+  
+  await fs.writeFile(talkersFile, JSON.stringify(filteredTalkers));
+  res.status(200).json({ message: 'Pessoa palestrante deletada com sucesso' });
+});
 
 module.exports = talkerRouter;
