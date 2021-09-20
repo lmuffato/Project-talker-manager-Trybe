@@ -3,6 +3,13 @@ const bodyParser = require('body-parser');
 const talker = require('./talker');
 const talkerId = require('./talkerId');
 const { emailLogin, passwordLogin } = require('./login');
+const authentication = require('./authentication');
+const talkerName = require('./talkerName');
+const ageTalker = require('./ageTalker');
+const watchedTalker = require('./watchedTalker');
+const rateTalker = require('./rateTalker');
+const watchedAndRate = require('./watchedAndRate');
+const newTalker = require('./newTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,7 +25,10 @@ app.get('/', (_request, response) => {
 app.get('/talker', talker);
 app.get('/talker/:id', talkerId);
 app.post('/login', emailLogin, passwordLogin);
-
+app.post(
+  '/talker',
+  authentication, talkerName, ageTalker, watchedAndRate, watchedTalker, rateTalker, newTalker,
+);
 app.listen(PORT, () => {
   console.log('Online');
 });
