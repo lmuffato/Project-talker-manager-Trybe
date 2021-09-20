@@ -11,6 +11,7 @@ const newTalker = async (req, res) => {
 
   talkerArray.push(newTalkerToAdd);
   await fs.writeFile(json, JSON.stringify(talkerArray));
+
   res.status(201).json(newTalkerToAdd);
   };
 

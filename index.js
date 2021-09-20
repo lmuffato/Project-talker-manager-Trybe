@@ -10,6 +10,7 @@ const watchedTalker = require('./watchedTalker');
 const rateTalker = require('./rateTalker');
 const watchedAndRate = require('./watchedAndRate');
 const newTalker = require('./newTalker');
+const editTalker = require('./editTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -29,6 +30,11 @@ app.post(
   '/talker',
   authentication, talkerName, ageTalker, watchedAndRate, watchedTalker, rateTalker, newTalker,
 );
+app.put(
+  '/talker/:id', authentication, talkerName, ageTalker, watchedAndRate, watchedTalker, rateTalker,
+  editTalker,
+);
+
 app.listen(PORT, () => {
   console.log('Online');
 });
