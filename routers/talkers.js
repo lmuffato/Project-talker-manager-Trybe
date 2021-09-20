@@ -6,7 +6,7 @@ const talkers = express.Router();
 const [validateToken] = validations;
 
 talkers.get('/', tasks.getAllTalkers);
-talkers.get('/search', validateToken);
+talkers.get('/search', validateToken, tasks.searchTalkers);
 talkers.get('/:id', tasks.getTalkerId);
 talkers.post('/', ...validations, tasks.createTalker);
 talkers.put('/:id', ...validations, tasks.editTalker);
