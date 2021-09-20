@@ -21,6 +21,17 @@ router.get('/', async (_req, res) => {
     });
 });
 
+router.get('/search', tokenValid, async (req, res) => {
+    const { q } = req.query;
+    readFile(TALKER, UTF).then((data) => {
+        const jsonData = JSON.parse(data);
+        const filteredTalkers = jsonData.filter((t) => t.name.includes(q));
+        if (!q || q === '') return res.status(TWO_HUND).json(jsonData);
+        if (filteredTalkers.length === 0) return res.status(TWO_HUND).json([]);
+        res.status(TWO_HUND).json(filteredTalkers);
+    });
+});
+
 router.get('/:id', async (req, res) => {
     const { id } = req.params;
     readFile(TALKER, UTF).then((data) => {
@@ -80,5 +91,6 @@ router.delete('/:id', tokenValid, async (req, res) => {
     res.status(TWO_HUND).json({ message: 'Pessoa palestrante deletada com sucesso' });
     });
 });
+
 
 module.exports = router;
