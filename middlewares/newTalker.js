@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { talker } = require('../talker.json');
+const talker = require('../talker.json');
 const { HTTP_CREATE_STATUS, HTTP_BAD_REQUEST } = require('../utils/statusHttp');
 
 const newTalker = async (req, res) => {

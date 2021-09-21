@@ -1,5 +1,5 @@
 const fs = require('fs').promises;
-const { talker } = require('../talker.json');
+const talker = require('../talker.json');
 const { HTTP_OK_STATUS } = require('../utils/statusHttp');
 
 const fetchTalker = async (_req, res) => {
