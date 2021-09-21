@@ -1,9 +1,9 @@
-const fs = require('fs/promises');
+const fs = require('fs');
 
 const talkerId = async (req, res) => {
   const { id } = req.params;
 
-  const readFile = JSON.parse(await fs.readFile('talker.json'));
+  const readFile = JSON.parse(await fs.promises.readFile('talker.json'));
   const talkerID = readFile.find((element) => element.id === Number(id));
 
   if (!talkerID) {

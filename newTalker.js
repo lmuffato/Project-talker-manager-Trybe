@@ -1,10 +1,10 @@
-const fs = require('fs/promises');
+const fs = require('fs');
 
 const newTalker = async (req, res) => {
   const json = './talker.json';
   const { name, age, talk } = req.body;
 
-  const talkerArray = JSON.parse(await fs.readFile(json));
+  const talkerArray = JSON.parse(await fs.promises.readFile(json));
   const newTalkerToAdd = {
         id: talkerArray.length + 1, name, age, talk,
   };

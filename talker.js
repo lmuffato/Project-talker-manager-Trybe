@@ -1,7 +1,7 @@
-const fs = require('fs/promises');
+const fs = require('fs');
 
 const talker = async (req, res) => {
-  const readFile = await fs.readFile('talker.json');
+  const readFile = await fs.promises.readFile('talker.json');
   
   return res.status(200).json(JSON.parse((readFile)));
 };

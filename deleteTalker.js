@@ -1,9 +1,9 @@
-const fs = require('fs/promises');
+const fs = require('fs');
 
 const deleteTalker = async (req, res) => {
   const { id } = req.params;
 
-  const json = JSON.parse(await fs.readFile('./talker.json'));
+  const json = JSON.parse(await fs.promises.readFile('./talker.json'));
   const indexToExclude = json.findIndex((person) => person.id === +id);
   json.splice(indexToExclude);
 
