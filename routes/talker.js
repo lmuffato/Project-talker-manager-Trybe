@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 const { Router } = require('express');
 
 const manageTalkersFile = require('../utils/manageTalkers');
@@ -21,25 +21,24 @@ router.get('/', async (_req, res) => {
 router.get('/:id', getTalkerById);
 
 router.post('/',
+validateToken,
 validateAge,
 validateTalk,
 validateName,
-validateToken,
 validateRate,
 validateWatched, async (req, res) => {
   const { name, age, talk: { watchedAt, rate } } = req.body;
-  const talkers = await fs.readFile('./talker.json');
-  const talker = JSON.parse(talkers);
+  const talkers = await manageTalkersFile();
   const newTalker = {
-  id: (talker.length + 1),
+  id: (talkers.length + 1),
   name,
   age: parseInt(age, 10),
   talk: {
     watchedAt,
     rate: parseInt(rate, 10),
   } };
-  talker.push(newTalker);
-  await fs.writeFile('./talker.json', JSON.stringify(talker));
+  talkers.push(newTalker);
+  await fs.writeFile('./talker.json', JSON.stringify(talkers));
   res.status(CREATE).json(newTalker);
 });
 
