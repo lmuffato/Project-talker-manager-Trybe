@@ -1,6 +1,15 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { getAllTalkers, getTalkerById, login } = require('./middlewares');
+const {
+  getAllTalkers,
+  getTalkerById,
+  login,
+  validationToken,
+  validationTalker,
+  validationFieldTalk,
+  validationDateAndRate,
+  createTalker,
+} = require('./middlewares');
 
 const app = express();
 app.use(bodyParser.json());
@@ -13,6 +22,15 @@ app.get('/talker', getAllTalkers);
 app.get('/talker/:id', getTalkerById);
 
 app.post('/login', login);
+
+app.post(
+  '/talker',
+  validationToken,
+  validationTalker,
+  validationFieldTalk,
+  validationDateAndRate,
+  createTalker,
+);
 
 // não remova esse endpoint, e para o avaliador funcionar
 app.get('/', (_request, response) => {
