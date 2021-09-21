@@ -22,6 +22,17 @@ router.use(bodyParser.json());
 const HTTP_OK_STATUS = 200;
 const HTTP_ERROR_STATUS = 404;
 
+// requisito 7
+router.get('/search',
+  verifyToken,
+  async (request, response) => {
+    const { q } = request.query;
+    const listTalkers = await talkers();
+
+    const findName = listTalkers.filter((e) => e.name.includes(q));
+    return response.status(HTTP_OK_STATUS).json(findName);
+  });
+
 // requisito 1
 router.get('/', async (_request, response) => {
   const listTalkers = await talkers();
@@ -43,53 +54,53 @@ router.get('/:id', async (request, response) => {
 
 // requisito 4
 router.post('/',
-verifyToken,
-verifyName,
-verifyAge,
-verifyTalk,
-verifyWatchedAt,
-verifyRate,
-async (request, response) => {
-  const listTalkers = await talkers();
-  const newTalker = { id: listTalkers.length + 1, ...request.body };
-  
-  listTalkers.push(newTalker);
-  await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
-  return response.status(201).json(newTalker);
-});
+  verifyToken,
+  verifyName,
+  verifyAge,
+  verifyTalk,
+  verifyWatchedAt,
+  verifyRate,
+  async (request, response) => {
+    const listTalkers = await talkers();
+    const newTalker = { id: listTalkers.length + 1, ...request.body };
+
+    listTalkers.push(newTalker);
+    await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
+    return response.status(201).json(newTalker);
+  });
 
 // requisito 5
 router.put('/:id',
-verifyToken,
-verifyName,
-verifyAge,
-verifyTalk,
-verifyWatchedAt,
-verifyRate,
-async (request, response) => {
-  const { id } = request.params;
-  const listTalkers = await talkers();
+  verifyToken,
+  verifyName,
+  verifyAge,
+  verifyTalk,
+  verifyWatchedAt,
+  verifyRate,
+  async (request, response) => {
+    const { id } = request.params;
+    const listTalkers = await talkers();
 
-  const findTalker = listTalkers.findIndex((elem) => elem.id === parseInt(id, 10));
-  listTalkers[findTalker] = { ...listTalkers[findTalker], ...request.body };
-  await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
+    const findTalker = listTalkers.findIndex((elem) => elem.id === parseInt(id, 10));
+    listTalkers[findTalker] = { ...listTalkers[findTalker], ...request.body };
+    await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
 
-  return response.status(HTTP_OK_STATUS).json(listTalkers[findTalker]);
-});
+    return response.status(HTTP_OK_STATUS).json(listTalkers[findTalker]);
+  });
 
 // requisito 6
 router.delete('/:id',
-verifyToken,
-async (request, response) => {
-  const { id } = request.params;
-  const listTalkers = await talkers();
+  verifyToken,
+  async (request, response) => {
+    const { id } = request.params;
+    const listTalkers = await talkers();
 
-  const findTalker = listTalkers.findIndex((elem) => elem.id === parseInt(id, 10));
-  listTalkers.splice(findTalker, 1);
-  await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
+    const findTalker = listTalkers.findIndex((elem) => elem.id === parseInt(id, 10));
+    listTalkers.splice(findTalker, 1);
+    await fs.writeFile('./talker.json', JSON.stringify(listTalkers));
 
-  return response.status(HTTP_OK_STATUS)
-  .json({ message: 'Pessoa palestrante deletada com sucesso' });
-});
+    return response.status(HTTP_OK_STATUS)
+      .json({ message: 'Pessoa palestrante deletada com sucesso' });
+  });
 
 module.exports = router;
