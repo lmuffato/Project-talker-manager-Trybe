@@ -62,4 +62,20 @@ validateWatched, async (req, res) => {
   }
 });
 
+router.delete('/:id', 
+  validateToken,
+  async (req, res) => {
+    const { id } = req.params;
+  
+    const talkers = await manageTalkersFile();
+  
+    const talkerIndex = talkers.findIndex((talker) => talker.id === parseInt(id, 10));
+  
+    if (talkers[talkerIndex] !== -1) {
+      talkers.splice(talkerIndex, 1);
+      await fs.writeFile('./talker.json', JSON.stringify(talkers), 'utf-8');
+      res.status(OK).json({ message: 'Pessoa palestrante deletada com sucesso' });
+    }
+  });
+
 module.exports = router;
