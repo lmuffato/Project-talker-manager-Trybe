@@ -1,7 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const routes = require('./routes/talker');
-const STATUS = require('./status/http_status');
 
 const app = express();
 app.use(bodyParser.json());
