@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const getTalker = require('./endpoints/get-talker');
 const getTalkerById = require('./endpoints/get-talker-id');
+const postLogin = require('./endpoints/post-login');
 
 const app = express();
 app.use(bodyParser.json());
@@ -25,3 +26,7 @@ app.get('/talker', getTalker);
 // Requisito 2
 
 app.get('/talker/:id', getTalkerById);
+
+// Requisito 3
+
+app.use('/login', postLogin);
