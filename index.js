@@ -20,7 +20,7 @@ app.get('/', (_request, response) => {
 // app.get('/talker', (_req, res) => res.status(200).send({ message: 'hello word!' }));
 app.get('/talker', getTalkers);
 app.get('/talker/:id', getTalkerId);
-app.post('/login', validations.cryptoGenerate);
+app.post('/login', validations.checkEmail, validations.cryptoGenerate);
 
 app.listen(PORT, () => {
   console.log('Online');
