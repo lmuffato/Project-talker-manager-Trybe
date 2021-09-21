@@ -7,7 +7,7 @@ app.use(bodyParser.json());
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
-app.get('/', routes);
+app.use('/', routes);
 
 app.listen(PORT, () => {
   console.log(`We are running and ready to rock on ${PORT}`);
