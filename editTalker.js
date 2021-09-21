@@ -1,9 +1,9 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 
 const editTalker = async (req, res) => {
   const { id } = req.params;
 
-  const json = JSON.parse(await fs.promises.readFile('./talker.json'));
+  const json = JSON.parse(await fs.readFile('./talker.json'));
 
   const indexFinder = json.findIndex((element) => element.id === id);
   const newTalker = { id: +id, ...req.body };
