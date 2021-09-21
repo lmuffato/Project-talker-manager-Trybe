@@ -35,6 +35,10 @@ module.exports = {
     }
   },
 
+  postTalkerMiddleware: (req, res) => {
+    res.status(201).send(req.body);
+  },
+
   getLoginToken: (_req, res) => {
     res.status(200).send({ token: loginToken });
   },
