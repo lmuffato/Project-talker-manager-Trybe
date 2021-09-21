@@ -1,4 +1,4 @@
-const fs = require('fs/promises');
+const fs = require('fs').promises;
 const crypto = require('crypto');
 
 const loginToken = crypto.randomBytes(8).toString('hex');
