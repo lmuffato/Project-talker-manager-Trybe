@@ -10,11 +10,11 @@ const validationDateAndRate = (req, res, next) => {
       .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
   }
 
-  if (parseInt(talk.rate, 10) > 5 || parseInt(talk.rate, 10) < 1) {
+  if (parseInt(talk.rate, 10) < 1 || parseInt(talk.rate, 10) > 5) {
     return res.status(badRequest)
       .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
-
+  
   next();
 };
 

@@ -9,6 +9,7 @@ const {
   validationFieldTalk,
   validationDateAndRate,
   createTalker,
+  editTalker,
 } = require('./middlewares');
 
 const app = express();
@@ -30,6 +31,15 @@ app.post(
   validationFieldTalk,
   validationDateAndRate,
   createTalker,
+);
+
+app.put(
+  '/talker/:id',
+  validationToken,
+  validationTalker,
+  validationFieldTalk,
+  validationDateAndRate,
+  editTalker,
 );
 
 // não remova esse endpoint, e para o avaliador funcionar

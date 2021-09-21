@@ -6,6 +6,7 @@ const validationTalker = require('./validationTalker');
 const validationFieldTalk = require('./validationFieldTalk');
 const validationDateAndRate = require('./validationDateAndRate');
 const createTalker = require('./createTalker');
+const editTalker = require('./editTalker');
 
 module.exports = {
   getAllTalkers,
@@ -16,4 +17,5 @@ module.exports = {
   validationFieldTalk,
   validationDateAndRate,
   createTalker,
+  editTalker,
 };
