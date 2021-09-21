@@ -11,6 +11,7 @@ const rateTalker = require('./rateTalker');
 const watchedAndRate = require('./watchedAndRate');
 const newTalker = require('./newTalker');
 const editTalker = require('./editTalker');
+const deleteTalker = require('./deleteTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -34,7 +35,11 @@ app.put(
   '/talker/:id', authentication, talkerName, ageTalker, watchedAndRate, watchedTalker, rateTalker,
   editTalker,
 );
-
+app.delete(
+  '/talker/:id', 
+  authentication,
+  deleteTalker,
+);
 app.listen(PORT, () => {
   console.log('Online');
 });
