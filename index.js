@@ -12,6 +12,7 @@ const watchedAndRate = require('./watchedAndRate');
 const newTalker = require('./newTalker');
 const editTalker = require('./editTalker');
 const deleteTalker = require('./deleteTalker');
+const searchName = require('./searchName');
 
 const app = express();
 app.use(bodyParser.json());
@@ -25,6 +26,7 @@ app.get('/', (_request, response) => {
 });
 
 app.get('/talker', talker);
+app.get('/talker/search', authentication, searchName);
 app.get('/talker/:id', talkerId);
 app.post('/login', emailLogin, passwordLogin);
 app.post(
