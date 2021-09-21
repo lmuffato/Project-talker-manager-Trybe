@@ -13,14 +13,15 @@ const getAllTalker = async (_req, res) => {
   res.status(STATUS.SUCCESS.OK).send(talker);
 };
 
-const getSortedTalker = async (req, res) => {
+const getSortedTalker = async (req, res, next) => {
+  try {
   const talkers = await convertFromJSON();
   const { id } = req.params;
-  const filterdTalker = talkers.filter((talker) => talker.id === id);
-  if (filterdTalker.length === 0) {
-    res.status(STATUS.SUCCESS.NO_CONTENT).send('Nenhum resultado encontrado');
-  }
+  const filterdTalker = talkers.filter((talker) => talker.id === Number(id));
   res.status(STATUS.SUCCESS.OK).send(filterdTalker);
+  } catch (err) {
+    next(err);
+  }
 };
 
 module.exports = {

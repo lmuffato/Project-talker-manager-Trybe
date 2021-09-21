@@ -10,4 +10,6 @@ router.get('/', (_req, res) => {
 
 router.get('/talker', middle.getAllTalker);
 
+router.get('/talker/:id', middle.getSortedTalker);
+
 module.exports = router;
