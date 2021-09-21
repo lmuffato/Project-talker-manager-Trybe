@@ -1,8 +1,8 @@
-const fs = require('fs/promises');
+const fs = require('fs');
 
 const searchName = async (req, res) => {
     const { query } = req.query;
-    const json = JSON.parse(await fs.readFile('./talker.json'));
+    const json = JSON.parse(await fs.promises.readFile('./talker.json'));
 
     const findTalkers = json.filter((element) => element.name.includes(query));
 
