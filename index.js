@@ -1,8 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const getTalker = require('./endpoints/get-talker');
-const getTalkerById = require('./endpoints/get-talker-id');
-const postLogin = require('./endpoints/post-login');
+const talker = require('./routes/talker');
+const login = require('./routes/login');
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,14 +18,6 @@ app.listen(PORT, () => {
   console.log('Online');
 });
 
-// Requisito 1
+app.use('/talker', talker);
 
-app.get('/talker', getTalker);
-
-// Requisito 2
-
-app.get('/talker/:id', getTalkerById);
-
-// Requisito 3
-
-app.use('/login', postLogin);
+app.use('/login', login);

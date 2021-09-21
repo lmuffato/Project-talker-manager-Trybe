@@ -1,5 +1,5 @@
-const manageTalkers = require('../utils/manageTalkers');
-const { OK, NOT_FOUND } = require('../utils/status');
+const manageTalkers = require('./manageTalkers');
+const { OK, NOT_FOUND } = require('./status');
 
 const getTalkerById = async (req, res) => {
   const { id } = req.params;
