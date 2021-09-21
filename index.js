@@ -11,6 +11,7 @@ const {
   createTalker,
   editTalker,
   deleteTalker,
+  searchTalker,
 } = require('./middlewares');
 
 const app = express();
@@ -18,6 +19,8 @@ app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const PORT = '3000';
+
+app.get('/talker/search', validationToken, searchTalker);
 
 app.get('/talker', getAllTalkers);
 
