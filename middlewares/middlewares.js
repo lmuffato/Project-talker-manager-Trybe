@@ -111,12 +111,12 @@ const validateRate = (req, res, next) => {
 };
 
 module.exports = { 
-  validateEmail,
   validateLogin,
+  validateEmail,
   validatePassword,
   validateName,
-  validateRate,
-  validateTalk,
   validateAge,
   validateDate,
+  validateTalk,
+  validateRate,
 };

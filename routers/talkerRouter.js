@@ -5,20 +5,12 @@ const fs = require('fs').promises;
 
 const {
   validateLogin,
-  validateAge,
-  validateDate,
   validateName,
+  validateAge,
   validateTalk,
-  validateRate } = require('../middlewares/middlewares');
-
-const validateNewTalker = [
-  validateLogin,
-  validateName, 
-  validateAge, 
-  validateTalk, 
-  validateDate, 
-  validateRate, 
-];
+  validateDate,
+  validateRate,
+} = require('../middlewares/middlewares');
 
 const getAll = async () => {
   const allTalkers = await fs.readFile('./talker.json', 'utf-8');
@@ -58,7 +50,13 @@ router.get('/:id', async (req, res) => {
   return res.status(200).json(getTalker);
 });
 
-router.post('/', validateNewTalker, async (req, res) => {
+router.post('/',
+validateLogin,
+validateName, 
+validateAge, 
+validateTalk, 
+validateDate, 
+validateRate, async (req, res) => {
   const talkers = await getAll();
   const newTalker = { ...req.body, id: talkers.length + 1 };
 
@@ -67,7 +65,13 @@ router.post('/', validateNewTalker, async (req, res) => {
   res.status(201).json(newTalker);
 });
 
-router.put('/:id', validateNewTalker, async (req, res) => {
+router.put('/:id',
+validateLogin,
+validateName, 
+validateAge, 
+validateTalk, 
+validateDate, 
+validateRate, async (req, res) => {
   const { id } = req.params;
   const talkers = await getAll();
 
