@@ -40,6 +40,7 @@ app.put('/talker/:id',
   newTalker.checkRate,
   editTalker.editTalker);
 app.delete('/talker/:id',
+  newTalker.authorizationToken,
   deleteTalker.delTalker,
   );
 
