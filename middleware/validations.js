@@ -21,6 +21,7 @@ const checkEmail = (req, res, next) => {
     return res.status(HTTP_BAD_REQUEST_STATUS)
       .json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
+  return next;
 };
 
 module.exports = {

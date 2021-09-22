@@ -35,5 +35,4 @@ const authorizationToken = async (req, res, next) => {
 module.exports = {
   created,
   authorizationToken,
-  cryptoGenerate,
 };
