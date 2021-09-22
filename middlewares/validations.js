@@ -82,9 +82,12 @@ const validateTalk = (req, res, next) => {
 const validateToken = async (req, res, next) => {
   const { authorization } = req.headers;
   const validTokens = JSON.parse(await fs.readFile('./auth/validTokens.json'));
-  const isValid = validTokens.some((token) => token === authorization);  
+  const isValid = validTokens.some((token) => token === authorization);
+  if (!authorization) {
+    res.status(STATUS.ERROR.UNOTHORIZED).send({ message: 'Token não encontrado' });
+  }
   if (!isValid) {
-    res.status(STATUS.ERROR.UNOTHORIZED).send(isValid);
+    res.status(STATUS.ERROR.UNOTHORIZED).send({ message: 'Token inválido' });
   }
   next();
 };
