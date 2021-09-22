@@ -4,7 +4,7 @@ const { HTTP_OK_STATUS } = require('../utils/statusHttp');
 const talkerEdit = async (req, res) => {
   const { id } = req.params;
 
-  const data = JSON.parse(await fs.readFile('talker.json'));
+  const data = JSON.parse(await fs.readFile('./talker.json'));
 
   const findIndex = data.findIndex((talker) => talker.id === id);
   const newTalker = {
@@ -13,7 +13,7 @@ const talkerEdit = async (req, res) => {
   };
 
   data.splice(findIndex, 1, newTalker);
-  await fs.writeFileSync('./talker.json', JSON.stringify(data));
+  await fs.writeFile('./talker.json', JSON.stringify(data));
 
   res.status(HTTP_OK_STATUS).json(newTalker);
 };
