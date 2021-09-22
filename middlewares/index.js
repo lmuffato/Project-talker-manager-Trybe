@@ -70,6 +70,18 @@ module.exports = {
     res.status(200).send(parsed[talkerToEdit]);
   },
 
+  deleteTalkersMiddleware: async (req, res) => {
+    const { talkerId } = req.params;
+    const data = await fs.readFile(talkerPath, 'utf-8');
+    const parsed = JSON.parse(data);
+
+    const talkerToDelete = parsed.findIndex((talker) => talker.id === parseInt(talkerId, 10));
+
+    parsed.splice(talkerToDelete, 1);
+    await fs.writeFile(talkerPath, JSON.stringify(parsed));
+    res.status(200).send({ message: 'Pessoa palestrante deletada com sucesso' });
+  },
+
   getLoginToken: (_req, res) => {
     res.status(200).send({ token: loginToken });
   },

@@ -11,6 +11,7 @@ const {
   getTalkerByIdMiddleware,
   postTalkerMiddleware,
   putTalkersMiddleware,
+  deleteTalkersMiddleware,
 } = require('../middlewares');
 
 // Validations
@@ -38,5 +39,6 @@ router.get('/:talkerId', getTalkerByIdMiddleware);
 
 router.post('/', validations, postTalkerMiddleware);
 router.put('/:talkerId', validations, putTalkersMiddleware);
+router.delete('/:talkerId', tokenValidation, deleteTalkersMiddleware);
 
 module.exports = router;
