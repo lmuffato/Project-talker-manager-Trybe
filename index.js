@@ -23,9 +23,8 @@ app.get('/', (_request, response) => {
 // app.get('/talker', (_req, res) => res.status(200).send({ message: 'hello word!' }));
 app.get('/talker', getTalkers);
 app.get('/talker/search',
-newTalker.authorizationToken,
-searchTalker.searchTalker,
-);
+  newTalker.authorizationToken,
+  searchTalker.searchTalker);
 app.get('/talker/:id', getTalkerId);
 app.post('/login', validations.checkEmail, validations.checkPassWord, validations.cryptoGenerate);
 app.post('/talker',
