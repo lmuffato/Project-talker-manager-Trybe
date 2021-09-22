@@ -23,6 +23,7 @@ app.get('/talker/:id', getTalkerId);
 app.post('/login', validations.checkEmail, validations.checkPassWord, validations.cryptoGenerate);
 app.post('/talker',
   newTalker.checkName,
+  newTalker.checkAge,
   newTalker.authorizationToken,
   newTalker.createdTalker);
 
