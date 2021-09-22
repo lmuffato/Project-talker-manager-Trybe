@@ -7,7 +7,7 @@ const watchedTalker = (req, res, next) => {
 
   if (!dateRegex.test(watchedAt)) {
     return res.status(HTTP_BAD_REQUEST).send({
-      message: 'O campo "watchedAt" deve ter formato "dd/mm/aaaa"',
+      message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
     });
   }
 

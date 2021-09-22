@@ -12,6 +12,9 @@ const { talkerAge } = require('./middlewares/talkerAge');
 const { watchedAndRate } = require('./middlewares/watchedAndRate');
 const { watchedTalker } = require('./middlewares/watchedTalker');
 const { rateTalker } = require('./middlewares/rateTalker');
+const { talkerEdit } = require('./middlewares/talkerEdit');
+const { talkerDelete } = require('./middlewares/talkerDelete');
+const { searchByName } = require('./middlewares/searchByName');
 
 const app = express();
 app.use(bodyParser.json());
@@ -25,12 +28,19 @@ app.get('/', (_request, response) => {
 
 app.get('/talker', fetchTalker);
 
+app.get('/talker/search', authentication, searchByName);
+
 app.get('/talker/:id', talkerById);
 
 app.post('/login', validateLogin);
 
-app.post('talker', authentication, nameTalker, talkerAge, watchedAndRate, watchedTalker, 
+app.post('/talker', authentication, nameTalker, talkerAge, watchedAndRate, watchedTalker, 
 rateTalker, newTalker);
+
+app.put('/talker/:id', authentication, nameTalker, talkerAge, watchedAndRate, 
+watchedTalker, rateTalker, talkerEdit);
+
+app.delete('/talker/:id', authentication, talkerDelete);
 
 app.listen(PORT, () => {
   console.log('Online');
