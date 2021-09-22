@@ -60,6 +60,17 @@ const removeTalker = async (req, res) => {
   res.status(STATUS.SUCCESS.OK).send({ message: 'Pessoa palestrante deletada com sucesso' });
 };
 
+const TalkerBySearchTerm = async (req, res) => {
+  const { q } = req.query;
+  console.log(req.query);
+  const talkers = await convertFromJSON();
+  const filteredQ = talkers.filter((talker) => talker.name.includes(q));
+  if (!q) {
+    res.stats(STATUS.ERROR.BAD_REQUEST).send({ message: 'É necessário preencher o parametro' });
+  }
+  res.status(STATUS.SUCCESS.OK).send(filteredQ);
+};
+
 module.exports = {
     getAllTalker,
     getSortedTalker,
@@ -67,4 +78,5 @@ module.exports = {
     pushNewTalker,
     editTalker,
     removeTalker,
+    TalkerBySearchTerm,
 };
