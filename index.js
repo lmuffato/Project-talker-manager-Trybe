@@ -25,6 +25,7 @@ app.post('/talker',
   newTalker.authorizationToken,
   newTalker.checkName,
   newTalker.checkAge,
+  newTalker.checkTalk,
   newTalker.checkWatchedAt,
   newTalker.checkRate,
   newTalker.createdTalker);
