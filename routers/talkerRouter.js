@@ -2,10 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 const fs = require('fs').promises;
-// const talker = require('../talker.json');
 
 const STATUS_OK = 200;
-const NOT_FOUND = 400;
+const NOT_FOUND = 404;
 
 const getAll = async () => {
   const allTalkers = await fs.readFile('./talker.json', 'utf-8');
