@@ -21,7 +21,9 @@ app.get('/', (_request, response) => {
 app.get('/talker', getTalkers);
 app.get('/talker/:id', getTalkerId);
 app.post('/login', validations.checkEmail, validations.checkPassWord, validations.cryptoGenerate);
-app.post('/talker', newTalker.createdTalker);
+app.post('/talker',
+  newTalker.authorizationToken,
+  newTalker.createdTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
