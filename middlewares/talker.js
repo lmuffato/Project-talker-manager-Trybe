@@ -18,7 +18,7 @@ const getSortedTalker = async (req, res, next) => {
   const talkers = await convertFromJSON();
   const { id } = req.params;
   const filterdTalker = talkers.filter((talker) => talker.id === Number(id));
-  res.status(STATUS.SUCCESS.OK).send(filterdTalker);
+  return res.status(STATUS.SUCCESS.OK).send(filterdTalker);
   } catch (err) {
     next(err);
   }
@@ -26,7 +26,7 @@ const getSortedTalker = async (req, res, next) => {
 
 const generateToken = async (_req, res) => {
   const token = await genToken.generateToken();
-  res.status(STATUS.SUCCESS.OK).send({ token });
+  return res.status(STATUS.SUCCESS.OK).send({ token });
 };
 
 const pushNewTalker = async (req, res) => {
@@ -35,7 +35,7 @@ const pushNewTalker = async (req, res) => {
   talkers.push(newTalker);
   const JSONtalkers = JSON.stringify(talkers);
   fs.writeFile('./talker.json', JSONtalkers);
-  res.status(STATUS.SUCCESS.CREATED).send(newTalker);
+  return res.status(STATUS.SUCCESS.CREATED).send(newTalker);
 };
 
 const editTalker = async (req, res) => {
@@ -47,7 +47,7 @@ const editTalker = async (req, res) => {
   const index = talkers.indexOf(selectedTalker);
   talkers.splice(index, 1, editedTalker);
   await fs.writeFile('./talker.json', JSON.stringify(talkers));
-  res.status(STATUS.SUCCESS.OK).send(editedTalker);
+  return res.status(STATUS.SUCCESS.OK).send(editedTalker);
 };
 
 const removeTalker = async (req, res) => {
@@ -57,7 +57,7 @@ const removeTalker = async (req, res) => {
   const index = talkers.indexOf(selectedTalker);
   talkers.splice(index, 1);
   await fs.writeFile('./talker.json', JSON.stringify(talkers));
-  res.status(STATUS.SUCCESS.OK).send({ message: 'Pessoa palestrante deletada com sucesso' });
+  return res.status(STATUS.SUCCESS.OK).send({ message: 'Pessoa palestrante deletada com sucesso' });
 };
 
 const TalkerBySearchTerm = async (req, res) => {
@@ -68,7 +68,7 @@ const TalkerBySearchTerm = async (req, res) => {
   if (!q) {
     res.stats(STATUS.ERROR.BAD_REQUEST).send({ message: 'É necessário preencher o parametro' });
   }
-  res.status(STATUS.SUCCESS.OK).send(filteredQ);
+  return res.status(STATUS.SUCCESS.OK).send(filteredQ);
 };
 
 module.exports = {
