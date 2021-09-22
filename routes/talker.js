@@ -1,5 +1,4 @@
 const express = require('express');
-const STATUS = require('../status/http_status');
 const { getAllTalker,
     getSortedTalker,
     TalkerBySearchTerm,
