@@ -32,6 +32,11 @@ app.post('/talker',
   newTalker.createdTalker);
 app.put('/talker/:id',
   newTalker.authorizationToken,
+  newTalker.checkName,
+  newTalker.checkAge,
+  newTalker.checkTalk,
+  newTalker.checkWatchedAt,
+  newTalker.checkRate,
   editTalker.editTalker);
 
 app.listen(PORT, () => {
