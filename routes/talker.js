@@ -5,6 +5,7 @@ const { getAllTalker,
     generateToken,
     pushNewTalker,
     editTalker,
+    removeTalker,
 } = require('../middlewares/talker');
 
 const { validateEmail,
@@ -30,5 +31,7 @@ router.post('/login', validateEmail, validatePassword, generateToken);
 router.post('/talker', validateToken, validateFields, validateData, validateTalk, pushNewTalker);
 
 router.put('/talker/:id', validateToken, validateFields, validateData, validateTalk, editTalker);
+
+router.delete('/talker/:id', validateToken, removeTalker);
 
 module.exports = router;
