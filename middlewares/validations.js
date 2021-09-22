@@ -22,7 +22,7 @@ const validatePassword = (req, res, next) => {
     res.status(STATUS.ERROR.BAD_REQUEST).send({
       message: 'O campo "password" é obrigatório',
     });
-  } else if (password < 6) {
+  } else if (password.length < 6) {
     res.status(STATUS.ERROR.BAD_REQUEST).send({
       message: 'O "password" deve ter pelo menos 6 caracteres',
     });
