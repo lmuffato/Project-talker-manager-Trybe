@@ -10,6 +10,7 @@ const {
   getTalkersMiddleware,
   getTalkerByIdMiddleware,
   postTalkerMiddleware,
+  putTalkersMiddleware,
 } = require('../middlewares');
 
 // Validations
@@ -36,5 +37,6 @@ router.get('/', getTalkersMiddleware);
 router.get('/:talkerId', getTalkerByIdMiddleware);
 
 router.post('/', validations, postTalkerMiddleware);
+router.put('/:talkerId', validations, putTalkersMiddleware);
 
 module.exports = router;

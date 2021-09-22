@@ -1,12 +1,14 @@
 const fs = require('fs').promises;
 const crypto = require('crypto');
 
+const talkerPath = './talker.json';
+
 const loginToken = crypto.randomBytes(8).toString('hex');
 
 module.exports = {
   getTalkersMiddleware: async (_req, res) => {
     try {
-      const file = await fs.readFile('./talker.json', 'utf-8');
+      const file = await fs.readFile(talkerPath, 'utf-8');
   
       if (!file) {
         return res.status(200).json(JSON.parse([]));
@@ -21,7 +23,7 @@ module.exports = {
   getTalkerByIdMiddleware: async (req, res) => {
     try {
       const { talkerId } = req.params;
-      const file = await fs.readFile('./talker.json', 'utf-8');
+      const file = await fs.readFile(talkerPath, 'utf-8');
       const parsedFile = JSON.parse(file);
       const talkerById = [...parsedFile]
         .find((talker) => talker.id === parseInt(talkerId, 10));
@@ -37,7 +39,7 @@ module.exports = {
 
   postTalkerMiddleware: async (req, res) => {
     const { name, age, talk: { watchedAt, rate } } = req.body;
-    const data = await fs.readFile('./talker.json', 'utf-8');
+    const data = await fs.readFile(talkerPath, 'utf-8');
     const parsed = JSON.parse(data);
     const talkerToAdd = {
       name,
@@ -52,6 +54,20 @@ module.exports = {
 
     await fs.writeFile('./talker.json', JSON.stringify(parsed));
     res.status(201).send(talkerToAdd);
+  },
+
+  putTalkersMiddleware: async (req, res) => {
+    const { talkerId } = req.params;
+    const { name, age, talk: { watchedAt, rate } } = req.body;
+    const data = await fs.readFile(talkerPath, 'utf-8');
+    const parsed = JSON.parse(data);
+
+    const talkerToEdit = parsed.findIndex((talker) => talker.id === parseInt(talkerId, 10));
+
+    parsed[talkerToEdit] = { ...parsed[talkerToEdit], name, age, talk: { watchedAt, rate } };
+    
+    await fs.writeFile('./talker.json', JSON.stringify(parsed));
+    res.status(200).send(parsed[talkerToEdit]);
   },
 
   getLoginToken: (_req, res) => {
