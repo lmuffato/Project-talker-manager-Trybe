@@ -6,7 +6,7 @@ app.use(bodyParser.json());
 
 const getTalkers = require('./getTalker');
 const getTalkerId = require('./getTalkerId');
-// const create = require('./postLogin');
+const newTalker = require('./postTalker');
 const validations = require('./middleware/validations');
 
 const HTTP_OK_STATUS = 200;
@@ -21,6 +21,7 @@ app.get('/', (_request, response) => {
 app.get('/talker', getTalkers);
 app.get('/talker/:id', getTalkerId);
 app.post('/login', validations.checkEmail, validations.checkPassWord, validations.cryptoGenerate);
+app.post('/talker', newTalker.createdTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
