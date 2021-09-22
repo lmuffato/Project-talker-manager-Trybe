@@ -41,12 +41,7 @@ const pushNewTalker = async (req, res) => {
 const editTalker = async (req, res) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;
-  const editedTalker = {
-    name,
-    age,
-    id: Number(id),
-    talk,
-  };
+  const editedTalker = { name, age, id: Number(id), talk };
   const talkers = await convertFromJSON();
   const selectedTalker = talkers.filter((talker) => talker.id === Number(id)).pop();
   const index = talkers.indexOf(selectedTalker);
@@ -55,10 +50,21 @@ const editTalker = async (req, res) => {
   res.status(STATUS.SUCCESS.OK).send(editedTalker);
 };
 
+const removeTalker = async (req, res) => {
+  const { id } = req.params;
+  const talkers = await convertFromJSON();
+  const selectedTalker = talkers.filter((talker) => talker.id === Number(id)).pop();
+  const index = talkers.indexOf(selectedTalker);
+  talkers.splice(index, 1);
+  await fs.writeFile('./talker.json', JSON.stringify(talkers));
+  res.status(STATUS.SUCCESS.OK).send({ message: 'Pessoa palestrante deletada com sucesso' });
+};
+
 module.exports = {
     getAllTalker,
     getSortedTalker,
     generateToken,
     pushNewTalker,
     editTalker,
+    removeTalker,
 };
