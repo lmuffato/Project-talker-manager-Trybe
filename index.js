@@ -22,6 +22,7 @@ app.get('/talker', getTalkers);
 app.get('/talker/:id', getTalkerId);
 app.post('/login', validations.checkEmail, validations.checkPassWord, validations.cryptoGenerate);
 app.post('/talker',
+  newTalker.checkName,
   newTalker.authorizationToken,
   newTalker.createdTalker);
 
