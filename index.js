@@ -10,7 +10,7 @@ const HTTP_OK_STATUS = 200;
 const HTTP_CREATED_STATUS = 201;
 const HTTP_BAD_REQUEST_STATUS = 400;
 const HTTP_UNAUTHORIZED_STATUS = 401;
-// const HTTP_NOT_FOUND_STATUS = 404;
+const HTTP_NOT_FOUND_STATUS = 404;
 const FILE_TALKERS = './talker.json';
 const PORT = '3000';
 
@@ -124,6 +124,24 @@ const validateToken = (req, res, next) => {
 
   next();
 };
+
+app.get('/talker/search', validateToken,
+
+async (req, res) => {
+  const talkers = JSON.parse(await fs.readFile(FILE_TALKERS, 'utf-8'));
+  const { q } = req.query;
+  const searchTerm = talkers.filter((t) => t.name.includes(q));
+
+  if (searchTerm === undefined || searchTerm === '') {
+    return res.status(HTTP_NOT_FOUND_STATUS).json(talkers);
+  }
+
+  if (!searchTerm) {
+    return res.status(HTTP_NOT_FOUND_STATUS).json([]);
+  }
+
+  res.status(HTTP_OK_STATUS).json(searchTerm);
+});
 
 app.get('/talker/:id', async (req, res) => {
   const content = await fs.readFile(FILE_TALKERS, 'utf-8');
