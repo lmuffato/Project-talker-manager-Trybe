@@ -12,6 +12,7 @@ const {
   postTalkerMiddleware,
   putTalkersMiddleware,
   deleteTalkersMiddleware,
+  getTalkersBySearch,
 } = require('../middlewares');
 
 // Validations
@@ -35,6 +36,7 @@ const validations = [
 
 // Routes
 router.get('/', getTalkersMiddleware);
+router.get('/search', tokenValidation, getTalkersBySearch);
 router.get('/:talkerId', getTalkerByIdMiddleware);
 
 router.post('/', validations, postTalkerMiddleware);

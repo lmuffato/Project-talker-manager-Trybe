@@ -37,6 +37,24 @@ module.exports = {
     }
   },
 
+  getTalkersBySearch: async (req, res) => {
+    const { q } = req.query;
+    const file = await fs.readFile(talkerPath, 'utf-8');
+    const parsed = JSON.parse(file);
+
+    if (!q || q === '') {
+      return res.status(200).send(parsed);
+    }
+
+    const filteredTalkers = parsed.filter((talker) => talker.name.includes(q));
+
+    if (!filteredTalkers) {
+      return res.status(200).send([]);
+    }
+
+    res.status(200).send(filteredTalkers);
+  },
+
   postTalkerMiddleware: async (req, res) => {
     const { name, age, talk: { watchedAt, rate } } = req.body;
     const data = await fs.readFile(talkerPath, 'utf-8');
