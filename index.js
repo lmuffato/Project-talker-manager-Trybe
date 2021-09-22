@@ -6,6 +6,7 @@ const {
   login,
   createTalker,
   deleteTalker,
+  editTalker,
   verifyToken,
   verifyName,
   verifyAge,
@@ -40,6 +41,15 @@ app.post('/talker', [
   verifyTalk,
   verifyRate,
   createTalker,
+]);
+
+app.put('/talker/:id', [
+  verifyToken,
+  verifyName,
+  verifyAge,
+  verifyData,
+  verifyRate,
+  editTalker,
 ]);
 
 app.delete('/talker/:id', [verifyToken, deleteTalker]);
