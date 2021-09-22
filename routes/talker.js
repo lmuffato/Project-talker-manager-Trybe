@@ -19,10 +19,6 @@ const { validateEmail,
 
 const router = express.Router();
 
-router.get('/', (_req, res) => {
-    res.status(STATUS.SUCCESS.OK).send('Hello World 🚀👩‍🚀');
-});
-
 router.get('/talker', getAllTalker);
 
 router.get('/talker/search', validateToken, TalkerBySearchTerm);
