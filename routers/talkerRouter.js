@@ -33,14 +33,23 @@ const getTalkerById = async (id) => {
   return talkerById; 
 };
 
+const setNewTalker = async (talker) => {
+  await fs.writeFile('./talker.json', JSON.stringify(talker));
+};
+
 router.get('/', async (_req, res) => {
   const talkers = await getAll();
   res.status(200).json(talkers);
 });
 
-const setNewTalker = async (talker) => {
-  await fs.writeFile('./talker.json', JSON.stringify(talker));
-};
+router.get('/search', validateLogin, async (req, res) => {
+  const { q: query } = req.query;
+  const talkers = await getAll();
+  const searchTalkers = talkers.filter(
+    (talker) => talker.name.toLowerCase().includes(query.toLowerCase()),
+    );
+  res.status(200).json(searchTalkers);
+});
 
 router.get('/:id', async (req, res) => {
   const { id } = req.params;
