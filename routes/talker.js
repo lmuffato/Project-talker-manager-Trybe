@@ -8,6 +8,9 @@ const { getAllTalker,
 
 const { validateEmail,
     validatePassword,
+    validateFields,
+    validateData,
+    validateTalk,
 } = require('../middlewares/validations');
 
 const router = express.Router();
@@ -22,6 +25,6 @@ router.get('/talker/:id', getSortedTalker);
 
 router.post('/login', validateEmail, validatePassword, generateToken);
 
-router.post('/talker', pushNewTalker);
+router.post('/talker', validateFields, validateData, validateTalk, pushNewTalker);
 
 module.exports = router;
