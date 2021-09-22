@@ -1,11 +1,17 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const crypto = require('crypto');
 const fs = require('fs').promises;
 
 const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
+// const HTTP_CREATED_STATUS = 201;
+const HTTP_BAD_REQUEST_STATUS = 400;
+// const HTTP_UNAUTHORIZED_STATUS = 401;
+// const HTTP_NOT_FOUND_STATUS = 404;
+const FILE_TALKERS = './talker.json';
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -13,19 +19,59 @@ app.get('/', (_request, response) => {
   response.status(HTTP_OK_STATUS).send();
 });
 
-app.get('/talker', async (_req, res) => {
-  const content = await fs.readFile('./talker.json', 'utf-8');
-  return res.status(HTTP_OK_STATUS).json(JSON.parse(content));
-});
+const validateEmail = (req, res, next) => {
+  const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const { email } = req.body;
+
+  if (!email || email === '') { 
+    return res.status(HTTP_BAD_REQUEST_STATUS).json({ message: 'O campo "email" é obrigatório' });
+  }
+
+  if (!validEmail.test(email)) { 
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+      .json({ message: 'O "email" deve ter o formato "email@email.com"' });
+  }
+
+  next();
+};
+
+const validatePassword = (req, res, next) => {
+  const { password } = req.body;
+  const PASSWORD_MIN_SIZE = 6;
+
+  if (!password || password === '') {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+      .json({ message: 'O campo "password" é obrigatório' });
+  }
+
+  if (password.length < PASSWORD_MIN_SIZE) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+      .json({ message: 'O "password" deve ter pelo menos 6 caracteres' });
+  }
+
+  next();
+};
 
 app.get('/talker/:id', async (req, res) => {
-  const content = await fs.readFile('./talker.json', 'utf-8');
+  const content = await fs.readFile(FILE_TALKERS, 'utf-8');
   const { id } = req.params;
   const talker = JSON.parse(content).find((c) => c.id === +id);
   
   if (!talker) return res.status(404).json({ message: 'Pessoa palestrante não encontrada' });
-
+  
   res.status(HTTP_OK_STATUS).json(talker);
+});
+
+app.get('/talker', async (_req, res) => {
+  const content = await fs.readFile(FILE_TALKERS, 'utf-8');
+  return res.status(HTTP_OK_STATUS).json(JSON.parse(content));
+});
+
+app.post('/login', validateEmail, validatePassword, 
+(_req, res) => {
+  const token = crypto.randomBytes(8).toString('hex');
+
+  return res.status(HTTP_OK_STATUS).json({ token });
 });
 
 app.listen(PORT, () => {
@@ -34,4 +80,7 @@ app.listen(PORT, () => {
 
 /* Referências:
   Como converter uma string em json: https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+  Como gerar um token aleatório com 16 caracteres: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
+  Regex para email válido retirado do projeto já realizado (APP Receitas): https://github.com/tryber/sd-010-a-project-recipes-app/pull/89/commits/83cb72f06dd96973ca365d9c06ce59e4d1c2cbad
+  
 */
