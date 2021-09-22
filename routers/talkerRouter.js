@@ -3,13 +3,13 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs').promises;
 
-const { 
+const {
+  validateLogin,
   validateAge,
   validateDate,
   validateName,
   validateTalk,
-  validateRate } = require('../middlewares/middlewaresTalker');
-const { validateLogin } = require('../middlewares/middlewaresLogin');
+  validateRate } = require('../middlewares/middlewares');
 
 const validateNewTalker = [
   validateLogin,
