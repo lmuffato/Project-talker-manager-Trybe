@@ -10,8 +10,8 @@ const { validateEmail,
     validatePassword,
     validateFields,
     validateData,
-    validateTalk,
     validateToken,
+    validateTalk,
 } = require('../middlewares/validations');
 
 const router = express.Router();
