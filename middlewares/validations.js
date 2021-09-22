@@ -49,11 +49,11 @@ const validateFields = (req, res, next) => {
 const validateData = (req, res, next) => {
   const newTalker = req.body;
     if (newTalker.name.length < 3) {
-      res.status(STATUS.ERROR.BAD_REQUEST)
+      return res.status(STATUS.ERROR.BAD_REQUEST)
       .send({ message: 'O "name" deve ter pelo menos 3 caracteres' });
     }
     if (newTalker.age < 18) {
-      res.status(STATUS.ERROR.BAD_REQUEST)
+      return res.status(STATUS.ERROR.BAD_REQUEST)
       .send({ message: 'A pessoa palestrante deve ser maior de idade' });
     }
   next();
