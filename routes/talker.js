@@ -18,18 +18,18 @@ const { validateEmail,
 
 const router = express.Router();
 
-router.get('/talker', getAllTalker);
+router.get('/', getAllTalker);
 
-router.get('/talker/search', validateToken, TalkerBySearchTerm);
+router.get('/search', validateToken, TalkerBySearchTerm);
 
-router.get('/talker/:id', getSortedTalker);
+router.get('/:id', getSortedTalker);
 
 router.post('/login', validateEmail, validatePassword, generateToken);
 
-router.post('/talker', validateToken, validateFields, validateData, validateTalk, pushNewTalker);
+router.post('/', validateToken, validateFields, validateData, validateTalk, pushNewTalker);
 
-router.put('/talker/:id', validateToken, validateFields, validateData, validateTalk, editTalker);
+router.put('/:id', validateToken, validateFields, validateData, validateTalk, editTalker);
 
-router.delete('/talker/:id', validateToken, removeTalker);
+router.delete('/:id', validateToken, removeTalker);
 
 module.exports = router;

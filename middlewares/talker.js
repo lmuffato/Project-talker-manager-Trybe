@@ -10,7 +10,7 @@ const convertFromJSON = async () => {
 
 const getAllTalker = async (_req, res) => {
   const talker = await convertFromJSON();
-  res.status(STATUS.SUCCESS.OK).send(talker);
+  return res.status(STATUS.SUCCESS.OK).send(talker);
 };
 
 const getSortedTalker = async (req, res, next) => {
