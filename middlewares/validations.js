@@ -63,13 +63,13 @@ const validateTalk = (req, res, next) => {
   const { talk } = req.body;
   const dateValidation = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
   if (talk.rate < 1 || talk.rate > 5) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
-        message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
-    });
-  }
-  if (!dateValidation.test(talk.watchedAt)) {
     res.status(STATUS.ERROR.BAD_REQUEST)
     .send({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+  if (!dateValidation.test(talk.watchedAt)) {
+    res.status(STATUS.ERROR.BAD_REQUEST).send({
+      message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
+  });
   }
   if (!talk.rate) {
     res.status(STATUS.ERROR.BAD_REQUEST).send({
