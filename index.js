@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
-const { HTTP_OK_STATUS } = ('./utils/statusHttp');
+const { HTTP_OK_STATUS } = require('./utils/statusHttp');
 const { fetchTalker } = require('./middlewares/fetchTalker');
 const { validateLogin } = require('./middlewares/validation');
 const { talkerById } = require('./middlewares/talkerById');
