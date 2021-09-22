@@ -58,4 +58,17 @@ router.post('/', validateNewTalker, async (req, res) => {
   res.status(201).json(newTalker);
 });
 
+router.put('/:id', validateNewTalker, async (req, res) => {
+  const { id } = req.params;
+  const talkers = await getAll();
+
+  const removedId = talkers.filter((talker) => talker.id !== Number(id));
+  const updatedTalker = { ...req.body, id: Number(id) };
+
+  const newTalkers = [...removedId, updatedTalker];
+  await setNewTalker(newTalkers);
+
+  res.status(200).json(updatedTalker);
+});
+
 module.exports = router;
