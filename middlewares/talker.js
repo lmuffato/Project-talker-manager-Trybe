@@ -42,15 +42,16 @@ const editTalker = async (req, res) => {
   const { id } = req.params;
   const { name, age, talk } = req.body;
   const editedTalker = {
-    id: Number(id),
     name,
     age,
+    id: Number(id),
     talk,
   };
   const talkers = await convertFromJSON();
-  const selectedTalker = talkers.filter((talker) => talker.id === Number(id)).pop;
+  const selectedTalker = talkers.filter((talker) => talker.id === Number(id)).pop();
   const index = talkers.indexOf(selectedTalker);
-  talkers.splice(index, 1, editedTalker);  
+  talkers.splice(index, 1, editedTalker);
+  await fs.writeFile('./talker.json', JSON.stringify(talkers));
   res.status(STATUS.SUCCESS.OK).send(editedTalker);
 };
 
