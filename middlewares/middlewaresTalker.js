@@ -39,7 +39,7 @@ const validateDate = (req, res, next) => {
   
   next();
 };
-  
+
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
   if (!talk) {
