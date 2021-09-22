@@ -37,7 +37,7 @@ const pushNewTalker = async (req, res) => {
   talkers.push(newTalker);
   const JSONtalkers = JSON.stringify(talkers);
   fs.writeFile('./talker.json', JSONtalkers);
-  res.status(STATUS.SUCCESS.CREATED).send('Talker Added');
+  res.status(STATUS.SUCCESS.CREATED).send(newTalker);
 };
 
 module.exports = {

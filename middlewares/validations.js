@@ -29,7 +29,60 @@ const validatePassword = (req, res, next) => {
   next();
 };
 
+const validateFields = (req, res, next) => {
+  const newTalker = req.body;
+  console.log(newTalker);
+  if (!newTalker.name) {
+    res.status(STATUS.ERROR.BAD_REQUEST).send({ message: 'O campo "name" é obrigatório' });
+  }    
+  if (!newTalker.age) {
+    res.status(STATUS.ERROR.BAD_REQUEST).send({ message: 'O campo "age" é obrigatório' });
+  }
+  if (!newTalker.talk || !newTalker.talk.watchedAt) {
+    res.status(STATUS.ERROR.BAD_REQUEST).send({
+        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    }); 
+}
+  next();
+};
+
+const validateData = (req, res, next) => {
+  const newTalker = req.body;
+    if (newTalker.name.length < 3) {
+      res.status(STATUS.ERROR.BAD_REQUEST)
+      .send({ message: 'O "name" deve ter pelo menos 3 caracteres' });
+    }
+    if (newTalker.age < 18) {
+      res.status(STATUS.ERROR.BAD_REQUEST)
+      .send({ message: 'A pessoa palestrante deve ser maior de idade' });
+    }
+  next();
+};
+
+const validateTalk = (req, res, next) => {
+  const { talk } = req.body;
+  const dateValidation = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+  if (talk.rate < 1 || talk.rate > 5) {
+    res.status(STATUS.ERROR.BAD_REQUEST).send({
+        message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
+    });
+  }
+  if (!dateValidation.test(talk.watchedAt)) {
+    res.status(STATUS.ERROR.BAD_REQUEST)
+    .send({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+  if (!talk.rate) {
+    res.status(STATUS.ERROR.BAD_REQUEST).send({
+        message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
+    }); 
+  }
+  next();
+};
+
 module.exports = {
     validateEmail,
     validatePassword,
+    validateFields,
+    validateData,
+    validateTalk,
 };
