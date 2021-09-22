@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const crypto = require('crypto');
 const path = require('path');
-const { writeFileSync } = require('fs');
+// const { writeFileSync } = require('fs');
 
 const app = express();
 app.use(bodyParser.json());
@@ -96,10 +96,10 @@ app.get('/talker/search', validateToken, async (request, response) => {
   const talkers = JSON.parse(content);
   const talkersFilters = talkers.filter((e) => e.name.toUpperCase().includes(q.toUpperCase()));
   if (q === undefined || q === '') {
-   return response.status(HTTP_OK_STATUS).json(talkers);
+    return response.status(HTTP_OK_STATUS).json(talkers);
   }
   return response.status(HTTP_OK_STATUS)
-  .json(talkersFilters);
+    .json(talkersFilters);
 });
 
 // Requisito 1
@@ -152,37 +152,37 @@ app.post('/login', (request, response) => {
 });
 
 // Requisito 4
-app.post('/talker',
-validateName, validateToken, validateTalk, validateAge, validateRate,
+// app.post('/talker',
+// validateName, validateToken, validateTalk, validateAge, validateRate,
+//   validateWatchedAt,
+//   async (request, response) => {
+//     const { body } = request;
+//     const content = await fs.readFile(caminhoTalker, 'utf-8');
+//     const talkers = JSON.parse(content);
+//     const newTalker = { id: talkers[talkers.length - 1].id + 1, ...body };
+//     const allTalkers = [...talkers, newTalker];
+//     await fs.writeFile(caminhoTalker, JSON.stringify(allTalkers, null, 2), 'utf-8');
+//     if (newTalker) {
+//       return response.status(201).json(newTalker);
+//     }
+//   });
+
+// Requisito 5
+app.put('/talker/:id',
+  validateName, validateToken, validateTalk, validateAge, validateRate,
   validateWatchedAt,
   async (request, response) => {
+    const { id } = request.params;
     const { body } = request;
     const content = await fs.readFile(caminhoTalker, 'utf-8');
-    const talkers = JSON.parse(content);
-    const newTalker = { id: talkers[talkers.length - 1].id + 1, ...body };
-    const allTalkers = [...talkers, newTalker];
-    await fs.writeFile(caminhoTalker, JSON.stringify(allTalkers, null, 2), 'utf-8');
-    if (newTalker) {
-      return response.status(201).json(newTalker);
-    }
+    const talkerEdit = { id: Number(id), ...body };
+    const talkers = JSON.parse(content).map((e) => {
+      if (e.id !== Number(id)) return e;
+      return talkerEdit;
+    });
+    await fs.writeFile(caminhoTalker, JSON.stringify(talkers, null, 2), 'utf-8');
+    return response.status(HTTP_OK_STATUS).json(talkerEdit);
   });
-
-  // Requisito 5
-app.put('/talker/:id', 
-validateName, validateToken, validateTalk, validateAge, validateRate,
-  validateWatchedAt,
-async (request, response) => {
-  const { id } = request.params;
-  const { body } = request;
-  const content = await fs.readFile(caminhoTalker, 'utf-8');
-  const talkerEdit = { id: Number(id), ...body };
-  const talkers = JSON.parse(content).map((e) => {
- if (e.id !== Number(id)) return e; 
-return talkerEdit; 
-});
-   await fs.writeFile(caminhoTalker, JSON.stringify(talkers, null, 2), 'utf-8');
-   return response.status(HTTP_OK_STATUS).json(talkerEdit);
-});
 
 // Requisito 6
 app.delete('/talker/:id', validateToken, async (request, response) => {
@@ -191,7 +191,7 @@ app.delete('/talker/:id', validateToken, async (request, response) => {
   const talkers = JSON.parse(content).filter((e) => e.id !== Number(id));
   await fs.writeFile(caminhoTalker, JSON.stringify(talkers, null, 2), 'utf-8');
   return response.status(HTTP_OK_STATUS)
-  .json({ message: 'Pessoa palestrante deletada com sucesso' });
+    .json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
 
 app.listen(PORT, () => {
