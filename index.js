@@ -133,10 +133,22 @@ async (req, res) => {
   const { name, age, talk } = req.body;
   const talker = await readTalkerFile();
   const talkerId = talker.findIndex((talke) => talke.id === parseInt(id, 10));
-  if (talkerId === -1) {
+  if (talkerId < 1) {
     return res.status(HTTP_NOT_FOUND_STATUS);
   }
   talker[talkerId] = { id: parseInt(id, 10), name, age, talk };
   await addTalker(talker);
   return res.status(HTTP_OK_STATUS).json(talker[talkerId]);
+});
+
+app.delete('/talker/:id', validateToken, async (req, res) => {
+  const { id } = req.params;
+  const talker = await readTalkerFile();
+  const talkerId = talker.findIndex((talke) => talke.id === parseInt(id, 10));
+  if (talkerId < 1) {
+    return res.status(HTTP_NOT_FOUND_STATUS);
+  }
+  talker.splice(talkerId, 1); // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/splice; primeiro parâmetro é de onde começa, segundo é a quantidade de remoções;
+  await addTalker(talker);
+  return res.status(HTTP_OK_STATUS).json({ message: 'Pessoa palestrante deletada com sucesso' });
 });
