@@ -1,8 +1,6 @@
 const fs = require('fs').promises;
-
 const STATUS = require('../status/http_status');
-
-const gen = () => Math.random().toString(36).substr(4);
+const genToken = require('../auth/authCore');
 
 const convertFromJSON = async () => {
   const rawTalkers = (await fs.readFile('./talker.json')).toString('utf-8');
@@ -26,8 +24,8 @@ const getSortedTalker = async (req, res, next) => {
   }
 };
 
-const generateToken = (_req, res) => {
-  const token = `${gen()}${gen()}`;
+const generateToken = async (_req, res) => {
+  const token = await genToken.generateToken();
   res.status(STATUS.SUCCESS.OK).send({ token });
 };
 

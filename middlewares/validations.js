@@ -1,3 +1,4 @@
+const fs = require('fs').promises;
 const STATUS = require('../status/http_status');
 
 const validateEmail = (req, res, next) => {
@@ -79,10 +80,21 @@ const validateTalk = (req, res, next) => {
   next();
 };
 
+const validateToken = async (req, res, next) => {
+  const { authorization } = req.headers;
+  const validTokens = JSON.parse(await fs.readFile('./auth/validTokens.json'));
+  const isValid = validTokens.some((token) => token === authorization);  
+  if (!isValid) {
+    res.status(STATUS.ERROR.UNOTHORIZED).send(isValid);
+  }
+  next();
+};
+
 module.exports = {
     validateEmail,
     validatePassword,
     validateFields,
     validateData,
     validateTalk,
+    validateToken,
 };

@@ -11,6 +11,7 @@ const { validateEmail,
     validateFields,
     validateData,
     validateTalk,
+    validateToken,
 } = require('../middlewares/validations');
 
 const router = express.Router();
@@ -25,6 +26,6 @@ router.get('/talker/:id', getSortedTalker);
 
 router.post('/login', validateEmail, validatePassword, generateToken);
 
-router.post('/talker', validateFields, validateData, validateTalk, pushNewTalker);
+router.post('/talker', validateToken, validateFields, validateData, validateTalk, pushNewTalker);
 
 module.exports = router;
