@@ -4,6 +4,7 @@ const { getAllTalker,
     getSortedTalker,
     generateToken,
     pushNewTalker,
+    editTalker,
 } = require('../middlewares/talker');
 
 const { validateEmail,
@@ -27,5 +28,7 @@ router.get('/talker/:id', getSortedTalker);
 router.post('/login', validateEmail, validatePassword, generateToken);
 
 router.post('/talker', validateToken, validateFields, validateData, validateTalk, pushNewTalker);
+
+router.put('/talker/:id', validateToken, validateFields, validateData, validateTalk, editTalker);
 
 module.exports = router;
