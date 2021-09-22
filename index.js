@@ -5,14 +5,15 @@ const {
   getTalkerById,
   login,
   createTalker,
-  deleteTalker,
   editTalker,
   verifyToken,
   verifyName,
   verifyAge,
-  verifyData,
   verifyTalk,
+  verifyData,
   verifyRate,
+  deleteTalker,
+  searchTalker,
 } = require('./middleware');
 
 const app = express();
@@ -31,14 +32,16 @@ app.listen(PORT, () => {
 });
 
 app.get('/talker', getAllTalkers);
+app.get('/talker/search', verifyToken, searchTalker);
 app.get('/talker/:id', getTalkerById);
 app.post('/login', login);
+
 app.post('/talker', [
   verifyToken,
   verifyName,
   verifyAge,
-  verifyData,
   verifyTalk,
+  verifyData,
   verifyRate,
   createTalker,
 ]);

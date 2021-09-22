@@ -4,6 +4,7 @@ const login = require('./login');
 const createTalker = require('./createTalker');
 const deleteTalker = require('./deleteTalker');
 const editTalker = require('./editTalker');
+const searchTalker = require('./searchTalker');
 const {
     verifyToken,
     verifyName,
@@ -26,4 +27,5 @@ module.exports = {
     verifyData,
     verifyTalk,
     verifyRate,
+    searchTalker,
 };
