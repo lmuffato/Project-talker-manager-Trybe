@@ -8,6 +8,7 @@ const getTalkers = require('./getTalker');
 const getTalkerId = require('./getTalkerId');
 const newTalker = require('./postTalker');
 const editTalker = require('./putTalker');
+const deleteTalker = require('./deleteTalker');
 const validations = require('./middleware/validations');
 
 const HTTP_OK_STATUS = 200;
@@ -38,6 +39,9 @@ app.put('/talker/:id',
   newTalker.checkWatchedAt,
   newTalker.checkRate,
   editTalker.editTalker);
+app.delete('/talker/:id',
+  deleteTalker.delTalker,
+  );
 
 app.listen(PORT, () => {
   console.log('Online');
