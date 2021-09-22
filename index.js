@@ -30,7 +30,9 @@ app.post('/talker',
   newTalker.checkWatchedAt,
   newTalker.checkRate,
   newTalker.createdTalker);
-app.put('/talker/:id', editTalker.editTalker);
+app.put('/talker/:id',
+  newTalker.authorizationToken,
+  editTalker.editTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
