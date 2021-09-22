@@ -2,6 +2,7 @@ const getAllTalkers = require('./getAllTalkers');
 const getTalkerById = require('./getTalkerById');
 const login = require('./login');
 const createTalker = require('./createTalker');
+const deleteTalker = require('./deleteTalker');
 const {
     verifyToken,
     verifyName,
@@ -16,6 +17,7 @@ module.exports = {
     getTalkerById,
     login,
     createTalker,
+    deleteTalker,
     verifyToken,
     verifyName,
     verifyAge,

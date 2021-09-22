@@ -5,6 +5,7 @@ const {
   getTalkerById,
   login,
   createTalker,
+  deleteTalker,
   verifyToken,
   verifyName,
   verifyAge,
@@ -40,3 +41,5 @@ app.post('/talker', [
   verifyRate,
   createTalker,
 ]);
+
+app.delete('/talker/:id', [verifyToken, deleteTalker]);
