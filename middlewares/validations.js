@@ -5,11 +5,12 @@ const validateEmail = (req, res, next) => {
   const { email } = req.body;
   const validation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({
       message: 'O campo "email" é obrigatório',
     });
-  } else if (!validation.test(email)) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
+  }
+  if (!validation.test(email)) {
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({
       message: 'O "email" deve ter o formato "email@email.com"',
     });
   }
@@ -19,11 +20,12 @@ const validateEmail = (req, res, next) => {
 const validatePassword = (req, res, next) => {
   const { password } = req.body;
   if (!password) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({
       message: 'O campo "password" é obrigatório',
     });
-  } else if (password.length < 6) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
+  }
+  if (password.length < 6) {
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({
       message: 'O "password" deve ter pelo menos 6 caracteres',
     });
   }
@@ -33,13 +35,13 @@ const validatePassword = (req, res, next) => {
 const validateFields = (req, res, next) => {
   const newTalker = req.body;
   if (!newTalker.name) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({ message: 'O campo "name" é obrigatório' });
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({ message: 'O campo "name" é obrigatório' });
   }    
   if (!newTalker.age) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({ message: 'O campo "age" é obrigatório' });
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({ message: 'O campo "age" é obrigatório' });
   }
   if (!newTalker.talk || !newTalker.talk.watchedAt) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({
         message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     }); 
 }
@@ -63,16 +65,16 @@ const validateTalk = (req, res, next) => {
   const { talk } = req.body;
   const dateValidation = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
   if (talk.rate < 1 || talk.rate > 5) {
-    res.status(STATUS.ERROR.BAD_REQUEST)
+    return res.status(STATUS.ERROR.BAD_REQUEST)
     .send({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
   if (!dateValidation.test(talk.watchedAt)) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({
       message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"',
   });
   }
   if (!talk.rate) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
+    return res.status(STATUS.ERROR.BAD_REQUEST).send({
         message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios',
     }); 
   }
@@ -84,10 +86,10 @@ const validateToken = async (req, res, next) => {
   const validTokens = JSON.parse(await fs.readFile('./auth/validTokens.json'));
   const isValid = validTokens.some((token) => token === authorization);
   if (!authorization) {
-    res.status(STATUS.ERROR.UNOTHORIZED).send({ message: 'Token não encontrado' });
+    return res.status(STATUS.ERROR.UNOTHORIZED).send({ message: 'Token não encontrado' });
   }
   if (!isValid) {
-    res.status(STATUS.ERROR.UNOTHORIZED).send({ message: 'Token inválido' });
+    return res.status(STATUS.ERROR.UNOTHORIZED).send({ message: 'Token inválido' });
   }
   next();
 };

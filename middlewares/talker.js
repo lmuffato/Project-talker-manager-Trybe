@@ -18,7 +18,7 @@ const getSortedTalker = async (req, res) => {
   const { id } = req.params;
   const filterdTalker = talkers.filter((talker) => talker.id === Number(id)).pop();
   if (!filterdTalker) {
-    return res
+    res
     .status(STATUS.ERROR.NOT_FOUND).send({ message: 'Pessoa palestrante não encontrada' });
   }
   res.status(STATUS.SUCCESS.OK).send(filterdTalker);
@@ -71,9 +71,6 @@ const TalkerBySearchTerm = async (req, res) => {
   console.log(req.query);
   const talkers = await convertFromJSON();
   const filteredQ = talkers.filter((talker) => talker.name.includes(q));
-  if (!q) {
-    res.stats(STATUS.ERROR.BAD_REQUEST).send({ message: 'É necessário preencher o parametro' });
-  }
   res.status(STATUS.SUCCESS.OK).send(filteredQ);
 };
 
