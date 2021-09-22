@@ -24,6 +24,7 @@ app.post('/login', validations.checkEmail, validations.checkPassWord, validation
 app.post('/talker',
   newTalker.checkName,
   newTalker.checkAge,
+  newTalker.checkWatchedAt,
   newTalker.authorizationToken,
   newTalker.createdTalker);
 

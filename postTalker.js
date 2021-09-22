@@ -55,9 +55,20 @@ const checkAge = (req, res, next) => {
   next();
 };
 
+const checkWatchedAt = (req, res, next) => {
+  const { talk } = req.body;
+  const validDate = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/; // https://www.regextester.com
+  if (!validDate.test(talk.watchedAt)) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+      .json({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+  }
+  next();
+};
+
 module.exports = {
   createdTalker,
   authorizationToken,
   checkName,
   checkAge,
+  checkWatchedAt,
 };
