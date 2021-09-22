@@ -26,44 +26,23 @@ const getSortedTalker = async (req, res, next) => {
   }
 };
 
-const validateEmail = (req, res, next) => {
-  const { email } = req.body;
-  const validation = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
-      message: 'O campo "email" é obrigatório',
-    });
-  } else if (!validation.test(email)) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
-      message: 'O "email" deve ter o formato "email@email.com"',
-    });
-  }
-  next();
-};
-
-const validatePassword = (req, res, next) => {
-  const { password } = req.body;
-  if (!password) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
-      message: 'O campo "password" é obrigatório',
-    });
-  } else if (password < 6) {
-    res.status(STATUS.ERROR.BAD_REQUEST).send({
-      message: 'O "password" deve ter pelo menos 6 caracteres',
-    });
-  }
-  next();
-};
-
 const generateToken = (_req, res) => {
   const token = `${gen()}${gen()}`;
   res.status(STATUS.SUCCESS.OK).send({ token });
 };
 
+const pushNewTalker = async (req, res) => {
+  const newTalker = req.body;
+  const talkers = await convertFromJSON();
+  talkers.push(newTalker);
+  const JSONtalkers = JSON.stringify(talkers);
+  fs.writeFile('./talker.json', JSONtalkers);
+  res.status(STATUS.SUCCESS.CREATED).send('Talker Added');
+};
+
 module.exports = {
     getAllTalker,
     getSortedTalker,
-    validateEmail,
-    validatePassword,
     generateToken,
+    pushNewTalker,
 };
