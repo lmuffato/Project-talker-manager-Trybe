@@ -7,6 +7,7 @@ app.use(bodyParser.json());
 const getTalkers = require('./getTalker');
 const getTalkerId = require('./getTalkerId');
 const newTalker = require('./postTalker');
+const editTalker = require('./putTalker');
 const validations = require('./middleware/validations');
 
 const HTTP_OK_STATUS = 200;
@@ -29,6 +30,7 @@ app.post('/talker',
   newTalker.checkWatchedAt,
   newTalker.checkRate,
   newTalker.createdTalker);
+app.put('/talker/:id', editTalker.editTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
