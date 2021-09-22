@@ -3,12 +3,22 @@ const bodyParser = require('body-parser');
 const fs = require('fs').promises;
 const rescue = require('express-rescue');
 
+const {
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalkWatchedAndRate,
+  validateTalk,
+  validateTalkEmptyValues,
+} = require('./validations/validations');
+
 const app = express();
 app.use(bodyParser.json());
 
 const HTTP_OK_STATUS = 200;
 const HTTP_NOT_FOUND_STATUS = 404;
 const HTTP_BAD_REQ_STATUS = 400; // sintaxe inválida; por isso, servidor não atendeu a requisição;
+const HTTP_CREATED_STATUS = 201;
 const PORT = '3000';
 
 // não remova esse endpoint, e para o avaliador funcionar
@@ -23,6 +33,10 @@ app.listen(PORT, () => {
 const readTalkerFile = async () => { // function para ler o arquivo talker.json
   const talkerList = await fs.readFile('talker.json');
   return JSON.parse(talkerList); // parse para converter json em string
+};
+
+const addTalker = async (data) => {
+  await fs.writeFile('talker.json', JSON.stringify(data));
 };
 
 app.get('/talker', async (_req, res) => {
@@ -85,4 +99,22 @@ app.post(
     
     response.status(HTTP_OK_STATUS).json({ token: token(16) });
   }),
+);
+
+app.post(
+  '/talker',
+  validateToken,
+  validateName,
+  validateAge,
+  validateTalk,
+  validateTalkEmptyValues,
+  validateTalkWatchedAndRate,
+  async (req, res) => {
+    const { name, age, talk } = req.body;
+    const talker = await readTalkerFile();
+    const add = { id: talker.length + 1, name, age, talk };
+    talker.push(add);
+    addTalker(talker);
+    return res.status(HTTP_CREATED_STATUS).json(add);
+  },
 );
