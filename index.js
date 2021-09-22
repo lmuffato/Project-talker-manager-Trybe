@@ -120,3 +120,23 @@ app.post(
     return res.status(HTTP_CREATED_STATUS).json(add);
   },
 );
+
+app.put('/talker/:id',
+validateToken,
+validateName,
+validateAge,
+validateTalk,
+validateTalkEmptyValues,
+validateTalkWatchedAndRate,
+async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const talker = await readTalkerFile();
+  const talkerId = talker.findIndex((talke) => talke.id === parseInt(id, 10));
+  if (talkerId === -1) {
+    return res.status(HTTP_NOT_FOUND_STATUS);
+  }
+  talker[talkerId] = { id: parseInt(id, 10), name, age, talk };
+  await addTalker(talker);
+  return res.status(HTTP_OK_STATUS).json(talker[talkerId]);
+});

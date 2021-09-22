@@ -53,7 +53,7 @@ const validateTalkWatchedAndRate = (req, res, next) => { // https://stackoverflo
 
 const validateTalkEmptyValues = (req, res, next) => {
   const { talk: { watchedAt, rate } } = req.body;
-  if (!watchedAt || watchedAt === '' || !rate || rate === '') {
+  if (!watchedAt || watchedAt === '' || rate === undefined || rate === '') {
     return res.status(HTTP_BAD_REQ_STATUS)
     .json({ message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' });
   }
