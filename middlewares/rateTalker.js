@@ -5,7 +5,7 @@ const rateTalker = (req, res, next) => {
 
   if (rate < 1 || rate > 5) {
     return res.status(HTTP_BAD_REQUEST).send({
-      message: 'O campo "rate" deve ser inteiro de 1 à 5',
+      message: 'O campo "rate" deve ser um inteiro de 1 à 5',
     });
   }
 

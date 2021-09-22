@@ -2,7 +2,7 @@ const fs = require('fs').promises;
 const { HTTP_CREATE_STATUS } = require('../utils/statusHttp');
 
 const newTalker = async (req, res) => {
-  const data = 'talker.json';
+  const data = './talker.json';
   const { name, age, talk } = req.body;
 
   const arrayTalker = JSON.parse(await fs.readFile(data));
