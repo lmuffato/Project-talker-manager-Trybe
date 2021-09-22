@@ -17,10 +17,10 @@ const validateEmail = (req, res, next) => {
   const regex = /^[\w.]+@[a-z]+\.\w{2,3}$/g.test(email);
   
   if (!email) {
-    res.status(400).json({ message: 'O campo "email" é obrigatório' });
+    return res.status(400).json({ message: 'O campo "email" é obrigatório' });
   }
   if (!regex) {
-    res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
+    return res.status(400).json({ message: 'O "email" deve ter o formato "email@email.com"' });
   }
 
   next();
@@ -86,7 +86,7 @@ const validateDate = (req, res, next) => {
 const validateTalk = (req, res, next) => {
   const { talk } = req.body;
   if (!talk) {
-    res.status(400).json(
+    return res.status(400).json(
       { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
     );
   }
@@ -98,11 +98,11 @@ const validateRate = (req, res, next) => {
   const { talk: { rate } } = req.body;
 
   if (rate < 1 || rate > 5) {
-    res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+    return res.status(400).json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
   }
 
   if (!rate) {
-    res.status(400).json(
+    return res.status(400).json(
       { message: 'O campo "talk" é obrigatório e "watchedAt" e "rate" não podem ser vazios' },
     );
   }
