@@ -2,6 +2,7 @@ const express = require('express');
 const STATUS = require('../status/http_status');
 const { getAllTalker,
     getSortedTalker,
+    TalkerBySearchTerm,
     generateToken,
     pushNewTalker,
     editTalker,
@@ -23,6 +24,8 @@ router.get('/', (_req, res) => {
 });
 
 router.get('/talker', getAllTalker);
+
+router.get('/talker/search', validateToken, TalkerBySearchTerm);
 
 router.get('/talker/:id', getSortedTalker);
 
