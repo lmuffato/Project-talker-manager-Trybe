@@ -3,7 +3,7 @@ const STATUS = require('../status/http_status');
 const genToken = require('../auth/authCore');
 
 const convertFromJSON = async () => {
-  const rawTalkers = (await fs.readFile('./talker.json')).toString('utf-8');
+  const rawTalkers = (await fs.readFile('./talker.json'));
   const talkers = JSON.parse(rawTalkers);
   return talkers;
 };
@@ -38,9 +38,26 @@ const pushNewTalker = async (req, res) => {
   res.status(STATUS.SUCCESS.CREATED).send(newTalker);
 };
 
+const editTalker = async (req, res) => {
+  const { id } = req.params;
+  const { name, age, talk } = req.body;
+  const editedTalker = {
+    id: Number(id),
+    name,
+    age,
+    talk,
+  };
+  const talkers = await convertFromJSON();
+  const selectedTalker = talkers.filter((talker) => talker.id === Number(id)).pop;
+  const index = talkers.indexOf(selectedTalker);
+  talkers.splice(index, 1, editedTalker);  
+  res.status(STATUS.SUCCESS.OK).send(editedTalker);
+};
+
 module.exports = {
     getAllTalker,
     getSortedTalker,
     generateToken,
     pushNewTalker,
+    editTalker,
 };
