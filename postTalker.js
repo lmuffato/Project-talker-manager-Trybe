@@ -65,10 +65,20 @@ const checkWatchedAt = (req, res, next) => {
   next();
 };
 
+const checkRate = (req, res, next) => {
+  const { talk } = req.body;
+  if (talk.rate > 1 || talk.rate < 5) {
+    return res.status(HTTP_BAD_REQUEST_STATUS)
+      .json({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
+  }
+  next();
+};
+
 module.exports = {
   createdTalker,
   authorizationToken,
   checkName,
   checkAge,
   checkWatchedAt,
+  checkRate,
 };

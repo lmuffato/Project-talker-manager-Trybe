@@ -22,10 +22,11 @@ app.get('/talker', getTalkers);
 app.get('/talker/:id', getTalkerId);
 app.post('/login', validations.checkEmail, validations.checkPassWord, validations.cryptoGenerate);
 app.post('/talker',
+  newTalker.authorizationToken,
   newTalker.checkName,
   newTalker.checkAge,
   newTalker.checkWatchedAt,
-  newTalker.authorizationToken,
+  newTalker.checkRate,
   newTalker.createdTalker);
 
 app.listen(PORT, () => {
