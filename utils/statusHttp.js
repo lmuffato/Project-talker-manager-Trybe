@@ -3,6 +3,7 @@ const HTTP_CREATE_STATUS = 201;
 const HTTP_BAD_REQUEST = 400;
 const HTTP_NOT_FOUND = 404;
 const HTTP_UNAUTHORIZED = 401;
+const HTTP_SERVER_ERROR = 500;
 
 module.exports = {
   HTTP_OK_STATUS,
@@ -10,4 +11,5 @@ module.exports = {
   HTTP_BAD_REQUEST,
   HTTP_NOT_FOUND,
   HTTP_UNAUTHORIZED,
+  HTTP_SERVER_ERROR,
 };
