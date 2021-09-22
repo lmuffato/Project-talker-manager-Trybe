@@ -10,7 +10,7 @@ const convertFromJSON = async () => {
 
 const getAllTalker = async (_req, res) => {
   const talker = await convertFromJSON();
-  return res.status(STATUS.SUCCESS.OK).send(talker);
+  res.status(STATUS.SUCCESS.OK).send(talker);
 };
 
 const getSortedTalker = async (req, res) => {
@@ -18,14 +18,15 @@ const getSortedTalker = async (req, res) => {
   const { id } = req.params;
   const filterdTalker = talkers.filter((talker) => talker.id === Number(id)).pop();
   if (!filterdTalker) {
-    res.status(STATUS.ERROR.NOT_FOUND).send({ message: 'Pessoa palestrante não encontrada' });
+    return res
+    .status(STATUS.ERROR.NOT_FOUND).send({ message: 'Pessoa palestrante não encontrada' });
   }
-  return res.status(STATUS.SUCCESS.OK).send(filterdTalker);
+  res.status(STATUS.SUCCESS.OK).send(filterdTalker);
 };
 
 const generateToken = async (_req, res) => {
   const token = await genToken.generateToken();
-  return res.status(STATUS.SUCCESS.OK).send({ token });
+  res.status(STATUS.SUCCESS.OK).send({ token });
 };
 
 const pushNewTalker = async (req, res) => {
@@ -52,7 +53,7 @@ const editTalker = async (req, res) => {
   const index = talkers.indexOf(selectedTalker);
   talkers.splice(index, 1, editedTalker);
   await fs.writeFile('./talker.json', JSON.stringify(talkers));
-  return res.status(STATUS.SUCCESS.OK).send(editedTalker);
+  res.status(STATUS.SUCCESS.OK).send(editedTalker);
 };
 
 const removeTalker = async (req, res) => {
@@ -62,7 +63,7 @@ const removeTalker = async (req, res) => {
   const index = talkers.indexOf(selectedTalker);
   talkers.splice(index, 1);
   await fs.writeFile('./talker.json', JSON.stringify(talkers));
-  return res.status(STATUS.SUCCESS.OK).send({ message: 'Pessoa palestrante deletada com sucesso' });
+  res.status(STATUS.SUCCESS.OK).send({ message: 'Pessoa palestrante deletada com sucesso' });
 };
 
 const TalkerBySearchTerm = async (req, res) => {
@@ -73,7 +74,7 @@ const TalkerBySearchTerm = async (req, res) => {
   if (!q) {
     res.stats(STATUS.ERROR.BAD_REQUEST).send({ message: 'É necessário preencher o parametro' });
   }
-  return res.status(STATUS.SUCCESS.OK).send(filteredQ);
+  res.status(STATUS.SUCCESS.OK).send(filteredQ);
 };
 
 module.exports = {
