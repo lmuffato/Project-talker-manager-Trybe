@@ -12,4 +12,4 @@ const generateToken = async () => {
 
 module.exports = {
     generateToken,
-}
+};
