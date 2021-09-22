@@ -15,7 +15,7 @@ const editTalker = async (req, res) => {
   const filterTalker = actualTalkers.filter((talker) => talker.id === id);
   filterTalker.push(changeTalker);
   await readFile.writeFileTalker(filterTalker);
-  return res.status(HTTP_OK_STATUS).json({ changeTalker });
+  return res.status(HTTP_OK_STATUS).json(changeTalker);
 };
 
 module.exports = {
