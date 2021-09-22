@@ -41,8 +41,7 @@ app.put('/talker/:id',
   editTalker.editTalker);
 app.delete('/talker/:id',
   newTalker.authorizationToken,
-  deleteTalker.delTalker,
-  );
+  deleteTalker.delTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
