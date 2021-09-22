@@ -13,15 +13,14 @@ const getAllTalker = async (_req, res) => {
   return res.status(STATUS.SUCCESS.OK).send(talker);
 };
 
-const getSortedTalker = async (req, res, next) => {
-  try {
+const getSortedTalker = async (req, res) => {
   const talkers = await convertFromJSON();
   const { id } = req.params;
-  const filterdTalker = talkers.filter((talker) => talker.id === Number(id));
-  return res.status(STATUS.SUCCESS.OK).send(filterdTalker);
-  } catch (err) {
-    next(err);
+  const filterdTalker = talkers.filter((talker) => talker.id === Number(id)).pop();
+  if (!filterdTalker) {
+    res.status(STATUS.ERROR.NOT_FOUND).send({ message: 'Pessoa palestrante não encontrada' });
   }
+  return res.status(STATUS.SUCCESS.OK).send(filterdTalker);
 };
 
 const generateToken = async (_req, res) => {
