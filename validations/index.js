@@ -29,13 +29,13 @@ module.exports = {
   },
 
   tokenValidation: (req, res, next) => {
-    const { token } = req.headers;
+    const { authorization } = req.headers;
 
-    if (!token) {
-      return res.status(401).send({ message: 'Token inválido' });
-    }
-    if (token.length !== 16 || typeof token !== 'string') {
+    if (!authorization) {
       return res.status(401).send({ message: 'Token não encontrado' });
+    }
+    if (authorization.length !== 16) {
+      return res.status(401).send({ message: 'Token inválido' });
     }
 
     next();
@@ -68,11 +68,9 @@ module.exports = {
     next();
   },
 
-  talkAndWatchedAtValidation: (req, res, next) => {
+  talkValidation: (req, res, next) => {
     const { talk } = req.body;
-    const dateValidation = /^\d{2}\/\d{2}\/\d{4}$/;
-    
-    if (!talk) {
+    if (!talk || !talk.watchedAt || !talk.rate) {
       return res
         .status(400)
         .send({ 
@@ -80,9 +78,17 @@ module.exports = {
         });
     }
 
+    next();
+  },
+
+  talkWatchedAtValidation: (req, res, next) => {
+    const { talk } = req.body;
+    const dateValidation = /^\d{2}\/\d{2}\/\d{4}$/;
+
     if (!dateValidation.test(talk.watchedAt)) {
       return res
-        .status(400).send({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
+        .status(400)
+        .send({ message: 'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
     }
 
     next();
@@ -91,8 +97,8 @@ module.exports = {
   talkRateValidation: (req, res, next) => {
     const { talk } = req.body;
 
-    if (parseInt((talk.rate < 1), 10) || parseInt((talk.rate > 5), 10)) {
-      return res.status(400).send({ message: 'O campo "rate" deve ser um inteiro de 1 a 5' });
+    if (Number(talk.rate) < 1 || Number(talk.rate) > 5) {
+      return res.status(400).send({ message: 'O campo "rate" deve ser um inteiro de 1 à 5' });
     }
 
     next();

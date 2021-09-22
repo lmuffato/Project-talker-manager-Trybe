@@ -35,8 +35,23 @@ module.exports = {
     }
   },
 
-  postTalkerMiddleware: (req, res) => {
-    res.status(201).send(req.body);
+  postTalkerMiddleware: async (req, res) => {
+    const { name, age, talk: { watchedAt, rate } } = req.body;
+    const data = await fs.readFile('./talker.json', 'utf-8');
+    const parsed = JSON.parse(data);
+    const talkerToAdd = {
+      name,
+      age,
+      id: parsed.length + 1,
+      talk: {
+        watchedAt,
+        rate,
+      },
+    };
+    parsed.push(talkerToAdd);
+
+    await fs.writeFile('./talker.json', JSON.stringify(parsed));
+    res.status(201).send(talkerToAdd);
   },
 
   getLoginToken: (_req, res) => {

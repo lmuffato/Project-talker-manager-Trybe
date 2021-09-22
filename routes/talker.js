@@ -17,15 +17,17 @@ const {
   tokenValidation,
   nameValidation,
   ageValidation,
-  talkAndWatchedAtValidation,
-  talkRateValidation
+  talkValidation,
+  talkWatchedAtValidation,
+  talkRateValidation,
 } = require('../validations');
 
-const validationsMiddlewares = [
+const validations = [
   tokenValidation,
   nameValidation,
   ageValidation,
-  talkAndWatchedAtValidation,
+  talkValidation,
+  talkWatchedAtValidation,
   talkRateValidation,
 ];
 
@@ -33,6 +35,6 @@ const validationsMiddlewares = [
 router.get('/', getTalkersMiddleware);
 router.get('/:talkerId', getTalkerByIdMiddleware);
 
-router.post('/', validationsMiddlewares, postTalkerMiddleware);
+router.post('/', validations, postTalkerMiddleware);
 
 module.exports = router;
