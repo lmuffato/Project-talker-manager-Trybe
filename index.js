@@ -6,7 +6,12 @@ const { fetchTalker } = require('./middlewares/fetchTalker');
 const { validateLogin } = require('./middlewares/validation');
 const { talkerById } = require('./middlewares/talkerById');
 const { authentication } = require('./middlewares/authentication');
-const { newTalker, nameTalker, talkerAge } = require('./middlewares/newTalker');
+const { newTalker } = require('./middlewares/newTalker');
+const { nameTalker } = require('./middlewares/nameTalker');
+const { talkerAge } = require('./middlewares/talkerAge');
+const { watchedAndRate } = require('./middlewares/watchedAndRate');
+const { watchedTalker } = require('./middlewares/watchedTalker');
+const { rateTalker } = require('./middlewares/rateTalker');
 
 const app = express();
 app.use(bodyParser.json());
@@ -24,7 +29,8 @@ app.get('/talker/:id', talkerById);
 
 app.post('/login', validateLogin);
 
-app.post('talker', authentication, newTalker, nameTalker, talkerAge);
+app.post('talker', authentication, nameTalker, talkerAge, watchedAndRate, watchedTalker, 
+rateTalker, newTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
