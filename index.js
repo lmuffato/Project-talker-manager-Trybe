@@ -22,6 +22,10 @@ app.get('/', (_request, response) => {
 
 // app.get('/talker', (_req, res) => res.status(200).send({ message: 'hello word!' }));
 app.get('/talker', getTalkers);
+app.get('/talker/search',
+newTalker.authorizationToken,
+searchTalker.searchTalker,
+);
 app.get('/talker/:id', getTalkerId);
 app.post('/login', validations.checkEmail, validations.checkPassWord, validations.cryptoGenerate);
 app.post('/talker',
@@ -40,12 +44,9 @@ app.put('/talker/:id',
   newTalker.checkWatchedAt,
   newTalker.checkRate,
   editTalker.editTalker);
-app.delete('/talker/:id',
-  newTalker.authorizationToken,
-  deleteTalker.delTalker);
-app.get('/talker/search',
-  newTalker.authorizationToken,
-  searchTalker.searchTalker);
+  app.delete('/talker/:id',
+    newTalker.authorizationToken,
+    deleteTalker.delTalker);
 
 app.listen(PORT, () => {
   console.log('Online');
