@@ -2,14 +2,12 @@ const express = require('express');
 const { getAllTalker,
     getSortedTalker,
     TalkerBySearchTerm,
-    generateToken,
     pushNewTalker,
     editTalker,
     removeTalker,
 } = require('../middlewares/talker');
 
-const { validateEmail,
-    validatePassword,
+const { 
     validateFields,
     validateData,
     validateToken,
@@ -23,8 +21,6 @@ router.get('/', getAllTalker);
 router.get('/search', validateToken, TalkerBySearchTerm);
 
 router.get('/:id', getSortedTalker);
-
-router.post('/login', validateEmail, validatePassword, generateToken);
 
 router.post('/', validateToken, validateFields, validateData, validateTalk, pushNewTalker);
 
