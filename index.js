@@ -179,6 +179,29 @@ async (req, res) => {
   return res.status(HTTP_CREATED_STATUS).json(newTalker);
 });
 
+app.put('/talker/:id', validateToken, validateName,
+validateAge, validateTalk, validateRateAndWatchedAt,
+async (req, res) => {
+  const content = JSON.parse(await fs.readFile(FILE_TALKERS, 'utf-8'));
+  const { id } = req.params;
+  const talkerIndex = content.findIndex((c) => c.id === parseInt(id, 10));
+  const { name, age, talk } = req.body;
+  const { rate, watchedAt } = talk;
+  content[talkerIndex] = { 
+    id: Number(id),
+    name,
+    age: Number(age),
+    talk: {
+      rate: Number(rate),
+      watchedAt,
+    },
+  };
+  const talkers = JSON.stringify(content);
+  await fs.writeFile(FILE_TALKERS, talkers);
+  
+  return res.status(HTTP_OK_STATUS).json(content[talkerIndex]);
+});
+
 app.listen(PORT, () => {
   console.log('Online');
 });
@@ -188,5 +211,5 @@ app.listen(PORT, () => {
   Como gerar um token aleatório com 16 caracteres: https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript
   Regex para email válido retirado do projeto já realizado (APP Receitas): https://github.com/tryber/sd-010-a-project-recipes-app/pull/89/commits/83cb72f06dd96973ca365d9c06ce59e4d1c2cbad
   Regex para data válida: https://stackoverflow.com/questions/6177975/how-to-validate-date-with-format-mm-dd-yyyy-in-javascript
-
+  Consulta ao repositório do Lucas Pedroso T10-A para descobrir o que estava quebrando no primeiro teste do Requisito 5: https://github.com/tryber/sd-010-a-project-talker-manager/pull/102/files
 */
