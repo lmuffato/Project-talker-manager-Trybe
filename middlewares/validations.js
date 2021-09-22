@@ -32,7 +32,6 @@ const validatePassword = (req, res, next) => {
 
 const validateFields = (req, res, next) => {
   const newTalker = req.body;
-  console.log(newTalker);
   if (!newTalker.name) {
     res.status(STATUS.ERROR.BAD_REQUEST).send({ message: 'O campo "name" é obrigatório' });
   }    
