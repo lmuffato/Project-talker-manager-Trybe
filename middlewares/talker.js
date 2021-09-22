@@ -29,12 +29,18 @@ const generateToken = async (_req, res) => {
 };
 
 const pushNewTalker = async (req, res) => {
-  const newTalker = req.body;
+  const { name, age, talk } = req.body;
   const talkers = await convertFromJSON();
+  const newTalker = {
+    name,
+    age,
+    id: talkers.length + 1,
+    talk,
+  };
   talkers.push(newTalker);
   const JSONtalkers = JSON.stringify(talkers);
   fs.writeFile('./talker.json', JSONtalkers);
-  return res.status(STATUS.SUCCESS.CREATED).send(newTalker);
+  res.status(STATUS.SUCCESS.CREATED).send(newTalker);
 };
 
 const editTalker = async (req, res) => {
